@@ -1,0 +1,15 @@
+# DB 연결 설정
+# 포트와 DB 이름 및 아이디 비밀번호는 임의로 넣어놨습니다.
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/website
+    username: root
+    password: ${password}
+
+  jpa:
+    open-in-view: true
+    hibernate:
+      ddl-auto: update
+    show-sql: true
