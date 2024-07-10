@@ -19,6 +19,7 @@ public class MemberSaveDto {
     @NotBlank @Size(min = 1, max = 10)
     private String nickname;
 
+    //Size를 11자리로 맞춰야 함
     @NotBlank @Size(min = 1, max = 100)
     private String phoneNumber;
 

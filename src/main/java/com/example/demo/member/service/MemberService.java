@@ -37,6 +37,7 @@ public class MemberService {
                 .name(memberSaveDto.getName())
                 .age(memberSaveDto.getAge())
                 .password(passwordEncoder.encode(memberSaveDto.getPassword()))
+                .role(MemberRole.USER.getRole())
                 .build();
     }
 

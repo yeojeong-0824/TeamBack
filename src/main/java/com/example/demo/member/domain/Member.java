@@ -9,6 +9,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Entity
 @Getter
 @Builder
@@ -25,7 +27,6 @@ public class Member {
     @Column(nullable = false, unique = true)
     private String nickname;
 
-    // 전화번호를 어떤 식으로 받을 지 프론트와 이야기가 필요
     @Column(nullable = false, unique = true)
     private String phoneNumber;
 
@@ -37,4 +38,7 @@ public class Member {
 
     @Column(nullable = false)
     private short age;
+
+    @Column(nullable = false)
+    private String role;
 }
