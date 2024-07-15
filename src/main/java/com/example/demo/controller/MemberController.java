@@ -1,6 +1,8 @@
-package com.example.demo.member.presentation;
+package com.example.demo.controller;
 
-import com.example.demo.member.service.MemberService;
+import com.example.demo.dto.member.MemberSaveDto;
+import com.example.demo.dto.member.MemberShowDto;
+import com.example.demo.service.MemberService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -8,7 +10,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;

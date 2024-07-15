@@ -1,6 +1,6 @@
 package com.example.demo.security.filter;
 
-import com.example.demo.member.domain.MemberDetails;
+import com.example.demo.dto.member.MemberDetails;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

@@ -1,8 +1,8 @@
-package com.example.demo.member.service;
+package com.example.demo.service;
 
-import com.example.demo.member.domain.Member;
-import com.example.demo.member.domain.MemberDetails;
-import com.example.demo.member.repository.MemberRepository;
+import com.example.demo.entity.Member;
+import com.example.demo.dto.member.MemberDetails;
+import com.example.demo.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

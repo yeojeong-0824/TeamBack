@@ -1,4 +1,4 @@
-package com.example.demo.member.domain;
+package com.example.demo.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
@@ -41,4 +41,10 @@ public class Member {
 
     @Column(nullable = false)
     private String role;
+
+    @OneToMany(mappedBy = "member", orphanRemoval = true)
+    private List<Board> boards;
+
+    @OneToMany(mappedBy = "member", orphanRemoval = true)
+    private List<Comment> comments;
 }

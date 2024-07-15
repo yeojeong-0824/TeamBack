@@ -1,4 +1,4 @@
-package com.example.demo.member.service;
+package com.example.demo.dto.member;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

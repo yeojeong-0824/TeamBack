@@ -1,5 +1,6 @@
-package com.example.demo.member.domain;
+package com.example.demo.dto.member;
 
+import com.example.demo.entity.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

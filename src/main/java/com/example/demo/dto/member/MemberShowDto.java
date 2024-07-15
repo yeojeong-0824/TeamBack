@@ -1,4 +1,4 @@
-package com.example.demo.member.presentation;
+package com.example.demo.dto.member;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;

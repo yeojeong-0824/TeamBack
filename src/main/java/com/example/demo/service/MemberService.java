@@ -1,9 +1,10 @@
-package com.example.demo.member.service;
+package com.example.demo.service;
 
-import com.example.demo.member.domain.Member;
-import com.example.demo.member.presentation.MemberSaveDto;
-import com.example.demo.member.presentation.MemberShowDto;
-import com.example.demo.member.repository.MemberRepository;
+import com.example.demo.entity.Member;
+import com.example.demo.dto.member.MemberSaveDto;
+import com.example.demo.dto.member.MemberShowDto;
+import com.example.demo.dto.member.MemberRole;
+import com.example.demo.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
