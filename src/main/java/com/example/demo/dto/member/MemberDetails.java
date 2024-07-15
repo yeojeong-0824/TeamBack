@@ -17,7 +17,7 @@ public class MemberDetails implements UserDetails {
     public String getNickname() {
         return member.getNickname();
     }
-    public short getAge() { return member.getAge(); }
+    public Integer getAge() { return member.getAge(); }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

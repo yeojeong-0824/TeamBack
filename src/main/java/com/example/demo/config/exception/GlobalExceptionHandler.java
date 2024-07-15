@@ -3,6 +3,7 @@ package com.example.demo.config.exception;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -35,6 +36,13 @@ public class GlobalExceptionHandler {
                 .toList();
 
         errorMessage.forEach(s -> log.error("유효성 검사에 실패하였습니다 (ConstraintViolationException): " + s));
+        return new ResponseEntity<>(new ExceptionMessage(errorMessage), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<ExceptionMessage> handlerDataIntegrityViolationException(DataIntegrityViolationException ex) {
+        List<String> errorMessage = List.of("입력 값이 잘못되었습니다.");
+        log.error("SQL 무결성 제약 조건이 위배되었습니다");
         return new ResponseEntity<>(new ExceptionMessage(errorMessage), HttpStatus.BAD_REQUEST);
     }
 }

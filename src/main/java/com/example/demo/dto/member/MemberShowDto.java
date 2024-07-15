@@ -14,5 +14,5 @@ public class MemberShowDto {
     private String nickname;
     private String phoneNumber;
     private String name;
-    private short age;
+    private Integer age;
 }

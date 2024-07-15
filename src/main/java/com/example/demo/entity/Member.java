@@ -10,6 +10,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Getter
@@ -37,14 +38,22 @@ public class Member {
     private String name;
 
     @Column(nullable = false)
-    private short age;
+    private Integer age;
 
     @Column(nullable = false)
     private String role;
 
-    @OneToMany(mappedBy = "member", orphanRemoval = true)
-    private List<Board> boards;
+//    실행 오류로 일단 주석처리 해놨습니다
+//    @OneToMany(mappedBy = "member", orphanRemoval = true)
+//    private List<Board> boards;
 
-    @OneToMany(mappedBy = "member", orphanRemoval = true)
-    private List<Comment> comments;
+//    @OneToMany(mappedBy = "member", orphanRemoval = true)
+//    private List<Comment> comments;
+
+    public static boolean equalsMember(Member m1, Member m2) {
+        if(!Objects.equals(m1.getNickname(), m2.getNickname())) return false;
+        if(!Objects.equals(m1.getAge(), m2.getAge())) return false;
+        if(!Objects.equals(m1.getRole(), m2.getRole())) return false;
+        return true;
+    }
 }

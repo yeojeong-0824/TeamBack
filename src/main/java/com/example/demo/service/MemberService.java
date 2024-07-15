@@ -25,6 +25,14 @@ public class MemberService {
         memberRepository.save(takenMember);
     }
 
+    public boolean checkDuplicatedUsername(String username) {
+        return !memberRepository.existsByUsername(username);
+    }
+
+    public boolean checkDuplicatedNickname(String nickname) {
+        return !memberRepository.existsByNickname(nickname);
+    }
+
     public List<MemberShowDto> findAll() {
         List<Member> savedMemberList = memberRepository.findAll();
         return savedMemberList.stream().map(this::toDto).toList();
