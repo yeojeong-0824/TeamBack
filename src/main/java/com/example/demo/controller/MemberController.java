@@ -57,7 +57,7 @@ public class MemberController {
     }
 
 
-    @GetMapping("/check-username/{username}")
+    @GetMapping("/username/{username}")
     @Operation(summary = "아이디 중복 검사")
     @ApiResponses(
             value = {
@@ -71,7 +71,7 @@ public class MemberController {
             new ResponseEntity<>("중복되지 않음", HttpStatus.OK) : new ResponseEntity<>("아이디가 중복됨", HttpStatus.CONFLICT);
     }
 
-    @GetMapping("/check-nickname/{nickname}")
+    @GetMapping("/nickname/{nickname}")
     @Operation(summary = "닉네임 중복 검사")
     @ApiResponses(
             value = {

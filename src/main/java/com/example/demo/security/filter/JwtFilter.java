@@ -56,9 +56,6 @@ public class JwtFilter extends OncePerRequestFilter {
 
             // Refresh Token 재발급시 테스트를 진행하지 않았음
             // 리팩토링 필요해 보임
-            // Refresh Token 유효성 검사를 어떤식으로 진행할 지 생각해봐야 함
-
-            log.info("만료된 JWT Token 재발급");
 
             String refreshTokenHeader = request.getHeader(jwtProvider.REFRESH_HEADER_STRING);
             if(refreshTokenHeader == null) {
@@ -75,12 +72,24 @@ public class JwtFilter extends OncePerRequestFilter {
             }
 
             RefreshToken savedRefreshToken = savedOptionalRefreshToken.get();
-            if(savedRefreshToken.getCount() < 0) {
-                log.info("Refresh Token이 만료되었습니다");
+
+            // 해당 IP가 Refresh Token을 발급받은 IP와 다를 때
+            // Refresh Token을 삭제하고 유효하지 않은 사용자로 인증을 실패
+            if(!request.getRemoteAddr().equals(savedRefreshToken.getIp())) {
+                log.info("유효하지 않은 사용자");
+                refreshTokenService.dropRefreshToken(refreshTokenHeader);
                 return;
             }
 
-            Member tokenMember = jwtProvider.decodeToken(refreshTokenHeader, savedRefreshToken.getCreateTime());
+            // Refresh Token의 발급 횟수를 초과 했을 때
+            // Refresh Token을 삭제하고 만료된 Token으로 인증을 실패
+            if(savedRefreshToken.getCount() < 0) {
+                log.info("Refresh Token이 만료되었습니다");
+                refreshTokenService.dropRefreshToken(refreshTokenHeader);
+                return;
+            }
+
+            Member tokenMember = jwtProvider.decodeToken(refreshTokenHeader, String.valueOf(savedRefreshToken.getExpirationTime()));
 
             Member savedMember = Member.builder()
                     .nickname(savedRefreshToken.getNickname())
@@ -88,11 +97,15 @@ public class JwtFilter extends OncePerRequestFilter {
                     .role(savedRefreshToken.getRole())
                     .build();
 
+            // Refresh Token의 값과 데이터베이스의 저장된 정보와 다를 때
+            // Refresh Token을 삭제하고 유효하지 않은 Token으로 인증을 실패
             if(!Member.equalsMember(savedMember, tokenMember)) {
                 log.info("Refresh Token이 유효하지 않습니다");
+                refreshTokenService.dropRefreshToken(refreshTokenHeader);
                 return;
             }
 
+            log.info("만료된 JWT Token 재발급");
             MemberDetails reissueTokenMemberDetails = new MemberDetails(savedMember);
             String reissueToken = jwtProvider.createJwtToken(reissueTokenMemberDetails);
             response.addHeader(jwtProvider.JWT_HEADER_STRING, jwtProvider.TOKEN_PREFIX + reissueToken);

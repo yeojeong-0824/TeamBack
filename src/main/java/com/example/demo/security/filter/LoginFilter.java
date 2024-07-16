@@ -58,7 +58,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         log.error("로그인 성공");
         MemberDetails member = (MemberDetails) authResult.getPrincipal();
 
-        String loginTime = String.valueOf(System.currentTimeMillis());
+        long loginTime = System.currentTimeMillis();
 
         String jwtToken = jwtProvider.createJwtToken(member);
         String refreshToken = jwtProvider.createRefreshToken(member, loginTime);
@@ -68,8 +68,9 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
                 .nickname(member.getNickname())
                 .age(member.getAge())
                 .role(member.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList().get(0))
-                .createTime(loginTime)
+                .expirationTime(loginTime + jwtProvider.REFRESH_EXPIRATION_TIME)
                 .count(jwtProvider.REFRESH_COUNT)
+                .ip(request.getRemoteAddr())
                 .build();
 
         refreshTokenService.addRefreshToken(saveToken);

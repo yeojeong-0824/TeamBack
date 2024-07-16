@@ -18,8 +18,9 @@ public class RefreshToken {
     private String nickname;
     private Integer age;
     private String role;
-    private String createTime;
+    private Long expirationTime;
     private Integer count;
+    private String ip;
 
     public void counting() {
         this.count--;

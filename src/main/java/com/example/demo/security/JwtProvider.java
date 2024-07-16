@@ -17,6 +17,8 @@ public class JwtProvider {
 
     @Value("${JWTKey}")
     public String SECRET;
+    public final int JWT_EXPIRATION_TIME = 1000;
+    public final int REFRESH_EXPIRATION_TIME = 10 * 60 * 1000;
     public final String TOKEN_PREFIX = "Bearer ";
     public final String JWT_HEADER_STRING = "Authorization";
     public final String REFRESH_HEADER_STRING = "Refresh";
@@ -29,8 +31,6 @@ public class JwtProvider {
 
         String role = member.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList().get(0);
 
-        final int JWT_EXPIRATION_TIME = 1000;
-
         return JWT.create()
                 .withExpiresAt(new Date(System.currentTimeMillis() + JWT_EXPIRATION_TIME))
                 .withClaim("nickname", nickname)
@@ -40,21 +40,18 @@ public class JwtProvider {
 
     }
 
-    public String createRefreshToken(MemberDetails member, String createTime) {
+    public String createRefreshToken(MemberDetails member, long createTime) {
 
         String nickname = member.getNickname();
         Integer age = member.getAge();
 
         String role = member.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList().get(0);
-
-        final int REFRESH_EXPIRATION_TIME = 10 * 60 * 1000;
-
         return JWT.create()
                 .withExpiresAt(new Date(System.currentTimeMillis() + REFRESH_EXPIRATION_TIME))
                 .withClaim("nickname", nickname)
                 .withClaim("age", age)
                 .withClaim("role", role)
-                .sign(Algorithm.HMAC512(createTime));
+                .sign(Algorithm.HMAC512(String.valueOf(createTime + REFRESH_EXPIRATION_TIME)));
 
     }
 
