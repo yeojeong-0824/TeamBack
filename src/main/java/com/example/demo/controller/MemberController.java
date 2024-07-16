@@ -41,7 +41,7 @@ public class MemberController {
     public ResponseEntity<String> save(@Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE)) // 메소드가 받는 파라미터는 Json 형식을 사용한다
                                        @Valid @RequestBody MemberSaveDto memberSaveDto) {
         memberService.addUser(memberSaveDto);
-        return new ResponseEntity<>("생성 완료", HttpStatus.CREATED);
+        return ResponseEntity.status(HttpStatus.CREATED).body("생성 완료");
     }
 
     @GetMapping
@@ -53,7 +53,7 @@ public class MemberController {
     )
     public ResponseEntity<List<MemberShowDto>> findAll() {
         List<MemberShowDto> memberSaveDtoList = memberService.findAll();
-        return new ResponseEntity<>(memberSaveDtoList, HttpStatus.OK);
+        return ResponseEntity.ok(memberSaveDtoList);
     }
 
 
@@ -68,7 +68,7 @@ public class MemberController {
     )
     public ResponseEntity<String> checkDuplicatedUsername(@PathVariable("username") @Size(min = 5, max = 30) String username) {
         return memberService.checkDuplicatedUsername(username) ?
-            new ResponseEntity<>("중복되지 않음", HttpStatus.OK) : new ResponseEntity<>("아이디가 중복됨", HttpStatus.CONFLICT);
+            ResponseEntity.ok("중복되지 않음") : ResponseEntity.status(HttpStatus.CONFLICT).body("아이디가 중복됨");
     }
 
     @GetMapping("/nickname/{nickname}")
@@ -82,7 +82,7 @@ public class MemberController {
     )
     public ResponseEntity<String> checkDuplicatedNickname(@PathVariable("nickname") @Size(min = 1, max = 10) String nickname) {
         return memberService.checkDuplicatedNickname(nickname) ?
-                new ResponseEntity<>("중복되지 않음", HttpStatus.OK) : new ResponseEntity<>("닉네임이 중복됨", HttpStatus.CONFLICT);
+                ResponseEntity.ok("중복되지 않음") : ResponseEntity.status(HttpStatus.CONFLICT).body("닉네임이 중복됨");
     }
 
 

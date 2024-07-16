@@ -25,7 +25,7 @@ public class GlobalExceptionHandler {
                 .toList();
 
         errorMessage.forEach(s -> log.error("유효성 검사에 실패하였습니다 (MethodArgumentNotValidException): " + s));
-        return new ResponseEntity<>(new ExceptionMessage(errorMessage), HttpStatus.BAD_REQUEST);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ExceptionMessage(errorMessage));
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
@@ -36,13 +36,13 @@ public class GlobalExceptionHandler {
                 .toList();
 
         errorMessage.forEach(s -> log.error("유효성 검사에 실패하였습니다 (ConstraintViolationException): " + s));
-        return new ResponseEntity<>(new ExceptionMessage(errorMessage), HttpStatus.BAD_REQUEST);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ExceptionMessage(errorMessage));
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<ExceptionMessage> handlerDataIntegrityViolationException(DataIntegrityViolationException ex) {
         List<String> errorMessage = List.of("입력 값이 잘못되었습니다.");
         log.error("SQL 무결성 제약 조건이 위배되었습니다");
-        return new ResponseEntity<>(new ExceptionMessage(errorMessage), HttpStatus.BAD_REQUEST);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ExceptionMessage(errorMessage));
     }
 }
