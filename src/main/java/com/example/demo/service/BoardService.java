@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.config.exception.board.NotFoundBoardException;
 import com.example.demo.dto.board.BoardCreateRequest;
 import com.example.demo.dto.board.BoardRequest;
 import com.example.demo.dto.board.BoardResponse.*;
@@ -12,38 +13,46 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class BoardService {
     private final BoardRepository boardRepository;
     private final MemberRepository memberRepository;
 
 
     // 게시글 작성
+    @Transactional
     public Board writeBoard(BoardCreateRequest boardCreateRequest, short age){
         Board board = boardCreateRequest.toEntity(age);
         return boardRepository.save(board);
     }
 
     // 게시글 수정
+    @Transactional
     public Board updateBoard(Long boardId, BoardRequest.BoardUpdateRequest boardUpdateRequest){
-        Board board = boardRepository.findById(boardId).get();
+        Board board = boardRepository.findById(boardId)
+                .orElseThrow(() -> new NotFoundBoardException("해당 게시글을 찾을 수 없습니다."));
         board.update(boardUpdateRequest);
         return board;
     }
 
 
     // 게시글 삭제
+    @Transactional
     public Long deleteBoard(Long boardId){
-        Board board = boardRepository.findById(boardId).get();
+        Board board = boardRepository.findById(boardId)
+                .orElseThrow(() -> new NotFoundBoardException("해당 게시글을 찾을 수 없습니다."));
         boardRepository.delete(board);
         return boardId;
     }
 
     // 하나의 게시글
     public BoardReadResponse getBoard(Long boardId){
-        Board board = boardRepository.findById(boardId).get();
+        Board board = boardRepository.findById(boardId)
+                .orElseThrow(() -> new NotFoundBoardException("해당 게시글을 찾을 수 없습니다."));
         return new BoardReadResponse(board);
     }
 
