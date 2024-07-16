@@ -15,6 +15,7 @@ public class RefreshTokenService {
         refreshTokenRepository.save(refreshToken);
     }
 
+    //리팩토링 필요함
     public Optional<RefreshToken> findRefreshToken(String token) {
         Optional<RefreshToken> savedOptionalRefreshToken = refreshTokenRepository.findById(token);
         if(savedOptionalRefreshToken.isEmpty()) return Optional.empty();
