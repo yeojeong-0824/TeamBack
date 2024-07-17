@@ -1,6 +1,6 @@
 package com.example.demo.entity;
 
-import com.example.demo.dto.board.BoardUpdateRequest;
+import com.example.demo.dto.board.BoardRequest;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -47,7 +47,7 @@ public class Board {
     @Column(nullable = false)
     private Integer commentCount;
 
-    public void update(BoardUpdateRequest boardUpdateRequest){
+    public void update(BoardRequest boardUpdateRequest){
         this.title = boardUpdateRequest.getTitle();
         this.body = boardUpdateRequest.getBody();
         this.satisfaction = boardUpdateRequest.getSatisfaction();

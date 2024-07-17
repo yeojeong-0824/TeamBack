@@ -1,9 +1,8 @@
 package com.example.demo.service;
 
 import com.example.demo.config.exception.board.NotFoundBoardException;
-import com.example.demo.dto.board.BoardCreateRequest;
+import com.example.demo.dto.board.BoardRequest;
 import com.example.demo.dto.board.BoardResponse;
-import com.example.demo.dto.board.BoardUpdateRequest;
 import com.example.demo.entity.Board;
 import com.example.demo.repository.BoardRepository;
 import com.example.demo.repository.MemberRepository;
@@ -13,8 +12,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -26,18 +23,18 @@ public class BoardService {
 
     // 게시글 작성
     @Transactional
-    public BoardResponse writeBoard(BoardCreateRequest boardCreateRequest, Integer age){
-        Board board = boardCreateRequest.toEntity(age);
+    public BoardResponse writeBoard(BoardRequest boardRequest, Integer age){
+        Board board = boardRequest.toEntity(age);
         boardRepository.save(board);
         return toDto(board);
     }
 
     // 게시글 수정
     @Transactional
-    public BoardResponse updateBoard(Long boardId, BoardUpdateRequest boardUpdateRequest){
+    public BoardResponse updateBoard(Long boardId, BoardRequest boardRequest){
         Board board = boardRepository.findById(boardId)
                 .orElseThrow(() -> new NotFoundBoardException("해당 게시글을 찾을 수 없습니다."));
-        board.update(boardUpdateRequest);
+        board.update(boardRequest);
         return toDto(board);
     }
 

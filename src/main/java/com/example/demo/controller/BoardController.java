@@ -1,8 +1,7 @@
 package com.example.demo.controller;
 
-import com.example.demo.dto.board.BoardCreateRequest;
+import com.example.demo.dto.board.BoardRequest;
 import com.example.demo.dto.board.BoardResponse;
-import com.example.demo.dto.board.BoardUpdateRequest;
 import com.example.demo.service.BoardService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -28,7 +27,7 @@ public class BoardController {
                     @ApiResponse(responseCode = "400", description = "게시글 작성 실패")
             }
     )
-    public ResponseEntity<BoardResponse> boardWrite(@RequestBody BoardCreateRequest request){
+    public ResponseEntity<BoardResponse> boardWrite(@RequestBody BoardRequest request){
         return ResponseEntity.status(HttpStatus.CREATED).body(boardService.writeBoard(request, 0));
     }
 
@@ -41,7 +40,7 @@ public class BoardController {
             }
     )
     public ResponseEntity<BoardResponse> boardUpdate(
-            @RequestBody BoardUpdateRequest request,
+            @RequestBody BoardRequest request,
             @PathVariable Long boardId
     ){
         return ResponseEntity.ok(boardService.updateBoard(boardId, request));
