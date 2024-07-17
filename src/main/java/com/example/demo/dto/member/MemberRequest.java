@@ -11,25 +11,31 @@ public class MemberRequest {
 
     @NotBlank
     @Size(min = 5, max = 30)
+    @Schema(example = "user12") // 들어갈 데이터 예시
     private String username;
 
     @NotBlank @Size(min = 1, max = 10)
+    @Schema(example = "소인국갔다옴")
     private String nickname;
 
-    //Size를 11자리로 맞춰야 함
-    @NotBlank @Size(min = 1, max = 100)
-    private String phoneNumber;
+    @NotBlank @Size(min = 1, max = 50)
+    @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$", // 이메일 정규식
+            message = "유효한 이메일이 아닙니다.")
+    @Schema(example = "example@naver.com")
+    private String email;
 
     @NotBlank @Size(min = 8, max = 30)
-    @Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*[0-9])\\S+$",
+    @Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*[0-9])\\S+$", // 비밀번호 정규식
             message = "비밀번호는 영문(대,소문자)과 숫자가 적어도 1개 이상씩 포함되어야 합니다")
-    @Schema(allowableValues = "string") // 파라미터를 받는 예시 값(?) 같은 건데 프론트에서 보기 편하게 자료형으로 표현함
+    @Schema(example = "1q2w3e4r")
     private String password;
 
     @NotBlank @Size(min = 1, max = 10)
+    @Schema(example = "걸리버")
     private String name;
 
     @NotNull
-    @Min(1) @Max(100)
+    @Min(1) @Max(120)
+    @Schema(example = "90")
     private Integer age;
 }

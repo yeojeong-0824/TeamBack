@@ -24,7 +24,7 @@ public class Member {
     private String nickname;
 
     @Column(nullable = false, unique = true)
-    private String phoneNumber;
+    private String email;
 
     @Column(nullable = false)
     private String password;

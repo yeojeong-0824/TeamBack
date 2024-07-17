@@ -25,12 +25,16 @@ public class MemberService {
         memberRepository.save(takenMember);
     }
 
-    public boolean checkDuplicatedUsername(String username) {
-        return !memberRepository.existsByUsername(username);
+    public boolean checkDuplicatedUsername(String takenUsername) {
+        return !memberRepository.existsByUsername(takenUsername);
     }
 
-    public boolean checkDuplicatedNickname(String nickname) {
-        return !memberRepository.existsByNickname(nickname);
+    public boolean checkDuplicatedNickname(String takenNickname) {
+        return !memberRepository.existsByNickname(takenNickname);
+    }
+
+    public boolean checkDuplicatedEmail(String takenEmail) {
+        return !memberRepository.existsByEmail(takenEmail);
     }
 
     public List<MemberResponse> findAll() {
@@ -42,7 +46,7 @@ public class MemberService {
         return Member.builder()
                 .username(memberRequest.getUsername())
                 .nickname(memberRequest.getNickname())
-                .phoneNumber(memberRequest.getPhoneNumber())
+                .email(memberRequest.getEmail())
                 .name(memberRequest.getName())
                 .age(memberRequest.getAge())
                 .password(passwordEncoder.encode(memberRequest.getPassword()))
@@ -54,7 +58,7 @@ public class MemberService {
         return MemberResponse.builder()
                 .username(member.getUsername())
                 .nickname(member.getNickname())
-                .phoneNumber(member.getPhoneNumber())
+                .email(member.getEmail())
                 .name(member.getName())
                 .age(member.getAge())
                 .build();

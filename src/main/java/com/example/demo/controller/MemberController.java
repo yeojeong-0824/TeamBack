@@ -10,6 +10,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -65,7 +67,9 @@ public class MemberController {
                     @ApiResponse(responseCode = "409", description = "아이디가 중복됨")
             }
     )
-    public ResponseEntity<String> checkDuplicatedUsername(@PathVariable("username") @Size(min = 5, max = 30) String username) {
+    public ResponseEntity<String> checkDuplicatedUsername(@PathVariable("username")
+                                                          @Size(min = 5, max = 30)
+                                                          String username) {
         return memberService.checkDuplicatedUsername(username) ?
             ResponseEntity.ok("중복되지 않음") : ResponseEntity.status(HttpStatus.CONFLICT).body("아이디가 중복됨");
     }
@@ -79,11 +83,28 @@ public class MemberController {
                     @ApiResponse(responseCode = "409", description = "닉네임이 중복됨")
             }
     )
-    public ResponseEntity<String> checkDuplicatedNickname(@PathVariable("nickname") @Size(min = 1, max = 10) String nickname) {
+    public ResponseEntity<String> checkDuplicatedNickname(@PathVariable("nickname")
+                                                          @Size(min = 1, max = 10)
+                                                          String nickname) {
         return memberService.checkDuplicatedNickname(nickname) ?
                 ResponseEntity.ok("중복되지 않음") : ResponseEntity.status(HttpStatus.CONFLICT).body("닉네임이 중복됨");
     }
 
-
-    //전화번호 중복검사는 전화번호를 사용할지 이메일을 사용할지에 따라 달라짐
+    @GetMapping("/email/{email}")
+    @Operation(summary = "이메일 중복 검사")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "중복되지 않음"),
+                    @ApiResponse(responseCode = "400", description = "입력 값이 잘못됨"),
+                    @ApiResponse(responseCode = "409", description = "이메일이 중복됨")
+            }
+    )
+    public ResponseEntity<String> checkDuplicatedEmail(@PathVariable("email")
+                                                       @NotBlank @Size(min = 1, max = 50)
+                                                       @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$",
+                                                                message = "이메일이 유효하지 않습니다.")
+                                                       String email) {
+        return memberService.checkDuplicatedEmail(email) ?
+                ResponseEntity.ok("중복되지 않음") : ResponseEntity.status(HttpStatus.CONFLICT).body("이메일이 중복됨");
+    }
 }
