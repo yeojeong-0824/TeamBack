@@ -1,6 +1,6 @@
 package com.example.demo.entity;
 
-import com.example.demo.dto.board.BoardRequest;
+import com.example.demo.dto.board.BoardUpdateRequest;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -29,16 +29,16 @@ public class Board {
     private Integer view;
 
     @Column(nullable = false)
-    private short age;
+    private Integer age;
 
     @Column(nullable = false)
-    private short satisfaction;
+    private Integer satisfaction;
 
     @Column(nullable = false)
     private Integer likeCount;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="member_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+    //@JoinColumn(name="member_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private Member member;
 
     @OneToMany(mappedBy = "board", orphanRemoval = true)
@@ -47,9 +47,10 @@ public class Board {
     @Column(nullable = false)
     private Integer commentCount;
 
-    public void update(BoardRequest.BoardUpdateRequest boardUpdateRequest){
-        this.title = boardUpdateRequest.title();
-        this.body = boardUpdateRequest.body();
+    public void update(BoardUpdateRequest boardUpdateRequest){
+        this.title = boardUpdateRequest.getTitle();
+        this.body = boardUpdateRequest.getBody();
+        this.satisfaction = boardUpdateRequest.getSatisfaction();
     }
 
     public void viewUp(){this.view += 1;}

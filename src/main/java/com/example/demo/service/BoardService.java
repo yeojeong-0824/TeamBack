@@ -2,10 +2,9 @@ package com.example.demo.service;
 
 import com.example.demo.config.exception.board.NotFoundBoardException;
 import com.example.demo.dto.board.BoardCreateRequest;
-import com.example.demo.dto.board.BoardRequest;
-import com.example.demo.dto.board.BoardResponse.*;
+import com.example.demo.dto.board.BoardResponse;
+import com.example.demo.dto.board.BoardUpdateRequest;
 import com.example.demo.entity.Board;
-import com.example.demo.entity.Member;
 import com.example.demo.repository.BoardRepository;
 import com.example.demo.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +13,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -25,18 +26,19 @@ public class BoardService {
 
     // 게시글 작성
     @Transactional
-    public Board writeBoard(BoardCreateRequest boardCreateRequest, short age){
+    public BoardResponse writeBoard(BoardCreateRequest boardCreateRequest, Integer age){
         Board board = boardCreateRequest.toEntity(age);
-        return boardRepository.save(board);
+        boardRepository.save(board);
+        return toDto(board);
     }
 
     // 게시글 수정
     @Transactional
-    public Board updateBoard(Long boardId, BoardRequest.BoardUpdateRequest boardUpdateRequest){
+    public BoardResponse updateBoard(Long boardId, BoardUpdateRequest boardUpdateRequest){
         Board board = boardRepository.findById(boardId)
                 .orElseThrow(() -> new NotFoundBoardException("해당 게시글을 찾을 수 없습니다."));
         board.update(boardUpdateRequest);
-        return board;
+        return toDto(board);
     }
 
 
@@ -50,19 +52,15 @@ public class BoardService {
     }
 
     // 하나의 게시글
-    public BoardReadResponse getBoard(Long boardId){
+    public BoardResponse getBoard(Long boardId){
         Board board = boardRepository.findById(boardId)
                 .orElseThrow(() -> new NotFoundBoardException("해당 게시글을 찾을 수 없습니다."));
-        return new BoardReadResponse(board);
+        return toDto(board);
     }
 
-    // 나의 게시글 보기
-    public Page<Board> getAllMyBoardList(String username, PageRequest request){
-        return boardRepository.findAllByMemberUsername(username, request);
-    }
 
     // 조건에 따른 게시글 검색, 정렬
-    public Page<Board> getSearchBoardList(String searchKeyword, String keyword, String sortKeyword, int page) {
+    public Page<BoardResponse> getSearchBoardList(String searchKeyword, String keyword, String sortKeyword, int page) {
         // 생성 날짜
         PageRequest request = PageRequest.of(page - 1, 10, Sort.by("id").descending());
 
@@ -74,14 +72,46 @@ public class BoardService {
             };
         }
 
+        Page<Board> boardList;
         if (searchKeyword.equals("title")){
-            return boardRepository.findAllByTitleContaining(keyword, request);
+            boardList = boardRepository.findAllByTitleContaining(keyword, request);
         } else if (searchKeyword.equals("body")) {
-            return boardRepository.findAllByBodyContaining(keyword, request);
-        } else if (searchKeyword != null){
-            return boardRepository.findByTitleOrBodyContaining(keyword, request);
+            boardList = boardRepository.findAllByBodyContaining(keyword, request);
+        } else if (searchKeyword.equals("null") && keyword != null){
+            boardList = boardRepository.findByTitleOrBodyContaining(keyword, request);
         } else {
-            return boardRepository.findAll(request);
+            boardList = boardRepository.findAll(request);
         }
+
+        return toDtoPage(boardList);
+
+    }
+
+    public BoardResponse toDto(Board board){
+        return BoardResponse.builder()
+                .id(board.getId())
+                .title(board.getTitle())
+                .body(board.getBody())
+                .view(board.getView())
+                .age(board.getMember().getAge())
+                .view(board.getView())
+                .satisfaction(board.getSatisfaction())
+                .likeCount(board.getLikeCount())
+                .memberNickname(board.getMember().getNickname())
+                .build();
+    }
+
+    public Page<BoardResponse> toDtoPage(Page<Board> boardList){
+        return boardList.map(board -> BoardResponse.builder()
+                .id(board.getId())
+                .title(board.getTitle())
+                .body(board.getBody())
+                .view(board.getView())
+                .age(board.getMember().getAge())
+                .view(board.getView())
+                .satisfaction(board.getSatisfaction())
+                .likeCount(board.getLikeCount())
+                .memberNickname(board.getMember().getNickname())
+                .build());
     }
 }

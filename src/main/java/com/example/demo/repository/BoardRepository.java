@@ -11,7 +11,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface BoardRepository extends JpaRepository<Board, Long> {
-    Page<Board> findAllByMemberUsername(String username, Pageable pageable);
     Page<Board> findAllByTitleContaining(String keyword, Pageable pageable);
     Page<Board> findAllByBodyContaining(String keyword, Pageable pageable);
     @Query("SELECT b FROM Board b WHERE b.title LIKE %:keyword% OR b.body LIKE %:keyword%")

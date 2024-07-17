@@ -8,16 +8,8 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class BoardResponse {
-    private Long id;
+public class BoardUpdateRequest {
     private String title;
     private String body;
-    private Integer view;
-    private Integer age;
     private Integer satisfaction;
-    private Integer likeCount;
-
-    private String memberNickname;
-
-
 }

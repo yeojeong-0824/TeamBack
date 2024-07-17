@@ -1,13 +1,19 @@
 package com.example.demo.dto.board;
 
 import com.example.demo.entity.Board;
+import lombok.*;
 
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class BoardCreateRequest {
     private String title;
     private String body;
-    private short satisfaction;
+    private Integer satisfaction;
 
-    public Board toEntity(short age){
+    public Board toEntity(Integer age){
         return Board.builder()
                 .title(title)
                 .body(body)
