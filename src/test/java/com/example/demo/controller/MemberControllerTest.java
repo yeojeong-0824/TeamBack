@@ -122,29 +122,29 @@ class MemberControllerTest {
 
         @Test
         @WithMockUser
-        @DisplayName("잘못된 이메일 테스트")
+        @DisplayName("중복된 이메일 테스트")
         void 이메일_중복검사2() throws Exception {
 
+            String email = "test@naver.com";
+
+            given(memberService.checkDuplicatedEmail(email)).willReturn(false);
+            mvc.perform(get("/member/email/"+email))
+                    .andExpect(status().isConflict());
+        }
+
+        @Test
+        @WithMockUser
+        @DisplayName("잘못된 이메일 테스트")
+        void 이메일_중복검사_BAD1() throws Exception {
+
             String[] emailArr = new String[]{"test", "test@naver", "test@naver", "test@naver.", "test@naver.c",
-                    "testnaver.com", "@naver.com", "test.naver@com"};
+                    "testnaver.com", "@naver.com", "test.naver@com", "123456789012345678901234567890123456789012345678901"};
 
             for(String email : emailArr) {
                 given(memberService.checkDuplicatedEmail(email)).willReturn(false);
                 mvc.perform(get("/member/email/"+email))
                         .andExpect(status().isBadRequest());
             }
-        }
-
-        @Test
-        @WithMockUser // @WithAnonymousUser로 하면 401 상태코드가 나와서 User 권한으로 테스트
-        @DisplayName("긴 이메일 중복검사 테스트")
-        void 이메일_중복검사_BAD1() throws Exception {
-
-            String email = "123456789012345678901234567890123456789012345678901";
-
-            given(memberService.checkDuplicatedEmail(email)).willReturn(false);
-            mvc.perform(get("/member/email/"+email))
-                    .andExpect(status().isBadRequest());
         }
     }
 }
