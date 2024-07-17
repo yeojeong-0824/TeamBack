@@ -42,7 +42,7 @@ public class SecurityFilter {
     }
 
     // 개발단계에서는 복잡성을 줄이기 위해 모든 요청을 허용함
-    // 프론트 단과 통신시 Cors에 걸리는 지의 여부는 테스트 하지 않음
+    // 프론트와 통신시 Cors에 걸리는 지의 여부는 테스트 하지 않음
     private CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

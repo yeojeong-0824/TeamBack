@@ -4,13 +4,10 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
 import lombok.*;
 
-@Getter
-@Setter
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
+@Getter @Setter
+@Builder @NoArgsConstructor @AllArgsConstructor
 @Schema(name = "유저 회원가입 정보 입력") //DTO의 설명
-public class MemberSaveDto {
+public class MemberRequest {
 
     @NotBlank
     @Size(min = 5, max = 30)

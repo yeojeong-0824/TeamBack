@@ -5,7 +5,6 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.example.demo.dto.member.MemberDetails;
 import com.example.demo.entity.Member;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.core.GrantedAuthority;
@@ -17,18 +16,24 @@ public class JwtProvider {
 
     @Value("${JWTKey}")
     public String SECRET;
-    public final int JWT_EXPIRATION_TIME = 1000;
-    public final int REFRESH_EXPIRATION_TIME = 10 * 60 * 1000;
+
+    //JWT Token는 하루의 유효기간을 가짐
+    public final int JWT_EXPIRATION_TIME = 24 * 60 * 60 * 1000;
+
+    //Refresh Token는 보름의 유효기간을 가짐
+    public final int REFRESH_EXPIRATION_TIME = 15 * 24 * 60 * 60 * 1000;
+
+    //JWT Token의 재발급은 10번으로 제안
+    public final Integer REFRESH_COUNT = 10;
+
     public final String TOKEN_PREFIX = "Bearer ";
     public final String JWT_HEADER_STRING = "Authorization";
     public final String REFRESH_HEADER_STRING = "Refresh";
 
-    public final Integer REFRESH_COUNT = 5;
-
     public String createJwtToken(MemberDetails member) {
+
         String nickname = member.getNickname();
         Integer age = member.getAge();
-
         String role = member.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList().get(0);
 
         return JWT.create()
@@ -44,8 +49,8 @@ public class JwtProvider {
 
         String nickname = member.getNickname();
         Integer age = member.getAge();
-
         String role = member.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList().get(0);
+
         return JWT.create()
                 .withExpiresAt(new Date(System.currentTimeMillis() + REFRESH_EXPIRATION_TIME))
                 .withClaim("nickname", nickname)

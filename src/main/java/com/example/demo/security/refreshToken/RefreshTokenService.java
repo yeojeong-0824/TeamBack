@@ -1,13 +1,16 @@
 package com.example.demo.security.refreshToken;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
-@RequiredArgsConstructor
+@Slf4j
 @Service
+@RequiredArgsConstructor
 public class RefreshTokenService {
     private final RefreshTokenRepository refreshTokenRepository;
 
@@ -31,8 +34,17 @@ public class RefreshTokenService {
         refreshTokenRepository.deleteById(token);
     }
 
-    //만료된 토큰 삭제
-//    private void dropExpirationToken() {
-//        List<RefreshToken> refreshTokenList = refreshTokenRepository.findAll();
-//    }
+    // 만료된 토큰 정리 프로세스 하루에 한번 진행
+    @Scheduled(fixedDelay = 24 * 60 * 60 * 1000)
+    private void dropExpirationToken() {
+        log.info("만료된 Refresh Token 정리 프로세스");
+        long time = System.currentTimeMillis();
+
+        List<RefreshToken> refreshTokenList = refreshTokenRepository.findByOrderByExpirationTime();
+        for(RefreshToken refreshToken : refreshTokenList) {
+            if(time < refreshToken.getExpirationTime()) break;
+            refreshTokenRepository.delete(refreshToken);
+            log.info("만료된 Refresh Token 삭제");
+        }
+    }
 }

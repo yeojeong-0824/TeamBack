@@ -1,7 +1,7 @@
 package com.example.demo.controller;
 
-import com.example.demo.dto.member.MemberSaveDto;
-import com.example.demo.dto.member.MemberShowDto;
+import com.example.demo.dto.member.MemberRequest;
+import com.example.demo.dto.member.MemberResponse;
 import com.example.demo.service.MemberService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -10,7 +10,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -39,8 +38,8 @@ public class MemberController {
         }
     )
     public ResponseEntity<String> save(@Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE)) // 메소드가 받는 파라미터는 Json 형식을 사용한다
-                                       @Valid @RequestBody MemberSaveDto memberSaveDto) {
-        memberService.addUser(memberSaveDto);
+                                       @Valid @RequestBody MemberRequest memberRequest) {
+        memberService.addUser(memberRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body("생성 완료");
     }
 
@@ -51,8 +50,8 @@ public class MemberController {
                     @ApiResponse(responseCode = "200", description = "유저 목록 호출 성공")
             }
     )
-    public ResponseEntity<List<MemberShowDto>> findAll() {
-        List<MemberShowDto> memberSaveDtoList = memberService.findAll();
+    public ResponseEntity<List<MemberResponse>> findAll() {
+        List<MemberResponse> memberSaveDtoList = memberService.findAll();
         return ResponseEntity.ok(memberSaveDtoList);
     }
 

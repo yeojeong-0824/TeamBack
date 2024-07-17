@@ -55,6 +55,13 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
                                             FilterChain chain,
                                             Authentication authResult) throws IOException, ServletException {
 
+        /*
+        로그인에 성공했다면 Jwt Token과 Refresh Token을 발급
+
+        JWT Token: 사용자 정보를 Secret Key를 이용하여 암호화 후 Header에 넣어줌
+        Refresh Token: 사용자 정보를 로그인이 성공한 시점으로 암호화 후 DB에 저장 후 Header에 넣어줌
+         */
+
         log.error("로그인 성공");
         MemberDetails member = (MemberDetails) authResult.getPrincipal();
 

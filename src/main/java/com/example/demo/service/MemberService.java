@@ -1,8 +1,8 @@
 package com.example.demo.service;
 
 import com.example.demo.entity.Member;
-import com.example.demo.dto.member.MemberSaveDto;
-import com.example.demo.dto.member.MemberShowDto;
+import com.example.demo.dto.member.MemberRequest;
+import com.example.demo.dto.member.MemberResponse;
 import com.example.demo.dto.member.MemberRole;
 import com.example.demo.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,8 +20,8 @@ public class MemberService {
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
-    public void addUser(MemberSaveDto takenMemberSaveDto) {
-        Member takenMember = toEntity(takenMemberSaveDto);
+    public void addUser(MemberRequest takenMemberRequest) {
+        Member takenMember = toEntity(takenMemberRequest);
         memberRepository.save(takenMember);
     }
 
@@ -33,25 +33,25 @@ public class MemberService {
         return !memberRepository.existsByNickname(nickname);
     }
 
-    public List<MemberShowDto> findAll() {
+    public List<MemberResponse> findAll() {
         List<Member> savedMemberList = memberRepository.findAll();
         return savedMemberList.stream().map(this::toDto).toList();
     }
 
-    private Member toEntity(MemberSaveDto memberSaveDto) {
+    private Member toEntity(MemberRequest memberRequest) {
         return Member.builder()
-                .username(memberSaveDto.getUsername())
-                .nickname(memberSaveDto.getNickname())
-                .phoneNumber(memberSaveDto.getPhoneNumber())
-                .name(memberSaveDto.getName())
-                .age(memberSaveDto.getAge())
-                .password(passwordEncoder.encode(memberSaveDto.getPassword()))
+                .username(memberRequest.getUsername())
+                .nickname(memberRequest.getNickname())
+                .phoneNumber(memberRequest.getPhoneNumber())
+                .name(memberRequest.getName())
+                .age(memberRequest.getAge())
+                .password(passwordEncoder.encode(memberRequest.getPassword()))
                 .role(MemberRole.USER.getRole())
                 .build();
     }
 
-    private MemberShowDto toDto(Member member) {
-        return MemberShowDto.builder()
+    private MemberResponse toDto(Member member) {
+        return MemberResponse.builder()
                 .username(member.getUsername())
                 .nickname(member.getNickname())
                 .phoneNumber(member.getPhoneNumber())
