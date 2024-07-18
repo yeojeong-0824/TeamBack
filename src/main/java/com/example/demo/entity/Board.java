@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -42,7 +43,7 @@ public class Board {
     private Member member;
 
     @OneToMany(mappedBy = "board", orphanRemoval = true)
-    private List<Comment> comments;
+    private List<Comment> comments = new ArrayList<>();
 
     @Column(nullable = false)
     private Integer commentCount;
