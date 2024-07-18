@@ -45,4 +45,11 @@ public class GlobalExceptionHandler {
         log.error("SQL 무결성 제약 조건이 위배되었습니다");
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ExceptionMessage(errorMessage));
     }
+
+    @ExceptionHandler(ServerException.class)
+    public ResponseEntity<ExceptionMessage> handlerServerException(ServerException ex) {
+        List<String> errorMessage = List.of("일시적인 오류가 발생하였습니다.");
+        log.warn(ex.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ExceptionMessage(errorMessage));
+    }
 }

@@ -1,9 +1,8 @@
 package com.example.demo.service;
 
+import com.example.demo.dto.member.MemberRequest.*;
 import com.example.demo.entity.Member;
-import com.example.demo.dto.member.MemberRequest;
 import com.example.demo.dto.member.MemberResponse;
-import com.example.demo.dto.member.MemberRole;
 import com.example.demo.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,8 +19,9 @@ public class MemberService {
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
-    public void addUser(MemberRequest takenMemberRequest) {
-        Member takenMember = toEntity(takenMemberRequest);
+    public void addUser(CreateMember takenMemberRequest) {
+        String encodingPassword = passwordEncoder.encode(takenMemberRequest.password());
+        Member takenMember = CreateMember.toEntity(takenMemberRequest, encodingPassword);
         memberRepository.save(takenMember);
     }
 
@@ -40,18 +40,6 @@ public class MemberService {
     public List<MemberResponse> findAll() {
         List<Member> savedMemberList = memberRepository.findAll();
         return savedMemberList.stream().map(this::toDto).toList();
-    }
-
-    private Member toEntity(MemberRequest memberRequest) {
-        return Member.builder()
-                .username(memberRequest.getUsername())
-                .nickname(memberRequest.getNickname())
-                .email(memberRequest.getEmail())
-                .name(memberRequest.getName())
-                .age(memberRequest.getAge())
-                .password(passwordEncoder.encode(memberRequest.getPassword()))
-                .role(MemberRole.USER.getRole())
-                .build();
     }
 
     private MemberResponse toDto(Member member) {

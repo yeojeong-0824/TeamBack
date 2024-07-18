@@ -1,7 +1,6 @@
 package com.example.demo.controller;
 
-import com.example.demo.dto.member.MemberDuplicated;
-import com.example.demo.dto.member.MemberRequest;
+import com.example.demo.dto.member.MemberRequest.*;
 import com.example.demo.dto.member.MemberResponse;
 import com.example.demo.service.MemberService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -41,11 +40,11 @@ public class MemberController {
         }
     )
     public ResponseEntity<String> save(@Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE)) // 메소드가 받는 파라미터는 Json 형식을 사용한다
-                                       @Valid @RequestBody MemberRequest memberRequest,
+                                       @Valid @RequestBody CreateMember taken,
                                        HttpServletRequest request) {
         String ip = request.getRemoteAddr();
         log.info("{}: 유저 생성 API 호출", ip);
-        memberService.addUser(memberRequest);
+        memberService.addUser(taken);
         return ResponseEntity.status(HttpStatus.CREATED).body("생성 완료");
     }
 
@@ -73,19 +72,19 @@ public class MemberController {
             }
     )
     public ResponseEntity<String> checkDuplicated(@Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE)) // 메소드가 받는 파라미터는 Json 형식을 사용한다
-                                                  @Valid @RequestBody MemberDuplicated memberDuplicated,
+                                                  @Valid @RequestBody DataConfirmMember taken,
                                                   HttpServletRequest request) {
 
         String ip = request.getRemoteAddr();
         log.info("{}: 중복 검사 API 호출", ip);
 
-        if(memberDuplicated.getUsername() != null && !memberService.checkDuplicatedUsername(memberDuplicated.getUsername()))
+        if(taken.username() != null && !memberService.checkDuplicatedUsername(taken.username()))
             return ResponseEntity.status(HttpStatus.CONFLICT).body("아이디가 중복됨");
 
-        if(memberDuplicated.getNickname() != null && !memberService.checkDuplicatedNickname(memberDuplicated.getNickname()))
+        if(taken.nickname() != null && !memberService.checkDuplicatedNickname(taken.nickname()))
             return ResponseEntity.status(HttpStatus.CONFLICT).body("닉네임이 중복됨");
 
-        if(memberDuplicated.getEmail() != null && !memberService.checkDuplicatedEmail(memberDuplicated.getEmail()))
+        if(taken.email() != null && !memberService.checkDuplicatedEmail(taken.email()))
             return ResponseEntity.status(HttpStatus.CONFLICT).body("이메일이 중복됨");
 
         return ResponseEntity.ok("중복되지 않음");
