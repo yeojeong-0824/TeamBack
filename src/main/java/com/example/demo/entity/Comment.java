@@ -1,5 +1,6 @@
 package com.example.demo.entity;
 
+import com.example.demo.dto.comment.CommentRequest.*;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -28,4 +29,8 @@ public class Comment {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "board_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private Board board;
+
+    public void update(CommentSaveRequest request) {
+        body = request.body();
+    }
 }
