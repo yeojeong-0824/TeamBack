@@ -81,8 +81,10 @@ public class MemberController {
 
         if(memberDuplicated.getUsername() != null && !memberService.checkDuplicatedUsername(memberDuplicated.getUsername()))
             return ResponseEntity.status(HttpStatus.CONFLICT).body("아이디가 중복됨");
+
         if(memberDuplicated.getNickname() != null && !memberService.checkDuplicatedNickname(memberDuplicated.getNickname()))
             return ResponseEntity.status(HttpStatus.CONFLICT).body("닉네임이 중복됨");
+
         if(memberDuplicated.getEmail() != null && !memberService.checkDuplicatedEmail(memberDuplicated.getEmail()))
             return ResponseEntity.status(HttpStatus.CONFLICT).body("이메일이 중복됨");
 
