@@ -31,4 +31,16 @@ public class BoardRequest {
                 .commentCount(0)
                 .build();
     }
+
+    public record BoardSaveRequest(
+            String title,
+            String body,
+            Integer view,
+            Integer age,
+            Integer satisfaction,
+            Integer likeCount,
+            Integer commentCount
+    ) {
+    }
+
 }
