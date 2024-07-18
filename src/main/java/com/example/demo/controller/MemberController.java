@@ -10,11 +10,10 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/member")
@@ -41,7 +41,10 @@ public class MemberController {
         }
     )
     public ResponseEntity<String> save(@Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE)) // 메소드가 받는 파라미터는 Json 형식을 사용한다
-                                       @Valid @RequestBody MemberRequest memberRequest) {
+                                       @Valid @RequestBody MemberRequest memberRequest,
+                                       HttpServletRequest request) {
+        String ip = request.getRemoteAddr();
+        log.info("{}: 유저 생성 API 호출", ip);
         memberService.addUser(memberRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body("생성 완료");
     }
@@ -53,7 +56,9 @@ public class MemberController {
                     @ApiResponse(responseCode = "200", description = "유저 목록 호출 성공")
             }
     )
-    public ResponseEntity<List<MemberResponse>> findAll() {
+    public ResponseEntity<List<MemberResponse>> findAll(HttpServletRequest request) {
+        String ip = request.getRemoteAddr();
+        log.info("{}: 유저 목록 API 호출", ip);
         List<MemberResponse> memberSaveDtoList = memberService.findAll();
         return ResponseEntity.ok(memberSaveDtoList);
     }
@@ -68,7 +73,11 @@ public class MemberController {
             }
     )
     public ResponseEntity<String> checkDuplicated(@Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE)) // 메소드가 받는 파라미터는 Json 형식을 사용한다
-                                                  @Valid @RequestBody MemberDuplicated memberDuplicated) {
+                                                  @Valid @RequestBody MemberDuplicated memberDuplicated,
+                                                  HttpServletRequest request) {
+
+        String ip = request.getRemoteAddr();
+        log.info("{}: 중복 검사 API 호출", ip);
 
         if(memberDuplicated.getUsername() != null && !memberService.checkDuplicatedUsername(memberDuplicated.getUsername()))
             return ResponseEntity.status(HttpStatus.CONFLICT).body("아이디가 중복됨");
