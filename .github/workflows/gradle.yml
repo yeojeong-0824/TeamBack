@@ -29,13 +29,13 @@ jobs:
         distribution: 'temurin'
 
     # application.yml 파일 생성
-    - name: Make yml file
-      run: |
-        cd ./src/main/resources
-        touch ./application.yml
+    # - name: Make yml file
+    #   run: |
+    #     cd ./src/main/resources
+    #     touch ./application.yml
         
-        echo "${{ secrets.APPLICATION_YML }}" > ./application.yml
-      shell: bash
+    #     echo "${{ secrets.APPLICATION_YML }}" > ./application.yml
+    #   shell: bash
 
           
 
