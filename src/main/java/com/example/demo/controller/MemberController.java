@@ -118,7 +118,7 @@ public class MemberController {
         String title = "이메일 인증 코드";
         String text = "이메일 인증 코드";
 
-//        emailService.sendEmail(email, title, text);
+        emailService.sendEmail(email, title, text);
 
         return ResponseEntity.ok("중복되지 않음");
     }

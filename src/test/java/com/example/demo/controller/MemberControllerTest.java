@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.member.MemberRequest.*;
+import com.example.demo.security.email.EmailService;
 import com.example.demo.service.MemberService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
@@ -26,6 +27,7 @@ class MemberControllerTest {
 
     @Autowired MockMvc mvc;
     @MockBean MemberService memberService;
+    @MockBean EmailService emailService;
     @Autowired ObjectMapper objectMapper;
 
     @Nested

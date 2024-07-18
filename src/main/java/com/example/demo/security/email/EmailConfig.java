@@ -10,25 +10,25 @@ import java.util.Properties;
 
 @Configuration
 public class EmailConfig {
-//    @Value("${EmailPassword}")
-//    private String password;
-//    @Bean
-//    public JavaMailSender javaMailSender() {
-//
-//        String host = "smtp.gmail.com";
-//        String username = "webwinter04@gmail.com";
-//        int port = 587;
-//
-//        JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
-//        mailSender.setHost(host);
-//        mailSender.setPort(port);
-//        mailSender.setUsername(username);
-//        mailSender.setPassword(password);
-//        mailSender.setDefaultEncoding("UTF-8");
-//        mailSender.setJavaMailProperties(getMailProperties());
-//
-//        return mailSender;
-//    }
+    @Value("${EmailPassword}")
+    private String password;
+    @Bean
+    public JavaMailSender javaMailSender() {
+
+        String host = "smtp.gmail.com";
+        String username = "webwinter04@gmail.com";
+        int port = 587;
+
+        JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
+        mailSender.setHost(host);
+        mailSender.setPort(port);
+        mailSender.setUsername(username);
+        mailSender.setPassword(password);
+        mailSender.setDefaultEncoding("UTF-8");
+        mailSender.setJavaMailProperties(getMailProperties());
+
+        return mailSender;
+    }
 
     private Properties getMailProperties() {
 
