@@ -1,7 +1,7 @@
 package com.example.demo.controller;
 
-import com.example.demo.dto.board.BoardRequest;
-import com.example.demo.dto.board.BoardResponse;
+import com.example.demo.dto.board.BoardRequest.*;
+import com.example.demo.dto.board.BoardResponse.*;
 import com.example.demo.service.BoardService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 public class BoardController {
     private BoardService boardService;
 
-    @PostMapping("/write")
+    @PostMapping
     @Operation(summary = "게시글 작성")
     @ApiResponses(
             value = {
@@ -27,11 +27,12 @@ public class BoardController {
                     @ApiResponse(responseCode = "400", description = "게시글 작성 실패")
             }
     )
-    public ResponseEntity<BoardResponse> boardWrite(@RequestBody BoardRequest request){
-        return ResponseEntity.status(HttpStatus.CREATED).body(boardService.writeBoard(request, 0));
+    public ResponseEntity<BoardSaveResponse> boardWrite(@RequestBody BoardSaveRequest request){
+        // TODO : username 을 찾는 코드 작성 필요
+        return ResponseEntity.status(HttpStatus.CREATED).body(boardService.writeBoard(request, ""));
     }
 
-    @GetMapping("/update/{boardId}")
+    @PutMapping("/update/{boardId}")
     @Operation(summary = "게시글 수정")
     @ApiResponses(
             value = {
@@ -39,8 +40,8 @@ public class BoardController {
                     @ApiResponse(responseCode = "400", description = "게시글 수정 실패")
             }
     )
-    public ResponseEntity<BoardResponse> boardUpdate(
-            @RequestBody BoardRequest request,
+    public ResponseEntity<BoardSaveResponse> boardUpdate(
+            @RequestBody BoardSaveRequest request,
             @PathVariable Long boardId
     ){
         return ResponseEntity.ok(boardService.updateBoard(boardId, request));
@@ -66,11 +67,11 @@ public class BoardController {
                     @ApiResponse(responseCode = "404", description = "존재하는 게시글 없음")
             }
     )
-    public ResponseEntity<BoardResponse> getBoard(@PathVariable Long boardId){
+    public ResponseEntity<BoardReadResponse> getBoard(@PathVariable Long boardId){
         return ResponseEntity.ok(boardService.getBoard(boardId));
     }
 
-    @GetMapping("/search")
+    @GetMapping
     @Operation(summary = "조건에 따른 게시글 검색, 정렬")
     @ApiResponses(
             value = {
@@ -78,7 +79,7 @@ public class BoardController {
                     @ApiResponse(responseCode = "400", description = "게시글 검색, 정렬 실패")
             }
     )
-    public ResponseEntity<Page<BoardResponse>> boardSearch(
+    public ResponseEntity<Page<BoardListResponse>> boardSearch(
             @RequestParam String keyword,
             @RequestParam String searchKeyword,
             @RequestParam String sortKeyword,
