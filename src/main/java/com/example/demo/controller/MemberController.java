@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.member.MemberDuplicated;
 import com.example.demo.dto.member.MemberRequest;
 import com.example.demo.dto.member.MemberResponse;
 import com.example.demo.service.MemberService;
@@ -57,54 +58,25 @@ public class MemberController {
         return ResponseEntity.ok(memberSaveDtoList);
     }
 
-
-    @GetMapping("/username/{username}")
-    @Operation(summary = "아이디 중복 검사")
+    @PostMapping("/confirm")
+    @Operation(summary = "중복 검사")
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "중복되지 않음"),
                     @ApiResponse(responseCode = "400", description = "입력 값이 잘못됨"),
-                    @ApiResponse(responseCode = "409", description = "아이디가 중복됨")
+                    @ApiResponse(responseCode = "409", description = "중복됨")
             }
     )
-    public ResponseEntity<String> checkDuplicatedUsername(@PathVariable("username")
-                                                          @Size(min = 5, max = 30)
-                                                          String username) {
-        return memberService.checkDuplicatedUsername(username) ?
-            ResponseEntity.ok("중복되지 않음") : ResponseEntity.status(HttpStatus.CONFLICT).body("아이디가 중복됨");
-    }
+    public ResponseEntity<String> checkDuplicated(@Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE)) // 메소드가 받는 파라미터는 Json 형식을 사용한다
+                                                  @Valid @RequestBody MemberDuplicated memberDuplicated) {
 
-    @GetMapping("/nickname/{nickname}")
-    @Operation(summary = "닉네임 중복 검사")
-    @ApiResponses(
-            value = {
-                    @ApiResponse(responseCode = "200", description = "중복되지 않음"),
-                    @ApiResponse(responseCode = "400", description = "입력 값이 잘못됨"),
-                    @ApiResponse(responseCode = "409", description = "닉네임이 중복됨")
-            }
-    )
-    public ResponseEntity<String> checkDuplicatedNickname(@PathVariable("nickname")
-                                                          @Size(min = 1, max = 10)
-                                                          String nickname) {
-        return memberService.checkDuplicatedNickname(nickname) ?
-                ResponseEntity.ok("중복되지 않음") : ResponseEntity.status(HttpStatus.CONFLICT).body("닉네임이 중복됨");
-    }
+        if(memberDuplicated.getUsername() != null && !memberService.checkDuplicatedUsername(memberDuplicated.getUsername()))
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("아이디가 중복됨");
+        if(memberDuplicated.getNickname() != null && !memberService.checkDuplicatedNickname(memberDuplicated.getNickname()))
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("닉네임이 중복됨");
+        if(memberDuplicated.getEmail() != null && !memberService.checkDuplicatedEmail(memberDuplicated.getEmail()))
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("이메일이 중복됨");
 
-    @GetMapping("/email/{email}")
-    @Operation(summary = "이메일 중복 검사")
-    @ApiResponses(
-            value = {
-                    @ApiResponse(responseCode = "200", description = "중복되지 않음"),
-                    @ApiResponse(responseCode = "400", description = "입력 값이 잘못됨"),
-                    @ApiResponse(responseCode = "409", description = "이메일이 중복됨")
-            }
-    )
-    public ResponseEntity<String> checkDuplicatedEmail(@PathVariable("email")
-                                                       @NotBlank @Size(min = 1, max = 50)
-                                                       @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$",
-                                                                message = "이메일이 유효하지 않습니다.")
-                                                       String email) {
-        return memberService.checkDuplicatedEmail(email) ?
-                ResponseEntity.ok("중복되지 않음") : ResponseEntity.status(HttpStatus.CONFLICT).body("이메일이 중복됨");
+        return ResponseEntity.ok("중복되지 않음");
     }
 }
