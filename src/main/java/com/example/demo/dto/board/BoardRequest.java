@@ -20,17 +20,7 @@ public class BoardRequest {
     @NotBlank @Size(max = 10)
     private Integer satisfaction;
 
-    public Board toEntity(Integer age){
-        return Board.builder()
-                .title(title)
-                .body(body)
-                .view(0)
-                .age(age)
-                .satisfaction(satisfaction)
-                .likeCount(0)
-                .commentCount(0)
-                .build();
-    }
+
 
     public record BoardSaveRequest(
             String title,

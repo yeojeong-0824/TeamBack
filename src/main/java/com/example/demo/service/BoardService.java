@@ -1,9 +1,10 @@
 package com.example.demo.service;
 
 import com.example.demo.config.exception.board.NotFoundBoardException;
-import com.example.demo.dto.board.BoardRequest;
-import com.example.demo.dto.board.BoardResponse;
+import com.example.demo.dto.board.BoardRequest.*;
+import com.example.demo.dto.board.BoardResponse.*;
 import com.example.demo.entity.Board;
+import com.example.demo.entity.Member;
 import com.example.demo.repository.BoardRepository;
 import com.example.demo.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,19 +24,20 @@ public class BoardService {
 
     // 게시글 작성
     @Transactional
-    public BoardResponse writeBoard(BoardRequest boardRequest, Integer age){
-        Board board = boardRequest.toEntity(age);
+    public BoardSaveResponse writeBoard(BoardSaveRequest request, String memberName){
+        Member member = memberRepository.findByUsername(memberName).get();
+        Board board = toEntity(request, member);
         boardRepository.save(board);
-        return toDto(board);
+        return new BoardSaveResponse(board);
     }
 
     // 게시글 수정
     @Transactional
-    public BoardResponse updateBoard(Long boardId, BoardRequest boardRequest){
+    public BoardSaveResponse updateBoard(Long boardId, BoardSaveRequest request){
         Board board = boardRepository.findById(boardId)
                 .orElseThrow(() -> new NotFoundBoardException("해당 게시글을 찾을 수 없습니다."));
-        board.update(boardRequest);
-        return toDto(board);
+        board.update(request);
+        return new BoardSaveResponse(board);
     }
 
 
@@ -49,15 +51,15 @@ public class BoardService {
     }
 
     // 하나의 게시글
-    public BoardResponse getBoard(Long boardId){
+    public BoardReadResponse getBoard(Long boardId){
         Board board = boardRepository.findById(boardId)
                 .orElseThrow(() -> new NotFoundBoardException("해당 게시글을 찾을 수 없습니다."));
-        return toDto(board);
+        return new BoardReadResponse(board);
     }
 
 
     // 조건에 따른 게시글 검색, 정렬
-    public Page<BoardResponse> getSearchBoardList(String searchKeyword, String keyword, String sortKeyword, int page) {
+    public Page<BoardListResponse> getSearchBoardList(String searchKeyword, String keyword, String sortKeyword, int page) {
         // 생성 날짜
         PageRequest request = PageRequest.of(page - 1, 10, Sort.by("id").descending());
 
@@ -81,34 +83,22 @@ public class BoardService {
         }
 
         return toDtoPage(boardList);
-
     }
 
-    public BoardResponse toDto(Board board){
-        return BoardResponse.builder()
-                .id(board.getId())
-                .title(board.getTitle())
-                .body(board.getBody())
-                .view(board.getView())
-                .age(board.getMember().getAge())
-                .view(board.getView())
-                .satisfaction(board.getSatisfaction())
-                .likeCount(board.getLikeCount())
-                .memberNickname(board.getMember().getNickname())
+    public Board toEntity(BoardSaveRequest request, Member member){
+        return Board.builder()
+                .title(request.title())
+                .body(request.body())
+                .view(0)
+                .age(member.getAge())
+                .member(member)
+                .satisfaction(request.satisfaction())
+                .likeCount(0)
+                .commentCount(0)
                 .build();
     }
 
-    public Page<BoardResponse> toDtoPage(Page<Board> boardList){
-        return boardList.map(board -> BoardResponse.builder()
-                .id(board.getId())
-                .title(board.getTitle())
-                .body(board.getBody())
-                .view(board.getView())
-                .age(board.getMember().getAge())
-                .view(board.getView())
-                .satisfaction(board.getSatisfaction())
-                .likeCount(board.getLikeCount())
-                .memberNickname(board.getMember().getNickname())
-                .build());
+    public Page<BoardListResponse> toDtoPage(Page<Board> boardList){
+        return boardList.map(BoardListResponse::new);
     }
 }
