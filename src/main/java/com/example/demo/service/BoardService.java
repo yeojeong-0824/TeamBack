@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import com.example.demo.config.exception.board.NotFoundBoardException;
+import com.example.demo.config.exception.member.NotFoundMemberException;
 import com.example.demo.dto.board.BoardRequest.*;
 import com.example.demo.dto.board.BoardResponse.*;
 import com.example.demo.entity.Board;
@@ -24,29 +25,44 @@ public class BoardService {
 
     // 게시글 작성
     @Transactional
-    public BoardSaveResponse writeBoard(BoardSaveRequest request, String memberName){
-        Member member = memberRepository.findByUsername(memberName).get();
-        Board board = toEntity(request, member);
+    public BoardSaveResponse writeBoard(BoardSaveRequest request){
+
+        Member member = memberRepository.findByUsername(request.memberName()).
+                orElseThrow(() -> new NotFoundMemberException("해당 회원을 찾을 수 없습니다."));
+
+        Board board = Board.builder()
+                .title(request.title())
+                .body(request.body())
+                .satisfaction(request.satisfaction())
+                .member(member)
+                .build();
+
         boardRepository.save(board);
         return new BoardSaveResponse(board);
     }
 
     // 게시글 수정
     @Transactional
-    public BoardSaveResponse updateBoard(Long boardId, BoardSaveRequest request){
+    public BoardUpdateResponse updateBoard(Long boardId, BoardUpdateRequest request){
+
         Board board = boardRepository.findById(boardId)
                 .orElseThrow(() -> new NotFoundBoardException("해당 게시글을 찾을 수 없습니다."));
-        board.update(request);
-        return new BoardSaveResponse(board);
+
+        board.update(request.title(), request.body(), request.satisfaction());
+
+        return new BoardUpdateResponse(board);
     }
 
 
     // 게시글 삭제
     @Transactional
     public Long deleteBoard(Long boardId){
+
         Board board = boardRepository.findById(boardId)
                 .orElseThrow(() -> new NotFoundBoardException("해당 게시글을 찾을 수 없습니다."));
+
         boardRepository.delete(board);
+
         return boardId;
     }
 
@@ -85,18 +101,18 @@ public class BoardService {
         return toDtoPage(boardList);
     }
 
-    public Board toEntity(BoardSaveRequest request, Member member){
-        return Board.builder()
-                .title(request.title())
-                .body(request.body())
-                .view(0)
-                .age(member.getAge())
-                .member(member)
-                .satisfaction(request.satisfaction())
-                .likeCount(0)
-                .commentCount(0)
-                .build();
-    }
+//    public Board toEntity(BoardSaveRequest request, Member member){
+//        return Board.builder()
+//                .title(request.title())
+//                .body(request.body())
+//                .view(0)
+//                .age(member.getAge())
+//                .member(member)
+//                .satisfaction(request.satisfaction())
+//                .likeCount(0)
+//                .commentCount(0)
+//                .build();
+//    }
 
     public Page<BoardListResponse> toDtoPage(Page<Board> boardList){
         return boardList.map(BoardListResponse::new);
