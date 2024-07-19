@@ -51,7 +51,6 @@ public class CommentService {
 
         // 게시글 댓글 수 담소
         board.commentCountDown();
-
         commentRepository.delete(comment);
 
         return commentId;
