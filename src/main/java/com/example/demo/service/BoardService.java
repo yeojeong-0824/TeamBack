@@ -33,8 +33,12 @@ public class BoardService {
         Board board = Board.builder()
                 .title(request.title())
                 .body(request.body())
+                .view(0)
+                .age(member.getAge())
                 .satisfaction(request.satisfaction())
+                .likeCount(0)
                 .member(member)
+                .commentCount(0)
                 .build();
 
         boardRepository.save(board);
