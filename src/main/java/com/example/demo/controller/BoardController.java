@@ -17,7 +17,8 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/board")
 public class BoardController {
-    private BoardService boardService;
+
+    private final BoardService boardService;
 
     @PostMapping
     @Operation(summary = "게시글 작성")
@@ -29,7 +30,7 @@ public class BoardController {
     )
     public ResponseEntity<BoardSaveResponse> boardWrite(@RequestBody BoardSaveRequest request){
         // TODO : username 을 찾는 코드 작성 필요
-        return ResponseEntity.status(HttpStatus.CREATED).body(boardService.writeBoard(request, ""));
+        return ResponseEntity.status(HttpStatus.CREATED).body(boardService.writeBoard(request));
     }
 
     @PutMapping("/update/{boardId}")
@@ -40,8 +41,8 @@ public class BoardController {
                     @ApiResponse(responseCode = "400", description = "게시글 수정 실패")
             }
     )
-    public ResponseEntity<BoardSaveResponse> boardUpdate(
-            @RequestBody BoardSaveRequest request,
+    public ResponseEntity<BoardUpdateResponse> boardUpdate(
+            @RequestBody BoardUpdateRequest request,
             @PathVariable Long boardId
     ){
         return ResponseEntity.ok(boardService.updateBoard(boardId, request));
