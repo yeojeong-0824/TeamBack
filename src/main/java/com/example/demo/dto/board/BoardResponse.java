@@ -41,6 +41,28 @@ public class BoardResponse {
         }
     }
 
+    public record BoardUpdateResponse(
+            String title,
+            String body,
+            Integer view,
+            Integer age,
+            Integer satisfaction,
+            Integer likeCount,
+            String memberNickname
+    ) {
+        public BoardUpdateResponse(Board board) {
+            this(
+                    board.getTitle(),
+                    board.getBody(),
+                    board.getView(),
+                    board.getAge(),
+                    board.getSatisfaction(),
+                    board.getLikeCount(),
+                    board.getMember().getNickname()
+            );
+        }
+    }
+
     public record BoardListResponse(
             Long id,
             String title,
