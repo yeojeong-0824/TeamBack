@@ -1,6 +1,5 @@
 package com.example.demo.entity;
 
-import com.example.demo.dto.board.BoardRequest.*;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,6 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Board {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -48,10 +48,10 @@ public class Board {
     @Column(nullable = false)
     private Integer commentCount;
 
-    public void update(BoardSaveRequest request){
-        this.title = request.title();
-        this.body = request.body();
-        this.satisfaction = request.satisfaction();
+    public void update(String title, String body, Integer satisfaction){
+        this.title = title;
+        this.body = body;
+        this.satisfaction = satisfaction;
     }
 
     public void viewUp(){this.view += 1;}
