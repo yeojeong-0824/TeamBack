@@ -1,4 +1,4 @@
-package com.example.demo.security.email;
+package com.example.demo.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -10,8 +10,10 @@ import java.util.Properties;
 
 @Configuration
 public class EmailConfig {
+
     @Value("${EmailPassword}")
     private String password;
+
     @Bean
     public JavaMailSender javaMailSender() {
 

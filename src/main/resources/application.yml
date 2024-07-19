@@ -3,4 +3,4 @@ spring:
     active: dev
 
 JWTKey: DevKey
-EmailPassword: test
+EmailPassword: ${emailPassword}
