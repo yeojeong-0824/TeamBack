@@ -19,6 +19,7 @@ import java.util.List;
 
 import static org.mockito.BDDMockito.given;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -44,6 +45,7 @@ class MemberControllerTest {
 
             String json = objectMapper.writeValueAsString(data);
 
+            given(emailService.checkAuthedEmail(data.email())).willReturn(true);
             mvc.perform(post("/member")
                             .with(csrf())
                             .contentType(MediaType.APPLICATION_JSON)
@@ -97,6 +99,25 @@ class MemberControllerTest {
                                 .content(json))
                         .andExpect(status().isBadRequest());
             }
+        }
+
+        @Test
+        @WithMockUser
+        @DisplayName("인증되지 않은 이메일 테스트")
+        void 인증되지_않은_이메일() throws Exception {
+
+            CreateMember data = CreateMember.builder()
+                    .username("user12").nickname("소인국 갔다옴").email("user@naver.com")
+                    .password("1q2w3e4r").name("걸리버").age(90).build();
+
+            String json = objectMapper.writeValueAsString(data);
+
+            given(emailService.checkAuthedEmail(data.email())).willReturn(false);
+            mvc.perform(post("/member")
+                            .with(csrf())
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(json))
+                    .andExpect(status().isUnauthorized());
         }
     }
 
@@ -242,75 +263,54 @@ class MemberControllerTest {
                 }
             }
         }
+    }
 
-        @Nested
-        @DisplayName("이메일 중복검사 테스트")
-        class EmailTest {
-            @Test
-            @WithMockUser
-            @DisplayName("중복 검사 테스트")
-            void 중복검사1() throws Exception {
+    @Nested
+    @DisplayName("이메일 전송 테스트")
+    class EmailTest {
 
-                String data = "test@naver.com";
+        @Test
+        @WithMockUser
+        @DisplayName("중복 검사 테스트")
+        void 중복검사1() throws Exception {
 
-                DataConfirmMember memberDuplicated = DataConfirmMember.builder()
-                        .email(data)
-                        .build();
+            String data = "test@naver.com";
 
-                String json = objectMapper.writeValueAsString(memberDuplicated);
+            given(memberService.checkDuplicatedEmail(data)).willReturn(true);
+            mvc.perform(get("/member/emailAuthed/"+data)
+                            .with(csrf())
+                            .contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(status().isOk());
+        }
 
-                given(memberService.checkDuplicatedEmail(data)).willReturn(true);
-                mvc.perform(post("/member/confirm")
+        @Test
+        @WithMockUser
+        @DisplayName("중복 테스트")
+        void 중복검사2() throws Exception {
+
+            String data = "test@naver.com";
+
+            given(memberService.checkDuplicatedEmail(data)).willReturn(false);
+            mvc.perform(get("/member/emailAuthed/"+data)
+                            .with(csrf())
+                            .contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(status().isConflict());
+        }
+
+        @Test
+        @WithMockUser
+        @DisplayName("잘못된 값 테스트")
+        void 중복검사_BAD1() throws Exception {
+
+            String[] dataArr = new String[]{"test", "test@naver", "test@naver", "test@naver.", "test@naver.c",
+                    "testnaver.com", "@naver.com", "test.naver@com", "123456789012345678901234567890123456789012345678901"};
+
+            for(String data : dataArr) {
+                given(memberService.checkDuplicatedNickname(data)).willReturn(false);
+                mvc.perform(get("/member/emailAuthed/"+data)
                                 .with(csrf())
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(json))
-                        .andExpect(status().isOk());
-            }
-
-            @Test
-            @WithMockUser
-            @DisplayName("중복 테스트")
-            void 중복검사2() throws Exception {
-
-                String data = "test@naver.com";
-
-                DataConfirmMember memberDuplicated = DataConfirmMember.builder()
-                        .email(data)
-                        .build();
-
-                String json = objectMapper.writeValueAsString(memberDuplicated);
-
-                given(memberService.checkDuplicatedEmail(data)).willReturn(false);
-                mvc.perform(post("/member/confirm")
-                                .with(csrf())
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(json))
-                        .andExpect(status().isConflict());
-            }
-
-            @Test
-            @WithMockUser
-            @DisplayName("잘못된 값 테스트")
-            void 중복검사_BAD1() throws Exception {
-
-                String[] dataArr = new String[]{"test", "test@naver", "test@naver", "test@naver.", "test@naver.c",
-                        "testnaver.com", "@naver.com", "test.naver@com", "123456789012345678901234567890123456789012345678901"};
-
-                for(String data : dataArr) {
-
-                    DataConfirmMember memberDuplicated = DataConfirmMember.builder()
-                            .email(data)
-                            .build();
-
-                    String json = objectMapper.writeValueAsString(memberDuplicated);
-
-                    given(memberService.checkDuplicatedNickname(data)).willReturn(false);
-                    mvc.perform(post("/member/confirm")
-                                    .with(csrf())
-                                    .contentType(MediaType.APPLICATION_JSON)
-                                    .content(json))
-                            .andExpect(status().isBadRequest());
-                }
+                                .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest());
             }
         }
     }

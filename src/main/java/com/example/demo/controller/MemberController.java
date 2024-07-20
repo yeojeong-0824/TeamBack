@@ -43,17 +43,21 @@ public class MemberController {
     @ApiResponses(
         value = {
                 @ApiResponse(responseCode = "201", description = "유저 생성 완료"), // 해당 메소드가 반환하는 Http Status 코드의 대한 설명
-                @ApiResponse(responseCode = "400", description = "유효성 검사 실패") // 해당 메소드가 반환하는 Http Status 코드의 대한 설명
+                @ApiResponse(responseCode = "400", description = "유효성 검사 실패"), // 해당 메소드가 반환하는 Http Status 코드의 대한 설명
+                @ApiResponse(responseCode = "401", description = "인증되지 않은 이메일")
         }
     )
     public ResponseEntity<String> save(@Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE)) // 메소드가 받는 파라미터는 Json 형식을 사용한다
-                                       @Valid @RequestBody CreateMember taken,
+                                       @Valid @RequestBody CreateMember takenDto,
                                        HttpServletRequest request) {
 
         String ip = request.getRemoteAddr();
         log.info("{}: 유저 생성 API 호출", ip);
 
-        memberService.addUser(taken);
+        if(!emailService.checkAuthedEmail(takenDto.email()))
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("인증되지 않은 이메일");
+
+        memberService.addUser(takenDto);
         return ResponseEntity.status(HttpStatus.CREATED).body("생성 완료");
     }
 
@@ -95,9 +99,6 @@ public class MemberController {
         if(taken.nickname() != null && !memberService.checkDuplicatedNickname(taken.nickname()))
             return ResponseEntity.status(HttpStatus.CONFLICT).body("닉네임이 중복됨");
 
-        if(taken.email() != null && !memberService.checkDuplicatedEmail(taken.email()))
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("이메일이 중복됨");
-
         return ResponseEntity.ok("중복되지 않음");
     }
 
@@ -118,12 +119,14 @@ public class MemberController {
         String ip = request.getRemoteAddr();
         log.info("{}: 이메일 인증코드 전송 API 호출", ip);
 
+        if(!memberService.checkDuplicatedEmail(email))
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("이메일이 중복되었습니다");
+
         String authendKey = emailService.createAuthedKey();
         String title = "이메일 인증 코드";
         String text = "이메일 인증 코드: " + authendKey;
 
         emailService.sendEmail(email, title, text, authendKey);
-
         return ResponseEntity.ok("이메일 인증 코드 전송");
     }
 
@@ -137,7 +140,7 @@ public class MemberController {
     )
     public ResponseEntity<String> emailAuthedCheck(@NotBlank @Size(min = 1, max = 50) @Schema(example = "example@naver.com")
                                                    @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$",
-                                                           message = "유효한 이메일이 아닙니다.")
+                                                            message = "유효한 이메일이 아닙니다.")
                                                    @PathVariable("email") String email,
 
                                                    @NotBlank @Schema(example = "1234")

@@ -18,7 +18,7 @@ public class EmailService {
     private final JavaMailSender javaMailSender;
     private Map<String, String> emailAuthendKeyMap = new HashMap<>(); // 일단 MAP으로 구현했습니다!
 
-    // ToDo: 이메일 전송 시 유효시간을 만들어야 함, 어떤 식으로 로직을 작성할지 고민을 해봐야 할 것 같음
+    // ToDo: 이메일 전송 시 유효시간을 만들어야 함, 어떤 식으로 로직을 작성 할 지 고민을 해봐야 할 것 같음
     // ToDo: 회원가입 시 이메일 인증이 된 유저인지 아닌지 확인하는 로직이 필요함
 
     public void sendEmail(String email, String title, String text, String authedKey) {
@@ -42,7 +42,17 @@ public class EmailService {
 
     public boolean checkAuthedKey(String email, String key) {
         String savedKey = emailAuthendKeyMap.get(email);
+        if(savedKey == null) return false;
         if(!savedKey.equals(key)) return false;
+
+        emailAuthendKeyMap.put(email, "Authed");
+        return true;
+    }
+
+    public boolean checkAuthedEmail(String email) {
+        String savedKey = emailAuthendKeyMap.get(email);
+        if(savedKey == null) return false;
+        if(!savedKey.equals("Authed")) return false;
 
         emailAuthendKeyMap.remove(email);
         return true;
