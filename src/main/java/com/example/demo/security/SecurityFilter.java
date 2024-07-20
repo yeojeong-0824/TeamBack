@@ -52,12 +52,11 @@ public class SecurityFilter {
         CorsConfiguration configuration = new CorsConfiguration();
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 
-        configuration.addAllowedOrigin(CorsConfiguration.ALL);
+        configuration.addAllowedOriginPattern(CorsConfiguration.ALL);
         configuration.addAllowedMethod(CorsConfiguration.ALL);
         configuration.addAllowedHeader(CorsConfiguration.ALL);
 
         configuration.setExposedHeaders(List.of(jwtProvider.REFRESH_HEADER_STRING, jwtProvider.JWT_HEADER_STRING));
-        configuration.setAllowCredentials(true);
         configuration.setMaxAge(3600L);
 
         source.registerCorsConfiguration("/**", configuration);
