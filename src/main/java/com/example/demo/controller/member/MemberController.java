@@ -1,4 +1,4 @@
-package com.example.demo.controller;
+package com.example.demo.controller.member;
 
 import com.example.demo.dto.member.MemberRequest.*;
 import com.example.demo.dto.member.MemberResponse;
@@ -54,7 +54,7 @@ public class MemberController {
         String ip = request.getRemoteAddr();
         log.info("{}: 유저 생성 API 호출", ip);
 
-        if(!emailService.checkAuthedEmail(takenDto.email()))
+        if(!emailService.checkAuthedEmail(takenDto.email(), "join")) // 회원가입을 시도할 때 Email의 상태가 join이여야 함
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("인증되지 않은 이메일");
 
         memberService.addUser(takenDto);
@@ -130,7 +130,7 @@ public class MemberController {
         return ResponseEntity.ok("이메일 인증 코드 전송");
     }
 
-    @PostMapping("/emailAuthed/{email}")
+    @PostMapping("/emailAuthed")
     @Operation(summary = "이메일 인증코드 확인")
     @ApiResponses(
             value = {
@@ -138,21 +138,14 @@ public class MemberController {
                     @ApiResponse(responseCode = "401", description = "이메일 인증 실패")
             }
     )
-    public ResponseEntity<String> emailAuthedCheck(@NotBlank @Size(min = 1, max = 50) @Schema(example = "example@naver.com")
-                                                   @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$",
-                                                            message = "유효한 이메일이 아닙니다.")
-                                                   @PathVariable("email") String email,
-
-                                                   @NotBlank @Schema(example = "1234")
-                                                   @Pattern(regexp = "^\\d{4}$", message = "인증 코드는 4자리 숫자입니다.")
-                                                   @RequestBody String key,
-
+    public ResponseEntity<String> emailAuthedCheck(@Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
+                                                   @Valid @RequestBody EmailAuthed emailAuthed,
                                                    HttpServletRequest request) {
 
         String ip = request.getRemoteAddr();
         log.info("{}: 이메일 인증 API 호출", ip);
 
-        return emailService.checkAuthedKey(email, key) ?
+        return emailService.checkAuthedKey(emailAuthed.email(), emailAuthed.key(), emailAuthed.option()) ?
                 ResponseEntity.ok("이메일 인증 성공") : ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("이메일 인증 실패");
     }
 }

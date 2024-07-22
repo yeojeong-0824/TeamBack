@@ -7,6 +7,23 @@ import jakarta.validation.constraints.*;
 import lombok.Builder;
 
 public class MemberRequest {
+    @Schema(name = "이메일 인증")
+    public record EmailAuthed(
+            @Size(min = 1, max = 50) @NotBlank
+            @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$",
+                    message = "유효한 이메일이 아닙니다.")
+            @Schema(example = "example@naver.com")
+            String email,
+
+            @Size(min = 1, max = 50) @NotBlank
+            @Schema(example = "join | changePassword 중 하나를 선택해서 넣어주세요 ex: join")
+            String option,
+
+            @NotBlank
+            @Pattern(regexp = "^\\d{4}$", message = "인증 코드는 4자리 숫자입니다.")
+            @Schema(example = "1234")
+            String key
+    ) {}
     @Builder
     @Schema(name = "유저 중복 검사")
     public record DataConfirmMember(
@@ -16,13 +33,7 @@ public class MemberRequest {
 
             @Size(min = 1, max = 10)
             @Schema(example = "소인국갔다옴", nullable = true)
-            String nickname,
-
-            @Size(min = 1, max = 50)
-            @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$", // 이메일 정규식
-                    message = "유효한 이메일이 아닙니다.")
-            @Schema(example = "example@naver.com", nullable = true)
-            String email
+            String nickname
     ) {}
 
     @Builder

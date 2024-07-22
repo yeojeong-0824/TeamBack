@@ -52,4 +52,11 @@ public class GlobalExceptionHandler {
         log.warn(ex.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ExceptionMessage(errorMessage));
     }
+
+    @ExceptionHandler(RequestDataException.class)
+    public ResponseEntity<ExceptionMessage> handlerRequestDataException(RequestDataException ex) {
+        List<String> errorMessage = List.of(ex.getMessage());
+        log.error(ex.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ExceptionMessage(errorMessage));
+    }
 }
