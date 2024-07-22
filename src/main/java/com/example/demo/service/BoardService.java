@@ -8,6 +8,7 @@ import com.example.demo.entity.Board;
 import com.example.demo.entity.Member;
 import com.example.demo.repository.BoardRepository;
 import com.example.demo.repository.MemberRepository;
+import com.example.demo.repository.RedisRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,8 +20,10 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class BoardService {
+
     private final BoardRepository boardRepository;
     private final MemberRepository memberRepository;
+    private final RedisRepository redisRepository;
 
 
     // 게시글 작성
@@ -74,6 +77,11 @@ public class BoardService {
     public BoardReadResponse getBoard(Long boardId){
         Board board = boardRepository.findById(boardId)
                 .orElseThrow(() -> new NotFoundBoardException("해당 게시글을 찾을 수 없습니다."));
+
+        long increasesViewCount = redisRepository.incrementViewCount(boardId);
+        board.addViewCount((int) increasesViewCount);
+        boardRepository.save(board);
+
         return new BoardReadResponse(board);
     }
 
