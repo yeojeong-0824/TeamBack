@@ -54,7 +54,9 @@ public class Board {
         this.satisfaction = satisfaction;
     }
 
-    public void viewUp(){this.view += 1;}
+    public void addViewCount(Integer view) {
+        this.view = view;
+    }
 
     public void commentCountUp(){this.commentCount += 1;}
 
