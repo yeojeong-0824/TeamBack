@@ -2,13 +2,16 @@ package com.example.demo.service;
 
 import com.example.demo.config.exception.board.NotFoundBoardException;
 import com.example.demo.config.exception.member.NotFoundMemberException;
-import com.example.demo.dto.board.BoardRequest.*;
-import com.example.demo.dto.board.BoardResponse.*;
+import com.example.demo.dto.board.BoardRequest.BoardSaveRequest;
+import com.example.demo.dto.board.BoardRequest.BoardUpdateRequest;
+import com.example.demo.dto.board.BoardResponse.BoardListResponse;
+import com.example.demo.dto.board.BoardResponse.BoardReadResponse;
+import com.example.demo.dto.board.BoardResponse.BoardSaveResponse;
+import com.example.demo.dto.board.BoardResponse.BoardUpdateResponse;
 import com.example.demo.entity.Board;
 import com.example.demo.entity.Member;
 import com.example.demo.repository.BoardRepository;
 import com.example.demo.repository.MemberRepository;
-import com.example.demo.repository.RedisRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -23,7 +26,7 @@ public class BoardService {
 
     private final BoardRepository boardRepository;
     private final MemberRepository memberRepository;
-    private final RedisRepository redisRepository;
+//    private final RedisRepository redisRepository;
 
 
     // 게시글 작성
@@ -78,9 +81,9 @@ public class BoardService {
         Board board = boardRepository.findById(boardId)
                 .orElseThrow(() -> new NotFoundBoardException("해당 게시글을 찾을 수 없습니다."));
 
-        long increasesViewCount = redisRepository.incrementViewCount(boardId);
-        board.addViewCount((int) increasesViewCount);
-        boardRepository.save(board);
+//        long increasesViewCount = redisRepository.incrementViewCount(boardId);
+//        board.addViewCount((int) increasesViewCount);
+//        boardRepository.save(board);
 
         return new BoardReadResponse(board);
     }
