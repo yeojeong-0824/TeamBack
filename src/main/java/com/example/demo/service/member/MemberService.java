@@ -1,4 +1,4 @@
-package com.example.demo.service;
+package com.example.demo.service.member;
 
 import com.example.demo.dto.member.MemberRequest.*;
 import com.example.demo.entity.Member;
@@ -8,8 +8,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -35,11 +33,6 @@ public class MemberService {
 
     public boolean checkDuplicatedEmail(String takenEmail) {
         return !memberRepository.existsByEmail(takenEmail);
-    }
-
-    public List<MemberResponse> findAll() {
-        List<Member> savedMemberList = memberRepository.findAll();
-        return savedMemberList.stream().map(this::toDto).toList();
     }
 
     private MemberResponse toDto(Member member) {

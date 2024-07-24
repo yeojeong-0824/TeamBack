@@ -1,4 +1,4 @@
-package com.example.demo.service;
+package com.example.demo.service.member;
 
 import com.example.demo.entity.Member;
 import com.example.demo.dto.member.MemberDetails;

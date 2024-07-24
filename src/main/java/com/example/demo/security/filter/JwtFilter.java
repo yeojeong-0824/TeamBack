@@ -101,6 +101,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
             Member tokenMember = jwtProvider.decodeToken(refreshTokenHeader, String.valueOf(savedRefreshToken.getExpirationTime()));
             Member savedMember = Member.builder()
+                    .username(savedRefreshToken.getUsername())
                     .nickname(savedRefreshToken.getNickname())
                     .age(savedRefreshToken.getAge())
                     .role(savedRefreshToken.getRole())

@@ -33,11 +33,13 @@ public class JwtProvider {
     public String createJwtToken(MemberDetails member) {
 
         String nickname = member.getNickname();
+        String username = member.getUsername();
         Integer age = member.getAge();
         String role = member.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList().get(0);
 
         return JWT.create()
                 .withExpiresAt(new Date(System.currentTimeMillis() + JWT_EXPIRATION_TIME))
+                .withClaim("username", username)
                 .withClaim("nickname", nickname)
                 .withClaim("age", age)
                 .withClaim("role", role)
@@ -66,10 +68,12 @@ public class JwtProvider {
                 .verify(token);
 
         String nickname = decodedJWT.getClaim("nickname").toString().replace("\"", "");
+        String username = decodedJWT.getClaim("username").toString().replace("\"", "");
         int age = decodedJWT.getClaim("age").asInt();
         String role = decodedJWT.getClaim("role").toString().replace("\"", "");
 
         return Member.builder()
+                .username(username)
                 .nickname(nickname)
                 .age(age)
                 .role(role)
