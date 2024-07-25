@@ -21,6 +21,8 @@ public class JoinMemberEmailService {
     // ToDo: 이메일 전송 시 유효시간을 만들어야 함, 어떤 식으로 로직을 작성 할 지 고민을 해봐야 할 것 같음
 
     private Map<String, String> emailAuthedKeyMap = new HashMap<>();
+
+    // ToDo: 전송 실패 시 처리 안해줌
     public void sendAuthedEmail(String email, String key) {
         String title = "회원가입 이메일 인증 코드";
         String text = "이메일 인증 코드: " + key;

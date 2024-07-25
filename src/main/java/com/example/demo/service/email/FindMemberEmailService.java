@@ -8,6 +8,15 @@ import org.springframework.stereotype.Service;
 public class FindMemberEmailService {
 
     private final EmailService emailService;
+
+    // ToDo: 전송 실패 시 처리 안해줌
+    public void sendNewPasswordEmail(String email, String password) {
+        String title = "새로운 비밀번호 발급";
+        String text = "새로운 비밀번호: " + password;
+
+        emailService.sendEmail(email, title, text);
+    }
+
     public String createNewPassword() {
         String password = "";
         for(int i = 0; i < 4; i++) {
@@ -17,12 +26,5 @@ public class FindMemberEmailService {
             password += (int) (Math.random() * 10);
         }
         return password;
-    }
-
-    public void sendNewPasswordEmail(String email, String password) {
-        String title = "새로운 비밀번호 발급";
-        String text = "새로운 비밀번호: " + password;
-
-        emailService.sendEmail(email, title, text);
     }
 }
