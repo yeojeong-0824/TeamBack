@@ -31,12 +31,14 @@ public class BoardService {
 
     // 게시글 작성
     @Transactional
-    public BoardSaveResponse writeBoard(BoardSaveRequest request){
+    public BoardSaveResponse writeBoard(BoardSaveRequest request, String memberName){
 
-        Member member = memberRepository.findByUsername(request.memberName()).
+        Member member = memberRepository.findByUsername(memberName).
                 orElseThrow(() -> new NotFoundMemberException("해당 회원을 찾을 수 없습니다."));
 
         Board board = Board.builder()
+                .country(request.country())
+                .city(request.city())
                 .title(request.title())
                 .body(request.body())
                 .view(0)
@@ -58,7 +60,7 @@ public class BoardService {
         Board board = boardRepository.findById(boardId)
                 .orElseThrow(() -> new NotFoundBoardException("해당 게시글을 찾을 수 없습니다."));
 
-        board.update(request.title(), request.body(), request.satisfaction());
+        board.update(request);
 
         return new BoardUpdateResponse(board);
     }

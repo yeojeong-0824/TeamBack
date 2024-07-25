@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.dto.board.BoardRequest.*;
 import com.example.demo.dto.board.BoardResponse.*;
+import com.example.demo.dto.member.MemberDetails;
 import com.example.demo.service.BoardService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -10,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -29,8 +31,9 @@ public class BoardController {
             }
     )
     public ResponseEntity<BoardSaveResponse> boardWrite(@RequestBody BoardSaveRequest request){
-        // TODO : username 을 찾는 코드 작성 필요
-        return ResponseEntity.status(HttpStatus.CREATED).body(boardService.writeBoard(request));
+        MemberDetails memberDetails = (MemberDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String memberName = memberDetails.getUsername();
+        return ResponseEntity.status(HttpStatus.CREATED).body(boardService.writeBoard(request, memberName));
     }
 
     @PutMapping("/update/{boardId}")

@@ -20,6 +20,8 @@ public class BoardResponse {
     private String memberNickname;
 
     public record BoardSaveResponse(
+            String country,
+            String city,
             String title,
             String body,
             Integer view,
@@ -30,6 +32,8 @@ public class BoardResponse {
     ) {
         public BoardSaveResponse(Board board) {
             this(
+                    board.getCountry(),
+                    board.getCity(),
                     board.getTitle(),
                     board.getBody(),
                     board.getView(),
@@ -42,6 +46,8 @@ public class BoardResponse {
     }
 
     public record BoardUpdateResponse(
+            String country,
+            String city,
             String title,
             String body,
             Integer view,
@@ -52,6 +58,8 @@ public class BoardResponse {
     ) {
         public BoardUpdateResponse(Board board) {
             this(
+                    board.getCountry(),
+                    board.getCity(),
                     board.getTitle(),
                     board.getBody(),
                     board.getView(),
@@ -65,6 +73,8 @@ public class BoardResponse {
 
     public record BoardListResponse(
             Long id,
+            String country,
+            String city,
             String title,
             Integer view,
             Integer satisfaction,
@@ -74,6 +84,8 @@ public class BoardResponse {
         public BoardListResponse(Board board) {
             this(
                     board.getId(),
+                    board.getCountry(),
+                    board.getCity(),
                     board.getTitle(),
                     board.getView(),
                     board.getSatisfaction(),
@@ -84,6 +96,8 @@ public class BoardResponse {
     }
 
     public record BoardReadResponse(
+            String country,
+            String city,
             String title,
             String Body,
             Integer view,
@@ -94,6 +108,8 @@ public class BoardResponse {
     ) {
         public BoardReadResponse(Board board) {
             this(
+                    board.getCountry(),
+                    board.getCity(),
                     board.getTitle(),
                     board.getBody(),
                     board.getView(),
