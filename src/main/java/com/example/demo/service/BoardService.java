@@ -90,6 +90,14 @@ public class BoardService {
         return new BoardReadResponse(board);
     }
 
+    // 전체 게시글
+    public Page<BoardListResponse> getBoardList(int page){
+        PageRequest request = PageRequest.of(page - 1, 10, Sort.by("id").descending());
+
+        Page<Board> boardList = boardRepository.findAll(request);
+        return toDtoPage(boardList);
+    }
+
 
     // 조건에 따른 게시글 검색, 정렬
     public Page<BoardListResponse> getSearchBoardList(String searchKeyword, String keyword, String sortKeyword, int page) {

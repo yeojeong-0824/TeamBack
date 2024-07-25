@@ -75,6 +75,19 @@ public class BoardController {
         return ResponseEntity.ok(boardService.getBoard(boardId));
     }
 
+    @GetMapping("/list")
+    @Operation(summary = "모든 게시글")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "모든 게시글 검색 성공"),
+                    @ApiResponse(responseCode = "400", description = "모든 게시글 검색 실패")
+            }
+    )
+    public ResponseEntity<Page<BoardListResponse>> boardList(
+            @RequestParam(required = false, defaultValue = "1") int page){
+        return ResponseEntity.ok(boardService.getBoardList(page));
+    }
+
     @GetMapping
     @Operation(summary = "조건에 따른 게시글 검색, 정렬")
     @ApiResponses(
