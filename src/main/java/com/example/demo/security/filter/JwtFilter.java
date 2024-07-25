@@ -57,7 +57,7 @@ public class JwtFilter extends OncePerRequestFilter {
             /*
             JWT Token이 만료되었다면 Refresh Token을 이용해 재발급을 시도
 
-            Process:
+            작동 방식:
             1. 재발급을 요청한 IP가 Refresh Token을 발급받은 IP와 다르다면 저장된 Refresh Token을 삭제 후 재발급 실패를 반환 (Token 탈취 검사)
             2. 재발급을 요청한 Refresh Token의 발급 가능 횟수를 초과했다면 저장된 Refresh Token을 삭제 후 재발급 실패를 반환 (Token 재발급 횟수 제한)
             3. 재발급을 요청한 Refresh Token의 정보와 데이터베이스의 저장된 정보와 다르다면 저장된 Refresh Token을 삭제 후 재발급 실패를 반환 (Token 변조 검사)

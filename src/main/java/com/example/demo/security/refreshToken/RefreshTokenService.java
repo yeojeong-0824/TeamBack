@@ -34,10 +34,10 @@ public class RefreshTokenService {
         refreshTokenRepository.deleteById(token);
     }
 
-    // 만료된 토큰 정리 프로세스 하루에 한번 진행
+    // 만료된 토큰 정리 하루에 한번 진행
     @Scheduled(fixedDelay = 24 * 60 * 60 * 1000)
     private void dropExpirationToken() {
-        log.info("만료된 Refresh Token 정리 프로세스");
+        log.info("만료된 Refresh Token 정리");
         long time = System.currentTimeMillis();
 
         List<RefreshToken> refreshTokenList = refreshTokenRepository.findByOrderByExpirationTime();
