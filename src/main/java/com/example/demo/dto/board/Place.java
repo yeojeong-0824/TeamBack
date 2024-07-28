@@ -5,6 +5,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class GoogleApiResponse {
-    private List<Place> places;
+public class Place {
+    private String formattedAddress;
+    private Location location;
 }
