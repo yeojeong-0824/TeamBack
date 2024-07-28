@@ -35,8 +35,19 @@ public class JwtFilter extends OncePerRequestFilter {
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
 
-        String refreshTokenHeader = request.getHeader(jwtProvider.REFRESH_HEADER_STRING);
+        /*
+        1. Jwt 재발급
+        Step 1: Refresh 토큰이 존재하는지 확인
+        Step 2: Refresh 토큰이 존재한다면, Jwt 토큰의 재발급 시도로 알고 Jwt 토큰 재발급을 시도
+        Step 3: 재발급의 실패 시(만료: 401, 변조: 400) 오류를 반환, 성공 시 인증에 성공
+        Step 4: 필터 종료
 
+        2. Jwt 확인
+        Step 1: Jwt 토큰이 존재하는지 확인 -> 없다면 필터 종료
+        Step 2: Jwt 토큰을 복호화 실패시(만료: 401, 변조: 400) 오류를 반환, 성공시 인증에 성공
+        Step 3: 필터 종료
+         */
+        String refreshTokenHeader = request.getHeader(jwtProvider.REFRESH_HEADER_STRING);
         if(refreshTokenHeader != null) {
             log.info("JWT Token 재발급");
             refreshTokenHeader = refreshTokenHeader.replace(jwtProvider.TOKEN_PREFIX, "");
@@ -92,7 +103,6 @@ public class JwtFilter extends OncePerRequestFilter {
 
 
         String jwtTokenHeader = request.getHeader(jwtProvider.JWT_HEADER_STRING);
-
         if(jwtTokenHeader == null) {
             filterChain.doFilter(request, response);
             return;
