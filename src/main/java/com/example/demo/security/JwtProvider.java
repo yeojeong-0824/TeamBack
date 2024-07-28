@@ -18,7 +18,7 @@ public class JwtProvider {
     public String SECRET;
 
     //JWT Token는 하루의 유효기간을 가짐
-    public final int JWT_EXPIRATION_TIME = 24 * 60 * 60 * 1000;
+    public final int JWT_EXPIRATION_TIME =  1000;
 
     //Refresh Token는 보름의 유효기간을 가짐
     public final int REFRESH_EXPIRATION_TIME = 15 * 24 * 60 * 60 * 1000;
