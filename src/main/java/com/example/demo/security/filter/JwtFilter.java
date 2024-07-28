@@ -44,8 +44,10 @@ public class JwtFilter extends OncePerRequestFilter {
 
         2. Jwt 확인
         Step 1: Jwt 토큰이 존재하는지 확인 -> 없다면 필터 종료
-        Step 2: Jwt 토큰을 복호화 실패시(만료: 401, 변조: 400) 오류를 반환, 성공시 인증에 성공
+        Step 2: Jwt 토큰을 복호화 실패시(재발급 횟수 초과: 401, 변조: 400) 오류를 반환, 성공시 인증에 성공
         Step 3: 필터 종료
+
+        ToDo: refresh 토큰을 redis로 설정하는 걸 고려해봐야 할 것 같음
          */
         String refreshTokenHeader = request.getHeader(jwtProvider.REFRESH_HEADER_STRING);
         if(refreshTokenHeader != null) {
@@ -54,7 +56,8 @@ public class JwtFilter extends OncePerRequestFilter {
 
             Optional<RefreshToken> savedOptionalRefreshToken = refreshTokenService.findRefreshToken(refreshTokenHeader);
             if(savedOptionalRefreshToken.isEmpty()) {
-                log.info("Refresh Token이 잘못되었습니다");
+                log.info("Refresh Token이 존재하지 않습니다");
+                response.setStatus(400);
                 return;
             }
 
@@ -64,7 +67,7 @@ public class JwtFilter extends OncePerRequestFilter {
             // Refresh Token의 발급 가능 횟수를 초과 했을 때
             // Refresh Token을 삭제하고 만료된 Token으로 재발급을 실패
             if(savedRefreshToken.getCount() < 0) {
-                log.info("Refresh Token이 만료되었습니다");
+                log.info("Refresh Token의 재발급 횟수가 초과되었습니다");
                 refreshTokenService.dropRefreshToken(refreshTokenHeader);
                 response.setStatus(401);
                 return;
