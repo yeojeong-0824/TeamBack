@@ -29,13 +29,12 @@ public class FindMemberController {
     private final MemberService memberService;
     private final FindMemberEmailService findMemberEmailService;
 
-    // Todo: http 상태 코드 수정해야 함
     @PatchMapping("/{username}")
     @Operation(summary = "새로운 비밀번호 발급")
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "비밀번호 재발급 완료"),
-                    @ApiResponse(responseCode = "400", description = "유저를 찾지 못함"),
+                    @ApiResponse(responseCode = "400", description = "입력 값이 잘못됨"),
             }
     )
     public ResponseEntity<String> newPassword(@Size(min = 5, max = 30) @Schema(example = "user12")

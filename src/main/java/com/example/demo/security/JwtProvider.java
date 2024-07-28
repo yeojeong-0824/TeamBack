@@ -23,7 +23,7 @@ public class JwtProvider {
     //Refresh Token는 보름의 유효기간을 가짐
     public final int REFRESH_EXPIRATION_TIME = 15 * 24 * 60 * 60 * 1000;
 
-    //JWT Token의 재발급은 10번으로 제안
+    //JWT Token의 재발급은 10번으로 제한
     public final Integer REFRESH_COUNT = 10;
 
     public final String TOKEN_PREFIX = "Bearer ";
