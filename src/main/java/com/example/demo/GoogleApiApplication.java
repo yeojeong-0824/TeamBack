@@ -1,6 +1,10 @@
 package com.example.demo;
 
+import com.example.demo.dto.board.GoogleApiRequest;
 import com.example.demo.dto.board.GoogleApiResponse;
+import com.example.demo.dto.board.Place;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -12,11 +16,11 @@ public class GoogleApiApplication {
         String key = "나만의 키 값";
 
         // 검색할 값
-        String textQuery = "Spicy Vegetarian Food in Sydney, Australia";
-        GoogleApiResponse result = GoogleApiResponse.builder()
+        String textQuery = "남산타워";
+        GoogleApiRequest result = GoogleApiRequest.builder()
                 .textQuery(textQuery)
+                .languageCode("ko")
                 .build();
-
 
         RestTemplate restTemplate = new RestTemplate();
 
@@ -27,14 +31,23 @@ public class GoogleApiApplication {
         headers.set("X-Goog-FieldMask", "places.location,places.formattedAddress");  // 내가 받을 정보를 세팅
 
         // 보낼 바디와 헤더를 세팅
-        HttpEntity<GoogleApiResponse> entity = new HttpEntity<>(result, headers);
+        HttpEntity<GoogleApiRequest> entity = new HttpEntity<>(result, headers);
 
         // post 로 요청
         ResponseEntity<String> responses = restTemplate.postForEntity(url, entity, String.class);
 
-        System.out.println(responses.getBody());
+        // 문자열을 dto 로 변환
+        ObjectMapper objectMapper = new ObjectMapper();
 
-        // TODO : 문자열을 다른 형태로 바꾸는 것이 필요
+        try {
+            GoogleApiResponse result1 = objectMapper.readValue(responses.getBody(), GoogleApiResponse.class);
 
+            // 확인용
+            /*for(Place place: result1.getPlaces()){
+                System.out.println(place.getFormattedAddress());
+            }*/
+        } catch (JsonProcessingException e){
+            e.printStackTrace();
+        }
     }
 }
