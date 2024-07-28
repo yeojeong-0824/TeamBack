@@ -32,15 +32,17 @@ public class FindMemberController {
     @Operation(summary = "새로운 비밀번호 발급")
     @ApiResponses(
             value = {
-                    @ApiResponse(responseCode = "201", description = "비밀번호 재발급 완료"),
+                    @ApiResponse(responseCode = "200", description = "비밀번호 재발급 완료"),
                     @ApiResponse(responseCode = "400", description = "유저를 찾지 못함"),
             }
     )
-    public ResponseEntity<String> makeNewPassword(@Size(min = 5, max = 30) @Schema(example = "user12")
-                                                  @PathVariable("username")
-                                                  String username,
+    public ResponseEntity<String> newPassword(@Size(min = 5, max = 30) @Schema(example = "user12")
+                                              @PathVariable("username")
+                                              String username,
+                                              HttpServletRequest request) {
+        String ip = request.getRemoteAddr();
+        log.info("{}: 새로운 비밀번호 발급 호출", ip);
 
-                                                  HttpServletRequest request) {
         String savedMemberEmail = memberService.findMemberEmailByUsername(username);
         String password = findMemberEmailService.createNewPassword();
 

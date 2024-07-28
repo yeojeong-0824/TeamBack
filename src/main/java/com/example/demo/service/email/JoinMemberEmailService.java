@@ -21,6 +21,7 @@ public class JoinMemberEmailService {
     private final RedisRepository redisRepository;
 
     // ToDo: 전송 실패 시 처리 안해줌
+    // ToDo: redis에 저장되지 않은 이메일에 접근할 때 오류 발생
     public void sendAuthedEmail(String email, String authedKey) {
         String title = "회원가입 이메일 인증 코드";
         String text = "이메일 인증 코드: " + authedKey;

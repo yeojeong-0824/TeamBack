@@ -44,13 +44,6 @@ public class MemberService {
         return savedMember.getEmail();
     }
 
-    public String findEmailByUsername(String username) {
-        Member savedMember = memberRepository.findByUsername(username)
-                .orElseThrow(() -> new NotFoundMemberException("해당 유저를 찾지 못했습니다"));
-
-        return savedMember.getEmail();
-    }
-
     public void patchPasswordByUsername(String username, String password) {
         Member savedMember = memberRepository.findByUsername(username)
                 .orElseThrow(() -> new NotFoundMemberException("해당 유저를 찾지 못했습니다"));

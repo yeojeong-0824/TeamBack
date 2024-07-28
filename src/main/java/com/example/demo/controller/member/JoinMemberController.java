@@ -55,7 +55,6 @@ public class JoinMemberController {
     public ResponseEntity<String> save(@Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
                                        @Valid @RequestBody CreateMember takenDto,
                                        HttpServletRequest request) {
-
         String ip = request.getRemoteAddr();
         log.info("{}: 유저 생성 API 호출", ip);
 
@@ -78,7 +77,6 @@ public class JoinMemberController {
     public ResponseEntity<String> checkDuplicatedByDataConfirmMember(@Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
                                                                      @Valid @RequestBody DataConfirmMember takenDto,
                                                                      HttpServletRequest request) {
-
         String ip = request.getRemoteAddr();
         log.info("{}: 중복 검사 API 호출", ip);
 
@@ -105,7 +103,6 @@ public class JoinMemberController {
                                                          message = "유효한 이메일이 아닙니다.")
                                                 @PathVariable("email") String email,
                                                 HttpServletRequest request) {
-
         String ip = request.getRemoteAddr();
         log.info("{}: 이메일 인증코드 전송 API 호출", ip);
 
@@ -135,7 +132,6 @@ public class JoinMemberController {
                                                      @RequestBody String key,
 
                                                      HttpServletRequest request) {
-
         String ip = request.getRemoteAddr();
         log.info("{}: 이메일 인증 API 호출", ip);
 
