@@ -72,12 +72,12 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
         RefreshToken saveToken = RefreshToken.builder()
                 .refreshToken(refreshToken)
+                .username(member.getUsername())
                 .nickname(member.getNickname())
                 .age(member.getAge())
                 .role(member.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList().get(0))
                 .expirationTime(loginTime + jwtProvider.REFRESH_EXPIRATION_TIME)
                 .count(jwtProvider.REFRESH_COUNT)
-                .ip(request.getRemoteAddr())
                 .build();
 
         refreshTokenService.addRefreshToken(saveToken);

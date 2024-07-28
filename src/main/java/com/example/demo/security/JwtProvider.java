@@ -18,7 +18,7 @@ public class JwtProvider {
     public String SECRET;
 
     //JWT Token는 하루의 유효기간을 가짐
-    public final int JWT_EXPIRATION_TIME = 24 * 60 * 60 * 1000;
+    public final int JWT_EXPIRATION_TIME = 1000;
 
     //Refresh Token는 보름의 유효기간을 가짐
     public final int REFRESH_EXPIRATION_TIME = 15 * 24 * 60 * 60 * 1000;
@@ -32,8 +32,8 @@ public class JwtProvider {
 
     public String createJwtToken(MemberDetails member) {
 
-        String nickname = member.getNickname();
         String username = member.getUsername();
+        String nickname = member.getNickname();
         Integer age = member.getAge();
         String role = member.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList().get(0);
 
@@ -49,12 +49,14 @@ public class JwtProvider {
 
     public String createRefreshToken(MemberDetails member, long createTime) {
 
+        String username = member.getUsername();
         String nickname = member.getNickname();
         Integer age = member.getAge();
         String role = member.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList().get(0);
 
         return JWT.create()
                 .withExpiresAt(new Date(System.currentTimeMillis() + REFRESH_EXPIRATION_TIME))
+                .withClaim("username", username)
                 .withClaim("nickname", nickname)
                 .withClaim("age", age)
                 .withClaim("role", role)
@@ -67,8 +69,8 @@ public class JwtProvider {
                 .build()
                 .verify(token);
 
-        String nickname = decodedJWT.getClaim("nickname").toString().replace("\"", "");
         String username = decodedJWT.getClaim("username").toString().replace("\"", "");
+        String nickname = decodedJWT.getClaim("nickname").toString().replace("\"", "");
         int age = decodedJWT.getClaim("age").asInt();
         String role = decodedJWT.getClaim("role").toString().replace("\"", "");
 
