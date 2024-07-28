@@ -3,9 +3,11 @@ package com.example.demo;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 
 @SpringBootApplication
-@EnableScheduling // 만료된 Refresh Token을 하루에 한번 정리하기 위해 추가했습니다 (@Scheduled를 사용하기 위함)
+@EnableScheduling
+@EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
 public class DemoApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(DemoApplication.class, args);

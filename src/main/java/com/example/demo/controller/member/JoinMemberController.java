@@ -3,7 +3,7 @@ package com.example.demo.controller.member;
 import com.example.demo.dto.member.MemberRequest.*;
 import com.example.demo.service.email.EmailService;
 import com.example.demo.service.member.MemberService;
-import com.example.demo.service.email.JoinEmailService;
+import com.example.demo.service.email.JoinMemberEmailService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -29,13 +29,19 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/member")
 @Validated
-@Tag(name = "회원가입 API") // 해당 클래스의 역할을 설명
+@Tag(name = "회원가입 API")
 public class JoinMemberController {
 
     private final MemberService memberService;
-    private final EmailService emailService;
-    private final JoinEmailService joinEmailService;
+    private final JoinMemberEmailService joinMemberEmailService;
 
+    /*
+    회원가입 작동 방식:
+    1. 이메일 중복 검사 및 유효성 검사 후 인증 이메일 발송
+    2. 인증 이메일 값 확인 후 인증이 완료 되었으면 인증된 이메일로 전환
+    3. 아이디 및 닉네임 중복 검사 및 유효성 검사
+    4. 회원가입(회원가입 시 이메일 인증을 진행하지 않았을 때는 인증되지 않은 이메일을 반환)
+     */
 
     @PostMapping
     @Operation(summary = "회원가입")
@@ -49,11 +55,10 @@ public class JoinMemberController {
     public ResponseEntity<String> save(@Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
                                        @Valid @RequestBody CreateMember takenDto,
                                        HttpServletRequest request) {
-
         String ip = request.getRemoteAddr();
         log.info("{}: 유저 생성 API 호출", ip);
 
-        if(!joinEmailService.checkAuthedEmailForJoin(takenDto.email()))
+        if(!joinMemberEmailService.checkAuthedEmail(takenDto.email()))
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("인증되지 않은 이메일입니다");
 
         memberService.addUser(takenDto);
@@ -69,17 +74,16 @@ public class JoinMemberController {
                     @ApiResponse(responseCode = "409", description = "중복됨")
             }
     )
-    public ResponseEntity<String> checkDuplicated(@Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
-                                                  @Valid @RequestBody DataConfirmMember takenDto,
-                                                  HttpServletRequest request) {
-
+    public ResponseEntity<String> checkDuplicatedByDataConfirmMember(@Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
+                                                                     @Valid @RequestBody DataConfirmMember takenDto,
+                                                                     HttpServletRequest request) {
         String ip = request.getRemoteAddr();
         log.info("{}: 중복 검사 API 호출", ip);
 
-        if(takenDto.username() != null && !memberService.checkDuplicatedUsername(takenDto.username()))
+        if(takenDto.username() != null && !memberService.checkDuplicatedByUsername(takenDto.username()))
             return ResponseEntity.status(HttpStatus.CONFLICT).body("이미 사용 중인 아이디입니다");
 
-        if(takenDto.nickname() != null && !memberService.checkDuplicatedNickname(takenDto.nickname()))
+        if(takenDto.nickname() != null && !memberService.checkDuplicatedByNickname(takenDto.nickname()))
             return ResponseEntity.status(HttpStatus.CONFLICT).body("이미 사용 중인 닉네임입니다");
 
         return ResponseEntity.ok("중복되지 않았습니다");
@@ -94,24 +98,20 @@ public class JoinMemberController {
                     @ApiResponse(responseCode = "409", description = "이메일이 중복 중복됨")
             }
     )
-    public ResponseEntity<String> emailAuthed(@NotBlank @Size(min = 1, max = 50) @Schema(example = "example@naver.com")
-                                              @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$",
-                                                       message = "유효한 이메일이 아닙니다.")
-                                              @PathVariable("email") String email,
-                                              HttpServletRequest request) {
-
+    public ResponseEntity<String> authedByEmail(@NotBlank @Size(min = 1, max = 50) @Schema(example = "example@naver.com")
+                                                @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$",
+                                                         message = "유효한 이메일이 아닙니다.")
+                                                @PathVariable("email") String email,
+                                                HttpServletRequest request) {
         String ip = request.getRemoteAddr();
         log.info("{}: 이메일 인증코드 전송 API 호출", ip);
 
-        if(!memberService.checkDuplicatedEmail(email))
+        if(!memberService.checkDuplicatedByEmail(email))
             return ResponseEntity.status(HttpStatus.CONFLICT).body("이미 사용 중인 이메일 입니다");
 
-        String authedKey = joinEmailService.createAuthedKeyForJoin();
-        String title = "회원가입 이메일 인증 코드";
-        String text = "이메일 인증 코드: " + authedKey;
-
-        emailService.sendEmail(email, title, text, authedKey);
-        return ResponseEntity.ok("이메일 인증 코드 전송 완료");
+        String key = joinMemberEmailService.createAuthedKey();
+        joinMemberEmailService.sendAuthedEmail(email, key);
+        return ResponseEntity.ok("이메일 인증 코드 전송되었습니다");
     }
 
     @PostMapping("/emailAuthed/{email}")
@@ -122,21 +122,20 @@ public class JoinMemberController {
                     @ApiResponse(responseCode = "401", description = "이메일 인증 실패")
             }
     )
-    public ResponseEntity<String> emailAuthedCheck(@Size(min = 1, max = 50) @Schema(example = "example@naver.com")
-                                                   @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$",
-                                                           message = "유효한 이메일이 아닙니다.")
-                                                   @PathVariable("email") String email,
+    public ResponseEntity<String> authedCheckByEmail(@Size(min = 1, max = 50) @Schema(example = "example@naver.com")
+                                                     @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$",
+                                                              message = "유효한 이메일이 아닙니다.")
+                                                     @PathVariable("email") String email,
 
-                                                   @NotBlank @Schema(example = "1234")
-                                                   @Pattern(regexp = "^\\d{4}$", message = "인증 코드는 4자리 숫자입니다.")
-                                                   @RequestBody String key,
+                                                     @NotBlank @Schema(example = "1234")
+                                                     @Pattern(regexp = "^\\d{4}$", message = "인증 코드는 4자리 숫자입니다.")
+                                                     @RequestBody String key,
 
-                                                   HttpServletRequest request) {
-
+                                                     HttpServletRequest request) {
         String ip = request.getRemoteAddr();
         log.info("{}: 이메일 인증 API 호출", ip);
 
-        return joinEmailService.checkAuthedKeyForJoin(email, key) ?
+        return joinMemberEmailService.checkAuthedKey(email, key) ?
                 ResponseEntity.ok("이메일 인증에 성공하였습니다") :
                 ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("이메일 인증에 실패하였습니다");
     }

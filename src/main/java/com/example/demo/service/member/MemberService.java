@@ -1,8 +1,10 @@
 package com.example.demo.service.member;
 
+import com.example.demo.config.exception.member.NotFoundMemberException;
 import com.example.demo.dto.member.MemberRequest.*;
-import com.example.demo.entity.Member;
 import com.example.demo.dto.member.MemberResponse;
+import com.example.demo.dto.member.MemberResponse.*;
+import com.example.demo.entity.Member;
 import com.example.demo.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,25 +25,30 @@ public class MemberService {
         memberRepository.save(takenMember);
     }
 
-    public boolean checkDuplicatedUsername(String takenUsername) {
+    public boolean checkDuplicatedByUsername(String takenUsername) {
         return !memberRepository.existsByUsername(takenUsername);
     }
 
-    public boolean checkDuplicatedNickname(String takenNickname) {
+    public boolean checkDuplicatedByNickname(String takenNickname) {
         return !memberRepository.existsByNickname(takenNickname);
     }
 
-    public boolean checkDuplicatedEmail(String takenEmail) {
+    public boolean checkDuplicatedByEmail(String takenEmail) {
         return !memberRepository.existsByEmail(takenEmail);
     }
 
-    private MemberResponse toDto(Member member) {
-        return MemberResponse.builder()
-                .username(member.getUsername())
-                .nickname(member.getNickname())
-                .email(member.getEmail())
-                .name(member.getName())
-                .age(member.getAge())
-                .build();
+    public String findMemberEmailByUsername(String username) {
+        Member savedMember = memberRepository.findByUsername(username)
+                .orElseThrow(() -> new NotFoundMemberException("해당 유저를 찾지 못했습니다"));
+
+        return savedMember.getEmail();
+    }
+
+    public void patchPasswordByUsername(String username, String password) {
+        Member savedMember = memberRepository.findByUsername(username)
+                .orElseThrow(() -> new NotFoundMemberException("해당 유저를 찾지 못했습니다"));
+
+        savedMember.patchPassword(passwordEncoder.encode(password));
+        memberRepository.save(savedMember);
     }
 }

@@ -30,6 +30,7 @@ public class EmailConfig {
         mailSender.setJavaMailProperties(getMailProperties());
 
         return mailSender;
+
     }
 
     private Properties getMailProperties() {
@@ -50,5 +51,6 @@ public class EmailConfig {
         properties.put("mail.smtp.writetimeout", writeTimeout);
 
         return properties;
+
     }
 }

@@ -18,7 +18,6 @@ public class RefreshToken {
     private String role;
     private Long expirationTime;
     private Integer count;
-    private String ip;
 
     public void counting() {
         this.count--;

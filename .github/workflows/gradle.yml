@@ -72,5 +72,5 @@ jobs:
             sudo docker pull ${{secrets.DOCKERHUB_USERNAME}}/website
             sudo docker stop website
             sudo docker container rm website
-            sudo docker run -dit --name website -p 80:8080 ${{secrets.DOCKERHUB_USERNAME}}/website
+            sudo docker run -dit -p 80:8080 --name website --link redis:redis ${{secrets.DOCKERHUB_USERNAME}}/website
             sudo docker image prune -f

@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 public class EmailService {
 
     private final JavaMailSender javaMailSender;
-    private final JoinEmailService joinEmailService;
 
     private SimpleMailMessage createEmailForm(String toEmail, String title, String text) {
         SimpleMailMessage message = new SimpleMailMessage();
@@ -29,12 +28,11 @@ public class EmailService {
     /**
      * 이메일 전송
      */
-    public void sendEmail(String email, String title, String text, String authedKey) {
+    public void sendEmail(String email, String title, String text) {
         SimpleMailMessage emailForm = createEmailForm(email, title, text);
 
         try {
             javaMailSender.send(emailForm);
-            joinEmailService.addEmailAuthedKeyMap(email, authedKey);
             log.info("이메일 전송 성공 To.{}, Title. {}, Text. {}", email, title, text);
         } catch (RuntimeException e) {
             log.error("이메일 전송 실패 To.{}, Title. {}, Text. {}", email, title, text);
