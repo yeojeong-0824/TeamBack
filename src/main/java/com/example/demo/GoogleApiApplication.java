@@ -2,7 +2,6 @@ package com.example.demo;
 
 import com.example.demo.dto.board.GoogleApiRequest;
 import com.example.demo.dto.board.GoogleApiResponse;
-import com.example.demo.dto.board.Place;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.HttpEntity;
@@ -11,7 +10,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
 public class GoogleApiApplication {
-    public static void main(String[] args) {
+
+    // 메소드 명만 수정했습니다!
+    public void ggogleApi() {
         String url ="https://places.googleapis.com/v1/places:searchText";
         String key = "나만의 키 값";
 
