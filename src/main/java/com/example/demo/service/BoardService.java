@@ -8,16 +8,24 @@ import com.example.demo.dto.board.BoardResponse.BoardListResponse;
 import com.example.demo.dto.board.BoardResponse.BoardReadResponse;
 import com.example.demo.dto.board.BoardResponse.BoardSaveResponse;
 import com.example.demo.dto.board.BoardResponse.BoardUpdateResponse;
+import com.example.demo.dto.board.GoogleApiRequest;
+import com.example.demo.dto.board.GoogleApiResponse;
 import com.example.demo.entity.Board;
 import com.example.demo.entity.Member;
 import com.example.demo.repository.BoardRepository;
 import com.example.demo.repository.MemberRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
 
 @Service
 @RequiredArgsConstructor
@@ -124,6 +132,43 @@ public class BoardService {
         }
 
         return toDtoPage(boardList);
+    }
+
+    // 구글맵 api 를 사용한 장소 정보 불러오기
+    public GoogleApiResponse getSearchLocation(String textQuery) {
+        String url ="https://places.googleapis.com/v1/places:searchText";
+        String key = "나만의 키 값";
+
+        // 검색할 값
+        GoogleApiRequest result = GoogleApiRequest.builder()
+                .textQuery(textQuery)
+                .includedType("restaurant")
+                .languageCode("ko")
+                .build();
+
+        // 헤더 세팅
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Content-Type", "application/json");
+        headers.set("X-Goog-Api-Key", key);
+        headers.set("X-Goog-FieldMask", "places.displayName,places.location,places.formattedAddress");  // 내가 받을 정보를 세팅
+
+        // 보낼 바디와 헤더를 세팅
+        HttpEntity<GoogleApiRequest> entity = new HttpEntity<>(result, headers);
+
+        // post 로 요청
+        RestTemplate restTemplate = new RestTemplate();
+        ResponseEntity<String> responses = restTemplate.postForEntity(url, entity, String.class);
+
+        // 문자열을 dto 로 변환
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        try {
+            return objectMapper.readValue(responses.getBody(), GoogleApiResponse.class);
+
+        } catch (JsonProcessingException e){
+            e.printStackTrace();
+        }
+        return null;
     }
 
 //    public Board toEntity(BoardSaveRequest request, Member member){

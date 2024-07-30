@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.dto.board.BoardRequest.*;
 import com.example.demo.dto.board.BoardResponse.*;
+import com.example.demo.dto.board.GoogleApiResponse;
 import com.example.demo.dto.member.MemberDetails;
 import com.example.demo.service.BoardService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -102,6 +103,12 @@ public class BoardController {
             @RequestParam String sortKeyword,
             @RequestParam(required = false, defaultValue = "1") int page){
         return ResponseEntity.ok(boardService.getSearchBoardList(searchKeyword, keyword, sortKeyword, page));
+    }
+
+    @GetMapping("/search")
+    @Operation(summary = "구글 api 를 이용한 장소 검색")
+    public ResponseEntity<GoogleApiResponse> locationSearch(@RequestParam String textQuery){
+        return ResponseEntity.ok(boardService.getSearchLocation(textQuery));
     }
 
 }

@@ -6,5 +6,6 @@ import lombok.*;
 @Builder
 public class GoogleApiRequest {
     private String textQuery;
+    private String includedType;
     private String languageCode;
 }
