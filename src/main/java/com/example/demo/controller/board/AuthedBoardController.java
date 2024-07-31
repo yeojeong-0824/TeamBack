@@ -7,6 +7,7 @@ import com.example.demo.service.BoardService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +27,10 @@ public class AuthedBoardController {
                     @ApiResponse(responseCode = "400", description = "게시글 작성 실패")
             }
     )
-    public ResponseEntity<BoardResponse.BoardSaveResponse> boardWrite(@RequestBody BoardRequest.BoardSaveRequest request, @RequestParam String memberName){
+    public ResponseEntity<BoardResponse.BoardSaveResponse> boardWrite(
+            @Valid @RequestBody BoardRequest.BoardSaveRequest request,
+            @RequestParam String memberName
+    ){
         // MemberDetails memberDetails = (MemberDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         //  String memberName = memberDetails.getUsername();
         return ResponseEntity.status(HttpStatus.CREATED).body(boardService.writeBoard(request, memberName));
@@ -47,7 +51,7 @@ public class AuthedBoardController {
             }
     )
     public ResponseEntity<BoardResponse.BoardUpdateResponse> boardUpdate(
-            @RequestBody BoardRequest.BoardUpdateRequest request,
+            @Valid @RequestBody BoardRequest.BoardUpdateRequest request,
             @PathVariable Long boardId
     ){
         return ResponseEntity.ok(boardService.updateBoard(boardId, request));
