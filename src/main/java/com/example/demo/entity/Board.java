@@ -22,10 +22,18 @@ public class Board {
     private Long id;
 
     @Column(nullable = false)
-    private String country;
+    private String locationName;
 
     @Column(nullable = false)
-    private String city;
+    private String formattedAddress;
+
+    // 경도
+    @Column(nullable = false)
+    private String longitude;
+
+    // 위도
+    @Column(nullable = false)
+    private String latitude;
 
     @Column(nullable = false)
     private String title;
@@ -56,8 +64,10 @@ public class Board {
     private Integer commentCount;
 
     public void update(BoardUpdateRequest request){
-        this.country = request.country();
-        this.city = request.city();
+        this.locationName = request.locationName();
+        this.formattedAddress = request.formattedAddress();
+        this.latitude = request.latitude();
+        this.longitude = request.longitude();
         this.title = request.title();
         this.body = request.body();
         this.satisfaction = request.satisfaction();

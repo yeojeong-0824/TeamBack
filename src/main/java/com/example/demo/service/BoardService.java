@@ -45,8 +45,10 @@ public class BoardService {
                 orElseThrow(() -> new NotFoundMemberException("해당 회원을 찾을 수 없습니다."));
 
         Board board = Board.builder()
-                .country(request.country())
-                .city(request.city())
+                .locationName(request.locationName())
+                .formattedAddress(request.formattedAddress())
+                .latitude(request.latitude())
+                .longitude(request.longitude())
                 .title(request.title())
                 .body(request.body())
                 .view(0)
@@ -137,7 +139,7 @@ public class BoardService {
     // 구글맵 api 를 사용한 장소 정보 불러오기
     public GoogleApiResponse getSearchLocation(String textQuery) {
         String url ="https://places.googleapis.com/v1/places:searchText";
-        String key = "나만의 키 값";
+        String key = "AIzaSyCA28kJUTg5AjzB5ePL6mEQqW1J-_pGMuc";
 
         // 검색할 값
         GoogleApiRequest result = GoogleApiRequest.builder()

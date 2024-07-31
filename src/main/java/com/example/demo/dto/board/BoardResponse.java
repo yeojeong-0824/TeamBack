@@ -11,6 +11,10 @@ import lombok.*;
 public class BoardResponse {
 
     private Long id;
+    private String locationName;
+    private String formattedAddress;
+    private String latitude;  // 위도
+    private String longitude;  // 경도
     private String title;
     private String body;
     private Integer view;
@@ -20,8 +24,10 @@ public class BoardResponse {
     private String memberNickname;
 
     public record BoardSaveResponse(
-            String country,
-            String city,
+            String locationName,
+            String formattedAddress,
+            String latitude,  // 위도
+            String longitude,  // 경도
             String title,
             String body,
             Integer view,
@@ -32,8 +38,10 @@ public class BoardResponse {
     ) {
         public BoardSaveResponse(Board board) {
             this(
-                    board.getCountry(),
-                    board.getCity(),
+                    board.getLocationName(),
+                    board.getFormattedAddress(),
+                    board.getLatitude(),
+                    board.getLongitude(),
                     board.getTitle(),
                     board.getBody(),
                     board.getView(),
@@ -46,8 +54,10 @@ public class BoardResponse {
     }
 
     public record BoardUpdateResponse(
-            String country,
-            String city,
+            String locationName,
+            String formattedAddress,
+            String latitude,  // 위도
+            String longitude,  // 경도
             String title,
             String body,
             Integer view,
@@ -58,8 +68,10 @@ public class BoardResponse {
     ) {
         public BoardUpdateResponse(Board board) {
             this(
-                    board.getCountry(),
-                    board.getCity(),
+                    board.getLocationName(),
+                    board.getFormattedAddress(),
+                    board.getLatitude(),
+                    board.getLongitude(),
                     board.getTitle(),
                     board.getBody(),
                     board.getView(),
@@ -73,8 +85,10 @@ public class BoardResponse {
 
     public record BoardListResponse(
             Long id,
-            String country,
-            String city,
+            String locationName,
+            String formattedAddress,
+            String latitude,  // 위도
+            String longitude,  // 경도
             String title,
             Integer view,
             Integer satisfaction,
@@ -84,8 +98,10 @@ public class BoardResponse {
         public BoardListResponse(Board board) {
             this(
                     board.getId(),
-                    board.getCountry(),
-                    board.getCity(),
+                    board.getLocationName(),
+                    board.getFormattedAddress(),
+                    board.getLatitude(),
+                    board.getLongitude(),
                     board.getTitle(),
                     board.getView(),
                     board.getSatisfaction(),
@@ -96,8 +112,10 @@ public class BoardResponse {
     }
 
     public record BoardReadResponse(
-            String country,
-            String city,
+            String locationName,
+            String formattedAddress,
+            String latitude,  // 위도
+            String longitude,  // 경도
             String title,
             String Body,
             Integer view,
@@ -108,8 +126,10 @@ public class BoardResponse {
     ) {
         public BoardReadResponse(Board board) {
             this(
-                    board.getCountry(),
-                    board.getCity(),
+                    board.getLocationName(),
+                    board.getFormattedAddress(),
+                    board.getLatitude(),
+                    board.getLongitude(),
                     board.getTitle(),
                     board.getBody(),
                     board.getView(),
