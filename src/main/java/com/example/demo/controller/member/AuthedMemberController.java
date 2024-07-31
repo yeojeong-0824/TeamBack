@@ -29,7 +29,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/member/authed")
 @Validated
-@Tag(name = "인증된 유저 API")
+@Tag(name = "유저 API (Authed)")
 @PreAuthorize("isAuthenticated()")
 public class AuthedMemberController {
 
