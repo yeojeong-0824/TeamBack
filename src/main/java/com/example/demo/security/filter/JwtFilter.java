@@ -36,42 +36,16 @@ public class JwtFilter extends OncePerRequestFilter {
                                     FilterChain filterChain) throws ServletException, IOException {
 
         /*
-        Jwt 확인
-        Step 1: Jwt 토큰이 존재하는지 확인 -> 없다면 필터 종료
-        Step 2: Jwt 토큰을 복호화 실패시(재발급 횟수 초과: 401, 변조: 400) 오류를 반환, 성공시 인증에 성공
-        Step 3: 필터 종료
-         */
-        String jwtTokenHeader = request.getHeader(jwtProvider.JWT_HEADER_STRING);
-        if(jwtTokenHeader == null) {
-            filterChain.doFilter(request, response);
-            return;
-        }
+        1. Jwt 재발급
+        Step 1: Refresh 토큰이 존재하는지 확인
+        Step 2: Refresh 토큰이 존재한다면, Jwt 토큰의 재발급 시도로 알고 Jwt 토큰 재발급을 시도
+        Step 3: 재발급의 실패 시(만료: 401, 변조: 400) 오류를 반환, 성공 시 인증에 성공
+        Step 4: 필터 종료
 
-        jwtTokenHeader = jwtTokenHeader.replace(jwtProvider.TOKEN_PREFIX, "");
-
-        try {
-            Member jwtTokenMember = jwtProvider.decodeToken(jwtTokenHeader, jwtProvider.SECRET);
-            MemberDetails jwtTokenMemberDetails = new MemberDetails(jwtTokenMember);
-            Authentication authentication =
-                    new UsernamePasswordAuthenticationToken(jwtTokenMemberDetails, null, jwtTokenMemberDetails.getAuthorities());
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-
-        } catch(TokenExpiredException e) {
-            /*
-            1. Jwt 재발급
-            Step 1: Refresh 토큰이 존재하는지 확인
-            Step 2: Refresh 토큰이 존재한다면, Jwt 토큰의 재발급 시도로 알고 Jwt 토큰 재발급을 시도
-            Step 3: 재발급의 실패 시(만료: 401, 변조: 400) 오류를 반환, 성공 시 인증에 성공
-            Step 4: 필터 종료
-
-            ToDo: refresh 토큰을 redis로 설정하는 걸 고려해봐야 할 것 같음
-            */
-            String refreshTokenHeader = request.getHeader(jwtProvider.REFRESH_HEADER_STRING);
-            if(refreshTokenHeader == null) {
-                log.info("JWT Token이 만료되었습니다");
-                response.setStatus(401);
-                return;
-            }
+        ToDo: refresh 토큰을 redis로 설정하는 걸 고려해봐야 할 것 같음
+        */
+        String refreshTokenHeader = request.getHeader(jwtProvider.REFRESH_HEADER_STRING);
+        if(refreshTokenHeader != null) {
             log.info("JWT Token 재발급");
             refreshTokenHeader = refreshTokenHeader.replace(jwtProvider.TOKEN_PREFIX, "");
 
@@ -123,6 +97,32 @@ public class JwtFilter extends OncePerRequestFilter {
 
             filterChain.doFilter(request, response);
             return;
+        }
+
+        /*
+        Jwt 확인
+        Step 1: Jwt 토큰이 존재하는지 확인 -> 없다면 필터 종료
+        Step 2: Jwt 토큰을 복호화 실패시(재발급 횟수 초과: 401, 변조: 400) 오류를 반환, 성공시 인증에 성공
+        Step 3: 필터 종료
+         */
+        String jwtTokenHeader = request.getHeader(jwtProvider.JWT_HEADER_STRING);
+        if(jwtTokenHeader == null) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
+        jwtTokenHeader = jwtTokenHeader.replace(jwtProvider.TOKEN_PREFIX, "");
+
+        try {
+            Member jwtTokenMember = jwtProvider.decodeToken(jwtTokenHeader, jwtProvider.SECRET);
+            MemberDetails jwtTokenMemberDetails = new MemberDetails(jwtTokenMember);
+            Authentication authentication =
+                    new UsernamePasswordAuthenticationToken(jwtTokenMemberDetails, null, jwtTokenMemberDetails.getAuthorities());
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        } catch(TokenExpiredException e) {
+            response.setStatus(401);
+            log.info("JWT Token 값이 잘못되었습니다");
 
         } catch (JWTDecodeException e) {
             log.info("JWT Token 값이 잘못되었습니다");
