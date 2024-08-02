@@ -1,6 +1,5 @@
 package com.example.demo.controller.member;
 
-import com.example.demo.service.email.EmailService;
 import com.example.demo.service.email.FindMemberEmailService;
 import com.example.demo.service.member.MemberService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -29,7 +28,7 @@ public class FindMemberController {
     private final MemberService memberService;
     private final FindMemberEmailService findMemberEmailService;
 
-    @PatchMapping("/{username}")
+    @PatchMapping("/password")
     @Operation(summary = "새로운 비밀번호 발급")
     @ApiResponses(
             value = {
@@ -38,19 +37,19 @@ public class FindMemberController {
             }
     )
     public ResponseEntity<String> newPassword(@Size(min = 5, max = 30) @Schema(example = "user12")
-                                              @PathVariable("username")
+                                              @RequestParam("username")
                                               String username,
 
                                               @Size(min = 1, max = 50) @Schema(example = "example@naver.com")
                                               @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$",
                                                       message = "유효한 이메일이 아닙니다.")
-                                              @RequestBody String email,
+                                              @RequestParam("email") String email,
 
                                               HttpServletRequest request) {
         String ip = request.getRemoteAddr();
         log.info("{}: 새로운 비밀번호 발급 호출", ip);
 
-        String savedMemberEmail = memberService.findMemberEmailByUsername(username);
+        String savedMemberEmail = memberService.findEmailByUsername(username);
         if(!email.equals(savedMemberEmail)) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("이메일이 잘못되었습니다.");
 
         String password = findMemberEmailService.createNewPassword();
@@ -59,5 +58,28 @@ public class FindMemberController {
         memberService.patchPasswordByUsername(username, password);
 
         return ResponseEntity.ok("비밀번호 재발급에 성공하였습니다");
+    }
+
+    @GetMapping("/username")
+    @Operation(summary = "아이디 찾기")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "아이디 전송 완료"),
+                    @ApiResponse(responseCode = "400", description = "입력 값이 잘못됨"),
+            }
+    )
+    public ResponseEntity<String> findUsername(@Size(min = 1, max = 50) @Schema(example = "example@naver.com")
+                                               @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$",
+                                                        message = "유효한 이메일이 아닙니다.")
+                                               @RequestParam("email") String email,
+
+                                               HttpServletRequest request) {
+        String ip = request.getRemoteAddr();
+        log.info("{}: 아이디 찾기 호출", ip);
+
+        String username = memberService.findUsernameByEmail(email);
+        findMemberEmailService.sendUsernameEmail(email, username);
+
+        return ResponseEntity.ok("아이디 찾기를 성공하였습니다");
     }
 }

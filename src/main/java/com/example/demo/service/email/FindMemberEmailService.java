@@ -17,6 +17,13 @@ public class FindMemberEmailService {
         emailService.sendEmail(email, title, text);
     }
 
+    public void sendUsernameEmail(String email, String username) {
+        String title = "아이디 찾기";
+        String text = "아이디: " + username;
+
+        emailService.sendEmail(email, title, text);
+    }
+
     public String createNewPassword() {
         String password = "";
         for(int i = 0; i < 4; i++) {

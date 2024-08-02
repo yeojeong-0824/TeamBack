@@ -33,7 +33,7 @@ public class EmailService {
 
         try {
             javaMailSender.send(emailForm);
-            log.info("이메일 전송 성공 To.{}, Title. {}, Text. {}", email, title, text);
+            log.info("이메일 전송 성공 To.{}, Title.{}, Text.{}", email, title, text);
         } catch (RuntimeException e) {
             log.error("이메일 전송 실패 To.{}, Title. {}, Text. {}", email, title, text);
         }
