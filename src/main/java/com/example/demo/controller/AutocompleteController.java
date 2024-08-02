@@ -17,7 +17,7 @@ public class AutocompleteController {
 
     @GetMapping("/{searchWord}")
     @ResponseBody
-    public ResponseEntity<AutocompleteResponse> getAutocompleteList(@PathVariable String searchWord) {
+    public ResponseEntity<AutocompleteResponse> getAutocompleteList(@PathVariable("searchWord") String searchWord) {
         return ResponseEntity.ok(autocompleteService.getAutocomplete(searchWord));
     }
 }
