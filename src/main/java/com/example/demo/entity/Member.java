@@ -49,6 +49,10 @@ public class Member {
         this.password = password;
     }
 
+    public void patchNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
     // Refresh Token 발급 시 유효한 Token인지 확인하기 위한 메소드
     public static boolean equalsMember(Member m1, Member m2) {
         if(!Objects.equals(m1.getUsername(), m2.getUsername())) return false;

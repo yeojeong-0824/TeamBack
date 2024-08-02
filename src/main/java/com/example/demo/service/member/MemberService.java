@@ -25,6 +25,13 @@ public class MemberService {
         memberRepository.save(takenMember);
     }
 
+    public String findMemberEmailByUsername(String username) {
+        Member savedMember = memberRepository.findByUsername(username)
+                .orElseThrow(() -> new NotFoundMemberException("해당 유저를 찾지 못했습니다"));
+
+        return savedMember.getEmail();
+    }
+
     public boolean checkDuplicatedByUsername(String takenUsername) {
         return !memberRepository.existsByUsername(takenUsername);
     }
@@ -37,18 +44,21 @@ public class MemberService {
         return !memberRepository.existsByEmail(takenEmail);
     }
 
-    public String findMemberEmailByUsername(String username) {
-        Member savedMember = memberRepository.findByUsername(username)
-                .orElseThrow(() -> new NotFoundMemberException("해당 유저를 찾지 못했습니다"));
-
-        return savedMember.getEmail();
-    }
-
+    @Transactional
     public void patchPasswordByUsername(String username, String password) {
         Member savedMember = memberRepository.findByUsername(username)
                 .orElseThrow(() -> new NotFoundMemberException("해당 유저를 찾지 못했습니다"));
 
         savedMember.patchPassword(passwordEncoder.encode(password));
+        memberRepository.save(savedMember);
+    }
+
+    @Transactional
+    public void patchNicknameByUsername(String username, String nickname) {
+        Member savedMember = memberRepository.findByUsername(nickname)
+                .orElseThrow(() -> new NotFoundMemberException("해당 유저를 찾지 못했습니다"));
+
+        savedMember.patchNickname(nickname);
         memberRepository.save(savedMember);
     }
 }
