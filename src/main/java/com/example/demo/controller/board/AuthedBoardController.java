@@ -3,6 +3,7 @@ package com.example.demo.controller.board;
 import com.example.demo.dto.board.BoardRequest;
 import com.example.demo.dto.board.BoardResponse;
 import com.example.demo.dto.board.GoogleApiResponse;
+import com.example.demo.dto.member.MemberDetails;
 import com.example.demo.service.BoardService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -12,12 +13,17 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+// 유저 정보 불러오기 오류 수정했습니다
+// 게시글 작성까지 잘 되는 걸로 확인 했어요!
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/board/authed")
 @Tag(name = "게시글 API (Authed)")
+@PreAuthorize("isAuthenticated()")
 public class AuthedBoardController {
     private final BoardService boardService;
 
@@ -30,11 +36,10 @@ public class AuthedBoardController {
             }
     )
     public ResponseEntity<BoardResponse.BoardSaveResponse> boardWrite(
-            @Valid @RequestBody BoardRequest.BoardSaveRequest request,
-            @RequestParam String memberName
+            @Valid @RequestBody BoardRequest.BoardSaveRequest request
     ){
-        // MemberDetails memberDetails = (MemberDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        //  String memberName = memberDetails.getUsername();
+        MemberDetails memberDetails = (MemberDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String memberName = memberDetails.getUsername();
         return ResponseEntity.status(HttpStatus.CREATED).body(boardService.writeBoard(request, memberName));
     }
 

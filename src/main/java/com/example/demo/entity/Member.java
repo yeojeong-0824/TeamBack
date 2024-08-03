@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
 import java.util.Objects;
 
 
@@ -38,12 +39,11 @@ public class Member {
     @Column(nullable = false)
     private String role;
 
-//    실행 오류로 일단 주석처리 해놨습니다
-//    @OneToMany(mappedBy = "member", orphanRemoval = true)
-//    private List<Board> boards;
+    @OneToMany(mappedBy = "member", orphanRemoval = true)
+    private List<Board> boards;
 
-//    @OneToMany(mappedBy = "member", orphanRemoval = true)
-//    private List<Comment> comments;
+    @OneToMany(mappedBy = "member", orphanRemoval = true)
+    private List<Comment> comments;
 
     public void patchPassword(String password) {
         this.password = password;

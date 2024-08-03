@@ -122,7 +122,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
         } catch(TokenExpiredException e) {
             response.setStatus(401);
-            log.info("JWT Token 값이 잘못되었습니다");
+            log.info("JWT Token 유효기간이 만료되었습니다.");
 
         } catch (JWTDecodeException e) {
             log.info("JWT Token 값이 잘못되었습니다");

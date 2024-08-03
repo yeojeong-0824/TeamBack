@@ -2,7 +2,6 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.Board;
 import com.example.demo.service.LikeService;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,8 +13,8 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/like")
-public class LikeController {
+@RequestMapping("/board/like/authed")
+public class AuthedLikeController {
 
     private final LikeService likeService;
 
