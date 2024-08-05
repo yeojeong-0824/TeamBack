@@ -1,4 +1,4 @@
-package com.example.demo.board.comment.exception.comment;
+package com.example.demo.board.comment.exception;
 
 public class NotFoundCommentException extends RuntimeException {
 

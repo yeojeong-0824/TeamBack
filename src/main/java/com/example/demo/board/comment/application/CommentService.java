@@ -3,7 +3,7 @@ package com.example.demo.board.comment.application;
 import com.example.demo.board.board.exception.NotFoundBoardException;
 import com.example.demo.board.comment.domain.Comment;
 import com.example.demo.board.comment.domain.CommentRepository;
-import com.example.demo.board.comment.exception.comment.NotFoundCommentException;
+import com.example.demo.board.comment.exception.NotFoundCommentException;
 import com.example.demo.board.comment.presentation.dto.CommentRequest;
 import com.example.demo.board.comment.presentation.dto.CommentResponse;
 import com.example.demo.member.member.exception.NotFoundMemberException;
