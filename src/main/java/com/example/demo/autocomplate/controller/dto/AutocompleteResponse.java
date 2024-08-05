@@ -1,4 +1,4 @@
-package com.example.demo.autoComplate.controller.dto;
+package com.example.demo.autocomplate.controller.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

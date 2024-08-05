@@ -1,6 +1,6 @@
-package com.example.demo.autoComplate;
+package com.example.demo.autocomplate;
 
-import com.example.demo.autoComplate.application.AutocompleteService;
+import com.example.demo.autocomplate.application.AutocompleteService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
