@@ -118,12 +118,12 @@ public class BoardService {
         }
 
         Page<Board> boardList;
-        if (searchKeyword.equals("title")){
-            boardList = boardRepository.findAllByTitleContaining(keyword, request);
-        } else if (searchKeyword.equals("body")) {
-            boardList = boardRepository.findAllByBodyContaining(keyword, request);
-        } else if (searchKeyword.equals("null") && keyword != null){
+        if (searchKeyword.equals("content")){
+            // 제목과 내용에 검색어와 일치하는 게시글 검색
             boardList = boardRepository.findByTitleOrBodyContaining(keyword, request);
+        } else if (searchKeyword.equals("location")) {
+            // 주소와 가게 이름이 검색어와 일치하는 게시글 검색
+            boardList = boardRepository.findByFormattedAddressOrLocationNameContaining(keyword, request);
         } else {
             boardList = boardRepository.findAll(request);
         }
@@ -134,7 +134,7 @@ public class BoardService {
     // 구글맵 api 를 사용한 장소 정보 불러오기
     public GoogleApiResponse getSearchLocation(String textQuery) {
         String url ="https://places.googleapis.com/v1/places:searchText";
-        String key = "AIzaSyCA28kJUTg5AjzB5ePL6mEQqW1J-_pGMuc";
+        String key = "나만의 키 값";
 
         // 검색할 값
         GoogleApiRequest result = GoogleApiRequest.builder()
