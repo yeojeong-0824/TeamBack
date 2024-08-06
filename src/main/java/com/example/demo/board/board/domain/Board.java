@@ -4,6 +4,7 @@ import com.example.demo.board.board.presentation.dto.BoardRequest;
 import com.example.demo.board.comment.domain.Comment;
 import com.example.demo.member.member.domain.Member;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -50,6 +51,7 @@ public class Board {
     private Integer view;
 
     @Column(nullable = false)
+    @Size(min=1, max=5)
     private Integer satisfaction;
 
     @Column(nullable = false)
