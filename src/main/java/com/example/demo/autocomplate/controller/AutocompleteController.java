@@ -1,7 +1,7 @@
-package com.example.demo.autoComplate.controller;
+package com.example.demo.autocomplate.controller;
 
-import com.example.demo.autoComplate.controller.dto.AutocompleteResponse;
-import com.example.demo.autoComplate.application.AutocompleteService;
+import com.example.demo.autocomplate.controller.dto.AutocompleteResponse;
+import com.example.demo.autocomplate.application.AutocompleteService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
