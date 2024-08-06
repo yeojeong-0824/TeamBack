@@ -1,5 +1,6 @@
 package com.example.demo.member.email.application;
 
+import com.example.demo.config.redis.RedisIdentifier;
 import com.example.demo.config.redis.RedisRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,30 +18,36 @@ public class JoinMemberEmailService {
     private final EmailService emailService;
     private final RedisRepository redisRepository;
 
+    private final String REDIS_IDENTIFIER = RedisIdentifier.EMAIL.getIdentifier();
+    private final String AUTHED = "Authed";
+    private final int VALID_TIME = 5;
+
     // ToDo: 전송 실패 시 처리 안해줌
-    // ToDo: redis에 저장되지 않은 이메일에 접근할 때 오류 발생
     public void sendAuthedEmail(String email, String authedKey) {
         String title = "회원가입 이메일 인증 코드";
         String text = "이메일 인증 코드: " + authedKey;
 
-        redisRepository.setData(email, authedKey, Duration.ofMinutes(5));
+        redisRepository.setData(REDIS_IDENTIFIER + email, authedKey, Duration.ofMinutes(VALID_TIME));
         emailService.sendEmail(email, title, text);
     }
 
     // 회원가입에 인증 이메일의 Key 값과 해당 이메일에 발송 된 Key 값이 같다면 해당 이메일의 값을 Authed로 변경
     public boolean checkAuthedKey(String email, String authedKey) {
-        String savedAuthedKey = (String) redisRepository.getDataByKey(email);
+        String savedAuthedKey = (String) redisRepository.getDataByKey(REDIS_IDENTIFIER + email);
+        if(savedAuthedKey == null) return false;
         if(!savedAuthedKey.equals(authedKey)) return false;
 
-        redisRepository.setData(email, "Authed", Duration.ofMinutes(5));
+        redisRepository.setData(REDIS_IDENTIFIER + email, AUTHED, Duration.ofMinutes(VALID_TIME));
         return true;
     }
 
     // 회원가입 인증 이메일의 값이 Authed라면 인증된 사용자라는 것으로 간주함
     public boolean checkAuthedEmail(String email) {
-        String savedAuthedKey = (String) redisRepository.getDataByKey(email);
-        if(!savedAuthedKey.equals("Authed")) return false;
-        redisRepository.deleteKey(email);
+        String savedAuthedKey = (String) redisRepository.getDataByKey(REDIS_IDENTIFIER + email);
+        if(savedAuthedKey == null) return false;
+        if(!savedAuthedKey.equals(AUTHED)) return false;
+
+        redisRepository.deleteKey(REDIS_IDENTIFIER + email);
         return true;
     }
 
