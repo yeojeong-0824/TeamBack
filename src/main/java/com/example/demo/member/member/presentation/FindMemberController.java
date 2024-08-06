@@ -1,6 +1,7 @@
 package com.example.demo.member.member.presentation;
 
 import com.example.demo.member.member.application.MemberService;
+import com.example.demo.member.member.application.MemberServiceImpl;
 import com.example.demo.member.email.application.FindMemberEmailService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -25,7 +26,7 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "유저 찾기 API")
 public class FindMemberController {
 
-    private final MemberService memberService;
+    private final MemberService memberServiceImpl;
     private final FindMemberEmailService findMemberEmailService;
 
     @PatchMapping("/password")
@@ -49,13 +50,13 @@ public class FindMemberController {
         String ip = request.getRemoteAddr();
         log.info("{}: 새로운 비밀번호 발급 호출", ip);
 
-        String savedMemberEmail = memberService.findEmailByUsername(username);
+        String savedMemberEmail = memberServiceImpl.findEmailByUsername(username);
         if(!email.equals(savedMemberEmail)) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("이메일이 잘못되었습니다.");
 
         String password = findMemberEmailService.createNewPassword();
 
         findMemberEmailService.sendNewPasswordEmail(savedMemberEmail, password);
-        memberService.patchPasswordByUsername(username, password);
+        memberServiceImpl.patchPasswordByUsername(username, password);
 
         return ResponseEntity.ok("비밀번호 재발급에 성공하였습니다");
     }
@@ -77,7 +78,7 @@ public class FindMemberController {
         String ip = request.getRemoteAddr();
         log.info("{}: 아이디 찾기 호출", ip);
 
-        String username = memberService.findUsernameByEmail(email);
+        String username = memberServiceImpl.findUsernameByEmail(email);
         findMemberEmailService.sendUsernameEmail(email, username);
 
         return ResponseEntity.ok("아이디 찾기를 성공하였습니다");

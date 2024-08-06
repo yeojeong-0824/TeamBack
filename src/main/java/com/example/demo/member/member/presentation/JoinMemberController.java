@@ -1,7 +1,8 @@
 package com.example.demo.member.member.presentation;
 
+import com.example.demo.member.member.presentation.dto.MemberRequest;
 import com.example.demo.member.member.presentation.dto.MemberRequest.*;
-import com.example.demo.member.member.application.MemberService;
+import com.example.demo.member.member.application.MemberServiceImpl;
 import com.example.demo.member.email.application.JoinMemberEmailService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -31,7 +32,7 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "회원가입 API")
 public class JoinMemberController {
 
-    private final MemberService memberService;
+    private final MemberServiceImpl memberServiceImpl;
     private final JoinMemberEmailService joinMemberEmailService;
 
     /*
@@ -52,7 +53,7 @@ public class JoinMemberController {
         }
     )
     public ResponseEntity<String> save(@Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
-                                       @Valid @RequestBody CreateMember takenDto,
+                                       @Valid @RequestBody MemberRequest.DefaultMember takenDto,
                                        HttpServletRequest request) {
         String ip = request.getRemoteAddr();
         log.info("{}: 유저 생성 API 호출", ip);
@@ -60,7 +61,7 @@ public class JoinMemberController {
         if(!joinMemberEmailService.checkAuthedEmail(takenDto.email()))
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("인증되지 않은 이메일입니다");
 
-        memberService.addUser(takenDto);
+        memberServiceImpl.save(takenDto);
         return ResponseEntity.status(HttpStatus.CREATED).body("생성이 완료되었습니다");
     }
 
@@ -79,10 +80,10 @@ public class JoinMemberController {
         String ip = request.getRemoteAddr();
         log.info("{}: 중복 검사 API 호출", ip);
 
-        if(takenDto.username() != null && !memberService.checkDuplicatedByUsername(takenDto.username()))
+        if(takenDto.username() != null && !memberServiceImpl.checkDuplicatedByUsername(takenDto.username()))
             return ResponseEntity.status(HttpStatus.CONFLICT).body("이미 사용 중인 아이디입니다");
 
-        if(takenDto.nickname() != null && !memberService.checkDuplicatedByNickname(takenDto.nickname()))
+        if(takenDto.nickname() != null && !memberServiceImpl.checkDuplicatedByNickname(takenDto.nickname()))
             return ResponseEntity.status(HttpStatus.CONFLICT).body("이미 사용 중인 닉네임입니다");
 
         return ResponseEntity.ok("중복되지 않았습니다");
@@ -105,7 +106,7 @@ public class JoinMemberController {
         String ip = request.getRemoteAddr();
         log.info("{}: 이메일 인증코드 전송 API 호출", ip);
 
-        if(!memberService.checkDuplicatedByEmail(email))
+        if(!memberServiceImpl.checkDuplicatedByEmail(email))
             return ResponseEntity.status(HttpStatus.CONFLICT).body("이미 사용 중인 이메일 입니다");
 
         String key = joinMemberEmailService.createAuthedKey();

@@ -21,7 +21,7 @@ public class MemberRequest {
 
     @Builder
     @Schema(name = "유저 회원가입 정보 입력")
-    public record CreateMember (
+    public record DefaultMember(
         @NotBlank @Size(min = 5, max = 30)
         @Schema(example = "user12") // 들어갈 데이터 예시
         String username,
@@ -51,7 +51,7 @@ public class MemberRequest {
         @Schema(example = "90")
         Integer age
     ) {
-        static public Member toEntity(CreateMember dto, String password) {
+        static public Member toEntity(DefaultMember dto, String password) {
             if(dto.password.equals(password)) throw new ServerException("비밀번호 암호화가 진행되지 않았습니다");
             return Member.builder()
                     .username(dto.username())

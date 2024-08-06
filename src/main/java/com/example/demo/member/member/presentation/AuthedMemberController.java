@@ -1,7 +1,8 @@
 package com.example.demo.member.member.presentation;
 
-import com.example.demo.member.member.presentation.dto.MemberDetails;
 import com.example.demo.member.member.application.MemberService;
+import com.example.demo.member.member.presentation.dto.MemberDetails;
+import com.example.demo.member.member.application.MemberServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -26,7 +27,7 @@ import org.springframework.web.bind.annotation.*;
 @PreAuthorize("isAuthenticated()")
 public class AuthedMemberController {
 
-    private final MemberService memberService;
+    private final MemberService memberServiceImpl;
 
     @PatchMapping("/password")
     @Operation(summary = "비밀번호 변경")
@@ -48,7 +49,7 @@ public class AuthedMemberController {
         MemberDetails memberDetails = (MemberDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String username = memberDetails.getUsername();
 
-        memberService.patchPasswordByUsername(username, password);
+        memberServiceImpl.patchPasswordByUsername(username, password);
         return ResponseEntity.ok("비밀번호 변경에 성공하였습니다");
     }
 
@@ -70,7 +71,7 @@ public class AuthedMemberController {
         MemberDetails memberDetails = (MemberDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String username = memberDetails.getUsername();
 
-        memberService.patchNicknameByUsername(username, nickname);
+        memberServiceImpl.patchNicknameByUsername(username, nickname);
         return ResponseEntity.ok("닉네임 변경에 성공하였습니다");
     }
 }
