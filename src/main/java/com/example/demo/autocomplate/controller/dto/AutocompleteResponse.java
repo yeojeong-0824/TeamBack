@@ -1,22 +1,10 @@
 package com.example.demo.autocomplate.controller.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-
 import java.util.List;
 
-@Getter
-@RequiredArgsConstructor
-public class AutocompleteResponse {
+public record AutocompleteResponse(List<Data> list) {
 
-    private final List<Data> list;
-
-    @Getter
-    @AllArgsConstructor
-    public static class Data {
-        private final String value;
-        private final double score;
+    public record Data(String value, double score) {
     }
 }
 
