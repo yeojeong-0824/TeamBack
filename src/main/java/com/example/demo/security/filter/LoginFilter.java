@@ -14,7 +14,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import java.io.IOException;
@@ -71,16 +70,13 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         String refreshToken = jwtProvider.createRefreshToken(member, loginTime);
 
         RefreshToken saveToken = RefreshToken.builder()
-                .refreshToken(refreshToken)
-                .username(member.getUsername())
-                .nickname(member.getNickname())
-                .age(member.getAge())
-                .role(member.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList().get(0))
+                .id(refreshToken)
                 .expirationTime(loginTime + jwtProvider.REFRESH_EXPIRATION_TIME)
                 .count(jwtProvider.REFRESH_COUNT)
+                .ttl(jwtProvider.REFRESH_EXPIRATION_TIME / 1000)
                 .build();
 
-        refreshTokenService.addRefreshToken(saveToken);
+        refreshTokenService.save(saveToken);
 
         response.addHeader(jwtProvider.JWT_HEADER_STRING, jwtProvider.TOKEN_PREFIX + jwtToken);
         response.addHeader(jwtProvider.REFRESH_HEADER_STRING, jwtProvider.TOKEN_PREFIX + refreshToken);

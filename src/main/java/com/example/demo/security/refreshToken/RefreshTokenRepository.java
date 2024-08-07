@@ -1,9 +1,8 @@
 package com.example.demo.security.refreshToken;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.CrudRepository;
 
-import java.util.List;
+import java.util.Optional;
 
-public interface RefreshTokenRepository extends JpaRepository<RefreshToken, String> {
-    List<RefreshToken> findByOrderByExpirationTime();
+public interface RefreshTokenRepository extends CrudRepository<RefreshToken, String> {
 }
