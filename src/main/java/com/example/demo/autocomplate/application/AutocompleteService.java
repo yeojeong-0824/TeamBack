@@ -16,18 +16,18 @@ import java.util.stream.Collectors;
 public class AutocompleteService {
 
     private final RedisTemplate<String, String> redisTemplate;
-    private final long limit;
+    private final long limitCount;
     private final String suffix;
     private final String key;
     private final String scoreKey;
 
     public AutocompleteService(RedisTemplate<String, String> redisTemplate,
-                               @Value("${autocomplete.limit}") long limit,
+                               @Value("${autocomplete.limit}") long limitCount,
                                @Value("${autocomplete.suffix}") String suffix,
                                @Value("${autocomplete.key}") String key,
                                @Value("${autocomplete.score-key}") String scoreKey) {
         this.redisTemplate = redisTemplate;
-        this.limit = limit;
+        this.limitCount = limitCount;
         this.suffix = suffix;
         this.key = key;
         this.scoreKey = scoreKey;
@@ -61,7 +61,7 @@ public class AutocompleteService {
                 autocompleteList = rangeList.stream()
                         .filter(value -> value.endsWith(suffix) && value.startsWith(searchWord))
                         .map(value -> StringUtils.removeEnd(value, suffix))
-                        .limit(limit)
+                        .limit(limitCount)
                         .collect(Collectors.toList());
             }
         }
@@ -78,7 +78,7 @@ public class AutocompleteService {
                 list.add(new AutocompleteResponse.Data(word, score));
             }
         }
-        list.sort((a, b) -> Double.compare(b.getScore(), a.getScore()));
+        list.sort((a, b) -> Double.compare(b.score(), a.score()));
         return new AutocompleteResponse(list);
     }
 }
