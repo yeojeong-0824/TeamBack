@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum RedisIdentifier {
-    EMAIL("EMAIL.");
+    EMAIL("EMAIL:");
 
     private final String identifier;
 }
