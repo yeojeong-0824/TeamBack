@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class LikeService {
+public class LikeServiceImpl {
 
     private final LikeRepository likeRepository;
     private final MemberRepository memberRepository;

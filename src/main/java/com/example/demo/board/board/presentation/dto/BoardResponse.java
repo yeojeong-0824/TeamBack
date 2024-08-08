@@ -33,7 +33,6 @@ public class BoardResponse {
             Integer view,
             Integer age,
             Integer satisfaction,
-            Integer likeCount,
             String memberNickname
     ) {
         public BoardSaveResponse(Board board) {
@@ -47,7 +46,6 @@ public class BoardResponse {
                     board.getView(),
                     board.getAge(),
                     board.getSatisfaction(),
-                    board.getLikeCount(),
                     board.getMember().getNickname()
             );
         }
@@ -63,7 +61,6 @@ public class BoardResponse {
             Integer view,
             Integer age,
             Integer satisfaction,
-            Integer likeCount,
             String memberNickname
     ) {
         public BoardUpdateResponse(Board board) {
@@ -77,7 +74,6 @@ public class BoardResponse {
                     board.getView(),
                     board.getAge(),
                     board.getSatisfaction(),
-                    board.getLikeCount(),
                     board.getMember().getNickname()
             );
         }
@@ -92,7 +88,6 @@ public class BoardResponse {
             String title,
             Integer view,
             Integer satisfaction,
-            Integer likeCount,
             String memberNickname
     ) {
         public BoardListResponse(Board board) {
@@ -105,7 +100,6 @@ public class BoardResponse {
                     board.getTitle(),
                     board.getView(),
                     board.getSatisfaction(),
-                    board.getLikeCount(),
                     board.getMember().getNickname()
             );
         }
@@ -121,7 +115,6 @@ public class BoardResponse {
             Integer view,
             Integer age,
             Integer satisfaction,
-            Integer likeCount,
             String memberNickname
     ) {
         public BoardReadResponse(Board board) {
@@ -135,7 +128,6 @@ public class BoardResponse {
                     board.getView(),
                     board.getAge(),
                     board.getSatisfaction(),
-                    board.getLikeCount(),
                     board.getMember().getNickname()
             );
         }

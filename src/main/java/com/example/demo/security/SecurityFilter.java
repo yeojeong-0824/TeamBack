@@ -26,6 +26,7 @@ public class SecurityFilter {
     private final JwtProvider jwtProvider;
     private final RefreshTokenService refreshTokenService;
 
+    // ToDo: 로그아웃 로직 작성
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http

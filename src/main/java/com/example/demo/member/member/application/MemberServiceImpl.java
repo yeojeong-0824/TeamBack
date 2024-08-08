@@ -75,20 +75,4 @@ public class MemberServiceImpl implements MemberService {
         Member takenMember = MemberRequest.DefaultMember.toEntity(takenMemberRequest, encodingPassword);
         memberRepository.save(takenMember);
     }
-
-    @Override
-    public Page<MemberRequest.DefaultMember> findAll() {
-        return null;
-    }
-
-    @Override
-    public MemberRequest.DefaultMember findById(Long id) {
-        return null;
-    }
-
-    @Override
-    public void deleteById(Long id) {}
-
-    @Override
-    public void updateById(MemberRequest.DefaultMember data, Long id) {}
 }

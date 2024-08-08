@@ -1,7 +1,7 @@
 package com.example.demo.board.like.presentation;
 
 import com.example.demo.board.board.domain.Board;
-import com.example.demo.board.like.application.LikeService;
+import com.example.demo.board.like.application.LikeServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,11 +16,11 @@ import java.util.List;
 @RequestMapping("/board/like/authed")
 public class AuthedLikeController {
 
-    private final LikeService likeService;
+    private final LikeServiceImpl likeServiceImpl;
 
     @GetMapping("/{memberId}")
     public ResponseEntity<List<Board>> getLikedBoardsByMember(@PathVariable Long memberId) {
-        return ResponseEntity.ok(likeService.getLikedBoardsByMember(memberId));
+        return ResponseEntity.ok(likeServiceImpl.getLikedBoardsByMember(memberId));
     }
 
 }

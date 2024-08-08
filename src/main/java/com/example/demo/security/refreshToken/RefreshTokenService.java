@@ -1,6 +1,7 @@
 package com.example.demo.security.refreshToken;
 
-import com.example.demo.config.GlobalService;
-
-public interface RefreshTokenService extends GlobalService<RefreshToken, String> {
+public interface RefreshTokenService {
+    void save(RefreshToken data);
+    RefreshToken findById(String token);
+    void deleteById(String token);
 }

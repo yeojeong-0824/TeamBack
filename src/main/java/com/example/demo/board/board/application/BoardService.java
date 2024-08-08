@@ -49,7 +49,6 @@ public class BoardService {
                 .body(request.body())
                 .view(0)
                 .satisfaction(request.satisfaction())
-                .likeCount(0)
                 .member(member)
                 .commentCount(0)
                 .build();

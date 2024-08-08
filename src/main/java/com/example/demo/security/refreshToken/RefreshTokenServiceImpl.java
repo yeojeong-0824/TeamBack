@@ -38,15 +38,8 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
     }
 
     @Override
-    public void updateById(RefreshToken data, String id) {}
-
-    @Override
     public void deleteById(String token) {
         refreshTokenRepository.deleteById(token);
     }
 
-    @Override
-    public Page<RefreshToken> findAll() {
-        return null;
-    }
 }

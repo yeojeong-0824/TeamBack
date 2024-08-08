@@ -1,5 +1,6 @@
 package com.example.demo.member.member.presentation;
 
+import com.example.demo.member.member.application.MemberService;
 import com.example.demo.member.member.presentation.dto.MemberRequest;
 import com.example.demo.member.member.presentation.dto.MemberRequest.*;
 import com.example.demo.member.member.application.MemberServiceImpl;
@@ -32,7 +33,7 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "회원가입 API")
 public class JoinMemberController {
 
-    private final MemberServiceImpl memberServiceImpl;
+    private final MemberService memberServiceImpl;
     private final JoinMemberEmailService joinMemberEmailService;
 
     /*
@@ -106,8 +107,10 @@ public class JoinMemberController {
         String ip = request.getRemoteAddr();
         log.info("{}: 이메일 인증코드 전송 API 호출", ip);
 
-        if(!memberServiceImpl.checkDuplicatedByEmail(email))
+        if(!memberServiceImpl.checkDuplicatedByEmail(email)) {
+            log.error("이미 사용중인 이메일입니다");
             return ResponseEntity.status(HttpStatus.CONFLICT).body("이미 사용 중인 이메일 입니다");
+        }
 
         String key = joinMemberEmailService.createAuthedKey();
         joinMemberEmailService.sendAuthedEmail(email, key);
