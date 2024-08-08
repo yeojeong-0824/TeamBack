@@ -39,7 +39,7 @@ public class AuthedBoardController {
             @Valid @RequestBody BoardRequest.DefaultBoard request
     ){
         MemberDetails memberDetails = (MemberDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Long memberId = memberDetails.getId();
+        Long memberId = memberDetails.getMemberId();
         boardServiceImpl.save(request, memberId);
         return ResponseEntity.status(HttpStatus.CREATED).body("게시글 작성 성공");
     }

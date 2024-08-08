@@ -12,7 +12,7 @@ public class SecurityUtil {
     public static Long getCurrentUserId() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && authentication.getPrincipal() instanceof MemberDetails) {
-            return ((MemberDetails) authentication.getPrincipal()).getId();
+            return ((MemberDetails) authentication.getPrincipal()).getMemberId();
         }
         throw new IllegalStateException("사용자가 인증되지 않았습니다.");
     }
