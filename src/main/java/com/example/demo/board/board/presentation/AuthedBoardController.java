@@ -4,7 +4,7 @@ import com.example.demo.board.board.presentation.dto.GoogleApiResponse;
 import com.example.demo.board.board.presentation.dto.BoardRequest;
 import com.example.demo.board.board.presentation.dto.BoardResponse;
 import com.example.demo.member.member.presentation.dto.MemberDetails;
-import com.example.demo.board.board.application.BoardService;
+import com.example.demo.board.board.application.BoardServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "게시글 API (Authed)")
 @PreAuthorize("isAuthenticated()")
 public class AuthedBoardController {
-    private final BoardService boardService;
+    private final BoardServiceImpl boardServiceImpl;
 
     @PostMapping
     @Operation(summary = "게시글 작성")
@@ -40,13 +40,13 @@ public class AuthedBoardController {
     ){
         MemberDetails memberDetails = (MemberDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String memberName = memberDetails.getUsername();
-        return ResponseEntity.status(HttpStatus.CREATED).body(boardService.writeBoard(request, memberName));
+        return ResponseEntity.status(HttpStatus.CREATED).body(boardServiceImpl.writeBoard(request, memberName));
     }
 
     @GetMapping("/search")
     @Operation(summary = "구글 api 를 이용한 장소 검색")
     public ResponseEntity<GoogleApiResponse> locationSearch(@RequestParam String textQuery){
-        return ResponseEntity.ok(boardService.getSearchLocation(textQuery));
+        return ResponseEntity.ok(boardServiceImpl.getSearchLocation(textQuery));
     }
 
     @PutMapping("/update/{boardId}")
@@ -61,7 +61,7 @@ public class AuthedBoardController {
             @Valid @RequestBody BoardRequest.BoardUpdateRequest request,
             @PathVariable Long boardId
     ){
-        return ResponseEntity.ok(boardService.updateBoard(boardId, request));
+        return ResponseEntity.ok(boardServiceImpl.updateBoard(boardId, request));
     }
 
     @DeleteMapping("/delete/{boardId}")
@@ -73,6 +73,6 @@ public class AuthedBoardController {
             }
     )
     public ResponseEntity<Long> boardDelete(@PathVariable Long boardId){
-        return ResponseEntity.ok(boardService.deleteBoard(boardId));
+        return ResponseEntity.ok(boardServiceImpl.deleteBoard(boardId));
     }
 }
