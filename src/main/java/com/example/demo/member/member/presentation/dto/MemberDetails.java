@@ -14,8 +14,17 @@ public class MemberDetails implements UserDetails {
 
     private final Member member;
 
+<<<<<<< HEAD
     public Long getMemberId() {
         return member.getId();
+=======
+    public Long getId() {
+        return member.getId();
+    }
+
+    public String getNickname() {
+        return member.getNickname();
+>>>>>>> a0e075dd2db013142d4092747717c476aebce757
     }
 
     @Override

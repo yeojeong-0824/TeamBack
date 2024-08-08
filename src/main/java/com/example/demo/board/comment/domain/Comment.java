@@ -1,20 +1,16 @@
 package com.example.demo.board.comment.domain;
 
 import com.example.demo.board.board.domain.Board;
-import com.example.demo.board.comment.presentation.dto.CommentRequest;
+import com.example.demo.board.comment.presentation.dto.CommentRequest.*;
 import com.example.demo.member.member.domain.Member;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Getter
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Comment {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -30,7 +26,14 @@ public class Comment {
     @JoinColumn(name = "board_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private Board board;
 
-    public void update(CommentRequest.CommentSaveRequest request) {
+    @Builder
+    public Comment(String body, Member member, Board board) {
+        this.body = body;
+        this.member = member;
+        this.board = board;
+    }
+
+    public void update(CommentUpdateRequest request) {
         body = request.body();
     }
 }

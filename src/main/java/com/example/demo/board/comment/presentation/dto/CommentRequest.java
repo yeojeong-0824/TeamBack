@@ -10,7 +10,14 @@ import jakarta.validation.constraints.Size;
 //@NoArgsConstructor
 //@AllArgsConstructor
 public class CommentRequest {
-    public record CommentSaveRequest (@NotBlank @Size(min=10) String body){
 
+    public record CommentSaveRequest(
+            String body
+    ){
+    }
+
+    public record CommentUpdateRequest(
+            String body
+    ) {
     }
 }

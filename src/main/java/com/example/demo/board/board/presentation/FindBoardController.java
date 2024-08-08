@@ -27,7 +27,7 @@ public class FindBoardController {
             }
     )
     public ResponseEntity<BoardResponse.BoardReadResponse> getBoard(@PathVariable Long boardId){
-        return ResponseEntity.ok(boardServiceImpl.getBoard(boardId));
+        return ResponseEntity.ok(boardServiceImpl.findById(boardId));
     }
 
     @GetMapping("/list")
@@ -40,7 +40,7 @@ public class FindBoardController {
     )
     public ResponseEntity<Page<BoardResponse.BoardListResponse>> boardList(
             @RequestParam(required = false, defaultValue = "1") int page){
-        return ResponseEntity.ok(boardServiceImpl.getBoardList(page));
+        return ResponseEntity.ok(boardServiceImpl.findAll(page));
     }
 
     @GetMapping
@@ -56,6 +56,6 @@ public class FindBoardController {
             @RequestParam String searchKeyword,
             @RequestParam String sortKeyword,
             @RequestParam(required = false, defaultValue = "1") int page){
-        return ResponseEntity.ok(boardServiceImpl.getSearchBoardList(searchKeyword, keyword, sortKeyword, page));
+        return ResponseEntity.ok(boardServiceImpl.findAllBySearchKeyword(searchKeyword, keyword, sortKeyword, page));
     }
 }

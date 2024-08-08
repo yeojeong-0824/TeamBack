@@ -26,7 +26,7 @@ import org.springframework.web.client.RestTemplate;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class BoardServiceImpl {
+public class BoardServiceImpl implements BoardService {
 
     private final BoardRepository boardRepository;
     private final MemberRepository memberRepository;
@@ -34,10 +34,10 @@ public class BoardServiceImpl {
 
 
     // 게시글 작성
+    @Override
     @Transactional
-    public BoardResponse.BoardSaveResponse writeBoard(BoardRequest.DefaultBoard request, String memberName){
-
-        Member member = memberRepository.findByUsername(memberName).
+    public void save(BoardRequest.DefaultBoard request, Long memberId) {
+        Member member = memberRepository.findById(memberId).
                 orElseThrow(() -> new NotFoundMemberException("해당 회원을 찾을 수 없습니다."));
 
         Board board = Board.builder()
@@ -54,37 +54,32 @@ public class BoardServiceImpl {
                 .build();
 
         boardRepository.save(board);
-        return new BoardResponse.BoardSaveResponse(board);
     }
 
     // 게시글 수정
+    @Override
     @Transactional
-    public BoardResponse.BoardUpdateResponse updateBoard(Long boardId, BoardRequest.BoardUpdateRequest request){
-
-        Board board = boardRepository.findById(boardId)
+    public void updateById(Long id, BoardRequest.BoardUpdateRequest request) {
+        Board board = boardRepository.findById(id)
                 .orElseThrow(() -> new NotFoundBoardException("해당 게시글을 찾을 수 없습니다."));
 
         board.update(request);
-
-        return new BoardResponse.BoardUpdateResponse(board);
     }
 
-
     // 게시글 삭제
+    @Override
     @Transactional
-    public Long deleteBoard(Long boardId){
-
-        Board board = boardRepository.findById(boardId)
+    public void deleteById(Long id) {
+        Board board = boardRepository.findById(id)
                 .orElseThrow(() -> new NotFoundBoardException("해당 게시글을 찾을 수 없습니다."));
 
         boardRepository.delete(board);
-
-        return boardId;
     }
 
     // 하나의 게시글
-    public BoardResponse.BoardReadResponse getBoard(Long boardId){
-        Board board = boardRepository.findById(boardId)
+    @Override
+    public BoardResponse.BoardReadResponse findById(Long id) {
+        Board board = boardRepository.findById(id)
                 .orElseThrow(() -> new NotFoundBoardException("해당 게시글을 찾을 수 없습니다."));
 
 //        long increasesViewCount = redisRepository.incrementViewCount(boardId);
@@ -95,16 +90,17 @@ public class BoardServiceImpl {
     }
 
     // 전체 게시글
-    public Page<BoardResponse.BoardListResponse> getBoardList(int page){
+    @Override
+    public Page<BoardResponse.BoardListResponse> findAll(int page) {
         PageRequest request = PageRequest.of(page - 1, 10, Sort.by("id").descending());
 
         Page<Board> boardList = boardRepository.findAll(request);
         return toDtoPage(boardList);
     }
 
-
     // 조건에 따른 게시글 검색, 정렬
-    public Page<BoardResponse.BoardListResponse> getSearchBoardList(String searchKeyword, String keyword, String sortKeyword, int page) {
+    @Override
+    public Page<BoardResponse.BoardListResponse> findAllBySearchKeyword(String searchKeyword, String keyword, String sortKeyword, int page) {
         // 생성 날짜
         PageRequest request = PageRequest.of(page - 1, 10, Sort.by("id").descending());
 
@@ -166,19 +162,6 @@ public class BoardServiceImpl {
         }
         return null;
     }
-
-//    public Board toEntity(BoardSaveRequest request, Member member){
-//        return Board.builder()
-//                .title(request.title())
-//                .body(request.body())
-//                .view(0)
-//                .age(member.getAge())
-//                .member(member)
-//                .satisfaction(request.satisfaction())
-//                .likeCount(0)
-//                .commentCount(0)
-//                .build();
-//    }
 
     public Page<BoardResponse.BoardListResponse> toDtoPage(Page<Board> boardList){
         return boardList.map(BoardResponse.BoardListResponse::new);

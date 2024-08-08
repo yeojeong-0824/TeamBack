@@ -35,12 +35,13 @@ public class AuthedBoardController {
                     @ApiResponse(responseCode = "400", description = "게시글 작성 실패")
             }
     )
-    public ResponseEntity<BoardResponse.BoardSaveResponse> boardWrite(
+    public ResponseEntity<String> boardWrite(
             @Valid @RequestBody BoardRequest.DefaultBoard request
     ){
         MemberDetails memberDetails = (MemberDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String memberName = memberDetails.getUsername();
-        return ResponseEntity.status(HttpStatus.CREATED).body(boardServiceImpl.writeBoard(request, memberName));
+        Long memberId = memberDetails.getId();
+        boardServiceImpl.save(request, memberId);
+        return ResponseEntity.status(HttpStatus.CREATED).body("게시글 작성 성공");
     }
 
     @GetMapping("/search")
@@ -57,11 +58,12 @@ public class AuthedBoardController {
                     @ApiResponse(responseCode = "400", description = "게시글 수정 실패")
             }
     )
-    public ResponseEntity<BoardResponse.BoardUpdateResponse> boardUpdate(
+    public ResponseEntity<String> boardUpdate(
             @Valid @RequestBody BoardRequest.BoardUpdateRequest request,
             @PathVariable Long boardId
     ){
-        return ResponseEntity.ok(boardServiceImpl.updateBoard(boardId, request));
+        boardServiceImpl.updateById(boardId, request);
+        return ResponseEntity.ok("게시글 수정 성공");
     }
 
     @DeleteMapping("/delete/{boardId}")
@@ -72,7 +74,8 @@ public class AuthedBoardController {
                     @ApiResponse(responseCode = "400", description = "게시글 삭제 실패")
             }
     )
-    public ResponseEntity<Long> boardDelete(@PathVariable Long boardId){
-        return ResponseEntity.ok(boardServiceImpl.deleteBoard(boardId));
+    public ResponseEntity<String> boardDelete(@PathVariable Long boardId){
+        boardServiceImpl.deleteById(boardId);
+        return ResponseEntity.ok("게시글 삭제 성공");
     }
 }
