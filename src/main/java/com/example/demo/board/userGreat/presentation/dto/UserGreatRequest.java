@@ -4,7 +4,6 @@ import com.example.demo.board.userGreat.domain.UserGreat;
 import lombok.Setter;
 
 public class UserGreatRequest {
-    @Setter
     public record SaveUserGreat(
             Short score
     ) {
