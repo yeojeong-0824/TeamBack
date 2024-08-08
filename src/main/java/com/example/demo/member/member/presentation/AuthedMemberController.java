@@ -6,6 +6,8 @@ import com.example.demo.member.member.presentation.dto.MemberDetails;
 import com.example.demo.member.member.application.MemberServiceImpl;
 import com.example.demo.member.member.presentation.dto.MemberRequest;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -17,6 +19,7 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -40,7 +43,8 @@ public class AuthedMemberController {
                     @ApiResponse(responseCode = "400", description = "유저를 찾지 못함"),
             }
     )
-    public ResponseEntity<String> patchPassword(@Valid @RequestBody MemberRequest.patchPassword takenDto,
+    public ResponseEntity<String> patchPassword(@Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
+                                                @Valid @RequestBody MemberRequest.patchPassword takenDto,
                                                 HttpServletRequest request) {
         String ip = request.getRemoteAddr();
         log.info("{}: 비밀번호 변경 호출", ip);
@@ -59,7 +63,8 @@ public class AuthedMemberController {
                     @ApiResponse(responseCode = "400", description = "유저를 찾지 못함"),
             }
     )
-    public ResponseEntity<String> patchNickname(@Valid @RequestBody MemberRequest.patchNickname takenDto,
+    public ResponseEntity<String> patchNickname(@Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
+                                                @Valid @RequestBody MemberRequest.patchNickname takenDto,
                                                 HttpServletRequest request) {
         String ip = request.getRemoteAddr();
         log.info("{}: 닉네임 변경 호출", ip);

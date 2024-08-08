@@ -59,4 +59,18 @@ public class GlobalExceptionHandler {
         log.error(ex.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ExceptionMessage(errorMessage));
     }
+
+    @ExceptionHandler(NotFoundDataException.class)
+    public ResponseEntity<ExceptionMessage> handlerNotFoundMemberException(NotFoundDataException ex) {
+        List<String> errorMessage = List.of(ex.getMessage());
+        errorMessage.forEach(log::error);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ExceptionMessage(errorMessage));
+    }
+
+    @ExceptionHandler(DuplicatedException.class)
+    public ResponseEntity<ExceptionMessage> handlerDuplicatedException(DuplicatedException ex) {
+        List<String> errorMessage = List.of(ex.getMessage());
+        errorMessage.forEach(log::error);
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(new ExceptionMessage(errorMessage));
+    }
 }

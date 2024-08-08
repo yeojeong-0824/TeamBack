@@ -120,7 +120,7 @@ public class JoinMemberController {
                                                               message = "유효한 이메일이 아닙니다.")
                                                      @PathVariable("email") String email,
 
-
+                                                     @Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
                                                      @RequestBody MemberRequest.EmailAuthedKey takenDto,
 
                                                      HttpServletRequest request) {

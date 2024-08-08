@@ -1,4 +1,4 @@
-package com.example.demo.member.member.exception;
+package com.example.demo.config.exception;
 
 public class DuplicatedException extends RuntimeException {
     public DuplicatedException(String message) {

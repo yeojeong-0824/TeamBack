@@ -8,6 +8,7 @@ import lombok.Builder;
 
 public class MemberRequest {
 
+    @Schema(name = "비밀번호 수정")
     public record patchPassword (
             @NotBlank @Size(min = 8, max = 30)
             @Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*[0-9])\\S+$", // 비밀번호 정규식
@@ -16,12 +17,14 @@ public class MemberRequest {
             String password
     ) {}
 
+    @Schema(name = "닉네임 수정")
     public record patchNickname (
             @NotBlank @Size(min = 1, max = 10)
             @Schema(example = "소인국갔다옴")
             String nickname
     ) {}
 
+    @Schema(name = "이메일 인증 코드")
     public record EmailAuthedKey (
             @NotBlank @Schema(example = "1234")
             @Pattern(regexp = "^\\d{4}$", message = "인증 코드는 4자리 숫자입니다.")

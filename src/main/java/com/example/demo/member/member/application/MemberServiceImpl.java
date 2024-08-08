@@ -1,8 +1,8 @@
 package com.example.demo.member.member.application;
 
-import com.example.demo.member.member.exception.DuplicatedException;
+import com.example.demo.config.exception.DuplicatedException;
+import com.example.demo.config.exception.NotFoundDataException;
 import com.example.demo.member.member.presentation.dto.MemberRequest;
-import com.example.demo.member.member.exception.NotFoundMemberException;
 import com.example.demo.member.member.domain.Member;
 import com.example.demo.member.member.domain.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,9 +20,9 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public String createNewPassword(String takenUsername, String takenEmail) {
         Member savedMember = memberRepository.findByUsername(takenUsername)
-                .orElseThrow(() -> new NotFoundMemberException("해당 유저를 찾지 못했습니다"));
+                .orElseThrow(() -> new NotFoundDataException("해당 유저를 찾지 못했습니다"));
 
-        if(!savedMember.getEmail().equals(takenEmail)) throw new NotFoundMemberException("해당 유저의 이메일을 찾지 못했습니다");
+        if(!savedMember.getEmail().equals(takenEmail)) throw new NotFoundDataException("해당 유저의 이메일을 찾지 못했습니다");
 
         String newPassword = this.createNewPassword();
         this.patchPasswordByUsername(savedMember.getId(), newPassword);
@@ -44,7 +44,7 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public String findUsernameByEmail(String takenEmail) {
         Member savedMember = memberRepository.findByEmail(takenEmail)
-                .orElseThrow(() -> new NotFoundMemberException("해당 유저를 찾지 못했습니다"));
+                .orElseThrow(() -> new NotFoundDataException("해당 유저를 찾지 못했습니다"));
 
         return savedMember.getUsername();
     }
@@ -61,7 +61,7 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public void patchNicknameById(Long takenId, String takenNickname) {
         Member savedMember = memberRepository.findById(takenId)
-                .orElseThrow(() -> new NotFoundMemberException("해당 유저를 찾지 못했습니다"));
+                .orElseThrow(() -> new NotFoundDataException("해당 유저를 찾지 못했습니다"));
 
         savedMember.patchNickname(takenNickname);
         memberRepository.save(savedMember);
@@ -71,7 +71,7 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public void patchPasswordByUsername(Long takenId, String takenPassword) {
         Member savedMember = memberRepository.findById(takenId)
-                .orElseThrow(() -> new NotFoundMemberException("해당 유저를 찾지 못했습니다"));
+                .orElseThrow(() -> new NotFoundDataException("해당 유저를 찾지 못했습니다"));
 
         savedMember.patchPassword(passwordEncoder.encode(takenPassword));
         memberRepository.save(savedMember);

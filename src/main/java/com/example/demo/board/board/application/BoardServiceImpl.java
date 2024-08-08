@@ -2,13 +2,12 @@ package com.example.demo.board.board.application;
 
 import com.example.demo.board.board.domain.Board;
 import com.example.demo.board.board.domain.BoardRepository;
-import com.example.demo.board.board.exception.NotFoundBoardException;
 import com.example.demo.board.board.presentation.dto.BoardRequest;
 import com.example.demo.board.board.presentation.dto.BoardResponse;
 import com.example.demo.board.board.presentation.dto.GoogleApiRequest;
 import com.example.demo.board.board.presentation.dto.GoogleApiResponse;
+import com.example.demo.config.exception.NotFoundDataException;
 import com.example.demo.config.exception.RequestDataException;
-import com.example.demo.member.member.exception.NotFoundMemberException;
 import com.example.demo.member.member.domain.Member;
 import com.example.demo.member.member.domain.MemberRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -22,7 +21,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Objects;
@@ -42,7 +40,7 @@ public class BoardServiceImpl implements BoardService {
     @Transactional
     public void save(BoardRequest.DefaultBoard request, Long memberId) {
         Member member = memberRepository.findById(memberId).
-                orElseThrow(() -> new NotFoundMemberException("해당 회원을 찾을 수 없습니다."));
+                orElseThrow(() -> new NotFoundDataException("해당 회원을 찾을 수 없습니다."));
 
         Board board = Board.builder()
                 .locationName(request.locationName())
@@ -65,7 +63,7 @@ public class BoardServiceImpl implements BoardService {
     @Transactional
     public void updateById(Long id, Long memberId, BoardRequest.BoardUpdateRequest request) {
         Board board = boardRepository.findById(id)
-                .orElseThrow(() -> new NotFoundBoardException("해당 게시글을 찾을 수 없습니다."));
+                .orElseThrow(() -> new NotFoundDataException("해당 게시글을 찾을 수 없습니다."));
 
         if (!memberId.equals(board.getMember().getId())){
             throw new RequestDataException("게시글을 작성한 회원이 아닙니다");
@@ -79,7 +77,7 @@ public class BoardServiceImpl implements BoardService {
     @Transactional
     public void deleteById(Long id, Long memberId) {
         Board board = boardRepository.findById(id)
-                .orElseThrow(() -> new NotFoundBoardException("해당 게시글을 찾을 수 없습니다."));
+                .orElseThrow(() -> new NotFoundDataException("해당 게시글을 찾을 수 없습니다."));
 
         if (!memberId.equals(board.getMember().getId())){
             throw new RequestDataException("게시글을 작성한 회원이 아닙니다");
@@ -92,7 +90,7 @@ public class BoardServiceImpl implements BoardService {
     @Override
     public BoardResponse.BoardReadResponse findById(Long id) {
         Board board = boardRepository.findById(id)
-                .orElseThrow(() -> new NotFoundBoardException("해당 게시글을 찾을 수 없습니다."));
+                .orElseThrow(() -> new NotFoundDataException("해당 게시글을 찾을 수 없습니다."));
 
 //        long increasesViewCount = redisRepository.incrementViewCount(boardId);
 //        board.addViewCount((int) increasesViewCount);
