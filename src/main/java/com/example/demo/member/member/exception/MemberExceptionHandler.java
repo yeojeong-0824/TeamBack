@@ -20,7 +20,7 @@ public class MemberExceptionHandler {
     }
 
     @ExceptionHandler(DuplicatedException.class)
-    public ResponseEntity<ExceptionMessage> handlerDuplicatedException(NotFoundMemberException ex) {
+    public ResponseEntity<ExceptionMessage> handlerDuplicatedException(DuplicatedException ex) {
         List<String> errorMessage = List.of(ex.getMessage());
         errorMessage.forEach(log::error);
         return ResponseEntity.status(HttpStatus.CONFLICT).body(new ExceptionMessage(errorMessage));

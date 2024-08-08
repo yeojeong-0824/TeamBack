@@ -32,16 +32,11 @@ public class JwtProvider {
 
     public String createJwtToken(MemberDetails member) {
 
-        String username = member.getUsername();
-        String nickname = member.getNickname();
-        Integer age = member.getAge();
         String role = member.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList().get(0);
 
         return JWT.create()
                 .withExpiresAt(new Date(System.currentTimeMillis() + JWT_EXPIRATION_TIME))
-                .withClaim("username", username)
-                .withClaim("nickname", nickname)
-                .withClaim("age", age)
+                .withClaim("id", member.getMemberId())
                 .withClaim("role", role)
                 .sign(Algorithm.HMAC512(SECRET));
 
@@ -49,16 +44,11 @@ public class JwtProvider {
 
     public String createRefreshToken(MemberDetails member, long createTime) {
 
-        String username = member.getUsername();
-        String nickname = member.getNickname();
-        Integer age = member.getAge();
         String role = member.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList().get(0);
 
         return JWT.create()
                 .withExpiresAt(new Date(System.currentTimeMillis() + REFRESH_EXPIRATION_TIME))
-                .withClaim("username", username)
-                .withClaim("nickname", nickname)
-                .withClaim("age", age)
+                .withClaim("id", member.getMemberId())
                 .withClaim("role", role)
                 .sign(Algorithm.HMAC512(String.valueOf(createTime + REFRESH_EXPIRATION_TIME)));
 
@@ -69,15 +59,11 @@ public class JwtProvider {
                 .build()
                 .verify(token);
 
-        String username = decodedJWT.getClaim("username").toString().replace("\"", "");
-        String nickname = decodedJWT.getClaim("nickname").toString().replace("\"", "");
-        int age = decodedJWT.getClaim("age").asInt();
+        Long id = decodedJWT.getClaim("id").asLong();
         String role = decodedJWT.getClaim("role").toString().replace("\"", "");
 
         return Member.builder()
-                .username(username)
-                .nickname(nickname)
-                .age(age)
+                .id(id)
                 .role(role)
                 .build();
     }

@@ -59,13 +59,13 @@ public class MemberServiceImpl implements MemberService {
         String takenNickname = takenDataConfirmMember.nickname();
         String takenUsername = takenDataConfirmMember.username();
 
-        if(!memberRepository.existsByNickname(takenNickname)) throw new DuplicatedException("중복된 닉네임입니다");
-        if(!memberRepository.existsByUsername(takenUsername)) throw new DuplicatedException("중복된 아이디입니다");
+        if(memberRepository.existsByNickname(takenNickname)) throw new DuplicatedException("중복된 닉네임입니다");
+        if(memberRepository.existsByUsername(takenUsername)) throw new DuplicatedException("중복된 아이디입니다");
     }
 
     @Override
     public void checkDuplicatedByEmail(String takenEmail) {
-        if(!memberRepository.existsByEmail(takenEmail)) throw new DuplicatedException("중복된 이메일입니다");
+        if(memberRepository.existsByEmail(takenEmail)) throw new DuplicatedException("중복된 이메일입니다");
     }
 
     @Transactional

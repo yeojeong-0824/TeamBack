@@ -55,7 +55,7 @@ public class Board {
     private Integer satisfaction;
 
     @Column(nullable = false)
-    private List<Long> like;
+    private List<Long> userLike;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="member_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))

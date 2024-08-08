@@ -14,10 +14,9 @@ public class MemberDetails implements UserDetails {
 
     private final Member member;
 
-    public String getNickname() {
-        return member.getNickname();
+    public Long getMemberId() {
+        return member.getId();
     }
-    public Integer getAge() { return member.getAge(); }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
