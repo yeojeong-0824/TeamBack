@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/board/like/authed")
+@RequestMapping("/board/userGreat/authed")
 public class AuthedUserGreatController {
 
     private final UserGreatService userGreatService;
