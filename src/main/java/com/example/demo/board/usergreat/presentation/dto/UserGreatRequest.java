@@ -1,7 +1,6 @@
-package com.example.demo.board.userGreat.presentation.dto;
+package com.example.demo.board.usergreat.presentation.dto;
 
-import com.example.demo.board.userGreat.domain.UserGreat;
-import lombok.Setter;
+import com.example.demo.board.usergreat.domain.UserGreat;
 
 public class UserGreatRequest {
     public record SaveUserGreat(

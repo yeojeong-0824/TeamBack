@@ -1,4 +1,4 @@
-package com.example.demo.board.userGreat.domain;
+package com.example.demo.board.usergreat.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -16,5 +16,8 @@ public class UserGreat {
     private Long boardId;
     private Short score;
 
-
+    public void saveUserIdAndBoardId(Long userId, Long boardId) {
+        this.userId = userId;
+        this.boardId = boardId;
+    }
 }

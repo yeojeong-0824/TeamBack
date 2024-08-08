@@ -42,20 +42,13 @@ public class Board {
     private String title;
 
     @Column(nullable = false)
-    private Integer age;
-
-    @Column(nullable = false)
     private String body;
 
     @Column(nullable = false)
     private Integer view;
 
     @Column(nullable = false)
-    @Size(min=1, max=5)
     private Integer satisfaction;
-
-    @Column(nullable = false)
-    private List<Long> userLike;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="member_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))

@@ -1,4 +1,4 @@
-package com.example.demo.board.userGreat.domain;
+package com.example.demo.board.usergreat.domain;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
