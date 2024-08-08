@@ -1,9 +1,8 @@
-package com.example.demo.board.userGreat.presentation;
+package com.example.demo.board.usergreat.presentation;
 
-import com.example.demo.board.userGreat.application.UserGreatService;
-import com.example.demo.board.userGreat.presentation.dto.UserGreatRequest;
+import com.example.demo.board.usergreat.application.UserGreatService;
+import com.example.demo.board.usergreat.presentation.dto.UserGreatRequest;
 import com.example.demo.config.util.SecurityUtil;
-import com.example.demo.member.member.presentation.dto.MemberRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;

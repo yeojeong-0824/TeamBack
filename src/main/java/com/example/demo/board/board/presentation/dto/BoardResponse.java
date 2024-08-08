@@ -18,7 +18,6 @@ public class BoardResponse {
     private String title;
     private String body;
     private Integer view;
-    private Integer age;
     private Integer satisfaction;
     private Integer likeCount;
     private String memberNickname;
@@ -31,7 +30,6 @@ public class BoardResponse {
             String title,
             String body,
             Integer view,
-            Integer age,
             Integer satisfaction,
             String memberNickname
     ) {
@@ -44,7 +42,6 @@ public class BoardResponse {
                     board.getTitle(),
                     board.getBody(),
                     board.getView(),
-                    board.getAge(),
                     board.getSatisfaction(),
                     board.getMember().getNickname()
             );
@@ -59,7 +56,6 @@ public class BoardResponse {
             String title,
             String body,
             Integer view,
-            Integer age,
             Integer satisfaction,
             String memberNickname
     ) {
@@ -72,7 +68,6 @@ public class BoardResponse {
                     board.getTitle(),
                     board.getBody(),
                     board.getView(),
-                    board.getAge(),
                     board.getSatisfaction(),
                     board.getMember().getNickname()
             );
@@ -113,7 +108,6 @@ public class BoardResponse {
             String title,
             String Body,
             Integer view,
-            Integer age,
             Integer satisfaction,
             String memberNickname
     ) {
@@ -126,7 +120,6 @@ public class BoardResponse {
                     board.getTitle(),
                     board.getBody(),
                     board.getView(),
-                    board.getAge(),
                     board.getSatisfaction(),
                     board.getMember().getNickname()
             );

@@ -1,14 +1,13 @@
-package com.example.demo.board.userGreat.application;
+package com.example.demo.board.usergreat.application;
 
 import com.example.demo.board.board.domain.BoardRepository;
-import com.example.demo.board.userGreat.domain.UserGreat;
-import com.example.demo.board.userGreat.domain.UserGreatRepository;
-import com.example.demo.board.userGreat.presentation.dto.UserGreatRequest;
+import com.example.demo.board.usergreat.domain.UserGreat;
+import com.example.demo.board.usergreat.domain.UserGreatRepository;
+import com.example.demo.board.usergreat.presentation.dto.UserGreatRequest;
 import com.example.demo.config.exception.NotFoundDataException;
 import com.example.demo.member.member.domain.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -18,7 +17,6 @@ public class UserGreatServiceImpl implements UserGreatService {
 
     private final BoardRepository boardRepository;
     private final MemberRepository memberRepository;
-
 
     @Override
     public void save(UserGreatRequest.SaveUserGreat takenDto, Long userId, Long boardId) {
