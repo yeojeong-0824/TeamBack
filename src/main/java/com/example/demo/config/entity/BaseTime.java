@@ -1,5 +1,6 @@
 package com.example.demo.config.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
 import org.springframework.data.annotation.CreatedDate;
@@ -13,6 +14,7 @@ import java.time.LocalDateTime;
 public class BaseTime {
 
     @CreatedDate
+    @Column(updatable = false)
     private LocalDateTime createAt;
 
     @LastModifiedDate

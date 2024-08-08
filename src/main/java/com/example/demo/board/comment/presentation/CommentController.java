@@ -46,11 +46,11 @@ public class CommentController {
                     @ApiResponse(responseCode = "400", description = "댓글 수정 실패")
             }
     )
-    public ResponseEntity<String> update(
+    public ResponseEntity<String> updateById(
             @PathVariable Long commentId,
             @Valid @RequestBody CommentUpdateRequest request
     ) {
-        commentService.update(commentId, request);
+        commentService.updateById(commentId, request);
         return ResponseEntity.ok("댓글 수정 완료");
     }
 
@@ -62,8 +62,8 @@ public class CommentController {
                     @ApiResponse(responseCode = "400", description = "댓글 삭제 실패")
             }
     )
-    public ResponseEntity<String> delete(@PathVariable Long commentId){
-        commentService.delete(commentId);
+    public ResponseEntity<String> deleteById(@PathVariable Long commentId){
+        commentService.deleteById(commentId);
         return ResponseEntity.ok("댓글 삭제 완료");
     }
 }

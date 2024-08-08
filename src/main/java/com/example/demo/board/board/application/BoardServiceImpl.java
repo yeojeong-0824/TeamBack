@@ -8,6 +8,7 @@ import com.example.demo.board.board.presentation.dto.GoogleApiRequest;
 import com.example.demo.board.board.presentation.dto.GoogleApiResponse;
 import com.example.demo.config.exception.NotFoundDataException;
 import com.example.demo.config.exception.RequestDataException;
+import com.example.demo.config.redis.RedisRepository;
 import com.example.demo.member.member.domain.Member;
 import com.example.demo.member.member.domain.MemberRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -32,7 +33,7 @@ public class BoardServiceImpl implements BoardService {
 
     private final BoardRepository boardRepository;
     private final MemberRepository memberRepository;
-//    private final RedisRepository redisRepository;
+    private final RedisRepository redisRepository;
 
 
     // 게시글 작성
@@ -92,9 +93,9 @@ public class BoardServiceImpl implements BoardService {
         Board board = boardRepository.findById(id)
                 .orElseThrow(() -> new NotFoundDataException("해당 게시글을 찾을 수 없습니다."));
 
-//        long increasesViewCount = redisRepository.incrementViewCount(boardId);
-//        board.addViewCount((int) increasesViewCount);
-//        boardRepository.save(board);
+        long increasesViewCount = redisRepository.incrementViewCount(id);
+        board.addViewCount((int) increasesViewCount);
+        boardRepository.save(board);
 
         return new BoardResponse.BoardReadResponse(board);
     }

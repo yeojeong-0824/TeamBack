@@ -49,7 +49,7 @@ public class CommentServiceImpl implements CommentService {
     // 댓글 수정
     @Transactional
     @Override
-    public void update(Long commentId, CommentUpdateRequest request) {
+    public void updateById(Long commentId, CommentUpdateRequest request) {
 
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new NotFoundCommentException("해당 댓글을 찾을 수 없습니다."));
@@ -62,7 +62,7 @@ public class CommentServiceImpl implements CommentService {
     // 댓글 삭제
     @Transactional
     @Override
-    public void delete(Long commentId) {
+    public void deleteById(Long commentId) {
 
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new NotFoundDataException("해당 댓글을 찾을 수 없습니다."));
