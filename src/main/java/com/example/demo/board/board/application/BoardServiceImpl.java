@@ -35,7 +35,7 @@ public class BoardServiceImpl {
 
     // 게시글 작성
     @Transactional
-    public BoardResponse.BoardSaveResponse writeBoard(BoardRequest.BoardSaveRequest request, String memberName){
+    public BoardResponse.BoardSaveResponse writeBoard(BoardRequest.DefaultBoard request, String memberName){
 
         Member member = memberRepository.findByUsername(memberName).
                 orElseThrow(() -> new NotFoundMemberException("해당 회원을 찾을 수 없습니다."));

@@ -36,7 +36,7 @@ public class AuthedBoardController {
             }
     )
     public ResponseEntity<BoardResponse.BoardSaveResponse> boardWrite(
-            @Valid @RequestBody BoardRequest.BoardSaveRequest request
+            @Valid @RequestBody BoardRequest.DefaultBoard request
     ){
         MemberDetails memberDetails = (MemberDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String memberName = memberDetails.getUsername();
