@@ -1,6 +1,8 @@
 package com.example.demo.board.userGreat.presentation;
 
 import com.example.demo.board.userGreat.application.UserGreatService;
+import com.example.demo.board.userGreat.presentation.dto.UserGreatRequest;
+import com.example.demo.config.util.SecurityUtil;
 import com.example.demo.member.member.presentation.dto.MemberRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -27,8 +29,13 @@ public class AuthedUserGreatController {
                     @ApiResponse(responseCode = "400", description = "입력 값이 잘못됨"),
             }
     )
-    public ResponseEntity<String> save(@Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
-                                       @RequestBody MemberRequest.SaveMember takenDto) {
-        return null;
+    public ResponseEntity<String> save(@PathVariable("boardId") Long boardId,
+                                       @Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
+                                       @RequestBody UserGreatRequest.SaveUserGreat takenDto) {
+
+        Long userId = SecurityUtil.getCurrentUserId();
+
+        userGreatService.save(takenDto, userId, boardId);
+        return ResponseEntity.ok("댓글 생성에 성공하였습니다");
     }
 }

@@ -1,5 +1,7 @@
 package com.example.demo.board.userGreat.application;
 
+import com.example.demo.board.userGreat.presentation.dto.UserGreatRequest;
+
 public interface UserGreatService {
-    void save(Long userId, Long boardId);
+    void save(UserGreatRequest.SaveUserGreat takenDto, Long userId, Long boardId);
 }
