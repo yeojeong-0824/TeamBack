@@ -3,6 +3,7 @@ package com.example.demo.board.board.presentation;
 import com.example.demo.board.board.presentation.dto.GoogleApiResponse;
 import com.example.demo.board.board.presentation.dto.BoardRequest;
 import com.example.demo.board.board.presentation.dto.BoardResponse;
+import com.example.demo.config.util.SecurityUtil;
 import com.example.demo.member.member.presentation.dto.MemberDetails;
 import com.example.demo.board.board.application.BoardServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
@@ -38,8 +39,7 @@ public class AuthedBoardController {
     public ResponseEntity<String> boardWrite(
             @Valid @RequestBody BoardRequest.DefaultBoard request
     ){
-        MemberDetails memberDetails = (MemberDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Long memberId = memberDetails.getMemberId();
+        Long memberId = SecurityUtil.getCurrentUserId();
         boardServiceImpl.save(request, memberId);
         return ResponseEntity.status(HttpStatus.CREATED).body("게시글 작성 성공");
     }
@@ -62,7 +62,8 @@ public class AuthedBoardController {
             @Valid @RequestBody BoardRequest.BoardUpdateRequest request,
             @PathVariable Long boardId
     ){
-        boardServiceImpl.updateById(boardId, request);
+        Long memberId = SecurityUtil.getCurrentUserId();
+        boardServiceImpl.updateById(boardId, memberId, request);
         return ResponseEntity.ok("게시글 수정 성공");
     }
 
@@ -75,7 +76,8 @@ public class AuthedBoardController {
             }
     )
     public ResponseEntity<String> boardDelete(@PathVariable Long boardId){
-        boardServiceImpl.deleteById(boardId);
+        Long memberId = SecurityUtil.getCurrentUserId();
+        boardServiceImpl.deleteById(boardId, memberId);
         return ResponseEntity.ok("게시글 삭제 성공");
     }
 }
