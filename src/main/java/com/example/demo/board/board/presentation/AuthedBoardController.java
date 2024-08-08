@@ -39,8 +39,7 @@ public class AuthedBoardController {
     public ResponseEntity<String> boardWrite(
             @Valid @RequestBody BoardRequest.DefaultBoard request
     ){
-        Long memberId = SecurityUtil.getCurrentUserId();
-        boardServiceImpl.save(request, memberId);
+        boardServiceImpl.save(request);
         return ResponseEntity.status(HttpStatus.CREATED).body("게시글 작성 성공");
     }
 

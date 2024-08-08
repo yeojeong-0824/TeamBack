@@ -1,5 +1,6 @@
 package com.example.demo.board.board.application;
 
+import com.example.demo.autocomplate.application.AutocompleteService;
 import com.example.demo.board.board.domain.Board;
 import com.example.demo.board.board.domain.BoardRepository;
 import com.example.demo.board.board.presentation.dto.BoardRequest;
@@ -9,6 +10,7 @@ import com.example.demo.board.board.presentation.dto.GoogleApiResponse;
 import com.example.demo.config.exception.NotFoundDataException;
 import com.example.demo.config.exception.RequestDataException;
 import com.example.demo.config.redis.RedisRepository;
+import com.example.demo.config.util.SecurityUtil;
 import com.example.demo.member.member.domain.Member;
 import com.example.demo.member.member.domain.MemberRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -24,7 +26,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Objects;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -34,12 +36,15 @@ public class BoardServiceImpl implements BoardService {
     private final BoardRepository boardRepository;
     private final MemberRepository memberRepository;
     private final RedisRepository redisRepository;
-
+    private final AutocompleteService autocompleteService;
 
     // 게시글 작성
     @Override
     @Transactional
-    public void save(BoardRequest.DefaultBoard request, Long memberId) {
+    public void save(BoardRequest.DefaultBoard request) {
+
+        Long memberId = SecurityUtil.getCurrentUserId();
+
         Member member = memberRepository.findById(memberId).
                 orElseThrow(() -> new NotFoundDataException("해당 회원을 찾을 수 없습니다."));
 
@@ -56,7 +61,9 @@ public class BoardServiceImpl implements BoardService {
                 .commentCount(0)
                 .build();
 
-        boardRepository.save(board);
+        Board save = boardRepository.save(board);
+
+        autocompleteService.addAutocomplete(save.getTitle());
     }
 
     // 게시글 수정
@@ -130,6 +137,10 @@ public class BoardServiceImpl implements BoardService {
         } else if (searchKeyword.equals("location")) {
             // 주소와 가게 이름이 검색어와 일치하는 게시글 검색
             boardList = boardRepository.findByFormattedAddressOrLocationNameContaining(keyword, request);
+        } else if (searchKeyword.equals("title")) {
+            // 자동완성 기능을 통해 제목 검색
+            List<String> autocompleteTitles = autocompleteService.getAutoCompleteListFromRedis(keyword);
+            boardList = boardRepository.findByTitleIn(autocompleteTitles, request);
         } else {
             boardList = boardRepository.findAll(request);
         }
