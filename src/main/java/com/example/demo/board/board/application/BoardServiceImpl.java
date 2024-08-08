@@ -36,6 +36,7 @@ public class BoardServiceImpl implements BoardService {
     private final RedisRepository redisRepository;
 
 
+
     // 게시글 작성
     @Override
     @Transactional
