@@ -5,7 +5,7 @@ import com.example.demo.board.comment.presentation.dto.CommentRequest;
 public interface CommentService {
 
     void save(Long boardId, CommentRequest.CommentSaveRequest request);
-    void update(Long commentId, CommentRequest.CommentUpdateRequest request);
-    void delete(Long commentId);
+    void updateById(Long commentId, CommentRequest.CommentUpdateRequest request);
+    void deleteById(Long commentId);
 
 }
