@@ -52,7 +52,7 @@ public class JoinMemberController {
         }
     )
     public ResponseEntity<String> save(@Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
-                                       @Valid @RequestBody MemberRequest.DefaultMember takenDto,
+                                       @Valid @RequestBody MemberRequest.SaveMember takenDto,
                                        HttpServletRequest request) {
         String ip = request.getRemoteAddr();
         log.info("{}: 유저 생성 API 호출", ip);
@@ -120,15 +120,14 @@ public class JoinMemberController {
                                                               message = "유효한 이메일이 아닙니다.")
                                                      @PathVariable("email") String email,
 
-                                                     @NotBlank @Schema(example = "1234")
-                                                     @Pattern(regexp = "^\\d{4}$", message = "인증 코드는 4자리 숫자입니다.")
-                                                     @RequestBody String key,
+
+                                                     @RequestBody MemberRequest.EmailAuthedKey takenDto,
 
                                                      HttpServletRequest request) {
         String ip = request.getRemoteAddr();
         log.info("{}: 이메일 인증 API 호출", ip);
 
-        return joinMemberEmailService.checkAuthedKey(email, key) ?
+        return joinMemberEmailService.checkAuthedKey(email, takenDto.key()) ?
                 ResponseEntity.ok("이메일 인증에 성공하였습니다") :
                 ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("이메일 인증에 실패하였습니다");
     }

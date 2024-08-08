@@ -6,7 +6,6 @@ import com.example.demo.member.member.exception.NotFoundMemberException;
 import com.example.demo.member.member.domain.Member;
 import com.example.demo.member.member.domain.MemberRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,11 +18,27 @@ public class MemberServiceImpl implements MemberService {
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    public String findEmailByUsername(String takenUsername) {
+    public String createNewPassword(String takenUsername, String takenEmail) {
         Member savedMember = memberRepository.findByUsername(takenUsername)
                 .orElseThrow(() -> new NotFoundMemberException("해당 유저를 찾지 못했습니다"));
 
-        return savedMember.getEmail();
+        if(!savedMember.getEmail().equals(takenEmail)) throw new NotFoundMemberException("해당 유저의 이메일을 찾지 못했습니다");
+
+        String newPassword = this.createNewPassword();
+        this.patchPasswordByUsername(savedMember.getId(), newPassword);
+
+        return newPassword;
+    }
+
+    private String createNewPassword() {
+        String password = "";
+        for(int i = 0; i < 4; i++) {
+            password += (char) ((int) (Math.random() * 26) + 97);
+        }
+        for(int i = 0; i < 4; i++) {
+            password += (int) (Math.random() * 10);
+        }
+        return password;
     }
 
     @Override
@@ -32,26 +47,6 @@ public class MemberServiceImpl implements MemberService {
                 .orElseThrow(() -> new NotFoundMemberException("해당 유저를 찾지 못했습니다"));
 
         return savedMember.getUsername();
-    }
-
-    @Transactional
-    @Override
-    public void patchPasswordByUsername(String takenUsername, String takenPassword) {
-        Member savedMember = memberRepository.findByUsername(takenUsername)
-                .orElseThrow(() -> new NotFoundMemberException("해당 유저를 찾지 못했습니다"));
-
-        savedMember.patchPassword(passwordEncoder.encode(takenPassword));
-        memberRepository.save(savedMember);
-    }
-
-    @Transactional
-    @Override
-    public void patchNicknameByUsername(String takenUsername, String takenNickname) {
-        Member savedMember = memberRepository.findByUsername(takenNickname)
-                .orElseThrow(() -> new NotFoundMemberException("해당 유저를 찾지 못했습니다"));
-
-        savedMember.patchNickname(takenNickname);
-        memberRepository.save(savedMember);
     }
 
     @Override
@@ -64,15 +59,34 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    public void patchNicknameById(Long takenId, String takenNickname) {
+        Member savedMember = memberRepository.findById(takenId)
+                .orElseThrow(() -> new NotFoundMemberException("해당 유저를 찾지 못했습니다"));
+
+        savedMember.patchNickname(takenNickname);
+        memberRepository.save(savedMember);
+    }
+
+    @Transactional
+    @Override
+    public void patchPasswordByUsername(Long takenId, String takenPassword) {
+        Member savedMember = memberRepository.findById(takenId)
+                .orElseThrow(() -> new NotFoundMemberException("해당 유저를 찾지 못했습니다"));
+
+        savedMember.patchPassword(passwordEncoder.encode(takenPassword));
+        memberRepository.save(savedMember);
+    }
+
+    @Override
     public void checkDuplicatedByEmail(String takenEmail) {
         if(memberRepository.existsByEmail(takenEmail)) throw new DuplicatedException("중복된 이메일입니다");
     }
 
     @Transactional
     @Override
-    public void save(MemberRequest.DefaultMember takenMemberRequest) {
+    public void save(MemberRequest.SaveMember takenMemberRequest) {
         String encodingPassword = passwordEncoder.encode(takenMemberRequest.password());
-        Member takenMember = MemberRequest.DefaultMember.toEntity(takenMemberRequest, encodingPassword);
+        Member takenMember = MemberRequest.SaveMember.toEntity(takenMemberRequest, encodingPassword);
         memberRepository.save(takenMember);
     }
 }

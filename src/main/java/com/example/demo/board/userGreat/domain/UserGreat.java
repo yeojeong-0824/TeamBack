@@ -18,4 +18,6 @@ public class UserGreat {
 
     private Long board;
 
+    private Short score;
+
 }

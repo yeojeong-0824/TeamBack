@@ -23,15 +23,4 @@ public class FindMemberEmailService {
 
         emailService.sendEmail(email, title, text);
     }
-
-    public String createNewPassword() {
-        String password = "";
-        for(int i = 0; i < 4; i++) {
-            password += (char) ((int) (Math.random() * 26) + 97);
-        }
-        for(int i = 0; i < 4; i++) {
-            password += (int) (Math.random() * 10);
-        }
-        return password;
-    }
 }

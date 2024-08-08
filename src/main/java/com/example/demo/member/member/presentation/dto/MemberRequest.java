@@ -7,9 +7,30 @@ import jakarta.validation.constraints.*;
 import lombok.Builder;
 
 public class MemberRequest {
+
+    public record patchPassword (
+            @NotBlank @Size(min = 8, max = 30)
+            @Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*[0-9])\\S+$", // 비밀번호 정규식
+                    message = "비밀번호는 영문(대,소문자)과 숫자가 적어도 1개 이상씩 포함되어야 합니다")
+            @Schema(example = "1q2w3e4r")
+            String password
+    ) {}
+
+    public record patchNickname (
+            @NotBlank @Size(min = 1, max = 10)
+            @Schema(example = "소인국갔다옴")
+            String nickname
+    ) {}
+
+    public record EmailAuthedKey (
+            @NotBlank @Schema(example = "1234")
+            @Pattern(regexp = "^\\d{4}$", message = "인증 코드는 4자리 숫자입니다.")
+            String key
+    ){}
+
     @Builder
     @Schema(name = "유저 중복 검사")
-    public record DataConfirmMember(
+    public record DataConfirmMember (
             @Size(min = 5, max = 30)
             @Schema(example = "user12", nullable = true) // 들어갈 데이터 예시
             String username,
@@ -21,7 +42,7 @@ public class MemberRequest {
 
     @Builder
     @Schema(name = "유저 회원가입 정보 입력")
-    public record DefaultMember(
+    public record SaveMember(
         @NotBlank @Size(min = 5, max = 30)
         @Schema(example = "user12") // 들어갈 데이터 예시
         String username,
@@ -50,7 +71,7 @@ public class MemberRequest {
         @Schema(example = "90")
         Integer age
     ) {
-        static public Member toEntity(DefaultMember dto, String password) {
+        static public Member toEntity(SaveMember dto, String password) {
             if(dto.password.equals(password)) throw new ServerException("비밀번호 암호화가 진행되지 않았습니다");
             return Member.builder()
                     .username(dto.username())

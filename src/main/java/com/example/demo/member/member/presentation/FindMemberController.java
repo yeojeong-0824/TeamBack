@@ -50,13 +50,8 @@ public class FindMemberController {
         String ip = request.getRemoteAddr();
         log.info("{}: 새로운 비밀번호 발급 호출", ip);
 
-        String savedMemberEmail = memberServiceImpl.findEmailByUsername(username);
-        if(!email.equals(savedMemberEmail)) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("이메일이 잘못되었습니다.");
-
-        String password = findMemberEmailService.createNewPassword();
-
-        findMemberEmailService.sendNewPasswordEmail(savedMemberEmail, password);
-        memberServiceImpl.patchPasswordByUsername(username, password);
+        String newPassword = memberServiceImpl.createNewPassword(username, email);
+        findMemberEmailService.sendNewPasswordEmail(email, newPassword);
 
         return ResponseEntity.ok("비밀번호 재발급에 성공하였습니다");
     }
