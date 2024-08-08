@@ -1,5 +1,6 @@
 package com.example.demo.member.member.application;
 
+import com.example.demo.member.member.exception.DuplicatedException;
 import com.example.demo.member.member.presentation.dto.MemberRequest;
 import com.example.demo.member.member.exception.NotFoundMemberException;
 import com.example.demo.member.member.domain.Member;
@@ -33,21 +34,6 @@ public class MemberServiceImpl implements MemberService {
         return savedMember.getUsername();
     }
 
-    @Override
-    public boolean checkDuplicatedByUsername(String takenUsername) {
-        return !memberRepository.existsByUsername(takenUsername);
-    }
-
-    @Override
-    public boolean checkDuplicatedByNickname(String takenNickname) {
-        return !memberRepository.existsByNickname(takenNickname);
-    }
-
-    @Override
-    public boolean checkDuplicatedByEmail(String takenEmail) {
-        return !memberRepository.existsByEmail(takenEmail);
-    }
-
     @Transactional
     @Override
     public void patchPasswordByUsername(String takenUsername, String takenPassword) {
@@ -66,6 +52,20 @@ public class MemberServiceImpl implements MemberService {
 
         savedMember.patchNickname(takenNickname);
         memberRepository.save(savedMember);
+    }
+
+    @Override
+    public void checkDuplicated(MemberRequest.DataConfirmMember takenDataConfirmMember) {
+        String takenNickname = takenDataConfirmMember.nickname();
+        String takenUsername = takenDataConfirmMember.username();
+
+        if(!memberRepository.existsByNickname(takenNickname)) throw new DuplicatedException("중복된 닉네임입니다");
+        if(!memberRepository.existsByUsername(takenUsername)) throw new DuplicatedException("중복된 아이디입니다");
+    }
+
+    @Override
+    public void checkDuplicatedByEmail(String takenEmail) {
+        if(!memberRepository.existsByEmail(takenEmail)) throw new DuplicatedException("중복된 이메일입니다");
     }
 
     @Transactional

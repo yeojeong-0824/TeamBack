@@ -18,4 +18,11 @@ public class MemberExceptionHandler {
         errorMessage.forEach(log::error);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ExceptionMessage(errorMessage));
     }
+
+    @ExceptionHandler(DuplicatedException.class)
+    public ResponseEntity<ExceptionMessage> handlerDuplicatedException(NotFoundMemberException ex) {
+        List<String> errorMessage = List.of(ex.getMessage());
+        errorMessage.forEach(log::error);
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(new ExceptionMessage(errorMessage));
+    }
 }
