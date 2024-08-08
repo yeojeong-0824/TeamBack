@@ -2,7 +2,7 @@ package com.example.demo.board.board.presentation.dto;
 
 public class BoardRequest {
 
-    public record BoardSaveRequest(
+    public record DefaultBoard(
             String locationName,
             String formattedAddress,
             String latitude,  // 위도

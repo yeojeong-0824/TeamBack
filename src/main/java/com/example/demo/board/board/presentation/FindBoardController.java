@@ -1,7 +1,7 @@
 package com.example.demo.board.board.presentation;
 
 import com.example.demo.board.board.presentation.dto.BoardResponse;
-import com.example.demo.board.board.application.BoardService;
+import com.example.demo.board.board.application.BoardServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/board")
 @Tag(name = "게시글 찾기 API")
 public class FindBoardController {
-    private final BoardService boardService;
+    private final BoardServiceImpl boardServiceImpl;
 
     @GetMapping("/{boardId}")
     @Operation(summary = "게시글 호출")
@@ -27,7 +27,7 @@ public class FindBoardController {
             }
     )
     public ResponseEntity<BoardResponse.BoardReadResponse> getBoard(@PathVariable Long boardId){
-        return ResponseEntity.ok(boardService.getBoard(boardId));
+        return ResponseEntity.ok(boardServiceImpl.getBoard(boardId));
     }
 
     @GetMapping("/list")
@@ -40,7 +40,7 @@ public class FindBoardController {
     )
     public ResponseEntity<Page<BoardResponse.BoardListResponse>> boardList(
             @RequestParam(required = false, defaultValue = "1") int page){
-        return ResponseEntity.ok(boardService.getBoardList(page));
+        return ResponseEntity.ok(boardServiceImpl.getBoardList(page));
     }
 
     @GetMapping
@@ -56,6 +56,6 @@ public class FindBoardController {
             @RequestParam String searchKeyword,
             @RequestParam String sortKeyword,
             @RequestParam(required = false, defaultValue = "1") int page){
-        return ResponseEntity.ok(boardService.getSearchBoardList(searchKeyword, keyword, sortKeyword, page));
+        return ResponseEntity.ok(boardServiceImpl.getSearchBoardList(searchKeyword, keyword, sortKeyword, page));
     }
 }

@@ -31,8 +31,7 @@ public class MemberRequest {
         String nickname,
 
         @NotBlank @Size(min = 1, max = 50)
-        @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$", // 이메일 정규식
-                message = "유효한 이메일이 아닙니다.")
+        @Email(message = "유효한 이메일이 아닙니다.")
         @Schema(example = "example@naver.com")
         String email,
 
