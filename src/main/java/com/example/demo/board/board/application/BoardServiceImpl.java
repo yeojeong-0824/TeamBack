@@ -7,6 +7,7 @@ import com.example.demo.board.board.presentation.dto.BoardRequest;
 import com.example.demo.board.board.presentation.dto.BoardResponse;
 import com.example.demo.board.board.presentation.dto.GoogleApiRequest;
 import com.example.demo.board.board.presentation.dto.GoogleApiResponse;
+import com.example.demo.config.exception.RequestDataException;
 import com.example.demo.member.member.exception.NotFoundMemberException;
 import com.example.demo.member.member.domain.Member;
 import com.example.demo.member.member.domain.MemberRepository;
@@ -21,7 +22,10 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -59,9 +63,13 @@ public class BoardServiceImpl implements BoardService {
     // 게시글 수정
     @Override
     @Transactional
-    public void updateById(Long id, BoardRequest.BoardUpdateRequest request) {
+    public void updateById(Long id, Long memberId, BoardRequest.BoardUpdateRequest request) {
         Board board = boardRepository.findById(id)
                 .orElseThrow(() -> new NotFoundBoardException("해당 게시글을 찾을 수 없습니다."));
+
+        if (!memberId.equals(board.getMember().getId())){
+            throw new RequestDataException("게시글을 작성한 회원이 아닙니다");
+        }
 
         board.update(request);
     }
@@ -69,9 +77,13 @@ public class BoardServiceImpl implements BoardService {
     // 게시글 삭제
     @Override
     @Transactional
-    public void deleteById(Long id) {
+    public void deleteById(Long id, Long memberId) {
         Board board = boardRepository.findById(id)
                 .orElseThrow(() -> new NotFoundBoardException("해당 게시글을 찾을 수 없습니다."));
+
+        if (!memberId.equals(board.getMember().getId())){
+            throw new RequestDataException("게시글을 작성한 회원이 아닙니다");
+        }
 
         boardRepository.delete(board);
     }
