@@ -1,8 +1,8 @@
 package com.example.demo.board.comment.presentation;
 
 import com.example.demo.board.comment.application.CommentService;
-import com.example.demo.board.comment.presentation.dto.CommentRequest.*;
-import com.example.demo.board.comment.presentation.dto.CommentResponse;
+import com.example.demo.board.comment.presentation.dto.CommentRequest.CommentSaveRequest;
+import com.example.demo.board.comment.presentation.dto.CommentRequest.CommentUpdateRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
