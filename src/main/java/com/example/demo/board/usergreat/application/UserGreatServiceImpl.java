@@ -24,6 +24,7 @@ public class UserGreatServiceImpl implements UserGreatService {
         if(!boardRepository.existsById(boardId)) throw new NotFoundDataException("해당 게시글이 존재하지 않습니다");
 
         UserGreat saveUserGreat = UserGreatRequest.SaveUserGreat.toEntity(takenDto);
+        saveUserGreat.saveUserIdAndBoardId(userId, boardId);
         userGreatRepository.save(saveUserGreat);
     }
 }
