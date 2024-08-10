@@ -5,6 +5,7 @@ import com.example.demo.config.exception.NotFoundDataException;
 import com.example.demo.member.member.presentation.dto.MemberRequest;
 import com.example.demo.member.member.domain.Member;
 import com.example.demo.member.member.domain.MemberRepository;
+import com.example.demo.member.member.presentation.dto.MemberResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -88,5 +89,12 @@ public class MemberServiceImpl implements MemberService {
         String encodingPassword = passwordEncoder.encode(takenMemberRequest.password());
         Member takenMember = MemberRequest.SaveMember.toEntity(takenMemberRequest, encodingPassword);
         memberRepository.save(takenMember);
+    }
+
+    @Override
+    public MemberResponse.FindMember findById(Long id) {
+        Member savedMember = memberRepository.findById(id)
+                .orElseThrow(() -> new NotFoundDataException("해당 유저를 찾지 못했습니다"));
+        return MemberResponse.FindMember.toDto(savedMember);
     }
 }

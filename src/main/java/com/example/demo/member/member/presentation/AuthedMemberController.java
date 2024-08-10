@@ -2,27 +2,21 @@ package com.example.demo.member.member.presentation;
 
 import com.example.demo.config.util.SecurityUtil;
 import com.example.demo.member.member.application.MemberService;
-import com.example.demo.member.member.presentation.dto.MemberDetails;
-import com.example.demo.member.member.application.MemberServiceImpl;
 import com.example.demo.member.member.presentation.dto.MemberRequest;
+import com.example.demo.member.member.presentation.dto.MemberResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
@@ -33,7 +27,23 @@ import org.springframework.web.bind.annotation.*;
 @PreAuthorize("isAuthenticated()")
 public class AuthedMemberController {
 
-    private final MemberService memberServiceImpl;
+    private final MemberService memberService;
+    @GetMapping
+    @Operation(summary = "회원 정보 확인")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "비밀번호 변경 완료"),
+                    @ApiResponse(responseCode = "400", description = "유저를 찾지 못함"),
+                    @ApiResponse(responseCode = "403", description = "권한 없음"),
+            }
+    )
+    public ResponseEntity<MemberResponse.FindMember> findById(HttpServletRequest request) {
+        String ip = request.getRemoteAddr();
+        log.info("{}: 회원정보 호출", ip);
+
+        Long userId = SecurityUtil.getCurrentUserId();
+        return ResponseEntity.ok(memberService.findById(userId));
+    }
 
     @PatchMapping("/password")
     @Operation(summary = "비밀번호 변경")
@@ -41,6 +51,7 @@ public class AuthedMemberController {
             value = {
                     @ApiResponse(responseCode = "200", description = "비밀번호 변경 완료"),
                     @ApiResponse(responseCode = "400", description = "유저를 찾지 못함"),
+                    @ApiResponse(responseCode = "403", description = "권한 없음"),
             }
     )
     public ResponseEntity<String> patchPassword(@Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
@@ -51,7 +62,7 @@ public class AuthedMemberController {
 
         Long userId = SecurityUtil.getCurrentUserId();
 
-        memberServiceImpl.patchPasswordByUsername(userId, takenDto.password());
+        memberService.patchPasswordByUsername(userId, takenDto.password());
         return ResponseEntity.ok("비밀번호 변경에 성공하였습니다");
     }
 
@@ -61,6 +72,7 @@ public class AuthedMemberController {
             value = {
                     @ApiResponse(responseCode = "200", description = "비밀번호 변경 완료"),
                     @ApiResponse(responseCode = "400", description = "유저를 찾지 못함"),
+                    @ApiResponse(responseCode = "403", description = "권한 없음"),
             }
     )
     public ResponseEntity<String> patchNickname(@Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
@@ -71,7 +83,7 @@ public class AuthedMemberController {
 
         Long userId = SecurityUtil.getCurrentUserId();
 
-        memberServiceImpl.patchNicknameById(userId, takenDto.nickname());
+        memberService.patchNicknameById(userId, takenDto.nickname());
         return ResponseEntity.ok("닉네임 변경에 성공하였습니다");
     }
 }

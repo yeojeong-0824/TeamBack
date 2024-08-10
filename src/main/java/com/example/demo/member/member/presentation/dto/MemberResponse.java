@@ -5,7 +5,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 public class MemberResponse {
-
     @Builder
     @Schema(name = "유저 정보 호출")
     public record FindMember (
@@ -24,7 +23,7 @@ public class MemberResponse {
         @Schema(example = "90")
         Integer age
     ) {
-        static public FindMember toFindMember(Member entity) {
+        static public FindMember toDto(Member entity) {
             return FindMember.builder()
                     .username(entity.getUsername())
                     .nickname(entity.getNickname())
