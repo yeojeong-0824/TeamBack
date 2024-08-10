@@ -9,6 +9,7 @@ import com.example.demo.board.board.presentation.dto.GoogleApiRequest;
 import com.example.demo.board.board.presentation.dto.GoogleApiResponse;
 import com.example.demo.config.exception.NotFoundDataException;
 import com.example.demo.config.exception.RequestDataException;
+import com.example.demo.config.exception.ServerException;
 import com.example.demo.config.redis.RedisRepository;
 import com.example.demo.config.util.SecurityUtil;
 import com.example.demo.member.member.domain.Member;
@@ -16,6 +17,7 @@ import com.example.demo.member.member.domain.MemberRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -29,6 +31,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.List;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class BoardServiceImpl implements BoardService {
@@ -178,11 +181,9 @@ public class BoardServiceImpl implements BoardService {
 
         try {
             return objectMapper.readValue(responses.getBody(), GoogleApiResponse.class);
-
         } catch (JsonProcessingException e){
-            e.printStackTrace();
+            throw new RequestDataException("구글 API 오브젝트 맵퍼 실패");
         }
-        return null;
     }
 
     public Page<BoardResponse.BoardListResponse> toDtoPage(Page<Board> boardList){
