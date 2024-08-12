@@ -1,26 +1,28 @@
 package com.example.demo.board.usergreat.presentation;
 
 import com.example.demo.board.usergreat.application.UserGreatService;
-import com.example.demo.config.util.SecurityUtil;
+import com.example.demo.board.usergreat.presentation.dto.UserGreatResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@Tag(name = "별점 정보 API (Authed)")
-@PreAuthorize("isAuthenticated()")
+@Tag(name = "별점 정보 API")
 @RequestMapping("/board/userGreat/authed")
-public class AuthedUserGreatController {
+public class UserGreatController {
 
     private final UserGreatService userGreatService;
-
-    @PostMapping("/{boardId}")
+    @GetMapping("/{boardId}")
     @Operation(summary = "게시글 좋아요 등록")
     @ApiResponses(
             value = {
@@ -28,9 +30,8 @@ public class AuthedUserGreatController {
                     @ApiResponse(responseCode = "400", description = "입력 값이 잘못됨"),
             }
     )
-    public ResponseEntity<String> save(@PathVariable("boardId") Long boardId) {
-        Long userId = SecurityUtil.getCurrentUserId();
-        userGreatService.save(userId, boardId);
-        return ResponseEntity.ok("좋아요 누르기에 성공하였습니다");
+    public ResponseEntity<List<UserGreatResponse.UserIdByBoardId>> findUserIdByBoardId(@PathVariable("boardId") Long boardId) {
+        List<UserGreatResponse.UserIdByBoardId> rtn = userGreatService.findUserIdByBoardId(boardId);
+        return ResponseEntity.ok(rtn);
     }
 }

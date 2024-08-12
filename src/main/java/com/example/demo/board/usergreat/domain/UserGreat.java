@@ -14,10 +14,4 @@ public class UserGreat {
     private Long id;
     private Long userId;
     private Long boardId;
-    private Short score;
-
-    public void saveUserIdAndBoardId(Long userId, Long boardId) {
-        this.userId = userId;
-        this.boardId = boardId;
-    }
 }
