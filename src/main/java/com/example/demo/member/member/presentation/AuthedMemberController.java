@@ -70,7 +70,7 @@ public class AuthedMemberController {
     @Operation(summary = "닉네임 변경")
     @ApiResponses(
             value = {
-                    @ApiResponse(responseCode = "200", description = "비밀번호 변경 완료"),
+                    @ApiResponse(responseCode = "200", description = "닉네임 완료"),
                     @ApiResponse(responseCode = "400", description = "유저를 찾지 못함"),
                     @ApiResponse(responseCode = "403", description = "권한 없음"),
             }

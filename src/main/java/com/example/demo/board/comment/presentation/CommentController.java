@@ -11,11 +11,13 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/comment")
+@PreAuthorize("isAuthenticated()")
 @Tag(name = "댓글 API (Authed)")
 public class CommentController {
 
@@ -26,7 +28,8 @@ public class CommentController {
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "댓글 작성 성공"),
-                    @ApiResponse(responseCode = "400", description = "댓글 작성 실패")
+                    @ApiResponse(responseCode = "400", description = "댓글 작성 실패"),
+                    @ApiResponse(responseCode = "403", description = "권한 없음"),
             }
     )
     public ResponseEntity<String> save(
@@ -43,7 +46,8 @@ public class CommentController {
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "댓글 수정 성공"),
-                    @ApiResponse(responseCode = "400", description = "댓글 수정 실패")
+                    @ApiResponse(responseCode = "400", description = "댓글 수정 실패"),
+                    @ApiResponse(responseCode = "403", description = "권한 없음"),
             }
     )
     public ResponseEntity<String> updateById(
@@ -59,7 +63,8 @@ public class CommentController {
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "댓글 삭제 성공"),
-                    @ApiResponse(responseCode = "400", description = "댓글 삭제 실패")
+                    @ApiResponse(responseCode = "400", description = "댓글 삭제 실패"),
+                    @ApiResponse(responseCode = "403", description = "권한 없음"),
             }
     )
     public ResponseEntity<String> deleteById(@PathVariable Long commentId){

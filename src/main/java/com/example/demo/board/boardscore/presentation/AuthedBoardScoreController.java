@@ -35,6 +35,7 @@ public class AuthedBoardScoreController {
             value = {
                     @ApiResponse(responseCode = "200", description = "별점 등록 완료"),
                     @ApiResponse(responseCode = "409", description = "이미 별점 등록을 했음"),
+                    @ApiResponse(responseCode = "403", description = "권한 없음"),
             }
     )
     public ResponseEntity<String> save(@PathVariable("boardId") Long boardId,

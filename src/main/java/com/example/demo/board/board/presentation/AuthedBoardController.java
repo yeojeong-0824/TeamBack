@@ -36,7 +36,8 @@ public class AuthedBoardController {
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "게시글 작성 성공"),
-                    @ApiResponse(responseCode = "400", description = "게시글 작성 실패")
+                    @ApiResponse(responseCode = "400", description = "게시글 작성 실패"),
+                    @ApiResponse(responseCode = "403", description = "권한 없음"),
             }
     )
     public ResponseEntity<String> boardWrite(
@@ -66,7 +67,8 @@ public class AuthedBoardController {
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "게시글 수정 성공"),
-                    @ApiResponse(responseCode = "400", description = "게시글 수정 실패")
+                    @ApiResponse(responseCode = "400", description = "게시글 수정 실패"),
+                    @ApiResponse(responseCode = "403", description = "권한 없음"),
             }
     )
     public ResponseEntity<String> boardUpdate(
@@ -87,7 +89,8 @@ public class AuthedBoardController {
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "게시글 삭제 성공"),
-                    @ApiResponse(responseCode = "400", description = "게시글 삭제 실패")
+                    @ApiResponse(responseCode = "400", description = "게시글 삭제 실패"),
+                    @ApiResponse(responseCode = "403", description = "권한 없음"),
             }
     )
     public ResponseEntity<String> boardDelete(@PathVariable("boardId") Long boardId,
