@@ -11,6 +11,7 @@ import com.example.demo.board.boardscore.application.BoardScoreService;
 import com.example.demo.board.boardscore.domain.BoardScore;
 import com.example.demo.board.boardscore.presentation.dto.BoardScoreRequest;
 import com.example.demo.board.boardscore.presentation.dto.BoardScoreResponse;
+import com.example.demo.config.MethodTimer;
 import com.example.demo.config.exception.NotFoundDataException;
 import com.example.demo.config.exception.RequestDataException;
 import com.example.demo.config.exception.ServerException;
@@ -106,6 +107,7 @@ public class BoardServiceImpl implements BoardService {
     }
 
     // 하나의 게시글
+    @MethodTimer(method = "BoardService.findById()")
     @Override
     public BoardResponse.BoardReadResponse findById(Long id) {
         Board board = boardRepository.findById(id)

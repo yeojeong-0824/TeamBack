@@ -1,5 +1,6 @@
 package com.example.demo.member.member.application;
 
+import com.example.demo.config.MethodTimer;
 import com.example.demo.config.exception.DuplicatedException;
 import com.example.demo.config.exception.NotFoundDataException;
 import com.example.demo.member.member.presentation.dto.MemberRequest;
@@ -19,6 +20,7 @@ public class MemberServiceImpl implements MemberService {
     private final PasswordEncoder passwordEncoder;
 
     @Override
+    @MethodTimer(method = "MemberService.createNewPassword()")
     public String createNewPassword(String takenUsername, String takenEmail) {
         Member savedMember = memberRepository.findByUsername(takenUsername)
                 .orElseThrow(() -> new NotFoundDataException("해당 유저를 찾지 못했습니다"));
@@ -43,6 +45,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    @MethodTimer(method = "MemberService.findUsernameByEmail()")
     public String findUsernameByEmail(String takenEmail) {
         Member savedMember = memberRepository.findByEmail(takenEmail)
                 .orElseThrow(() -> new NotFoundDataException("해당 유저를 찾지 못했습니다"));
@@ -51,6 +54,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    @MethodTimer(method = "MemberService.checkDuplicated()")
     public void checkDuplicated(MemberRequest.DataConfirmMember takenDataConfirmMember) {
         String takenNickname = takenDataConfirmMember.nickname();
         String takenUsername = takenDataConfirmMember.username();
@@ -60,6 +64,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    @MethodTimer(method = "MemberService.patchNicknameById()")
     public void patchNicknameById(Long takenId, String takenNickname) {
         Member savedMember = memberRepository.findById(takenId)
                 .orElseThrow(() -> new NotFoundDataException("해당 유저를 찾지 못했습니다"));
@@ -70,6 +75,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Transactional
     @Override
+    @MethodTimer(method = "MemberService.patchPasswordByUsername()")
     public void patchPasswordByUsername(Long takenId, String takenPassword) {
         Member savedMember = memberRepository.findById(takenId)
                 .orElseThrow(() -> new NotFoundDataException("해당 유저를 찾지 못했습니다"));
@@ -79,12 +85,14 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    @MethodTimer(method = "MemberService.checkDuplicatedByEmail()")
     public void checkDuplicatedByEmail(String takenEmail) {
         if(memberRepository.existsByEmail(takenEmail)) throw new DuplicatedException("중복된 이메일입니다");
     }
 
     @Transactional
     @Override
+    @MethodTimer(method = "MemberService.save()")
     public void save(MemberRequest.SaveMember takenMemberRequest) {
         String encodingPassword = passwordEncoder.encode(takenMemberRequest.password());
         Member takenMember = MemberRequest.SaveMember.toEntity(takenMemberRequest, encodingPassword);
@@ -92,6 +100,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    @MethodTimer(method = "MemberService.findById()")
     public MemberResponse.FindMember findById(Long id) {
         Member savedMember = memberRepository.findById(id)
                 .orElseThrow(() -> new NotFoundDataException("해당 유저를 찾지 못했습니다"));
