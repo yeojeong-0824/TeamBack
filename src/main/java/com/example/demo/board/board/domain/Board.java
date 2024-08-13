@@ -50,12 +50,14 @@ public class Board {
     @Column(nullable = false)
     private Integer satisfaction;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="member_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
-    private Member member;
+    @Column(nullable = false)
+    private Long memberId;
+
+    @Column(nullable = false)
+    private String memberNickname;
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Comment> comments = new ArrayList<>();
+    private List<Comment> comments;
 
     @Column(nullable = false)
     private Integer commentCount;

@@ -41,9 +41,6 @@ public class Member {
     private String role;
 
     @OneToMany(mappedBy = "member", orphanRemoval = true)
-    private List<Board> boards;
-
-    @OneToMany(mappedBy = "member", orphanRemoval = true)
     private List<Comment> comments;
 
     public void patchPassword(String password) {

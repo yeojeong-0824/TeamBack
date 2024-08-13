@@ -43,7 +43,7 @@ public class BoardResponse {
                     board.getBody(),
                     board.getView(),
                     board.getSatisfaction(),
-                    board.getMember().getNickname()
+                    board.getMemberNickname()
             );
         }
     }
@@ -69,7 +69,7 @@ public class BoardResponse {
                     board.getBody(),
                     board.getView(),
                     board.getSatisfaction(),
-                    board.getMember().getNickname()
+                    board.getMemberNickname()
             );
         }
     }
@@ -95,7 +95,7 @@ public class BoardResponse {
                     board.getTitle(),
                     board.getView(),
                     board.getSatisfaction(),
-                    board.getMember().getNickname()
+                    board.getMemberNickname()
             );
         }
     }
@@ -121,7 +121,7 @@ public class BoardResponse {
                     board.getBody(),
                     board.getView(),
                     board.getSatisfaction(),
-                    board.getMember().getNickname()
+                    board.getMemberNickname()
             );
         }
     }

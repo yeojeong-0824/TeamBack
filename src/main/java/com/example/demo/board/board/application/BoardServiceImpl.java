@@ -60,7 +60,8 @@ public class BoardServiceImpl implements BoardService {
                 .body(request.body())
                 .view(0)
                 .satisfaction(request.satisfaction())
-                .member(member)
+                .memberId(member.getId())
+                .memberNickname(member.getNickname())
                 .commentCount(0)
                 .build();
 
@@ -76,7 +77,7 @@ public class BoardServiceImpl implements BoardService {
         Board board = boardRepository.findById(id)
                 .orElseThrow(() -> new NotFoundDataException("해당 게시글을 찾을 수 없습니다."));
 
-        if (!memberId.equals(board.getMember().getId())){
+        if (!memberId.equals(board.getMemberId())){
             throw new RequestDataException("게시글을 작성한 회원이 아닙니다");
         }
 
@@ -90,7 +91,7 @@ public class BoardServiceImpl implements BoardService {
         Board board = boardRepository.findById(id)
                 .orElseThrow(() -> new NotFoundDataException("해당 게시글을 찾을 수 없습니다."));
 
-        if (!memberId.equals(board.getMember().getId())){
+        if (!memberId.equals(board.getMemberId())){
             throw new RequestDataException("게시글을 작성한 회원이 아닙니다");
         }
 
