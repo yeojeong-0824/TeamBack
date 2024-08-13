@@ -2,8 +2,8 @@ package com.example.demo.security.filter;
 
 import com.example.demo.member.member.presentation.dto.MemberDetails;
 import com.example.demo.security.JwtProvider;
-import com.example.demo.security.refreshToken.RefreshToken;
-import com.example.demo.security.refreshToken.RefreshTokenService;
+import com.example.demo.security.refreshtoken.RefreshToken;
+import com.example.demo.security.refreshtoken.RefreshTokenService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

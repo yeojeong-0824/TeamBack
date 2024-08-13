@@ -1,9 +1,13 @@
 package com.example.demo.member.email.application;
 
+import com.example.demo.config.exception.NotFoundDataException;
 import com.example.demo.config.redis.RedisIdentifier;
 import com.example.demo.config.redis.RedisRepository;
+import com.example.demo.member.email.domain.Email;
+import com.example.demo.member.email.domain.EmailRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
 import java.util.Random;
@@ -16,38 +20,42 @@ import java.util.Random;
 public class JoinMemberEmailService {
 
     private final EmailService emailService;
-    private final RedisRepository redisRepository;
+    private final EmailRepository emailRepository;
 
-    private final String REDIS_IDENTIFIER = RedisIdentifier.EMAIL.getIdentifier();
     private final String AUTHED = "Authed";
-    private final int VALID_TIME = 5;
+    private final int VALID_TIME = 5 * 60;
 
     // ToDo: 전송 실패 시 처리 안해줌
+    @Transactional
     public void sendAuthedEmail(String email, String authedKey) {
         String title = "회원가입 이메일 인증 코드";
         String text = "이메일 인증 코드: " + authedKey;
 
-        redisRepository.setData(REDIS_IDENTIFIER + email, authedKey, Duration.ofMinutes(VALID_TIME));
+        Email entity = Email.builder()
+                .id(email)
+                .value(authedKey)
+                .ttl(VALID_TIME)
+                .build();
+        emailRepository.save(entity);
         emailService.sendEmail(email, title, text);
     }
 
     // 회원가입에 인증 이메일의 Key 값과 해당 이메일에 발송 된 Key 값이 같다면 해당 이메일의 값을 Authed로 변경
     public boolean checkAuthedKey(String email, String authedKey) {
-        String savedAuthedKey = (String) redisRepository.getDataByKey(REDIS_IDENTIFIER + email);
-        if(savedAuthedKey == null) return false;
-        if(!savedAuthedKey.equals(authedKey)) return false;
+        Email savedEntity = emailRepository.findById(email).orElseThrow(() -> new NotFoundDataException("해당 이메일의 정보가 없습니다"));
+        if(!savedEntity.getValue().equals(authedKey)) return false;
 
-        redisRepository.setData(REDIS_IDENTIFIER + email, AUTHED, Duration.ofMinutes(VALID_TIME));
+        savedEntity.authedEmail(AUTHED);
+        emailRepository.save(savedEntity);
         return true;
     }
 
     // 회원가입 인증 이메일의 값이 Authed라면 인증된 사용자라는 것으로 간주함
     public boolean checkAuthedEmail(String email) {
-        String savedAuthedKey = (String) redisRepository.getDataByKey(REDIS_IDENTIFIER + email);
-        if(savedAuthedKey == null) return false;
-        if(!savedAuthedKey.equals(AUTHED)) return false;
+        Email savedEntity = emailRepository.findById(email).orElseThrow(() -> new NotFoundDataException("해당 이메일의 정보가 없습니다"));
+        if(!savedEntity.getValue().equals(AUTHED)) return false;
 
-        redisRepository.deleteKey(REDIS_IDENTIFIER + email);
+        emailRepository.deleteById(email);
         return true;
     }
 

@@ -1,4 +1,4 @@
-package com.example.demo.security.refreshToken;
+package com.example.demo.security.refreshtoken;
 
 public interface RefreshTokenService {
     void save(RefreshToken data);
