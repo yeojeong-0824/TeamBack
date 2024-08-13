@@ -1,7 +1,11 @@
 package com.example.demo.board.board.presentation.dto;
 
 import com.example.demo.board.board.domain.Board;
+import com.example.demo.board.boardscore.domain.BoardScore;
+import com.example.demo.board.boardscore.presentation.dto.BoardScoreResponse;
 import lombok.*;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -109,9 +113,10 @@ public class BoardResponse {
             String Body,
             Integer view,
             Integer satisfaction,
-            String memberNickname
+            String memberNickname,
+            BoardScoreResponse.BoardScoreByBoardId boardScore
     ) {
-        public BoardReadResponse(Board board) {
+        public BoardReadResponse(Board board, BoardScoreResponse.BoardScoreByBoardId boardScore) {
             this(
                     board.getLocationName(),
                     board.getFormattedAddress(),
@@ -121,7 +126,8 @@ public class BoardResponse {
                     board.getBody(),
                     board.getView(),
                     board.getSatisfaction(),
-                    board.getMemberNickname()
+                    board.getMemberNickname(),
+                    boardScore
             );
         }
     }

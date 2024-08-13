@@ -1,4 +1,4 @@
-package com.example.demo.board.usergreat.domain;
+package com.example.demo.board.boardscore.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -8,10 +8,12 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class UserGreat {
+public class BoardScore {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Long userId;
     private Long boardId;
+
+    private Integer score;
 }

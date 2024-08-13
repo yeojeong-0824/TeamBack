@@ -6,11 +6,14 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@Slf4j
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/board")
@@ -26,7 +29,11 @@ public class FindBoardController {
                     @ApiResponse(responseCode = "404", description = "존재하는 게시글 없음")
             }
     )
-    public ResponseEntity<BoardResponse.BoardReadResponse> getBoard(@PathVariable Long boardId){
+    public ResponseEntity<BoardResponse.BoardReadResponse> getBoard(@PathVariable("boardId") Long boardId,
+                                                                    HttpServletRequest requestArr){
+        String ip = requestArr.getRemoteAddr();
+        log.info("{}: 개별 게시글 호출", ip);
+
         return ResponseEntity.ok(boardServiceImpl.findById(boardId));
     }
 
@@ -39,7 +46,12 @@ public class FindBoardController {
             }
     )
     public ResponseEntity<Page<BoardResponse.BoardListResponse>> boardList(
-            @RequestParam(required = false, defaultValue = "1") int page){
+            @RequestParam(required = false, defaultValue = "1") int page,
+            HttpServletRequest requestArr){
+
+        String ip = requestArr.getRemoteAddr();
+        log.info("{}: 게시글 목록 호출", ip);
+
         return ResponseEntity.ok(boardServiceImpl.findAll(page));
     }
 
@@ -55,7 +67,12 @@ public class FindBoardController {
             @RequestParam String keyword,
             @RequestParam String searchKeyword,
             @RequestParam String sortKeyword,
-            @RequestParam(required = false, defaultValue = "1") int page){
+            @RequestParam(required = false, defaultValue = "1") int page,
+            HttpServletRequest requestArr){
+
+        String ip = requestArr.getRemoteAddr();
+        log.info("{}: 조건에 따른 게시글 검색, 정렬 호출", ip);
+
         return ResponseEntity.ok(boardServiceImpl.findAllBySearchKeyword(searchKeyword, keyword, sortKeyword, page));
     }
 }

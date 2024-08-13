@@ -10,8 +10,10 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 
 // 유저 정보 불러오기 오류 수정했습니다
 // 게시글 작성까지 잘 되는 걸로 확인 했어요!
+@Slf4j
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/board/authed")
@@ -37,15 +40,24 @@ public class AuthedBoardController {
             }
     )
     public ResponseEntity<String> boardWrite(
-            @Valid @RequestBody BoardRequest.DefaultBoard request
+            @Valid @RequestBody BoardRequest.DefaultBoard request,
+            HttpServletRequest requestArr
     ){
+        String ip = requestArr.getRemoteAddr();
+        log.info("{}: 게시글 작성 호출", ip);
+
         boardServiceImpl.save(request);
         return ResponseEntity.status(HttpStatus.CREATED).body("게시글 작성 성공");
     }
 
     @GetMapping("/search")
     @Operation(summary = "구글 api 를 이용한 장소 검색")
-    public ResponseEntity<GoogleApiResponse> locationSearch(@RequestParam String textQuery){
+    public ResponseEntity<GoogleApiResponse> locationSearch(@RequestParam String textQuery,
+                                                            HttpServletRequest requestArr){
+
+        String ip = requestArr.getRemoteAddr();
+        log.info("{}: 검색 호출", ip);
+
         return ResponseEntity.ok(boardServiceImpl.getSearchLocation(textQuery));
     }
 
@@ -59,8 +71,12 @@ public class AuthedBoardController {
     )
     public ResponseEntity<String> boardUpdate(
             @Valid @RequestBody BoardRequest.BoardUpdateRequest request,
-            @PathVariable Long boardId
+            @PathVariable Long boardId,
+            HttpServletRequest requestArr
     ){
+        String ip = requestArr.getRemoteAddr();
+        log.info("{}: 게시글 수정 호출", ip);
+
         Long memberId = SecurityUtil.getCurrentUserId();
         boardServiceImpl.updateById(boardId, memberId, request);
         return ResponseEntity.ok("게시글 수정 성공");
@@ -74,7 +90,11 @@ public class AuthedBoardController {
                     @ApiResponse(responseCode = "400", description = "게시글 삭제 실패")
             }
     )
-    public ResponseEntity<String> boardDelete(@PathVariable Long boardId){
+    public ResponseEntity<String> boardDelete(@PathVariable("boardId") Long boardId,
+                                              HttpServletRequest requestArr){
+        String ip = requestArr.getRemoteAddr();
+        log.info("{}: 게시글 삭제 호출", ip);
+
         Long memberId = SecurityUtil.getCurrentUserId();
         boardServiceImpl.deleteById(boardId, memberId);
         return ResponseEntity.ok("게시글 삭제 성공");

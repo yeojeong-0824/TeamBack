@@ -7,6 +7,10 @@ import com.example.demo.board.board.presentation.dto.BoardRequest;
 import com.example.demo.board.board.presentation.dto.BoardResponse;
 import com.example.demo.board.board.presentation.dto.GoogleApiRequest;
 import com.example.demo.board.board.presentation.dto.GoogleApiResponse;
+import com.example.demo.board.boardscore.application.BoardScoreService;
+import com.example.demo.board.boardscore.domain.BoardScore;
+import com.example.demo.board.boardscore.presentation.dto.BoardScoreRequest;
+import com.example.demo.board.boardscore.presentation.dto.BoardScoreResponse;
 import com.example.demo.config.exception.NotFoundDataException;
 import com.example.demo.config.exception.RequestDataException;
 import com.example.demo.config.exception.ServerException;
@@ -39,7 +43,9 @@ public class BoardServiceImpl implements BoardService {
     private final BoardRepository boardRepository;
     private final MemberRepository memberRepository;
     private final RedisRepository redisRepository;
+
     private final AutocompleteService autocompleteService;
+    private final BoardScoreService boardScoreService;
 
     // 게시글 작성
     @Override
@@ -95,6 +101,7 @@ public class BoardServiceImpl implements BoardService {
             throw new RequestDataException("게시글을 작성한 회원이 아닙니다");
         }
 
+        boardScoreService.deleteByBoardId(id);
         boardRepository.delete(board);
     }
 
@@ -108,7 +115,8 @@ public class BoardServiceImpl implements BoardService {
         board.addViewCount((int) increasesViewCount);
         boardRepository.save(board);
 
-        return new BoardResponse.BoardReadResponse(board);
+        BoardScoreResponse.BoardScoreByBoardId savedBoardScore = boardScoreService.findUserIdByBoardId(id);
+        return new BoardResponse.BoardReadResponse(board, savedBoardScore);
     }
 
     // 전체 게시글
