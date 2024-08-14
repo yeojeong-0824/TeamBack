@@ -32,7 +32,7 @@ public class AuthedMemberController {
     @Operation(summary = "회원 정보 확인")
     @ApiResponses(
             value = {
-                    @ApiResponse(responseCode = "200", description = "비밀번호 변경 완료"),
+                    @ApiResponse(responseCode = "200", description = "회원정보 확인 완료"),
                     @ApiResponse(responseCode = "400", description = "유저를 찾지 못함"),
                     @ApiResponse(responseCode = "403", description = "권한 없음"),
             }
@@ -43,6 +43,42 @@ public class AuthedMemberController {
 
         Long userId = SecurityUtil.getCurrentUserId();
         return ResponseEntity.ok(memberService.findById(userId));
+    }
+
+    @GetMapping("/detail")
+    @Operation(summary = "자세한 회원 정보 확인")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "회원정보 확인 완료"),
+                    @ApiResponse(responseCode = "400", description = "유저를 찾지 못함"),
+                    @ApiResponse(responseCode = "403", description = "권한 없음"),
+            }
+    )
+    public ResponseEntity<MemberResponse.FindMemberDetail> findByIdDetail(HttpServletRequest request) {
+        String ip = request.getRemoteAddr();
+        log.info("{}: 회원정보 호출", ip);
+
+        Long userId = SecurityUtil.getCurrentUserId();
+        return ResponseEntity.ok(memberService.findByIdDetail(userId));
+    }
+
+    @DeleteMapping
+    @Operation(summary = "유저 탈퇴")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "유저 탈퇴"),
+                    @ApiResponse(responseCode = "400", description = "유저를 찾지 못함"),
+                    @ApiResponse(responseCode = "403", description = "권한 없음"),
+            }
+    )
+    public ResponseEntity<String> deleteByUserId(HttpServletRequest request) {
+        String ip = request.getRemoteAddr();
+        log.info("{}: 유저 탈퇴 호출", ip);
+
+        Long userId = SecurityUtil.getCurrentUserId();
+
+        memberService.deleteByUserId(userId);
+        return ResponseEntity.ok("닉네임 변경에 성공하였습니다");
     }
 
     @PatchMapping("/password")

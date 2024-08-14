@@ -3,7 +3,6 @@ package com.example.demo.board.boardscore.presentation;
 import com.example.demo.board.boardscore.application.BoardScoreService;
 import com.example.demo.board.boardscore.presentation.dto.BoardScoreRequest;
 import com.example.demo.config.util.SecurityUtil;
-import com.example.demo.member.member.presentation.dto.MemberRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -34,8 +33,8 @@ public class AuthedBoardScoreController {
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "별점 등록 완료"),
-                    @ApiResponse(responseCode = "409", description = "이미 별점 등록을 했음"),
                     @ApiResponse(responseCode = "403", description = "권한 없음"),
+                    @ApiResponse(responseCode = "409", description = "이미 별점 등록을 했음"),
             }
     )
     public ResponseEntity<String> save(@PathVariable("boardId") Long boardId,

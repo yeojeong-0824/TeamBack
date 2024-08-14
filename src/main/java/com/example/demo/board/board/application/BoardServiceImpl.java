@@ -7,14 +7,9 @@ import com.example.demo.board.board.presentation.dto.BoardRequest;
 import com.example.demo.board.board.presentation.dto.BoardResponse;
 import com.example.demo.board.board.presentation.dto.GoogleApiRequest;
 import com.example.demo.board.board.presentation.dto.GoogleApiResponse;
-import com.example.demo.board.boardscore.application.BoardScoreService;
-import com.example.demo.board.boardscore.domain.BoardScore;
-import com.example.demo.board.boardscore.presentation.dto.BoardScoreRequest;
-import com.example.demo.board.boardscore.presentation.dto.BoardScoreResponse;
 import com.example.demo.config.MethodTimer;
 import com.example.demo.config.exception.NotFoundDataException;
 import com.example.demo.config.exception.RequestDataException;
-import com.example.demo.config.exception.ServerException;
 import com.example.demo.config.redis.RedisRepository;
 import com.example.demo.config.util.SecurityUtil;
 import com.example.demo.member.member.domain.Member;
@@ -46,7 +41,6 @@ public class BoardServiceImpl implements BoardService {
     private final RedisRepository redisRepository;
 
     private final AutocompleteService autocompleteService;
-    private final BoardScoreService boardScoreService;
 
     // 게시글 작성
     @Override
@@ -67,13 +61,12 @@ public class BoardServiceImpl implements BoardService {
                 .body(request.body())
                 .view(0)
                 .satisfaction(request.satisfaction())
-                .memberId(member.getId())
+                .member(member)
                 .memberNickname(member.getNickname())
                 .commentCount(0)
                 .build();
 
         Board save = boardRepository.save(board);
-
         autocompleteService.addAutocomplete(save.getTitle());
     }
 
@@ -84,7 +77,7 @@ public class BoardServiceImpl implements BoardService {
         Board board = boardRepository.findById(id)
                 .orElseThrow(() -> new NotFoundDataException("해당 게시글을 찾을 수 없습니다."));
 
-        if (!memberId.equals(board.getMemberId())){
+        if (!memberId.equals(board.getMember().getId())){
             throw new RequestDataException("게시글을 작성한 회원이 아닙니다");
         }
 
@@ -98,11 +91,10 @@ public class BoardServiceImpl implements BoardService {
         Board board = boardRepository.findById(id)
                 .orElseThrow(() -> new NotFoundDataException("해당 게시글을 찾을 수 없습니다."));
 
-        if (!memberId.equals(board.getMemberId())){
+        if (!memberId.equals(board.getMember().getId())){
             throw new RequestDataException("게시글을 작성한 회원이 아닙니다");
         }
 
-        boardScoreService.deleteByBoardId(id);
         boardRepository.delete(board);
     }
 
@@ -117,8 +109,7 @@ public class BoardServiceImpl implements BoardService {
         board.addViewCount((int) increasesViewCount);
         boardRepository.save(board);
 
-        BoardScoreResponse.BoardScoreByBoardId savedBoardScore = boardScoreService.findUserIdByBoardId(id);
-        return new BoardResponse.BoardReadResponse(board, savedBoardScore);
+        return new BoardResponse.BoardReadResponse(board);
     }
 
     // 전체 게시글

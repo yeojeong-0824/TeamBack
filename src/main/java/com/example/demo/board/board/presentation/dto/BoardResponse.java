@@ -3,6 +3,7 @@ package com.example.demo.board.board.presentation.dto;
 import com.example.demo.board.board.domain.Board;
 import com.example.demo.board.boardscore.domain.BoardScore;
 import com.example.demo.board.boardscore.presentation.dto.BoardScoreResponse;
+import com.example.demo.member.member.domain.Member;
 import lombok.*;
 
 import java.util.List;
@@ -114,9 +115,9 @@ public class BoardResponse {
             Integer view,
             Integer satisfaction,
             String memberNickname,
-            BoardScoreResponse.BoardScoreByBoardId boardScore
+            Member member
     ) {
-        public BoardReadResponse(Board board, BoardScoreResponse.BoardScoreByBoardId boardScore) {
+        public BoardReadResponse(Board board) {
             this(
                     board.getLocationName(),
                     board.getFormattedAddress(),
@@ -127,7 +128,7 @@ public class BoardResponse {
                     board.getView(),
                     board.getSatisfaction(),
                     board.getMemberNickname(),
-                    boardScore
+                    board.getMember()
             );
         }
     }

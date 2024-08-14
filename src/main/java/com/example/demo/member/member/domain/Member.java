@@ -1,6 +1,7 @@
 package com.example.demo.member.member.domain;
 
 import com.example.demo.board.board.domain.Board;
+import com.example.demo.board.boardscore.domain.BoardScore;
 import com.example.demo.board.comment.domain.Comment;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -39,6 +40,12 @@ public class Member {
 
     @Column(nullable = false)
     private String role;
+
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
+    private List<Board> board;
+
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
+    private List<BoardScore> boardScore;
 
     @OneToMany(mappedBy = "member", orphanRemoval = true)
     private List<Comment> comments;
