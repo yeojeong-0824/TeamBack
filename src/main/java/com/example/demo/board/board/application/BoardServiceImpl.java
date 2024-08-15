@@ -1,6 +1,7 @@
 package com.example.demo.board.board.application;
 
 import com.example.demo.autocomplate.application.AutocompleteService;
+import com.example.demo.autocomplate.controller.dto.AutocompleteResponse;
 import com.example.demo.board.board.domain.Board;
 import com.example.demo.board.board.domain.BoardRepository;
 import com.example.demo.board.board.presentation.dto.BoardRequest;
@@ -31,6 +32,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -155,7 +157,9 @@ public class BoardServiceImpl implements BoardService {
             boardList = boardRepository.findByFormattedAddressOrLocationNameContaining(keyword, request);
         } else if (searchKeyword.equals("title")) {
             // 자동완성 기능을 통해 제목 검색
-            List<String> autocompleteTitles = autocompleteService.getAutoCompleteListFromRedis(keyword);
+            List<String> autocompleteTitles = autocompleteService.getAutocomplete(keyword).list().stream()
+                    .map(AutocompleteResponse.Data::value)
+                    .collect(Collectors.toList());
             boardList = boardRepository.findByTitleIn(autocompleteTitles, request);
         } else {
             boardList = boardRepository.findAll(request);
