@@ -1,6 +1,6 @@
 package com.example.demo.autocomplate.application;
 
-import com.example.demo.autocomplate.controller.dto.AutocompleteResponse;
+import com.example.demo.autocomplate.presentation.dto.AutocompleteResponse;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
