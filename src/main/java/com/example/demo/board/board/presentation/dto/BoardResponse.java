@@ -1,8 +1,6 @@
 package com.example.demo.board.board.presentation.dto;
 
 import com.example.demo.board.board.domain.Board;
-import com.example.demo.board.boardscore.domain.BoardScore;
-import com.example.demo.board.boardscore.presentation.dto.BoardScoreResponse;
 import com.example.demo.member.member.domain.Member;
 import lombok.*;
 
@@ -115,6 +113,7 @@ public class BoardResponse {
             Integer view,
             Integer satisfaction,
             String memberNickname,
+
             Member member
     ) {
         public BoardReadResponse(Board board) {
@@ -128,6 +127,7 @@ public class BoardResponse {
                     board.getView(),
                     board.getSatisfaction(),
                     board.getMemberNickname(),
+
                     board.getMember()
             );
         }

@@ -5,15 +5,11 @@ import com.example.demo.board.board.domain.BoardRepository;
 import com.example.demo.board.boardscore.domain.BoardScore;
 import com.example.demo.board.boardscore.domain.BoardScoreRepository;
 import com.example.demo.board.boardscore.presentation.dto.BoardScoreRequest;
-import com.example.demo.board.boardscore.presentation.dto.BoardScoreResponse;
-import com.example.demo.config.exception.DuplicatedException;
 import com.example.demo.config.exception.NotFoundDataException;
 import com.example.demo.member.member.domain.Member;
 import com.example.demo.member.member.domain.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
