@@ -8,13 +8,10 @@ import com.example.demo.board.board.presentation.dto.BoardResponse;
 import com.example.demo.board.board.presentation.dto.GoogleApiRequest;
 import com.example.demo.board.board.presentation.dto.GoogleApiResponse;
 import com.example.demo.board.boardscore.application.BoardScoreService;
-import com.example.demo.board.boardscore.domain.BoardScore;
-import com.example.demo.board.boardscore.presentation.dto.BoardScoreRequest;
 import com.example.demo.board.boardscore.presentation.dto.BoardScoreResponse;
 import com.example.demo.config.MethodTimer;
 import com.example.demo.config.exception.NotFoundDataException;
 import com.example.demo.config.exception.RequestDataException;
-import com.example.demo.config.exception.ServerException;
 import com.example.demo.config.redis.RedisRepository;
 import com.example.demo.config.util.SecurityUtil;
 import com.example.demo.member.member.domain.Member;
@@ -114,8 +111,13 @@ public class BoardServiceImpl implements BoardService {
                 .orElseThrow(() -> new NotFoundDataException("해당 게시글을 찾을 수 없습니다."));
 
         long increasesViewCount = redisRepository.incrementViewCount(id);
-        board.addViewCount((int) increasesViewCount);
-        boardRepository.save(board);
+
+        try {
+            board.addViewCount((int) increasesViewCount);
+            boardRepository.saveAndFlush(board);
+        } catch (Exception e) {
+            throw new RuntimeException("데이터베이스에 저장하지 못했습니다.", e);
+        }
 
         BoardScoreResponse.BoardScoreByBoardId savedBoardScore = boardScoreService.findUserIdByBoardId(id);
         return new BoardResponse.BoardReadResponse(board, savedBoardScore);
