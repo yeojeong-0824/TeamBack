@@ -1,6 +1,7 @@
 package com.example.demo.board.board.domain;
 
 import com.example.demo.board.board.presentation.dto.BoardRequest;
+import com.example.demo.board.boardscore.domain.BoardScore;
 import com.example.demo.board.comment.domain.Comment;
 import com.example.demo.config.entity.BaseTime;
 import com.example.demo.member.member.domain.Member;
@@ -51,8 +52,15 @@ public class Board extends BaseTime {
     @Column(nullable = false)
     private Integer satisfaction;
 
-    @Column(nullable = false)
-    private Long memberId;
+    // 찾아보니 물리적인 외래키를 제외하고 논리적인 외래키를 맺는 방법이라고 합니다!
+    // foreignKey = @ForeignKey(ConstraintMode.CONSTRAINT) -> 물리적인 외래키 제외
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false, foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+    private Member member;
+
+//    @OneToMany(mappedBy = "board", fetch = FetchType.LAZY)
+//    private List<BoardScore> score;
+
 
     @Column(nullable = false)
     private String memberNickname;
