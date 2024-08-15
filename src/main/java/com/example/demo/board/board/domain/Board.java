@@ -58,8 +58,8 @@ public class Board extends BaseTime {
     @JoinColumn(name = "user_id", nullable = false, foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private Member member;
 
-//    @OneToMany(mappedBy = "board", fetch = FetchType.LAZY)
-//    private List<BoardScore> score;
+    @OneToMany(mappedBy = "board", fetch = FetchType.LAZY)
+    private List<BoardScore> score;
 
 
     @Column(nullable = false)

@@ -78,7 +78,7 @@ public class AuthedMemberController {
         Long userId = SecurityUtil.getCurrentUserId();
 
         memberService.deleteByUserId(userId);
-        return ResponseEntity.ok("닉네임 변경에 성공하였습니다");
+        return ResponseEntity.ok("유저 탈퇴에 성공했습니다");
     }
 
     @PatchMapping("/password")

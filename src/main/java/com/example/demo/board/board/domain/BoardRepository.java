@@ -1,5 +1,6 @@
 package com.example.demo.board.board.domain;
 
+import com.example.demo.member.member.domain.Member;
 import io.lettuce.core.dynamic.annotation.Param;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,4 +22,6 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
     Page<Board> findByFormattedAddressOrLocationNameContaining(@Param("keyword") String keyword, Pageable pageable);
 
     Page<Board> findByTitleIn(List<String> titles, Pageable pageable);
+
+    void deleteByMember(Member member);
 }

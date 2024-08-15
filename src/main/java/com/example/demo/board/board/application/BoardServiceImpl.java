@@ -61,9 +61,9 @@ public class BoardServiceImpl implements BoardService {
                 .body(request.body())
                 .view(0)
                 .satisfaction(request.satisfaction())
-                .member(member)
                 .memberNickname(member.getNickname())
                 .commentCount(0)
+                .member(member)
                 .build();
 
         Board save = boardRepository.save(board);

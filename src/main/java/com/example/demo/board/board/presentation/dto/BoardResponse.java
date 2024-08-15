@@ -112,11 +112,26 @@ public class BoardResponse {
             String Body,
             Integer view,
             Integer satisfaction,
-            String memberNickname,
+            String memberNickname
 
-            Member member
+//            MemberInfo member
     ) {
+        @Builder
+        private record MemberInfo (
+                Long userId,
+                Integer age,
+                String nickname
+        ){}
         public BoardReadResponse(Board board) {
+//            MemberInfo memberInfo = MemberInfo.builder()
+//                    .userId(board.getMember().getId())
+//                    .age(board.getMember().getAge())
+//                    .nickname(board.getMember().getNickname())
+//                    .build();
+
+//            this.member = memberInfo;
+
+            // member의 값을 넣는데 계속 오류나서 일단 주석처리 했어요..ㅠㅠ 이거 혹시 해결해주실 수 있으신가요??
             this(
                     board.getLocationName(),
                     board.getFormattedAddress(),
@@ -126,9 +141,7 @@ public class BoardResponse {
                     board.getBody(),
                     board.getView(),
                     board.getSatisfaction(),
-                    board.getMemberNickname(),
-
-                    board.getMember()
+                    board.getMemberNickname()
             );
         }
     }

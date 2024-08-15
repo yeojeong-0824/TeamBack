@@ -1,14 +1,10 @@
 package com.example.demo.member.member.presentation.dto;
 
-import com.example.demo.board.board.domain.Board;
-import com.example.demo.board.boardscore.domain.BoardScore;
 import com.example.demo.member.member.domain.Member;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class MemberResponse {
     @Builder
@@ -58,15 +54,46 @@ public class MemberResponse {
             @Schema(example = "90")
             Integer age,
 
-            List<String> boardTitle,
-            Map<String, Integer> boardScore
+            List<BoardInfo> board,
+            List<BoardScoreInfo> boardScore
     ) {
-        static public FindMemberDetail toDto(Member entity) {
-            Map<String, Integer> boardScore = new HashMap<>();
+        @Builder
+        private record BoardInfo(
+                @Schema(example = "1")
+                Long id,
 
-            for(BoardScore data : entity.getBoardScore()) {
-                boardScore.put(data.getBoard().getTitle(), data.getScore());
-            }
+                @Schema(example = "소인국 갔다온 썰 푼다")
+                String title
+        ){}
+
+        @Builder
+        private record BoardScoreInfo(
+                @Schema(example = "소인국 갔다온 썰 푼다")
+                String boardTitle,
+
+                @Schema(example = "1")
+                Long boardId,
+
+                @Schema(example = "5")
+                Integer score
+        ){}
+
+        static public FindMemberDetail toDto(Member entity) {
+
+            List<BoardInfo> board = entity.getBoard().stream().map(data ->
+                BoardInfo.builder()
+                        .id(data.getId())
+                        .title(data.getTitle())
+                        .build()
+            ).toList();
+
+            List<BoardScoreInfo> boardScore = entity.getBoardScore().stream().map(data ->
+                BoardScoreInfo.builder()
+                        .boardTitle(data.getBoard().getTitle())
+                        .boardId(data.getBoard().getId())
+                        .score(data.getScore())
+                        .build()
+            ).toList();
 
             return FindMemberDetail.builder()
                     .username(entity.getUsername())
@@ -74,7 +101,7 @@ public class MemberResponse {
                     .email(entity.getEmail())
                     .name(entity.getName())
                     .age(entity.getAge())
-                    .boardTitle(entity.getBoard().stream().map(Board::getTitle).toList())
+                    .board(board)
                     .boardScore(boardScore)
                     .build();
         }

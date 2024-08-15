@@ -22,6 +22,8 @@ import java.util.List;
 public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
+    private final BoardRepository boardRepository;
+    private final BoardScoreRepository boardScoreRepository;
 
     private final PasswordEncoder passwordEncoder;
 
@@ -52,42 +54,42 @@ public class MemberServiceImpl implements MemberService {
     @MethodTimer(method = "MemberService.deleteByUserId")
     @Transactional
     public void deleteByUserId(Long takenUserId) {
-        // 해당 Member를 사용하는 board와 boardScore을 삭제할지 정해야 할 것 같음
-        if(!memberRepository.existsById(takenUserId))
-            throw new NotFoundDataException("해당 유저를 찾지 못했습니다");
+        Member saveEntity = memberRepository.findById(takenUserId)
+                .orElseThrow(() -> new NotFoundDataException("해당 유저를 찾지 못했습니다"));
 
+        boardScoreRepository.deleteByMember(saveEntity);
+        boardRepository.deleteByMember(saveEntity);
         memberRepository.deleteById(takenUserId);
     }
 
     @Override
     @MethodTimer(method = "MemberService.findById()")
     public MemberResponse.FindMember findById(Long takenUserId) {
-        Member savedMember = memberRepository.findById(takenUserId)
+        Member savedEntity = memberRepository.findById(takenUserId)
                 .orElseThrow(() -> new NotFoundDataException("해당 유저를 찾지 못했습니다"));
 
-        return MemberResponse.FindMember.toDto(savedMember);
+        return MemberResponse.FindMember.toDto(savedEntity);
     }
 
     @Override
     public MemberResponse.FindMemberDetail findByIdDetail(Long takenUserId) {
-        Member savedMember = memberRepository.findById(takenUserId)
+        Member savedEntity = memberRepository.findById(takenUserId)
                 .orElseThrow(() -> new NotFoundDataException("해당 유저를 찾지 못했습니다"));
 
-        List<Board> test = savedMember.getBoard();
-        return MemberResponse.FindMemberDetail.toDto(savedMember);
+        return MemberResponse.FindMemberDetail.toDto(savedEntity);
     }
 
     @Override
     @MethodTimer(method = "MemberService.createNewPassword()")
     public String createNewPassword(String takenUsername, String takenEmail) {
-        Member savedMember = memberRepository.findByUsername(takenUsername)
+        Member savedEntity = memberRepository.findByUsername(takenUsername)
                 .orElseThrow(() -> new NotFoundDataException("해당 유저를 찾지 못했습니다"));
 
-        if(!savedMember.getEmail().equals(takenEmail))
+        if(!savedEntity.getEmail().equals(takenEmail))
             throw new NotFoundDataException("해당 유저의 이메일을 찾지 못했습니다");
 
         String newPassword = this.createNewPassword();
-        this.patchPasswordByUsername(savedMember.getId(), newPassword);
+        this.patchPasswordByUsername(savedEntity.getId(), newPassword);
 
         return newPassword;
     }
@@ -106,10 +108,10 @@ public class MemberServiceImpl implements MemberService {
     @Override
     @MethodTimer(method = "MemberService.findUsernameByEmail()")
     public String findUsernameByEmail(String takenEmail) {
-        Member savedMember = memberRepository.findByEmail(takenEmail)
+        Member savedEntity = memberRepository.findByEmail(takenEmail)
                 .orElseThrow(() -> new NotFoundDataException("해당 유저를 찾지 못했습니다"));
 
-        return savedMember.getUsername();
+        return savedEntity.getUsername();
     }
 
     @Override
@@ -135,21 +137,21 @@ public class MemberServiceImpl implements MemberService {
     @Override
     @MethodTimer(method = "MemberService.patchNicknameById()")
     public void patchNicknameById(Long takenId, String takenNickname) {
-        Member savedMember = memberRepository.findById(takenId)
+        Member savedEntity = memberRepository.findById(takenId)
                 .orElseThrow(() -> new NotFoundDataException("해당 유저를 찾지 못했습니다"));
 
-        savedMember.patchNickname(takenNickname);
-        memberRepository.save(savedMember);
+        savedEntity.patchNickname(takenNickname);
+        memberRepository.save(savedEntity);
     }
 
     @Transactional
     @Override
     @MethodTimer(method = "MemberService.patchPasswordByUsername()")
     public void patchPasswordByUsername(Long takenId, String takenPassword) {
-        Member savedMember = memberRepository.findById(takenId)
+        Member savedEntity = memberRepository.findById(takenId)
                 .orElseThrow(() -> new NotFoundDataException("해당 유저를 찾지 못했습니다"));
 
-        savedMember.patchPassword(passwordEncoder.encode(takenPassword));
-        memberRepository.save(savedMember);
+        savedEntity.patchPassword(passwordEncoder.encode(takenPassword));
+        memberRepository.save(savedEntity);
     }
 }
