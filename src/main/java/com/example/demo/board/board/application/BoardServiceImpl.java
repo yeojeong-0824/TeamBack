@@ -49,7 +49,8 @@ public class BoardServiceImpl implements BoardService {
     @Transactional
     public void save(BoardRequest.DefaultBoard request) {
 
-        Long memberId = SecurityUtil.getCurrentUserId();
+        //Long memberId = SecurityUtil.getCurrentUserId();
+        Long memberId = 1L;
 
         Member member = memberRepository.findById(memberId).
                 orElseThrow(() -> new NotFoundDataException("해당 회원을 찾을 수 없습니다."));
@@ -62,7 +63,6 @@ public class BoardServiceImpl implements BoardService {
                 .title(request.title())
                 .body(request.body())
                 .view(0)
-                .satisfaction(request.satisfaction())
                 .memberNickname(member.getNickname())
                 .commentCount(0)
                 .member(member)

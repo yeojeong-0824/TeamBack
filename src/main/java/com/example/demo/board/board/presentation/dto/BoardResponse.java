@@ -21,7 +21,6 @@ public class BoardResponse {
     private String title;
     private String body;
     private Integer view;
-    private Integer satisfaction;
     private Integer likeCount;
     private String memberNickname;
 
@@ -33,7 +32,6 @@ public class BoardResponse {
             String title,
             String body,
             Integer view,
-            Integer satisfaction,
             String memberNickname
     ) {
         public BoardSaveResponse(Board board) {
@@ -45,7 +43,6 @@ public class BoardResponse {
                     board.getTitle(),
                     board.getBody(),
                     board.getView(),
-                    board.getSatisfaction(),
                     board.getMemberNickname()
             );
         }
@@ -59,7 +56,6 @@ public class BoardResponse {
             String title,
             String body,
             Integer view,
-            Integer satisfaction,
             String memberNickname
     ) {
         public BoardUpdateResponse(Board board) {
@@ -71,7 +67,6 @@ public class BoardResponse {
                     board.getTitle(),
                     board.getBody(),
                     board.getView(),
-                    board.getSatisfaction(),
                     board.getMemberNickname()
             );
         }
@@ -85,7 +80,6 @@ public class BoardResponse {
             String longitude,  // 경도
             String title,
             Integer view,
-            Integer satisfaction,
             String memberNickname
     ) {
         public BoardListResponse(Board board) {
@@ -97,7 +91,6 @@ public class BoardResponse {
                     board.getLongitude(),
                     board.getTitle(),
                     board.getView(),
-                    board.getSatisfaction(),
                     board.getMemberNickname()
             );
         }
@@ -111,7 +104,6 @@ public class BoardResponse {
             String title,
             String body,  // Body 변수명을 소문자로 변경
             Integer view,
-            Integer satisfaction,
             String memberNickname,
             MemberInfo member
     ) {
@@ -131,7 +123,6 @@ public class BoardResponse {
                     board.getTitle(),
                     board.getBody(),
                     board.getView(),
-                    board.getSatisfaction(),
                     board.getMemberNickname(),
                     MemberInfo.builder()
                             .userId(board.getMember().getId())

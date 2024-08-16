@@ -8,8 +8,7 @@ public class BoardRequest {
             String latitude,  // 위도
             String longitude,  // 경도
             String title,
-            String body,
-            Integer satisfaction
+            String body
     ) {
     }
 
@@ -19,8 +18,7 @@ public class BoardRequest {
             String latitude,  // 위도
             String longitude,  // 경도
             String title,
-            String body,
-            Integer satisfaction
+            String body
     ) {
     }
 

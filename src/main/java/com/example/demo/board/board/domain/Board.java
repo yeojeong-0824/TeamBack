@@ -49,9 +49,6 @@ public class Board extends BaseTime {
     @Column(nullable = false)
     private Integer view;
 
-    @Column(nullable = false)
-    private Integer satisfaction;
-
     // 찾아보니 물리적인 외래키를 제외하고 논리적인 외래키를 맺는 방법이라고 합니다!
     // foreignKey = @ForeignKey(ConstraintMode.CONSTRAINT) -> 물리적인 외래키 제외
     @ManyToOne(fetch = FetchType.LAZY)
@@ -78,7 +75,6 @@ public class Board extends BaseTime {
         this.longitude = request.longitude();
         this.title = request.title();
         this.body = request.body();
-        this.satisfaction = request.satisfaction();
     }
 
     public void addViewCount(Integer view) {
