@@ -28,18 +28,7 @@ public class GlobalExceptionHandler {
                 .map(error -> error.getField() + ", " + error.getDefaultMessage())
                 .toList();
 
-        errorMessage.forEach(s -> log.error("유효성 검사에 실패하였습니다 (MethodArgumentNotValidException): " + s));
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ExceptionMessage(errorMessage));
-    }
-
-    @ExceptionHandler(ConstraintViolationException.class)
-    public ResponseEntity<ExceptionMessage> handlerConstraintViolationException(ConstraintViolationException ex) {
-        Set<ConstraintViolation<?>> set = ex.getConstraintViolations();
-        List<String> errorMessage = set.stream()
-                .map(error -> error.getPropertyPath() + ", " + error.getMessage())
-                .toList();
-
-        errorMessage.forEach(s -> log.error("유효성 검사에 실패하였습니다 (ConstraintViolationException): " + s));
+        errorMessage.forEach(s -> log.error("유효성 검사에 실패하였습니다: " + s));
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ExceptionMessage(errorMessage));
     }
 

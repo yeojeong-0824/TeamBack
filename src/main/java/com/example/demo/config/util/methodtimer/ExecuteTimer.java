@@ -1,4 +1,4 @@
-package com.example.demo.config;
+package com.example.demo.config.util.methodtimer;
 
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -12,7 +12,7 @@ import org.springframework.util.StopWatch;
 @Aspect
 @Component
 public class ExecuteTimer {
-    @Around("@annotation(com.example.demo.config.MethodTimer)")
+    @Around("@annotation(MethodTimer)")
     public Object measureExecutionTime(ProceedingJoinPoint joinPoint) throws Throwable {
         StopWatch stopWatch = new StopWatch();
 

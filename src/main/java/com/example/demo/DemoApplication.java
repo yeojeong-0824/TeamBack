@@ -8,7 +8,6 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 
 @SpringBootApplication
 @EnableJpaAuditing
-@EnableScheduling
 @EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
 public class DemoApplication {
 	public static void main(String[] args) {

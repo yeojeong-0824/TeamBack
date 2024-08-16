@@ -3,16 +3,14 @@ package com.example.demo.board.board.domain;
 import com.example.demo.board.board.presentation.dto.BoardRequest;
 import com.example.demo.board.boardscore.domain.BoardScore;
 import com.example.demo.board.comment.domain.Comment;
-import com.example.demo.config.entity.BaseTime;
+import com.example.demo.config.util.BaseTime;
 import com.example.demo.member.member.domain.Member;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity

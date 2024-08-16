@@ -2,7 +2,7 @@ package com.example.demo.board.comment.domain;
 
 import com.example.demo.board.board.domain.Board;
 import com.example.demo.board.comment.presentation.dto.CommentRequest.*;
-import com.example.demo.config.entity.BaseTime;
+import com.example.demo.config.util.BaseTime;
 import com.example.demo.member.member.domain.Member;
 import jakarta.persistence.*;
 import lombok.*;

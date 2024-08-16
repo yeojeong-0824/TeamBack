@@ -1,4 +1,4 @@
-package com.example.demo.config;
+package com.example.demo.config.util.methodtimer;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
