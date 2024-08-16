@@ -109,29 +109,20 @@ public class BoardResponse {
             String latitude,  // 위도
             String longitude,  // 경도
             String title,
-            String Body,
+            String body,  // Body 변수명을 소문자로 변경
             Integer view,
             Integer satisfaction,
-            String memberNickname
-
-//            MemberInfo member
+            String memberNickname,
+            MemberInfo member
     ) {
         @Builder
-        private record MemberInfo (
+        public record MemberInfo (
                 Long userId,
                 Integer age,
                 String nickname
         ){}
+
         public BoardReadResponse(Board board) {
-//            MemberInfo memberInfo = MemberInfo.builder()
-//                    .userId(board.getMember().getId())
-//                    .age(board.getMember().getAge())
-//                    .nickname(board.getMember().getNickname())
-//                    .build();
-
-//            this.member = memberInfo;
-
-            // member의 값을 넣는데 계속 오류나서 일단 주석처리 했어요..ㅠㅠ 이거 혹시 해결해주실 수 있으신가요??
             this(
                     board.getLocationName(),
                     board.getFormattedAddress(),
@@ -141,9 +132,15 @@ public class BoardResponse {
                     board.getBody(),
                     board.getView(),
                     board.getSatisfaction(),
-                    board.getMemberNickname()
+                    board.getMemberNickname(),
+                    MemberInfo.builder()
+                            .userId(board.getMember().getId())
+                            .age(board.getMember().getAge())
+                            .nickname(board.getMember().getNickname())
+                            .build()
             );
         }
     }
+
 
 }
