@@ -103,6 +103,7 @@ public class BoardServiceImpl implements BoardService {
     // 하나의 게시글
     @MethodTimer(method = "BoardService.findById()")
     @Override
+    @Transactional(readOnly = false)
     public BoardResponse.BoardReadResponse findById(Long id) {
         Board board = boardRepository.findById(id)
                 .orElseThrow(() -> new NotFoundDataException("해당 게시글을 찾을 수 없습니다."));
