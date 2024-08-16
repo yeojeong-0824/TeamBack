@@ -1,4 +1,4 @@
-package com.example.demo.autocomplate.controller.dto;
+package com.example.demo.autocomplate.presentation.dto;
 
 import java.util.List;
 
