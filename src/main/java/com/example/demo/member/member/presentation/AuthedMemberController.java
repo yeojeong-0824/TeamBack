@@ -29,7 +29,7 @@ public class AuthedMemberController {
 
     private final MemberService memberService;
     @GetMapping
-    @Operation(summary = "회원 정보 확인")
+    @Operation(summary = "회원 정보 확인", description = "간단한 회원 정보를 받아옵니다.")
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "회원정보 확인 완료"),
@@ -46,7 +46,7 @@ public class AuthedMemberController {
     }
 
     @GetMapping("/detail")
-    @Operation(summary = "자세한 회원 정보 확인")
+    @Operation(summary = "자세한 회원 정보 확인", description = "회원의 정보와 작성한 게시글, 댓글 및 별점을 준 게시글의 정보를 받아옵니다.")
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "회원정보 확인 완료"),
@@ -63,7 +63,7 @@ public class AuthedMemberController {
     }
 
     @DeleteMapping
-    @Operation(summary = "유저 탈퇴")
+    @Operation(summary = "유저 탈퇴", description = "회원 탈퇴를 진행합니다.")
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "유저 탈퇴"),
@@ -82,7 +82,7 @@ public class AuthedMemberController {
     }
 
     @PatchMapping("/password")
-    @Operation(summary = "비밀번호 변경")
+    @Operation(summary = "비밀번호 변경", description = "회원의 비밀번호를 변경합니다.")
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "비밀번호 변경 완료"),
@@ -103,7 +103,7 @@ public class AuthedMemberController {
     }
 
     @PatchMapping("/nickname")
-    @Operation(summary = "닉네임 변경")
+    @Operation(summary = "닉네임 변경", description = "회원의 닉네임을 변경합니다.")
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "닉네임 완료"),

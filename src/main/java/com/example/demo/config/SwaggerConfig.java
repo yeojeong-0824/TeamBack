@@ -1,22 +1,34 @@
 package com.example.demo.config;
 
-import io.swagger.v3.oas.models.Components;
-import io.swagger.v3.oas.models.OpenAPI;
-import io.swagger.v3.oas.models.info.Info;
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.info.Info;
+import org.springdoc.core.models.GroupedOpenApi;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+@OpenAPIDefinition(
+        info = @Info(title = "여정",
+                description = "여정 API",
+                version = "v1"))
 @Configuration
 public class SwaggerConfig {
     @Bean
-    public OpenAPI openAPI() {
-        Info info = new Info()
-                .title("여행 맛집 사이트 API")
-                .version("v0.1")
-                .description("일본과 한국 여행객을 대상으로 데모 버전 개발");
+    public GroupedOpenApi group1() {
+        String[] paths = {"/member", "/member/**"};
 
-        return new OpenAPI()
-                .components(new Components())
-                .info(info);
+        return GroupedOpenApi.builder()
+                .group("유저 API")
+                .pathsToMatch(paths)
+                .build();
+    }
+
+    @Bean
+    public GroupedOpenApi group2() {
+        String[] paths = {"/board", "/board/**"};
+
+        return GroupedOpenApi.builder()
+                .group("게시글 API")
+                .pathsToMatch(paths)
+                .build();
     }
 }

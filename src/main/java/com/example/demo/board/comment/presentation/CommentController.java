@@ -16,7 +16,9 @@ import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/comment")
+// Swagger 문서 정리하면서 url /board/comment로 변경했어요!
+// 확인해보시고 문제가 될 것 같으면 말씀주세요!
+@RequestMapping("/board/comment")
 @PreAuthorize("isAuthenticated()")
 @Tag(name = "댓글 API (Authed)")
 public class CommentController {

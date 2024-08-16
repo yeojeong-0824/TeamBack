@@ -29,7 +29,7 @@ public class AuthedBoardScoreController {
     private final BoardScoreService boardScoreService;
 
     @PostMapping("/{boardId}")
-    @Operation(summary = "별점 등록")
+    @Operation(summary = "별점 등록", description = "게시글에 별점을 기록합니다.")
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "별점 등록 완료"),

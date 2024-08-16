@@ -43,7 +43,7 @@ public class JoinMemberController {
      */
 
     @PostMapping
-    @Operation(summary = "회원가입")
+    @Operation(summary = "회원가입", description = "회원을 생성합니다.")
     @ApiResponses(
         value = {
                 @ApiResponse(responseCode = "201", description = "유저 생성 완료"),
@@ -65,7 +65,7 @@ public class JoinMemberController {
     }
 
     @PostMapping("/confirm")
-    @Operation(summary = "아이디 및 닉네임 중복 검사")
+    @Operation(summary = "아이디 및 닉네임 중복 검사", description = "아이디 및 닉네임이 이미 사용되고 있는지 확인합니다.")
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "중복되지 않음"),
@@ -84,7 +84,7 @@ public class JoinMemberController {
     }
 
     @GetMapping("/emailAuthed/{email}")
-    @Operation(summary = "이메일 중복 확인 및 회원가입 인증 이메일 발송")
+    @Operation(summary = "이메일 중복 확인 및 회원가입 인증 이메일 발송", description = "이메일이 중복되었는지 확인 후 중복되지 않았으면 인증 이메일을 발송합니다.")
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "인증 이메일 전송 완료"),
@@ -108,7 +108,7 @@ public class JoinMemberController {
     }
 
     @PostMapping("/emailAuthed/{email}")
-    @Operation(summary = "이메일 인증코드 확인")
+    @Operation(summary = "이메일 인증코드 확인", description = "이메일 인증을 시도합니다. 이메일 인증 이메일이 발송되지 않았으면 이메일 인증 실패를 하게 됩니다.")
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "이메일 인증 성공"),

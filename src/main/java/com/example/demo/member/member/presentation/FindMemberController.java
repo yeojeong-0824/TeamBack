@@ -28,7 +28,7 @@ public class FindMemberController {
     private final FindMemberEmailService findMemberEmailService;
 
     @PatchMapping("/password")
-    @Operation(summary = "새로운 비밀번호 발급")
+    @Operation(summary = "새로운 비밀번호 발급", description = "새로운 비밀번호를 발급합니다. 새로운 비밀번호는 해당 아이디의 이메일로 발송됩니다.")
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "비밀번호 재발급 완료"),
@@ -55,7 +55,7 @@ public class FindMemberController {
     }
 
     @GetMapping("/username")
-    @Operation(summary = "아이디 찾기")
+    @Operation(summary = "아이디 찾기", description = "해당 이메일로 회원가입이 된 아이디가 존재한다면, 해당 이메일로 아이디를 발송합니다.")
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "아이디 전송 완료"),
