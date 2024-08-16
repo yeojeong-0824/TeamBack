@@ -1,6 +1,7 @@
 package com.example.demo.board.board.presentation.dto;
 
 import com.example.demo.board.board.domain.Board;
+import com.example.demo.board.boardscore.domain.BoardScore;
 import com.example.demo.member.member.domain.Member;
 import lombok.*;
 
@@ -104,14 +105,22 @@ public class BoardResponse {
             String title,
             String body,  // Body 변수명을 소문자로 변경
             Integer view,
-            String memberNickname,
-            MemberInfo member
+            MemberInfo member,
+            List<BoardScoreInfo> boardScore
     ) {
         @Builder
         public record MemberInfo (
                 Long userId,
                 Integer age,
                 String nickname
+        ){}
+
+        @Builder
+        public record BoardScoreInfo (
+                Long userId,
+                String nickname,
+                Integer age,
+                Integer score
         ){}
 
         public BoardReadResponse(Board board) {
@@ -123,12 +132,19 @@ public class BoardResponse {
                     board.getTitle(),
                     board.getBody(),
                     board.getView(),
-                    board.getMemberNickname(),
                     MemberInfo.builder()
                             .userId(board.getMember().getId())
                             .age(board.getMember().getAge())
                             .nickname(board.getMember().getNickname())
-                            .build()
+                            .build(),
+                    board.getScore().stream().map(data ->
+                        BoardScoreInfo.builder()
+                                .userId(data.getMember().getId())
+                                .nickname(data.getMember().getNickname())
+                                .age(data.getMember().getAge())
+                                .score(data.getScore())
+                                .build()
+                    ).toList()
             );
         }
     }
