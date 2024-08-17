@@ -55,8 +55,6 @@ public class CommentServiceImpl implements CommentService {
                 .orElseThrow(() -> new NotFoundCommentException("해당 댓글을 찾을 수 없습니다."));
 
         comment.update(request);
-
-        commentRepository.save(comment);
     }
 
     // 댓글 삭제
@@ -70,7 +68,7 @@ public class CommentServiceImpl implements CommentService {
         Board board = boardRepository.findById(comment.getBoard().getId())
                 .orElseThrow(() -> new NotFoundDataException("해당 게시글을 찾을 수 없습니다."));
 
-        // 게시글 댓글 수 담소
+        // 게시글 댓글 수 감소
         board.commentCountDown();
         commentRepository.delete(comment);
     }
