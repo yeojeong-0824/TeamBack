@@ -66,7 +66,7 @@ public class FindBoardController {
     public ResponseEntity<Page<BoardResponse.BoardListResponse>> boardSearch(
             @RequestParam(value = "keyword") String keyword,
             @RequestParam(value = "searchKeyword") String searchKeyword,
-            @RequestParam(value = "sortKeyWord") String sortKeyword,
+            @RequestParam(value = "sortKeyword") String sortKeyword,
             @RequestParam(required = false, defaultValue = "1", value = "page") int page,
             HttpServletRequest requestArr){
 
