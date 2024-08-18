@@ -33,12 +33,14 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         String username = obtainUsername(request);
         if(username == null) {
             log.error("아이디가 공백입니다");
+            response.setStatus(401);
             return null;
         }
 
         String password = obtainPassword(request);
         if(password == null) {
             log.error("비밀번호가 공백입니다");
+            response.setStatus(401);
             return null;
         }
 

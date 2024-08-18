@@ -1,8 +1,6 @@
 package com.example.demo.board.board.presentation.dto;
 
 import com.example.demo.board.board.domain.Board;
-import com.example.demo.board.boardscore.domain.BoardScore;
-import com.example.demo.member.member.domain.Member;
 import lombok.*;
 
 import java.util.List;
@@ -81,7 +79,8 @@ public class BoardResponse {
             String longitude,  // 경도
             String title,
             Integer view,
-            String memberNickname
+            String memberNickname,
+            Integer avgScore
     ) {
         public BoardListResponse(Board board) {
             this(
@@ -92,7 +91,8 @@ public class BoardResponse {
                     board.getLongitude(),
                     board.getTitle(),
                     board.getView(),
-                    board.getMemberNickname()
+                    board.getMemberNickname(),
+                    board.getAvgScore()
             );
         }
     }
@@ -105,6 +105,7 @@ public class BoardResponse {
             String title,
             String body,  // Body 변수명을 소문자로 변경
             Integer view,
+            Integer avgScore,
             MemberInfo member,
             List<BoardScoreInfo> boardScore
     ) {
@@ -132,6 +133,7 @@ public class BoardResponse {
                     board.getTitle(),
                     board.getBody(),
                     board.getView(),
+                    board.getAvgScore(),
                     MemberInfo.builder()
                             .userId(board.getMember().getId())
                             .age(board.getMember().getAge())

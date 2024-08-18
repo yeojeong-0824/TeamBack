@@ -33,9 +33,9 @@ public class MemberServiceImpl implements MemberService {
         memberRepository.save(takenMember);
     }
 
+    @Transactional
     @Override
     @MethodTimer(method = "MemberService.deleteByUserId")
-    @Transactional
     public void deleteByUserId(Long takenUserId) {
         Member saveEntity = memberRepository.findById(takenUserId)
                 .orElseThrow(() -> new NotFoundDataException("해당 유저를 찾지 못했습니다"));
@@ -55,6 +55,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    @MethodTimer(method = "MemberService.findByIdDetail()")
     public MemberResponse.FindMemberDetail findByIdDetail(Long takenUserId) {
         Member savedEntity = memberRepository.findById(takenUserId)
                 .orElseThrow(() -> new NotFoundDataException("해당 유저를 찾지 못했습니다"));

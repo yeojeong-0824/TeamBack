@@ -2,9 +2,7 @@ package com.example.demo.board.board.presentation;
 
 import com.example.demo.board.board.presentation.dto.GoogleApiResponse;
 import com.example.demo.board.board.presentation.dto.BoardRequest;
-import com.example.demo.board.board.presentation.dto.BoardResponse;
 import com.example.demo.config.util.SecurityUtil;
-import com.example.demo.member.member.presentation.dto.MemberDetails;
 import com.example.demo.board.board.application.BoardServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -17,7 +15,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 // 유저 정보 불러오기 오류 수정했습니다

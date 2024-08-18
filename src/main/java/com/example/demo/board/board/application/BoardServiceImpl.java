@@ -65,6 +65,7 @@ public class BoardServiceImpl implements BoardService {
                 .memberNickname(member.getNickname())
                 .commentCount(0)
                 .member(member)
+                .avgScore(0)
                 .build();
 
         Board save = boardRepository.save(board);
@@ -100,9 +101,9 @@ public class BoardServiceImpl implements BoardService {
     }
 
     // 하나의 게시글
-    @MethodTimer(method = "BoardService.findById()")
-    @Override
     @Transactional(readOnly = false)
+    @Override
+    @MethodTimer(method = "BoardService.findById()")
     public BoardResponse.BoardReadResponse findById(Long id) {
         Board board = boardRepository.findById(id)
                 .orElseThrow(() -> new NotFoundDataException("해당 게시글을 찾을 수 없습니다."));
@@ -136,7 +137,7 @@ public class BoardServiceImpl implements BoardService {
 
         if (sortKeyword != null) {
             request = switch (sortKeyword) {
-                case "like" -> PageRequest.of(page - 1, 10, Sort.by("likeCount").descending());
+                case "score" -> PageRequest.of(page - 1, 10, Sort.by("avgScore").descending());
                 case "comment" -> PageRequest.of(page - 1, 10, Sort.by("commentCount").descending());
                 default -> request;
             };

@@ -48,7 +48,7 @@ public class Board extends BaseTime {
     private Integer view;
 
     // 찾아보니 물리적인 외래키를 제외하고 논리적인 외래키를 맺는 방법이라고 합니다!
-    // foreignKey = @ForeignKey(ConstraintMode.CONSTRAINT) -> 물리적인 외래키 제외
+    // foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT) -> 물리적인 외래키 제거
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false, foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private Member member;
@@ -56,6 +56,8 @@ public class Board extends BaseTime {
     @OneToMany(mappedBy = "board", fetch = FetchType.LAZY)
     private List<BoardScore> score;
 
+    @Column(nullable = false)
+    private Integer avgScore;
 
     @Column(nullable = false)
     private String memberNickname;
@@ -82,5 +84,9 @@ public class Board extends BaseTime {
     public void commentCountUp(){this.commentCount += 1;}
 
     public void commentCountDown(){this.commentCount -= 1;}
+
+    public void avgScorePatch(Integer avgScore) {
+        this.avgScore = avgScore;
+    }
 
 }
