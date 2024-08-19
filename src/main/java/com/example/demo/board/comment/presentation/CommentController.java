@@ -25,7 +25,7 @@ public class CommentController {
 
     private final CommentService commentService;
 
-    @PostMapping("/{boardId}")
+    @PostMapping("/{memberId}/{boardId}")
     @Operation(summary = "댓글 작성")
     @ApiResponses(
             value = {
@@ -35,15 +35,16 @@ public class CommentController {
             }
     )
     public ResponseEntity<String> save(
+            @PathVariable Long memberId,
             @PathVariable Long boardId,
             @Valid @RequestBody CommentSaveRequest request
     ){
         // TODO : username 을 찾는 코드 작성 필요
-        commentService.save(boardId, request);
+        commentService.save(memberId, boardId, request);
         return ResponseEntity.status(HttpStatus.CREATED).body("댓글 작성 완료");
     }
 
-    @PutMapping("/update/{commentId}")
+    @PutMapping("/update/{memberId}/{commentId}")
     @Operation(summary = "댓글 수정")
     @ApiResponses(
             value = {
@@ -53,14 +54,15 @@ public class CommentController {
             }
     )
     public ResponseEntity<String> updateById(
+            @PathVariable Long memberId,
             @PathVariable Long commentId,
             @Valid @RequestBody CommentUpdateRequest request
     ) {
-        commentService.updateById(commentId, request);
+        commentService.updateById(memberId, commentId, request);
         return ResponseEntity.ok("댓글 수정 완료");
     }
 
-    @DeleteMapping("/delete/{commentId}")
+    @DeleteMapping("/delete/{memberId}/{commentId}")
     @Operation(summary = "댓글 삭제")
     @ApiResponses(
             value = {
@@ -69,8 +71,10 @@ public class CommentController {
                     @ApiResponse(responseCode = "403", description = "권한 없음"),
             }
     )
-    public ResponseEntity<String> deleteById(@PathVariable Long commentId){
-        commentService.deleteById(commentId);
+    public ResponseEntity<String> deleteById(
+            @PathVariable Long memberId,
+            @PathVariable Long commentId){
+        commentService.deleteById(memberId, commentId);
         return ResponseEntity.ok("댓글 삭제 완료");
     }
 }

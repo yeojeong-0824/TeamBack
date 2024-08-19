@@ -8,6 +8,7 @@ import com.example.demo.board.comment.exception.NotFoundCommentException;
 import com.example.demo.board.comment.presentation.dto.CommentRequest.CommentSaveRequest;
 import com.example.demo.board.comment.presentation.dto.CommentRequest.CommentUpdateRequest;
 import com.example.demo.config.exception.NotFoundDataException;
+import com.example.demo.config.exception.RequestDataException;
 import com.example.demo.config.util.SecurityUtil;
 import com.example.demo.member.member.domain.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -26,9 +27,7 @@ public class CommentServiceImpl implements CommentService {
     // 댓글 작성
     @Transactional
     @Override
-    public void save(Long boardId, CommentSaveRequest request) {
-
-        Long memberId = SecurityUtil.getCurrentMemberId();
+    public void save(Long memberId, Long boardId, CommentSaveRequest request) {
 
         memberRepository.findById(memberId)
                 .orElseThrow(() -> new NotFoundDataException("해당 회원을 찾을 수 없습니다."));
@@ -49,10 +48,17 @@ public class CommentServiceImpl implements CommentService {
     // 댓글 수정
     @Transactional
     @Override
-    public void updateById(Long commentId, CommentUpdateRequest request) {
+    public void updateById(Long memberId, Long commentId, CommentUpdateRequest request) {
 
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new NotFoundCommentException("해당 댓글을 찾을 수 없습니다."));
+
+        boardRepository.findById(comment.getBoard().getId())
+                .orElseThrow(() -> new NotFoundDataException("해당 게시글을 찾을 수 없습니다."));
+
+        if (!memberId.equals(comment.getMember().getId())) {
+            throw new RequestDataException("댓글을 작성한 회원이 아닙니다.");
+        }
 
         comment.update(request);
     }
@@ -60,13 +66,17 @@ public class CommentServiceImpl implements CommentService {
     // 댓글 삭제
     @Transactional
     @Override
-    public void deleteById(Long commentId) {
+    public void deleteById(Long memberId, Long commentId) {
 
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new NotFoundDataException("해당 댓글을 찾을 수 없습니다."));
 
         Board board = boardRepository.findById(comment.getBoard().getId())
                 .orElseThrow(() -> new NotFoundDataException("해당 게시글을 찾을 수 없습니다."));
+
+        if (!memberId.equals(comment.getMember().getId())) {
+            throw new RequestDataException("댓글을 작성한 회원이 아닙니다.");
+        }
 
         // 게시글 댓글 수 감소
         board.commentCountDown();
