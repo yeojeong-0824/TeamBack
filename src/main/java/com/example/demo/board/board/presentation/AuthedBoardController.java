@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.*;
 public class AuthedBoardController {
     private final BoardServiceImpl boardServiceImpl;
 
+    // 통일성을 주기위해 메서드 명을 save로 바꿨습니다!
     @PostMapping
     @Operation(summary = "게시글 작성")
     @ApiResponses(
@@ -37,14 +38,16 @@ public class AuthedBoardController {
                     @ApiResponse(responseCode = "403", description = "권한 없음"),
             }
     )
-    public ResponseEntity<String> boardWrite(
+    public ResponseEntity<String> save(
             @Valid @RequestBody BoardRequest.DefaultBoard request,
             HttpServletRequest requestArr
     ){
         String ip = requestArr.getRemoteAddr();
         log.info("{}: 게시글 작성 호출", ip);
 
-        boardServiceImpl.save(request);
+        Long memberId = SecurityUtil.getCurrentUserId();
+
+        boardServiceImpl.save(request, memberId);
         return ResponseEntity.status(HttpStatus.CREATED).body("게시글 작성 성공");
     }
 

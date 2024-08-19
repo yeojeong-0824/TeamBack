@@ -46,11 +46,7 @@ public class BoardServiceImpl implements BoardService {
     // 게시글 작성
     @Override
     @Transactional
-    public void save(BoardRequest.DefaultBoard request) {
-
-        //Long memberId = SecurityUtil.getCurrentUserId();
-        Long memberId = 1L;
-
+    public void save(BoardRequest.DefaultBoard request, Long memberId) {
         Member member = memberRepository.findById(memberId).
                 orElseThrow(() -> new NotFoundDataException("해당 회원을 찾을 수 없습니다."));
 

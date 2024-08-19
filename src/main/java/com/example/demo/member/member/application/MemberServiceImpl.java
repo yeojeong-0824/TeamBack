@@ -36,19 +36,19 @@ public class MemberServiceImpl implements MemberService {
     @Transactional
     @Override
     @MethodTimer(method = "MemberService.deleteByUserId")
-    public void deleteByUserId(Long takenUserId) {
-        Member saveEntity = memberRepository.findById(takenUserId)
+    public void deleteByMemberId(Long takenMemberId) {
+        Member saveEntity = memberRepository.findById(takenMemberId)
                 .orElseThrow(() -> new NotFoundDataException("해당 유저를 찾지 못했습니다"));
 
         boardScoreRepository.deleteByMember(saveEntity);
         boardRepository.deleteByMember(saveEntity);
-        memberRepository.deleteById(takenUserId);
+        memberRepository.deleteById(takenMemberId);
     }
 
     @Override
     @MethodTimer(method = "MemberService.findById()")
-    public MemberResponse.FindMember findById(Long takenUserId) {
-        Member savedEntity = memberRepository.findById(takenUserId)
+    public MemberResponse.FindMember findById(Long takenMemberId) {
+        Member savedEntity = memberRepository.findById(takenMemberId)
                 .orElseThrow(() -> new NotFoundDataException("해당 유저를 찾지 못했습니다"));
 
         return MemberResponse.FindMember.toDto(savedEntity);
@@ -56,8 +56,8 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     @MethodTimer(method = "MemberService.findByIdDetail()")
-    public MemberResponse.FindMemberDetail findByIdDetail(Long takenUserId) {
-        Member savedEntity = memberRepository.findById(takenUserId)
+    public MemberResponse.FindMemberDetail findByIdDetail(Long takenMemberId) {
+        Member savedEntity = memberRepository.findById(takenMemberId)
                 .orElseThrow(() -> new NotFoundDataException("해당 유저를 찾지 못했습니다"));
 
         return MemberResponse.FindMemberDetail.toDto(savedEntity);
@@ -120,8 +120,8 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     @MethodTimer(method = "MemberService.patchNicknameById()")
-    public void patchNicknameById(Long takenId, String takenNickname) {
-        Member savedEntity = memberRepository.findById(takenId)
+    public void patchNicknameById(Long takenMemberId, String takenNickname) {
+        Member savedEntity = memberRepository.findById(takenMemberId)
                 .orElseThrow(() -> new NotFoundDataException("해당 유저를 찾지 못했습니다"));
 
         savedEntity.patchNickname(takenNickname);
@@ -131,8 +131,8 @@ public class MemberServiceImpl implements MemberService {
     @Transactional
     @Override
     @MethodTimer(method = "MemberService.patchPasswordByUsername()")
-    public void patchPasswordByUsername(Long takenId, String takenPassword) {
-        Member savedEntity = memberRepository.findById(takenId)
+    public void patchPasswordByUsername(Long takenMemberId, String takenPassword) {
+        Member savedEntity = memberRepository.findById(takenMemberId)
                 .orElseThrow(() -> new NotFoundDataException("해당 유저를 찾지 못했습니다"));
 
         savedEntity.patchPassword(passwordEncoder.encode(takenPassword));

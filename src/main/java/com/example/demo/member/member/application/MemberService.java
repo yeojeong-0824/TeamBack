@@ -5,14 +5,14 @@ import com.example.demo.member.member.presentation.dto.MemberResponse;
 
 public interface MemberService {
     void save(MemberRequest.SaveMember takenMemberRequest);
-    void deleteByUserId(Long takenUserId);
-    MemberResponse.FindMember findById(Long takenUserId);
+    void deleteByMemberId(Long takenMemberId);
+    MemberResponse.FindMember findById(Long takenMemberId);
     String createNewPassword(String takenUsername, String takenEmail);
     String findUsernameByEmail(String takenEmail);
     void checkDuplicatedByEmail(String takenEmail);
     void checkDuplicated(MemberRequest.DataConfirmMember takenDto);
-    void patchNicknameById(Long takenId, String takenNickname);
-    void patchPasswordByUsername(Long takenId, String takenPassword);
+    void patchNicknameById(Long takenMemberId, String takenNickname);
+    void patchPasswordByUsername(Long takenMemberId, String takenPassword);
 
-    MemberResponse.FindMemberDetail findByIdDetail(Long takenUserId);
+    MemberResponse.FindMemberDetail findByIdDetail(Long takenMemberId);
 }

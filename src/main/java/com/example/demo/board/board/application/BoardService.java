@@ -5,7 +5,7 @@ import com.example.demo.board.board.presentation.dto.BoardResponse;
 import org.springframework.data.domain.Page;
 
 public interface BoardService {
-    void save(BoardRequest.DefaultBoard request);
+    void save(BoardRequest.DefaultBoard request, Long memberId);
     void updateById(Long id, Long memberId, BoardRequest.BoardUpdateRequest request);
     BoardResponse.BoardReadResponse findById(Long id);
     Page<BoardResponse.BoardListResponse> findAll(int page);

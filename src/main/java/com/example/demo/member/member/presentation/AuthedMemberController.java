@@ -41,8 +41,8 @@ public class AuthedMemberController {
         String ip = request.getRemoteAddr();
         log.info("{}: 회원정보 호출", ip);
 
-        Long userId = SecurityUtil.getCurrentUserId();
-        return ResponseEntity.ok(memberService.findById(userId));
+        Long memberId = SecurityUtil.getCurrentUserId();
+        return ResponseEntity.ok(memberService.findById(memberId));
     }
 
     @GetMapping("/detail")
@@ -58,8 +58,8 @@ public class AuthedMemberController {
         String ip = request.getRemoteAddr();
         log.info("{}: 회원정보 호출", ip);
 
-        Long userId = SecurityUtil.getCurrentUserId();
-        return ResponseEntity.ok(memberService.findByIdDetail(userId));
+        Long memberId = SecurityUtil.getCurrentUserId();
+        return ResponseEntity.ok(memberService.findByIdDetail(memberId));
     }
 
     @DeleteMapping
@@ -75,9 +75,9 @@ public class AuthedMemberController {
         String ip = request.getRemoteAddr();
         log.info("{}: 유저 탈퇴 호출", ip);
 
-        Long userId = SecurityUtil.getCurrentUserId();
+        Long memberId = SecurityUtil.getCurrentUserId();
 
-        memberService.deleteByUserId(userId);
+        memberService.deleteByMemberId(memberId);
         return ResponseEntity.ok("유저 탈퇴에 성공했습니다");
     }
 
@@ -96,9 +96,9 @@ public class AuthedMemberController {
         String ip = request.getRemoteAddr();
         log.info("{}: 비밀번호 변경 호출", ip);
 
-        Long userId = SecurityUtil.getCurrentUserId();
+        Long memberId = SecurityUtil.getCurrentUserId();
 
-        memberService.patchPasswordByUsername(userId, takenDto.password());
+        memberService.patchPasswordByUsername(memberId, takenDto.password());
         return ResponseEntity.ok("비밀번호 변경에 성공하였습니다");
     }
 
@@ -117,9 +117,9 @@ public class AuthedMemberController {
         String ip = request.getRemoteAddr();
         log.info("{}: 닉네임 변경 호출", ip);
 
-        Long userId = SecurityUtil.getCurrentUserId();
+        Long memberId = SecurityUtil.getCurrentUserId();
 
-        memberService.patchNicknameById(userId, takenDto.nickname());
+        memberService.patchNicknameById(memberId, takenDto.nickname());
         return ResponseEntity.ok("닉네임 변경에 성공하였습니다");
     }
 }

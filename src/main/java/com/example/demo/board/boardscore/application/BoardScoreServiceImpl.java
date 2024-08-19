@@ -32,16 +32,11 @@ public class BoardScoreServiceImpl implements BoardScoreService {
         Member member = memberRepository.findById(takenUserId)
                 .orElseThrow(() -> new NotFoundDataException("해당 유저를 찾을 수 없습니다"));
 
+        // ToDo: boardScore에서 모든 데이터를 불러 오는 형식은 느리게 동작할 것 같음
+        // ToDo: boardScore에서 해당 게시글의 Score 개수만 불러오는 쿼리로 작성해야 할 것 같음
         List<BoardScore> savedEntity = boardScoreRepository.findByBoard(board);
         int size = savedEntity.size();
         int score = (board.getAvgScore() * size) + (takenDto.score() * 100);
-
-//        int sum = takenDto.score();
-//        int count = 1;
-//        for(BoardScore entity : savedEntity) {
-//            sum += entity.getScore();
-//            count++;
-//        }
         int avg = score / (size + 1);
 
         board.avgScorePatch(avg);
