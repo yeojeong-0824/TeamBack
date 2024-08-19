@@ -50,12 +50,11 @@ public class AuthedBoardScoreController {
     }
 
     @DeleteMapping("/{boardId}")
-    @Operation(summary = "별점 등록", description = "게시글에 별점을 기록합니다.")
+    @Operation(summary = "별점 삭제", description = "게시글에 별점을 삭제합니다.")
     @ApiResponses(
             value = {
-                    @ApiResponse(responseCode = "200", description = "별점 등록 완료"),
-                    @ApiResponse(responseCode = "403", description = "권한 없음"),
-                    @ApiResponse(responseCode = "409", description = "이미 별점 등록을 했음"),
+                    @ApiResponse(responseCode = "200", description = "별점 삭제 완료"),
+                    @ApiResponse(responseCode = "403", description = "권한 없음")
             }
     )
     public ResponseEntity<String> delete(@PathVariable("boardId") Long boardId,
@@ -65,6 +64,6 @@ public class AuthedBoardScoreController {
 
         Long memberId = SecurityUtil.getCurrentMemberId();
         boardScoreService.delete(boardId, memberId);
-        return ResponseEntity.ok("별점 등록에 성공하였습니다");
+        return ResponseEntity.ok("별점 삭제에 성공하였습니다");
     }
 }
