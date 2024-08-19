@@ -28,7 +28,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public void save(Long boardId, CommentSaveRequest request) {
 
-        Long memberId = SecurityUtil.getCurrentUserId();
+        Long memberId = SecurityUtil.getCurrentMemberId();
 
         memberRepository.findById(memberId)
                 .orElseThrow(() -> new NotFoundDataException("해당 회원을 찾을 수 없습니다."));

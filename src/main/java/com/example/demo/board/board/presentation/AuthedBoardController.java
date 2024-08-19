@@ -45,7 +45,7 @@ public class AuthedBoardController {
         String ip = requestArr.getRemoteAddr();
         log.info("{}: 게시글 작성 호출", ip);
 
-        Long memberId = SecurityUtil.getCurrentUserId();
+        Long memberId = SecurityUtil.getCurrentMemberId();
 
         boardServiceImpl.save(request, memberId);
         return ResponseEntity.status(HttpStatus.CREATED).body("게시글 작성 성공");
@@ -79,7 +79,7 @@ public class AuthedBoardController {
         String ip = requestArr.getRemoteAddr();
         log.info("{}: 게시글 수정 호출", ip);
 
-        Long memberId = SecurityUtil.getCurrentUserId();
+        Long memberId = SecurityUtil.getCurrentMemberId();
         boardServiceImpl.updateById(boardId, memberId, request);
         return ResponseEntity.ok("게시글 수정 성공");
     }
@@ -98,7 +98,7 @@ public class AuthedBoardController {
         String ip = requestArr.getRemoteAddr();
         log.info("{}: 게시글 삭제 호출", ip);
 
-        Long memberId = SecurityUtil.getCurrentUserId();
+        Long memberId = SecurityUtil.getCurrentMemberId();
         boardServiceImpl.deleteById(boardId, memberId);
         return ResponseEntity.ok("게시글 삭제 성공");
     }

@@ -11,6 +11,7 @@ import com.example.demo.member.member.domain.Member;
 import com.example.demo.member.member.domain.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -25,11 +26,11 @@ public class BoardScoreServiceImpl implements BoardScoreService {
 
     @Override
     @MethodTimer(method = "BoardScoreService.save()")
-    public void save(BoardScoreRequest.SaveScore takenDto, Long takenBoardId, Long takenUserId) {
+    public void save(BoardScoreRequest.SaveScore takenDto, Long takenBoardId, Long takenMemberId) {
         Board board = boardRepository.findById(takenBoardId)
                 .orElseThrow(() -> new NotFoundDataException("해당 게시글을 찾을 수 없습니다"));
 
-        Member member = memberRepository.findById(takenUserId)
+        Member member = memberRepository.findById(takenMemberId)
                 .orElseThrow(() -> new NotFoundDataException("해당 유저를 찾을 수 없습니다"));
 
         // ToDo: boardScore에서 모든 데이터를 불러 오는 형식은 느리게 동작할 것 같음
@@ -44,5 +45,11 @@ public class BoardScoreServiceImpl implements BoardScoreService {
 
         BoardScore entity = BoardScoreRequest.SaveScore.toEntity(takenDto, board, member);
         boardScoreRepository.save(entity);
+    }
+
+    @Override
+    @Transactional
+    public void delete(Long takenBoardId, Long takenMemberId) {
+        boardScoreRepository.deleteByBoard_IdAndMember_id(takenBoardId, takenMemberId);
     }
 }

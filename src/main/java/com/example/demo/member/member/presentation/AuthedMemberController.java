@@ -41,7 +41,7 @@ public class AuthedMemberController {
         String ip = request.getRemoteAddr();
         log.info("{}: 회원정보 호출", ip);
 
-        Long memberId = SecurityUtil.getCurrentUserId();
+        Long memberId = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(memberService.findById(memberId));
     }
 
@@ -58,7 +58,7 @@ public class AuthedMemberController {
         String ip = request.getRemoteAddr();
         log.info("{}: 회원정보 호출", ip);
 
-        Long memberId = SecurityUtil.getCurrentUserId();
+        Long memberId = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(memberService.findByIdDetail(memberId));
     }
 
@@ -75,7 +75,7 @@ public class AuthedMemberController {
         String ip = request.getRemoteAddr();
         log.info("{}: 유저 탈퇴 호출", ip);
 
-        Long memberId = SecurityUtil.getCurrentUserId();
+        Long memberId = SecurityUtil.getCurrentMemberId();
 
         memberService.deleteByMemberId(memberId);
         return ResponseEntity.ok("유저 탈퇴에 성공했습니다");
@@ -96,7 +96,7 @@ public class AuthedMemberController {
         String ip = request.getRemoteAddr();
         log.info("{}: 비밀번호 변경 호출", ip);
 
-        Long memberId = SecurityUtil.getCurrentUserId();
+        Long memberId = SecurityUtil.getCurrentMemberId();
 
         memberService.patchPasswordByUsername(memberId, takenDto.password());
         return ResponseEntity.ok("비밀번호 변경에 성공하였습니다");
@@ -117,7 +117,7 @@ public class AuthedMemberController {
         String ip = request.getRemoteAddr();
         log.info("{}: 닉네임 변경 호출", ip);
 
-        Long memberId = SecurityUtil.getCurrentUserId();
+        Long memberId = SecurityUtil.getCurrentMemberId();
 
         memberService.patchNicknameById(memberId, takenDto.nickname());
         return ResponseEntity.ok("닉네임 변경에 성공하였습니다");
