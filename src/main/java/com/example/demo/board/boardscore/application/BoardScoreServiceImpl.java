@@ -25,6 +25,7 @@ public class BoardScoreServiceImpl implements BoardScoreService {
     private final MemberRepository memberRepository;
 
     @Override
+    @Transactional
     @MethodTimer(method = "BoardScoreService.save()")
     public void save(BoardScoreRequest.SaveScore takenDto, Long takenBoardId, Long takenMemberId) {
         Board board = boardRepository.findById(takenBoardId)
@@ -33,23 +34,38 @@ public class BoardScoreServiceImpl implements BoardScoreService {
         Member member = memberRepository.findById(takenMemberId)
                 .orElseThrow(() -> new NotFoundDataException("해당 유저를 찾을 수 없습니다"));
 
-        // ToDo: boardScore에서 모든 데이터를 불러 오는 형식은 느리게 동작할 것 같음
-        // ToDo: boardScore에서 해당 게시글의 Score 개수만 불러오는 쿼리로 작성해야 할 것 같음
-        List<BoardScore> savedEntity = boardScoreRepository.findByBoard(board);
-        int size = savedEntity.size();
-        int score = (board.getAvgScore() * size) + (takenDto.score() * 100);
-        int avg = score / (size + 1);
-
-        board.avgScorePatch(avg);
-        boardRepository.save(board);
-
         BoardScore entity = BoardScoreRequest.SaveScore.toEntity(takenDto, board, member);
         boardScoreRepository.save(entity);
+
+        int avg = getBoardScoreAvg(board);
+        board.avgScorePatch(avg);
+
+        boardRepository.save(board);
     }
 
     @Override
     @Transactional
+    @MethodTimer(method = "BoardScoreService.save()")
     public void delete(Long takenBoardId, Long takenMemberId) {
+        Board board = boardRepository.findById(takenBoardId)
+                .orElseThrow(() -> new NotFoundDataException("해당 게시글을 찾을 수 없습니다"));
+
         boardScoreRepository.deleteByBoard_IdAndMember_id(takenBoardId, takenMemberId);
+
+        int avg = getBoardScoreAvg(board);
+        board.avgScorePatch(avg);
+
+        boardRepository.save(board);
+    }
+
+    @MethodTimer(method = "음 뭐가 더 빠를까?")
+    private int getBoardScoreAvg(Board board) {
+        List<BoardScore> savedBoardScore = boardScoreRepository.findByBoard(board);
+        if(savedBoardScore.isEmpty()) return 0;
+
+        int size = savedBoardScore.size();
+        int sum = savedBoardScore.stream().mapToInt(BoardScore::getScore).sum();
+        int rtn = (sum * 100) / size ;
+        return rtn;
     }
 }
