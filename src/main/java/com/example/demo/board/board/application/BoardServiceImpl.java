@@ -8,6 +8,8 @@ import com.example.demo.board.board.presentation.dto.BoardRequest;
 import com.example.demo.board.board.presentation.dto.BoardResponse;
 import com.example.demo.board.board.presentation.dto.GoogleApiRequest;
 import com.example.demo.board.board.presentation.dto.GoogleApiResponse;
+import com.example.demo.board.boardscore.domain.BoardScore;
+import com.example.demo.board.boardscore.domain.BoardScoreRepository;
 import com.example.demo.config.util.methodtimer.MethodTimer;
 import com.example.demo.config.exception.NotFoundDataException;
 import com.example.demo.config.exception.RequestDataException;
@@ -29,6 +31,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -39,8 +42,9 @@ public class BoardServiceImpl implements BoardService {
 
     private final BoardRepository boardRepository;
     private final MemberRepository memberRepository;
-    private final RedisRepository redisRepository;
+    private final BoardScoreRepository boardScoreRepository;
 
+    private final RedisRepository redisRepository;
     private final AutocompleteService autocompleteService;
 
     // 게시글 작성
@@ -100,7 +104,7 @@ public class BoardServiceImpl implements BoardService {
     @Transactional(readOnly = false)
     @Override
     @MethodTimer(method = "BoardService.findById()")
-    public BoardResponse.BoardReadResponse findById(Long id) {
+    public BoardResponse.BoardReadResponse findById(Long id, Long memberId) {
         Board board = boardRepository.findById(id)
                 .orElseThrow(() -> new NotFoundDataException("해당 게시글을 찾을 수 없습니다."));
 
@@ -113,7 +117,8 @@ public class BoardServiceImpl implements BoardService {
             throw new RuntimeException("데이터베이스에 저장하지 못했습니다.", e);
         }
 
-        return new BoardResponse.BoardReadResponse(board);
+        Optional<BoardScore> boardScoreByMember = boardScoreRepository.findByBoard_IdAndMember_Id(id, memberId);
+        return boardScoreByMember.map(boardScore -> new BoardResponse.BoardReadResponse(board, boardScore)).orElseGet(() -> new BoardResponse.BoardReadResponse(board, null));
     }
 
     // 전체 게시글

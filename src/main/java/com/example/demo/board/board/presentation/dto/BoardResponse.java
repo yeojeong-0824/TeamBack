@@ -1,6 +1,7 @@
 package com.example.demo.board.board.presentation.dto;
 
 import com.example.demo.board.board.domain.Board;
+import com.example.demo.board.boardscore.domain.BoardScore;
 import lombok.*;
 
 import java.util.List;
@@ -107,7 +108,8 @@ public class BoardResponse {
             Integer view,
             Integer avgScore,
             MemberInfo member,
-            List<BoardScoreInfo> boardScore
+            List<BoardScoreInfo> boardScore,
+            Integer MemberScoreInfo
     ) {
         @Builder
         public record MemberInfo (
@@ -124,7 +126,12 @@ public class BoardResponse {
                 Integer score
         ){}
 
-        public BoardReadResponse(Board board) {
+        @Builder
+        public record BoardScoreByMemberInfo (
+                Integer score
+        ){}
+
+        public BoardReadResponse(Board board, BoardScore boardScoreByMember) {
             this(
                     board.getLocationName(),
                     board.getFormattedAddress(),
@@ -146,7 +153,8 @@ public class BoardResponse {
                                 .age(data.getMember().getAge())
                                 .score(data.getScore())
                                 .build()
-                    ).toList()
+                    ).toList(),
+                    (boardScoreByMember != null) ? boardScoreByMember.getScore() : null
             );
         }
     }

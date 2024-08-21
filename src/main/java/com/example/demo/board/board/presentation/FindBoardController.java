@@ -2,6 +2,7 @@ package com.example.demo.board.board.presentation;
 
 import com.example.demo.board.board.presentation.dto.BoardResponse;
 import com.example.demo.board.board.application.BoardServiceImpl;
+import com.example.demo.config.util.SecurityUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -34,7 +35,9 @@ public class FindBoardController {
         String ip = requestArr.getRemoteAddr();
         log.info("{}: 개별 게시글 호출", ip);
 
-        return ResponseEntity.ok(boardServiceImpl.findById(boardId));
+        Long memberId = SecurityUtil.getCurrentMemberId();
+
+        return ResponseEntity.ok(boardServiceImpl.findById(boardId, memberId));
     }
 
     @GetMapping("/list")

@@ -9,6 +9,8 @@ import java.util.Optional;
 
 public interface BoardScoreRepository extends JpaRepository<BoardScore, Long> {
     void deleteByMember(Member member);
-    void deleteByBoard_IdAndMember_id(Long boardId, Long memberId);
+    void deleteByBoard_IdAndMember_Id(Long boardId, Long memberId);
+    Optional<BoardScore> findByBoard_IdAndMember_Id(Long boardId, Long memberId);
+    boolean existsByBoardAndMember(Board board, Member member);
     List<BoardScore> findByBoard(Board board);
 }
