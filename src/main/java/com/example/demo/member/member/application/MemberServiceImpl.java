@@ -2,6 +2,7 @@ package com.example.demo.member.member.application;
 
 import com.example.demo.board.board.domain.BoardRepository;
 import com.example.demo.board.boardscore.domain.BoardScoreRepository;
+import com.example.demo.config.exception.RequestDataException;
 import com.example.demo.config.util.methodtimer.MethodTimer;
 import com.example.demo.config.exception.DuplicatedException;
 import com.example.demo.config.exception.NotFoundDataException;
@@ -36,12 +37,16 @@ public class MemberServiceImpl implements MemberService {
     @Transactional
     @Override
     @MethodTimer(method = "MemberService.deleteByUserId")
-    public void deleteByMemberId(Long takenMemberId) {
-        Member saveEntity = memberRepository.findById(takenMemberId)
+    public void deleteByMemberId(Long takenMemberId, MemberRequest.DeleteMember takenDto) {
+        Member savedEntity = memberRepository.findById(takenMemberId)
                 .orElseThrow(() -> new NotFoundDataException("해당 유저를 찾지 못했습니다"));
 
-        boardScoreRepository.deleteByMember(saveEntity);
-        boardRepository.deleteByMember(saveEntity);
+        String savedPassword = savedEntity.getPassword();
+        String takenPassword = takenDto.password();
+        if(!passwordEncoder.matches(takenPassword, savedPassword)) throw new RequestDataException("비밀번호가 일치하지 않습니다");
+
+        boardScoreRepository.deleteByMember(savedEntity);
+        boardRepository.deleteByMember(savedEntity);
         memberRepository.deleteById(takenMemberId);
     }
 
@@ -73,7 +78,8 @@ public class MemberServiceImpl implements MemberService {
             throw new NotFoundDataException("해당 유저의 이메일을 찾지 못했습니다");
 
         String newPassword = this.createNewPassword();
-        this.patchPasswordByUsername(savedEntity.getId(), newPassword);
+        savedEntity.patchPassword(passwordEncoder.encode(newPassword));
+        memberRepository.save(savedEntity);
 
         return newPassword;
     }
@@ -100,9 +106,9 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     @MethodTimer(method = "MemberService.checkDuplicated()")
-    public void checkDuplicated(MemberRequest.DataConfirmMember takenDataConfirmMember) {
-        String takenNickname = takenDataConfirmMember.nickname();
-        String takenUsername = takenDataConfirmMember.username();
+    public void checkDuplicated(MemberRequest.DataConfirmMember takenDto) {
+        String takenNickname = takenDto.nickname();
+        String takenUsername = takenDto.username();
 
         if(memberRepository.existsByNickname(takenNickname))
             throw new DuplicatedException("중복된 닉네임입니다");
@@ -118,24 +124,19 @@ public class MemberServiceImpl implements MemberService {
             throw new DuplicatedException("중복된 이메일입니다");
     }
 
-    @Override
-    @MethodTimer(method = "MemberService.patchNicknameById()")
-    public void patchNicknameById(Long takenMemberId, String takenNickname) {
-        Member savedEntity = memberRepository.findById(takenMemberId)
-                .orElseThrow(() -> new NotFoundDataException("해당 유저를 찾지 못했습니다"));
-
-        savedEntity.patchNickname(takenNickname);
-        memberRepository.save(savedEntity);
-    }
-
     @Transactional
     @Override
     @MethodTimer(method = "MemberService.patchPasswordByUsername()")
-    public void patchPasswordByUsername(Long takenMemberId, String takenPassword) {
+    public void patchById(Long takenMemberId, MemberRequest.PatchMember takenDto) {
         Member savedEntity = memberRepository.findById(takenMemberId)
                 .orElseThrow(() -> new NotFoundDataException("해당 유저를 찾지 못했습니다"));
 
-        savedEntity.patchPassword(passwordEncoder.encode(takenPassword));
+        String savedPassword = savedEntity.getPassword();
+        String takenPassword = takenDto.password();
+        if(!passwordEncoder.matches(takenPassword, savedPassword)) throw new RequestDataException("비밀번호가 일치하지 않습니다");
+
+        String newPassword = takenDto.newPassword() == null ? null : passwordEncoder.encode(takenDto.newPassword());
+        savedEntity.patchMember(takenDto, newPassword);
         memberRepository.save(savedEntity);
     }
 }

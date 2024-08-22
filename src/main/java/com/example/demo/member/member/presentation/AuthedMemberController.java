@@ -71,55 +71,36 @@ public class AuthedMemberController {
                     @ApiResponse(responseCode = "403", description = "권한 없음"),
             }
     )
-    public ResponseEntity<String> deleteByUserId(HttpServletRequest request) {
+    public ResponseEntity<String> deleteByUserId(@Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
+                                                 @Valid @RequestBody MemberRequest.DeleteMember takenDto,
+                                                 HttpServletRequest request) {
         String ip = request.getRemoteAddr();
         log.info("{}: 유저 탈퇴 호출", ip);
 
         Long memberId = SecurityUtil.getCurrentMemberId();
 
-        memberService.deleteByMemberId(memberId);
+        memberService.deleteByMemberId(memberId, takenDto);
         return ResponseEntity.ok("유저 탈퇴에 성공했습니다");
     }
 
-    @PatchMapping("/password")
-    @Operation(summary = "비밀번호 변경", description = "회원의 비밀번호를 변경합니다.")
+    @PatchMapping
+    @Operation(summary = "유저 정보 수정", description = "회원 정보를 수정합니다")
     @ApiResponses(
             value = {
-                    @ApiResponse(responseCode = "200", description = "비밀번호 변경 완료"),
+                    @ApiResponse(responseCode = "200", description = "회원 정보 수정 완료"),
                     @ApiResponse(responseCode = "400", description = "유저를 찾지 못함"),
                     @ApiResponse(responseCode = "403", description = "권한 없음"),
             }
     )
     public ResponseEntity<String> patchPassword(@Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
-                                                @Valid @RequestBody MemberRequest.patchPassword takenDto,
+                                                @Valid @RequestBody MemberRequest.PatchMember takenDto,
                                                 HttpServletRequest request) {
         String ip = request.getRemoteAddr();
-        log.info("{}: 비밀번호 변경 호출", ip);
+        log.info("{}: 회원 정보 수정 호출", ip);
 
         Long memberId = SecurityUtil.getCurrentMemberId();
 
-        memberService.patchPasswordByUsername(memberId, takenDto.password());
-        return ResponseEntity.ok("비밀번호 변경에 성공하였습니다");
-    }
-
-    @PatchMapping("/nickname")
-    @Operation(summary = "닉네임 변경", description = "회원의 닉네임을 변경합니다.")
-    @ApiResponses(
-            value = {
-                    @ApiResponse(responseCode = "200", description = "닉네임 완료"),
-                    @ApiResponse(responseCode = "400", description = "유저를 찾지 못함"),
-                    @ApiResponse(responseCode = "403", description = "권한 없음"),
-            }
-    )
-    public ResponseEntity<String> patchNickname(@Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
-                                                @Valid @RequestBody MemberRequest.patchNickname takenDto,
-                                                HttpServletRequest request) {
-        String ip = request.getRemoteAddr();
-        log.info("{}: 닉네임 변경 호출", ip);
-
-        Long memberId = SecurityUtil.getCurrentMemberId();
-
-        memberService.patchNicknameById(memberId, takenDto.nickname());
-        return ResponseEntity.ok("닉네임 변경에 성공하였습니다");
+        memberService.patchById(memberId, takenDto);
+        return ResponseEntity.ok("회원 정보 수정 성공하였습니다");
     }
 }
