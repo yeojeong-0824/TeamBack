@@ -47,8 +47,6 @@ public class Board extends BaseTime {
     @Column(nullable = false)
     private Integer view;
 
-    // 찾아보니 물리적인 외래키를 제외하고 논리적인 외래키를 맺는 방법이라고 합니다!
-    // foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT) -> 물리적인 외래키 제거
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", nullable = false, foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private Member member;

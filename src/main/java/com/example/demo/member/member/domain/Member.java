@@ -43,14 +43,14 @@ public class Member {
     @Column(nullable = false)
     private String role;
 
-    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
-    private List<Board> board;
-
-    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
-    private List<BoardScore> boardScore;
-
-    @OneToMany(mappedBy = "member", orphanRemoval = true)
-    private List<Comment> comments;
+//    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
+//    private List<Board> board;
+//
+//    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
+//    private List<BoardScore> boardScore;
+//
+//    @OneToMany(mappedBy = "member", orphanRemoval = true)
+//    private List<Comment> comments;
 
     public void patchPassword(String password) {
         this.password = password;

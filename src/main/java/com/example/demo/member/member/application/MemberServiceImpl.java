@@ -1,6 +1,8 @@
 package com.example.demo.member.member.application;
 
+import com.example.demo.board.board.domain.Board;
 import com.example.demo.board.board.domain.BoardRepository;
+import com.example.demo.board.boardscore.domain.BoardScore;
 import com.example.demo.board.boardscore.domain.BoardScoreRepository;
 import com.example.demo.config.exception.RequestDataException;
 import com.example.demo.config.util.methodtimer.MethodTimer;
@@ -11,6 +13,9 @@ import com.example.demo.member.member.domain.Member;
 import com.example.demo.member.member.domain.MemberRepository;
 import com.example.demo.member.member.presentation.dto.MemberResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -60,12 +65,25 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    @MethodTimer(method = "MemberService.findByIdDetail()")
-    public MemberResponse.FindMemberDetail findByIdDetail(Long takenMemberId) {
+    public Page<MemberResponse.BoardInfo> findBoardById(Long takenMemberId, int takenPage) {
         Member savedEntity = memberRepository.findById(takenMemberId)
                 .orElseThrow(() -> new NotFoundDataException("해당 유저를 찾지 못했습니다"));
 
-        return MemberResponse.FindMemberDetail.toDto(savedEntity);
+        PageRequest pageRequest = PageRequest.of(takenPage - 1, 10, Sort.by("id").descending());
+        Page<Board> savedBoardPage = boardRepository.findByMember(savedEntity, pageRequest);
+
+        return savedBoardPage.map(MemberResponse.BoardInfo::toDto);
+    }
+
+    @Override
+    public Page<MemberResponse.BoardScoreInfo> findBoardScoreById(Long takenMemberId, int takenPage) {
+        Member savedEntity = memberRepository.findById(takenMemberId)
+                .orElseThrow(() -> new NotFoundDataException("해당 유저를 찾지 못했습니다"));
+
+        PageRequest pageRequest = PageRequest.of(takenPage - 1, 10, Sort.by("id").descending());
+        Page<BoardScore> savedBoardScorePage = boardScoreRepository.findByMember(savedEntity, pageRequest);
+
+        return savedBoardScorePage.map(MemberResponse.BoardScoreInfo::toDto);
     }
 
     @Override
