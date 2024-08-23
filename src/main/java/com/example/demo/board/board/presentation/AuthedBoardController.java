@@ -1,5 +1,6 @@
 package com.example.demo.board.board.presentation;
 
+import com.example.demo.board.board.application.BoardService;
 import com.example.demo.board.board.presentation.dto.GoogleApiResponse;
 import com.example.demo.board.board.presentation.dto.BoardRequest;
 import com.example.demo.config.util.SecurityUtil;
@@ -26,7 +27,7 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "게시글 API (Authed)")
 @PreAuthorize("isAuthenticated()")
 public class AuthedBoardController {
-    private final BoardServiceImpl boardServiceImpl;
+    private final BoardService boardService;
 
     // 통일성을 주기위해 메서드 명을 save로 바꿨습니다!
     @PostMapping
@@ -47,7 +48,7 @@ public class AuthedBoardController {
 
         Long memberId = SecurityUtil.getCurrentMemberId();
 
-        boardServiceImpl.save(request, memberId);
+        boardService.save(request, memberId);
         return ResponseEntity.status(HttpStatus.CREATED).body("게시글 작성 성공");
     }
 
@@ -59,7 +60,7 @@ public class AuthedBoardController {
         String ip = requestArr.getRemoteAddr();
         log.info("{}: 검색 호출", ip);
 
-        return ResponseEntity.ok(boardServiceImpl.getSearchLocation(textQuery));
+        return ResponseEntity.ok(boardService.getSearchLocation(textQuery));
     }
 
     @PutMapping("/update/{boardId}")
@@ -80,7 +81,7 @@ public class AuthedBoardController {
         log.info("{}: 게시글 수정 호출", ip);
 
         Long memberId = SecurityUtil.getCurrentMemberId();
-        boardServiceImpl.updateById(boardId, memberId, request);
+        boardService.updateById(boardId, memberId, request);
         return ResponseEntity.ok("게시글 수정 성공");
     }
 
@@ -99,7 +100,7 @@ public class AuthedBoardController {
         log.info("{}: 게시글 삭제 호출", ip);
 
         Long memberId = SecurityUtil.getCurrentMemberId();
-        boardServiceImpl.deleteById(boardId, memberId);
+        boardService.deleteById(boardId, memberId);
         return ResponseEntity.ok("게시글 삭제 성공");
     }
 }

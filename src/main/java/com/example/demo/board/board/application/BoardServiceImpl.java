@@ -165,6 +165,7 @@ public class BoardServiceImpl implements BoardService {
     }
 
     // 구글맵 api 를 사용한 장소 정보 불러오기
+    @Override
     public GoogleApiResponse getSearchLocation(String textQuery) {
         String url ="https://places.googleapis.com/v1/places:searchText";
         String key = "나만의 키 값";
