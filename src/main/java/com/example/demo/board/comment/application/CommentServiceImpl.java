@@ -7,13 +7,17 @@ import com.example.demo.board.comment.domain.CommentRepository;
 import com.example.demo.board.comment.exception.NotFoundCommentException;
 import com.example.demo.board.comment.presentation.dto.CommentRequest.CommentSaveRequest;
 import com.example.demo.board.comment.presentation.dto.CommentRequest.CommentUpdateRequest;
+import com.example.demo.board.comment.presentation.dto.CommentResponse;
 import com.example.demo.config.exception.NotFoundDataException;
 import com.example.demo.config.exception.RequestDataException;
-import com.example.demo.config.util.SecurityUtil;
+import com.example.demo.member.member.domain.Member;
 import com.example.demo.member.member.domain.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -29,7 +33,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public void save(Long memberId, Long boardId, CommentSaveRequest request) {
 
-        memberRepository.findById(memberId)
+        Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new NotFoundDataException("해당 회원을 찾을 수 없습니다."));
 
         Board board = boardRepository.findById(boardId)
@@ -37,12 +41,21 @@ public class CommentServiceImpl implements CommentService {
 
         Comment comment = Comment.builder()
                 .body(request.body())
+                .member(member)
+                .board(board)
                 .build();
 
         commentRepository.save(comment);
 
         // 게시글 댓글 수 증가
         board.commentCountUp();
+    }
+
+    @Transactional
+    @Override
+    public List<CommentResponse.CommentListResponse> findByBoardId(Long boardId) {
+        List<Comment> commentList = commentRepository.findAllByBoardId(boardId);
+        return toDtoList(commentList);
     }
 
     // 댓글 수정
@@ -81,5 +94,11 @@ public class CommentServiceImpl implements CommentService {
         // 게시글 댓글 수 감소
         board.commentCountDown();
         commentRepository.delete(comment);
+    }
+
+    public List<CommentResponse.CommentListResponse> toDtoList(List<Comment> commentList) {
+        return commentList.stream()
+                .map(comment -> new CommentResponse.CommentListResponse(comment.getId(), comment.getBody(), comment.getMember().getNickname()))
+                .collect(Collectors.toList());
     }
 }
