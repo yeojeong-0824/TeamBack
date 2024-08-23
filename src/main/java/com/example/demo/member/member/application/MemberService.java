@@ -2,6 +2,7 @@ package com.example.demo.member.member.application;
 
 import com.example.demo.member.member.presentation.dto.MemberRequest;
 import com.example.demo.member.member.presentation.dto.MemberResponse;
+import org.springframework.data.domain.Page;
 
 public interface MemberService {
     void save(MemberRequest.SaveMember takenMemberRequest);
@@ -12,6 +13,6 @@ public interface MemberService {
     void checkDuplicatedByEmail(String takenEmail);
     void checkDuplicated(MemberRequest.DataConfirmMember takenDto);
     void patchById(Long takenMemberId, MemberRequest.PatchMember takenDto);
-
-    MemberResponse.FindMemberDetail findByIdDetail(Long takenMemberId);
+    Page<MemberResponse.BoardInfo> findBoardById(Long takenMemberId, int takenPage);
+    Page<MemberResponse.BoardScoreInfo> findBoardScoreById(Long takenMemberId, int takenPage);
 }

@@ -14,6 +14,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -32,7 +33,7 @@ public class AuthedMemberController {
     @Operation(summary = "회원 정보 확인", description = "간단한 회원 정보를 받아옵니다.")
     @ApiResponses(
             value = {
-                    @ApiResponse(responseCode = "200", description = "회원정보 확인 완료"),
+                    @ApiResponse(responseCode = "200", description = "조회 완료"),
                     @ApiResponse(responseCode = "400", description = "유저를 찾지 못함"),
                     @ApiResponse(responseCode = "403", description = "권한 없음"),
             }
@@ -45,21 +46,40 @@ public class AuthedMemberController {
         return ResponseEntity.ok(memberService.findById(memberId));
     }
 
-    @GetMapping("/detail")
-    @Operation(summary = "자세한 회원 정보 확인", description = "회원의 정보와 작성한 게시글, 댓글 및 별점을 준 게시글의 정보를 받아옵니다.")
+    @GetMapping("/board")
+    @Operation(summary = "해당 회원의 작성 게시글 확인", description = "해당 회원이 작성한 게시글의 정보를 받아옵니다.")
     @ApiResponses(
             value = {
-                    @ApiResponse(responseCode = "200", description = "회원정보 확인 완료"),
+                    @ApiResponse(responseCode = "200", description = "조회 완료"),
                     @ApiResponse(responseCode = "400", description = "유저를 찾지 못함"),
                     @ApiResponse(responseCode = "403", description = "권한 없음"),
             }
     )
-    public ResponseEntity<MemberResponse.FindMemberDetail> findByIdDetail(HttpServletRequest request) {
+    public ResponseEntity<Page<MemberResponse.BoardInfo>> findBoardById(@RequestParam(required = false, defaultValue = "1", value = "page") int page,
+                                                                        HttpServletRequest request) {
         String ip = request.getRemoteAddr();
-        log.info("{}: 회원정보 호출", ip);
+        log.info("{}: 작성 게시글 호출", ip);
 
         Long memberId = SecurityUtil.getCurrentMemberId();
-        return ResponseEntity.ok(memberService.findByIdDetail(memberId));
+        return ResponseEntity.ok(memberService.findBoardById(memberId, page));
+    }
+
+    @GetMapping("/boardScore")
+    @Operation(summary = "해당 회원의 별점 등록 목록 확인", description = "해당 회원이 등록한 별점의 정보를 받아옵니다.")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "조회 완료"),
+                    @ApiResponse(responseCode = "400", description = "유저를 찾지 못함"),
+                    @ApiResponse(responseCode = "403", description = "권한 없음"),
+            }
+    )
+    public ResponseEntity<Page<MemberResponse.BoardScoreInfo>> findBoardScoreById(@RequestParam(required = false, defaultValue = "1", value = "page") int page,
+                                                                             HttpServletRequest request) {
+        String ip = request.getRemoteAddr();
+        log.info("{}: 작성 게시글 호출", ip);
+
+        Long memberId = SecurityUtil.getCurrentMemberId();
+        return ResponseEntity.ok(memberService.findBoardScoreById(memberId, page));
     }
 
     @DeleteMapping
@@ -78,8 +98,8 @@ public class AuthedMemberController {
         log.info("{}: 유저 탈퇴 호출", ip);
 
         Long memberId = SecurityUtil.getCurrentMemberId();
-
         memberService.deleteByMemberId(memberId, takenDto);
+
         return ResponseEntity.ok("유저 탈퇴에 성공했습니다");
     }
 
@@ -87,7 +107,7 @@ public class AuthedMemberController {
     @Operation(summary = "유저 정보 수정", description = "회원 정보를 수정합니다")
     @ApiResponses(
             value = {
-                    @ApiResponse(responseCode = "200", description = "회원 정보 수정 완료"),
+                    @ApiResponse(responseCode = "200", description = "수정 완료"),
                     @ApiResponse(responseCode = "400", description = "유저를 찾지 못함"),
                     @ApiResponse(responseCode = "403", description = "권한 없음"),
             }
@@ -99,8 +119,8 @@ public class AuthedMemberController {
         log.info("{}: 회원 정보 수정 호출", ip);
 
         Long memberId = SecurityUtil.getCurrentMemberId();
-
         memberService.patchById(memberId, takenDto);
+
         return ResponseEntity.ok("회원 정보 수정 성공하였습니다");
     }
 }

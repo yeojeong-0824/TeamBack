@@ -86,7 +86,7 @@ public class MemberRequest {
         @Schema(example = "90")
         Integer age
     ) {
-        static public Member toEntity(SaveMember dto, String password) {
+        public static Member toEntity(SaveMember dto, String password) {
             if(dto.password.equals(password)) throw new ServerException("비밀번호 암호화가 진행되지 않았습니다");
             return Member.builder()
                     .username(dto.username())
