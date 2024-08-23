@@ -1,8 +1,5 @@
 package com.example.demo.member.member.domain;
 
-import com.example.demo.board.board.domain.Board;
-import com.example.demo.board.boardscore.domain.BoardScore;
-import com.example.demo.board.comment.domain.Comment;
 import com.example.demo.config.exception.ServerException;
 import com.example.demo.member.member.presentation.dto.MemberRequest;
 import jakarta.persistence.*;
@@ -10,9 +7,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
-import java.util.Objects;
 
 
 @Entity @Getter
@@ -42,15 +36,6 @@ public class Member {
 
     @Column(nullable = false)
     private String role;
-
-//    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
-//    private List<Board> board;
-//
-//    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
-//    private List<BoardScore> boardScore;
-//
-//    @OneToMany(mappedBy = "member", orphanRemoval = true)
-//    private List<Comment> comments;
 
     public void patchPassword(String password) {
         this.password = password;

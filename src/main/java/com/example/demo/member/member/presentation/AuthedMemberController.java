@@ -61,7 +61,6 @@ public class AuthedMemberController {
         log.info("{}: 작성 게시글 호출", ip);
 
         Long memberId = SecurityUtil.getCurrentMemberId();
-
         return ResponseEntity.ok(memberService.findBoardById(memberId, page));
     }
 
@@ -80,7 +79,6 @@ public class AuthedMemberController {
         log.info("{}: 작성 게시글 호출", ip);
 
         Long memberId = SecurityUtil.getCurrentMemberId();
-
         return ResponseEntity.ok(memberService.findBoardScoreById(memberId, page));
     }
 
@@ -100,8 +98,8 @@ public class AuthedMemberController {
         log.info("{}: 유저 탈퇴 호출", ip);
 
         Long memberId = SecurityUtil.getCurrentMemberId();
-
         memberService.deleteByMemberId(memberId, takenDto);
+
         return ResponseEntity.ok("유저 탈퇴에 성공했습니다");
     }
 
@@ -121,8 +119,8 @@ public class AuthedMemberController {
         log.info("{}: 회원 정보 수정 호출", ip);
 
         Long memberId = SecurityUtil.getCurrentMemberId();
-
         memberService.patchById(memberId, takenDto);
+
         return ResponseEntity.ok("회원 정보 수정 성공하였습니다");
     }
 }

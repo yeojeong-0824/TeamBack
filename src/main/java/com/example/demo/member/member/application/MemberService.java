@@ -3,7 +3,6 @@ package com.example.demo.member.member.application;
 import com.example.demo.member.member.presentation.dto.MemberRequest;
 import com.example.demo.member.member.presentation.dto.MemberResponse;
 import org.springframework.data.domain.Page;
-import org.springframework.web.bind.annotation.RequestParam;
 
 public interface MemberService {
     void save(MemberRequest.SaveMember takenMemberRequest);
