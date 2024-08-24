@@ -8,8 +8,10 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Comment extends BaseTime {
 
     @Id
@@ -17,7 +19,10 @@ public class Comment extends BaseTime {
     private Long id;
 
     @Column(nullable = false)
-    private String body;
+    private Integer score;
+
+    @Column
+    private String comment;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
@@ -26,15 +31,4 @@ public class Comment extends BaseTime {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "board_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private Board board;
-
-    @Builder
-    public Comment(String body, Member member, Board board) {
-        this.body = body;
-        this.member = member;
-        this.board = board;
-    }
-
-    public void update(CommentUpdateRequest request) {
-        body = request.body();
-    }
 }

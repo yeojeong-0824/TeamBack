@@ -11,7 +11,8 @@ public class BoardScoreRequest {
     @Builder
     public record SaveScore(
             @Min(1) @Max(10)
-            int score
+            int score,
+            String comment
     ) {
         public static BoardScore toEntity(SaveScore dto, Board board, Member member) {
             return BoardScore.builder()

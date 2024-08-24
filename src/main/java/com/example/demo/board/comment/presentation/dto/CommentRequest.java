@@ -1,23 +1,29 @@
 package com.example.demo.board.comment.presentation.dto;
 
+
+import com.example.demo.board.board.domain.Board;
+import com.example.demo.board.comment.domain.Comment;
+import com.example.demo.member.member.domain.Member;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+import lombok.Builder;
 
-//실행 오류로 주석처리 했습니다!
-//@Getter
-//@Setter
-//@Builder
-//@NoArgsConstructor
-//@AllArgsConstructor
 public class CommentRequest {
-
-    public record CommentSaveRequest(
-            String body
+    @Builder
+    public record Save(
+            @NotBlank
+            @Min(1) @Max(10)
+            Integer score,
+            String comment
     ){
-    }
-
-    public record CommentUpdateRequest(
-            String body
-    ) {
+        public static Comment toEntity(Save dto, Board board, Member member) {
+            return Comment.builder()
+                    .score(dto.score())
+                    .comment(dto.comment())
+                    .board(board)
+                    .member(member)
+                    .build();
+        }
     }
 }

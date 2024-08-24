@@ -9,10 +9,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -21,17 +18,12 @@ import java.util.List;
 @RequestMapping("/board/comment")
 @Tag(name = "댓글 API")
 public class FindCommentController {
-    private final CommentService commentService;
-
     @GetMapping("/{boardId}")
-    @Operation(summary = "게시글 별 댓글 조회")
+    @Operation(summary = "댓글 받기", description = "게시글에 댓글 불러옵니다.")
     @ApiResponses(
             value = {
-                    @ApiResponse(responseCode = "200", description = "댓글 조회 성공"),
-                    @ApiResponse(responseCode = "400", description = "댓글 조회 실패")
+                    @ApiResponse(responseCode = "200", description = "댓글 등록 완료")
             }
     )
-    public ResponseEntity<List<CommentResponse.CommentListResponse>> findByBoardId(@PathVariable Long boardId){
-        return ResponseEntity.ok(commentService.findByBoardId(boardId));
-    }
+    public Page<>
 }
