@@ -17,7 +17,7 @@ public class ImageServiceImpl implements ImageService {
     private final ImageRepository imageRepository;
 
     @Override
-    public String updateImage(MultipartFile file) throws IOException {
+    public String uploadImage(MultipartFile file) throws IOException {
 
         Image image = imageRepository.save(
                 Image.builder()

@@ -6,7 +6,7 @@ import java.io.IOException;
 
 public interface ImageService {
 
-    String updateImage(MultipartFile file) throws IOException;
+    String uploadImage(MultipartFile file) throws IOException;
 
     byte[] downloadImage(String fileName);
 }
