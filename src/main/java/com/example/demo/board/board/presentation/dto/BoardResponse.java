@@ -22,7 +22,6 @@ public class BoardResponse {
     private String body;
     private Integer view;
     private Integer likeCount;
-    private String memberNickname;
 
     public record BoardSaveResponse(
             String locationName,
@@ -31,8 +30,7 @@ public class BoardResponse {
             String longitude,  // 경도
             String title,
             String body,
-            Integer view,
-            String memberNickname
+            Integer view
     ) {
         public BoardSaveResponse(Board board) {
             this(
@@ -42,8 +40,7 @@ public class BoardResponse {
                     board.getLongitude(),
                     board.getTitle(),
                     board.getBody(),
-                    board.getView(),
-                    board.getMemberNickname()
+                    board.getView()
             );
         }
     }
@@ -55,8 +52,7 @@ public class BoardResponse {
             String longitude,  // 경도
             String title,
             String body,
-            Integer view,
-            String memberNickname
+            Integer view
     ) {
         public BoardUpdateResponse(Board board) {
             this(
@@ -66,8 +62,7 @@ public class BoardResponse {
                     board.getLongitude(),
                     board.getTitle(),
                     board.getBody(),
-                    board.getView(),
-                    board.getMemberNickname()
+                    board.getView()
             );
         }
     }
@@ -80,7 +75,6 @@ public class BoardResponse {
             String longitude,  // 경도
             String title,
             Integer view,
-            String memberNickname,
             Integer avgScore
     ) {
         public BoardListResponse(Board board) {
@@ -92,7 +86,6 @@ public class BoardResponse {
                     board.getLongitude(),
                     board.getTitle(),
                     board.getView(),
-                    board.getMemberNickname(),
                     board.getAvgScore()
             );
         }
@@ -108,7 +101,7 @@ public class BoardResponse {
             Integer view,
             Integer avgScore,
             MemberInfo member,
-            List<BoardScoreInfo> boardScore,
+            //List<BoardScoreInfo> boardScore,
             Integer MemberScoreInfo
     ) {
         @Builder
@@ -146,12 +139,12 @@ public class BoardResponse {
                             .age(board.getMember().getAge())
                             .nickname(board.getMember().getNickname())
                             .build(),
-                    board.getScore().stream().map(data ->
+                    board.getComments().stream().map(data ->
                         BoardScoreInfo.builder()
-                                .userId(data.getMember().getId())
-                                .nickname(data.getMember().getNickname())
-                                .age(data.getMember().getAge())
-                                .score(data.getScore())
+                                    .userId(data.getMember().getId())
+                                    .nickname(data.getMember().getNickname())
+                                    .age(data.getMember().getAge())
+                                    .score(data.getScore())
                                 .build()
                     ).toList(),
                     (boardScoreByMember != null) ? boardScoreByMember.getScore() : null

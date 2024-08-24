@@ -33,9 +33,12 @@ public class FindCommentController {
                     @ApiResponse(responseCode = "200", description = "댓글 등록 완료")
             }
     )
-    public ResponseEntity<Page<CommentResponse.FindByBoardId>> findByBoardId(@PathVariable("boardId") Long boardId,
-                                                             HttpServletRequest request) {
-        Page<CommentResponse.FindByBoardId> rtn = commentService.findByBoardId(boardId);
+    public ResponseEntity<Page<CommentResponse.FindByBoardId>> findByBoardId(
+            @RequestParam(required = false, defaultValue = "1", value = "page") int page,
+            @PathVariable("boardId") Long boardId,
+            HttpServletRequest request
+    ) {
+        Page<CommentResponse.FindByBoardId> rtn = commentService.findByBoardId(boardId, page);
         return ResponseEntity.ok(rtn);
     }
 }

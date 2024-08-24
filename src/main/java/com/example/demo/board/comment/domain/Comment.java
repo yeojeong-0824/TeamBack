@@ -31,4 +31,9 @@ public class Comment extends BaseTime {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "board_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private Board board;
+
+    public void update(Edit editDto) {
+        score = editDto.score();
+        comment = editDto.comment();
+    }
 }

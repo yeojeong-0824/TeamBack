@@ -26,4 +26,12 @@ public class CommentRequest {
                     .build();
         }
     }
+
+    public record Edit(
+            @NotBlank
+            @Min(1) @Max(5)
+            Integer score,
+            String comment
+    ){
+    }
 }

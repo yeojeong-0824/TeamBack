@@ -52,7 +52,7 @@ public class Board extends BaseTime {
     private Member member;
 
     @OneToMany(mappedBy = "board", fetch = FetchType.LAZY)
-    private List<BoardScore> comment;
+    private List<Comment> comments;
 
     @Column(nullable = false)
     private Integer avgScore;

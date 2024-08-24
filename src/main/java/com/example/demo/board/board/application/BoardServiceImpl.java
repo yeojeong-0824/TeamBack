@@ -67,7 +67,6 @@ public class BoardServiceImpl implements BoardService {
                 .title(request.title())
                 .body(request.body())
                 .view(0)
-                .memberNickname(member.getNickname())
                 .commentCount(0)
                 .member(member)
                 .avgScore(0)
