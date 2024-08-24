@@ -16,7 +16,6 @@ public class EmailService {
 
     private final JavaMailSender javaMailSender;
 
-    //test
     private SimpleMailMessage createEmailForm(String toEmail, String title, String text) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(toEmail);
