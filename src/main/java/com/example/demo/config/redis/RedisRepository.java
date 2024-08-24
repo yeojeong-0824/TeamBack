@@ -37,6 +37,11 @@ public class RedisRepository {
         return redisTemplate.opsForValue().increment(redisKey);
     }
 
+    public void deleteViewCount(Long id) {
+        String key = "viewCount:" + id;
+        redisTemplate.delete(key);
+    }
+
     public Boolean lock(Long key) {
         return redisTemplate
                 .opsForValue()
