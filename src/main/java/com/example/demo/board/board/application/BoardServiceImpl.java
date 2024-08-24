@@ -115,7 +115,7 @@ public class BoardServiceImpl implements BoardService {
             boardRepository.save(board);
 
         Optional<BoardScore> boardScoreByMember = boardScoreRepository.findByBoard_IdAndMember_Id(id, memberId);
-        return boardScoreByMember.map(boardScore -> new BoardResponse.BoardReadResponse(board, boardScore)).orElseGet(() -> new BoardResponse.BoardReadResponse(board, null));
+        return new BoardResponse.BoardReadResponse(board);
     }
 
     // 전체 게시글
