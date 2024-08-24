@@ -78,7 +78,7 @@ public class BoardServiceImpl implements BoardService {
         Board board = boardRepository.findById(id)
                 .orElseThrow(() -> new NotFoundDataException("해당 게시글을 찾을 수 없습니다."));
 
-        if (!memberId.equals(board.getMember().getId())){
+        if (!memberId.equals(board.getMember().getId())) {
             throw new RequestDataException("게시글을 작성한 회원이 아닙니다");
         }
 
@@ -92,7 +92,7 @@ public class BoardServiceImpl implements BoardService {
         Board board = boardRepository.findById(id)
                 .orElseThrow(() -> new NotFoundDataException("해당 게시글을 찾을 수 없습니다."));
 
-        if (!memberId.equals(board.getMember().getId())){
+        if (!memberId.equals(board.getMember().getId())) {
             throw new RequestDataException("게시글을 작성한 회원이 아닙니다");
         }
 
@@ -108,6 +108,8 @@ public class BoardServiceImpl implements BoardService {
     public BoardResponse.BoardReadResponse findById(Long id, Long memberId) {
         Board board = boardRepository.findById(id)
                 .orElseThrow(() -> new NotFoundDataException("해당 게시글을 찾을 수 없습니다."));
+
+        redisRepository.restViewCount(id);
 
         long increasesViewCount = redisRepository.incrementViewCount(id);
 
@@ -142,7 +144,7 @@ public class BoardServiceImpl implements BoardService {
         }
 
         Page<Board> boardList;
-        if (searchKeyword.equals("content")){
+        if (searchKeyword.equals("content")) {
             // 제목과 내용에 검색어와 일치하는 게시글 검색
             boardList = boardRepository.findByTitleOrBodyContaining(keyword, request);
         } else if (searchKeyword.equals("location")) {
@@ -164,7 +166,7 @@ public class BoardServiceImpl implements BoardService {
     // 구글맵 api 를 사용한 장소 정보 불러오기
     @Override
     public GoogleApiResponse getSearchLocation(String textQuery) {
-        String url ="https://places.googleapis.com/v1/places:searchText";
+        String url = "https://places.googleapis.com/v1/places:searchText";
         String key = "나만의 키 값";
 
         // 검색할 값
@@ -192,12 +194,12 @@ public class BoardServiceImpl implements BoardService {
 
         try {
             return objectMapper.readValue(responses.getBody(), GoogleApiResponse.class);
-        } catch (JsonProcessingException e){
+        } catch (JsonProcessingException e) {
             throw new RequestDataException("구글 API 오브젝트 맵퍼 실패");
         }
     }
 
-    public Page<BoardResponse.BoardListResponse> toDtoPage(Page<Board> boardList){
+    public Page<BoardResponse.BoardListResponse> toDtoPage(Page<Board> boardList) {
         return boardList.map(BoardResponse.BoardListResponse::new);
     }
 }
