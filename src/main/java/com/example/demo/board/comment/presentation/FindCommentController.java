@@ -1,18 +1,21 @@
 package com.example.demo.board.comment.presentation;
 
 import com.example.demo.board.comment.application.CommentService;
-import com.example.demo.board.comment.domain.Comment;
+import com.example.demo.board.comment.presentation.dto.CommentRequest;
 import com.example.demo.board.comment.presentation.dto.CommentResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -21,17 +24,21 @@ import java.util.List;
 @RequestMapping("/board/comment")
 @Tag(name = "댓글 API")
 public class FindCommentController {
-    private final CommentService commentService;
 
+    private final CommentService commentService;
     @GetMapping("/{boardId}")
-    @Operation(summary = "게시글 별 댓글 조회")
+    @Operation(summary = "댓글 받기", description = "게시글에 댓글 불러옵니다.")
     @ApiResponses(
             value = {
-                    @ApiResponse(responseCode = "200", description = "댓글 조회 성공"),
-                    @ApiResponse(responseCode = "400", description = "댓글 조회 실패")
+                    @ApiResponse(responseCode = "200", description = "댓글 등록 완료")
             }
     )
-    public ResponseEntity<List<CommentResponse.CommentListResponse>> findByBoardId(@PathVariable Long boardId){
-        return ResponseEntity.ok(commentService.findByBoardId(boardId));
+    public ResponseEntity<Page<CommentResponse.FindByBoardId>> findByBoardId(
+            @RequestParam(required = false, defaultValue = "1", value = "page") int page,
+            @PathVariable("boardId") Long boardId,
+            HttpServletRequest request
+    ) {
+        Page<CommentResponse.FindByBoardId> rtn = commentService.findByBoardId(boardId, page);
+        return ResponseEntity.ok(rtn);
     }
 }

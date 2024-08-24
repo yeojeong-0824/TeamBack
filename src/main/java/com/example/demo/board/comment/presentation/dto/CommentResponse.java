@@ -1,32 +1,32 @@
 package com.example.demo.board.comment.presentation.dto;
 
 import com.example.demo.board.comment.domain.Comment;
+import lombok.Builder;
 
 public class CommentResponse {
-
-    public record CommentSaveResponse(
-            String body,
-            String memberNickname
+    @Builder
+    public record FindByBoardId(
+            Integer score,
+            String comment,
+            MemberInfo member
     ) {
-        public CommentSaveResponse(Comment comment){
-            this (
-                    comment.getBody(),
-                    comment.getMember().getNickname()
-            );
+        @Builder
+        private record MemberInfo(
+                Long id,
+                String nickname
+        ){}
+
+        public static FindByBoardId toDto(Comment entity) {
+
+            return FindByBoardId.builder()
+                    .score(entity.getScore())
+                    .comment(entity.getComment())
+                    .member(MemberInfo.builder()
+                            .id(entity.getMember().getId())
+                            .nickname(entity.getMember().getNickname())
+                            .build())
+                    .build();
         }
     }
 
-    public record CommentListResponse (
-            Long id,
-            String body,
-            String memberNickname
-    ) {
-        public CommentListResponse(Comment comment){
-            this (
-                    comment.getId(),
-                    comment.getBody(),
-                    comment.getMember().getNickname()
-            );
-        }
-    }
 }
