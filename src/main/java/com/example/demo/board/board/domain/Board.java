@@ -75,8 +75,8 @@ public class Board extends BaseTime {
         this.body = request.body();
     }
 
-    public void addViewCount(Integer view) {
-        this.view = view;
+    public void addViewCount() {
+        this.view += 1;
     }
 
     public void commentCountUp(){this.commentCount += 1;}

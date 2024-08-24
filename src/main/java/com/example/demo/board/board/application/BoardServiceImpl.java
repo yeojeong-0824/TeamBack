@@ -20,6 +20,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.redisson.api.RLock;
+import org.redisson.api.RedissonClient;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -32,6 +34,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @Service
@@ -43,6 +46,8 @@ public class BoardServiceImpl implements BoardService {
     private final BoardRepository boardRepository;
     private final MemberRepository memberRepository;
     private final BoardScoreRepository boardScoreRepository;
+
+    private final RedissonClient redissonClient;
 
     private final RedisRepository redisRepository;
     private final AutocompleteService autocompleteService;
@@ -101,20 +106,28 @@ public class BoardServiceImpl implements BoardService {
     }
 
     // 하나의 게시글
-    @Transactional(readOnly = false)
+    @Transactional
     @Override
     @MethodTimer(method = "BoardService.findById()")
     public BoardResponse.BoardReadResponse findById(Long id, Long memberId) {
         Board board = boardRepository.findById(id)
                 .orElseThrow(() -> new NotFoundDataException("해당 게시글을 찾을 수 없습니다."));
 
-        long increasesViewCount = redisRepository.incrementViewCount(id);
+        RLock lock = redissonClient.getLock(id.toString());
 
         try {
-            board.addViewCount((int) increasesViewCount);
-            boardRepository.saveAndFlush(board);
-        } catch (Exception e) {
-            throw new RuntimeException("데이터베이스에 저장하지 못했습니다.", e);
+            boolean available = lock.tryLock(10, 1, TimeUnit.SECONDS);
+
+            if (!available) {
+                throw new RuntimeException("lock 획득 실패");
+            }
+
+            board.addViewCount();
+            boardRepository.save(board);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        } finally {
+            lock.unlock();
         }
 
         Optional<BoardScore> boardScoreByMember = boardScoreRepository.findByBoard_IdAndMember_Id(id, memberId);
