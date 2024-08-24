@@ -13,7 +13,7 @@ public class CommentRequest {
     @Builder
     public record Save(
             @NotBlank
-            @Min(1) @Max(10)
+            @Min(1) @Max(5)
             Integer score,
             String comment
     ){

@@ -7,7 +7,8 @@ public class CommentResponse {
     @Builder
     public record FindByBoardId(
             Integer score,
-            String comment
+            String comment,
+            MemberInfo member
     ) {
         @Builder
         private record MemberInfo(
@@ -16,9 +17,15 @@ public class CommentResponse {
         ){}
 
         public static FindByBoardId toDto(Comment entity) {
+
             return FindByBoardId.builder()
                     .score(entity.getScore())
-                    .
+                    .comment(entity.getComment())
+                    .member(MemberInfo.builder()
+                            .id(entity.getMember().getId())
+                            .nickname(entity.getMember().getNickname())
+                            .build())
+                    .build();
         }
     }
 }

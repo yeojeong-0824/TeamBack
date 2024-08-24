@@ -5,10 +5,12 @@ import com.example.demo.board.board.domain.BoardRepository;
 import com.example.demo.board.comment.domain.Comment;
 import com.example.demo.board.comment.domain.CommentRepository;
 import com.example.demo.board.comment.presentation.dto.CommentRequest;
+import com.example.demo.board.comment.presentation.dto.CommentResponse;
 import com.example.demo.config.exception.NotFoundDataException;
 import com.example.demo.member.member.domain.Member;
 import com.example.demo.member.member.domain.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -28,5 +30,10 @@ public class CommentServiceImpl implements CommentService {
 
         Comment entity = CommentRequest.Save.toEntity(takenDto, savedBoard, savedMember);
         commentRepository.save(entity);
+    }
+
+    @Override
+    public Page<CommentResponse.FindByBoardId> findByBoardId(Long takenBoardId) {
+        return null;
     }
 }
