@@ -42,6 +42,11 @@ public class RedisRepository {
         redisTemplate.delete(key);
     }
 
+    public void restViewCount(Long key) {
+        String redisKey = String.valueOf(key);
+        redisTemplate.delete(redisKey);
+    }
+
     public Boolean lock(Long key) {
         return redisTemplate
                 .opsForValue()
