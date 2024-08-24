@@ -55,23 +55,20 @@ jobs:
 
   deploy:
     name: 도커 이미지를 활용하여 서버에 배포
-    runs-on: ubuntu-latest
-    permissions: write-all
-    needs: build
+    runs-on: ubuntu-latest # 실행될 인스턴스 OS와 버전
 
     steps:
-      - uses: actions/checkout@v3
-
-      - name: 배포
-        uses: appleboy/ssh-action@v1.0.0
+      - name: excuting remote ssh commands
+        uses: appleboy/ssh-action@v0.1.6 # ssh 접속하는 오픈소스
         with:
-          host: ${{secrets.GCP_HOST}}
-          username: ${{secrets.GCP_USERNAME}}
-          key: ${{secrets.GCP_PRIVATEKEY}}
-          script: |
-            sudo docker login -u ${{ secrets.DOCKERHUB_ID }} -p ${{ secrets.DOCKERHUB_PASSWORD }}
-            sudo docker pull ${{secrets.DOCKERHUB_USERNAME}}/website
-            sudo docker stop website
-            sudo docker container rm website
-            sudo docker run -dit -p 80:8080 --name website --link redis:redis ${{secrets.DOCKERHUB_USERNAME}}/website
-            sudo docker image prune -f
+          host: ${{ secrets.REMOTE_IP }} # 인스턴스 IP
+          username: ${{ secrets.REMOTE_USER }} # 우분투 아이디
+          key: ${{ secrets.REMOTE_PRIVATE_KEY }} # ec2 instance pem key
+          port: ${{ secrets.REMOTE_SSH_PORT }} # 접속포트
+          script: | # 실행할 스크립트
+            cd /home/ubuntu/Server-V2
+            git pull origin dev
+            pm2 kill
+            npm i --force
+            npm run build
+            pm2 start dist/main.js

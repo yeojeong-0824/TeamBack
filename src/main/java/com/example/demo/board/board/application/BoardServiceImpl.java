@@ -101,7 +101,7 @@ public class BoardServiceImpl implements BoardService {
         boardRepository.delete(board);
     }
 
-    // 하나의 게시글
+    // 하나의 게시글1
     @Transactional
     @Override
     @MethodTimer(method = "BoardService.findById()")
@@ -111,8 +111,8 @@ public class BoardServiceImpl implements BoardService {
 
         long increasesViewCount = redisRepository.incrementViewCount(id);
 
-            board.addViewCount((int) increasesViewCount);
-            boardRepository.save(board);
+        board.addViewCount((int) increasesViewCount);
+        boardRepository.save(board);
 
         Optional<BoardScore> boardScoreByMember = boardScoreRepository.findByBoard_IdAndMember_Id(id, memberId);
         return new BoardResponse.BoardReadResponse(board);

@@ -1,29 +1,35 @@
-  pipeline {
-    agent any
-
-    stages {
-    stage('Checkout') {
-    steps {
-  git branch: 'main', url: 'https://github.com/yeojeong-0824/back.git'
+pipeline {
+  environment {
+    repository = "website9911/back"
+    DOCKERHUB_CREDENTIALS = credentials('sue-dockerhub') // jenkins에 등록해 놓은 docker hub credentials 이름
+    dockerImage = ''
   }
-  }
-
-    stage('Build') {
-    steps {
-    sh './gradlew bootJar'
-  }
-  }
-
-    stage('Deploy') {
-    steps {
-  sshagent(credentials: ['key-yeojeong']) {
-                          // 원격 서버에 JAR 파일을 복사
-                          sh 'scp -o StrictHostKeyChecking=no build/libs/yeojeong-0.0.1-SNAPSHOT.jar ubuntu@3.25.206.207/home/ubuntu/'
-                          
-                          // 원격 서버에서 스크립트를 실행
-                          sh 'ssh -o StrictHostKeyChecking=no ubuntu@3.25.206.207 "sh /home/ubuntu/run.sh"'
-    }
-    }
-    }
+  agent any
+  stages {
+    stage('Building our image') {
+      steps {
+      script {
+      sh "cp /var/lib/jenkins/workspace/sue_jenkins_project/build/libs/sue-member-0.0.1-SNAPSHOT.war /var/lib/jenkins/workspace/pipeline/" // war 파일을 현재 위치로 복사
+      dockerImage = docker.build repository + ":$BUILD_NUMBER"
+      }
     }
   }
+  stage('Login'){
+  steps{
+    sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin' // docker hub 로그인
+    }
+  }
+  stage('Deploy our image') {
+  steps {
+    script {
+      sh 'docker push $repository:$BUILD_NUMBER' //docker push
+      }
+    }
+  }
+  stage('Cleaning up') {
+  steps {
+      sh "docker rmi $repository:$BUILD_NUMBER" // docker image 제거
+      }
+    }
+  }
+}
