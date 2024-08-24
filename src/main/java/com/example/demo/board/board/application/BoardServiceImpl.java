@@ -101,7 +101,7 @@ public class BoardServiceImpl implements BoardService {
         boardRepository.delete(board);
     }
 
-    // 하나의 게시글
+    // 하나의 게시글1
     @Transactional
     @Override
     @MethodTimer(method = "BoardService.findById()")
