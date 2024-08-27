@@ -1,3 +1,4 @@
 FROM openjdk:17
-COPY build/libs/yeojeong-0.0.1-SNAPSHOT.jar docker-springboot.jar
-ENTRYPOINT ["java", "-jar", "/docker-springboot.jar"]
+COPY build/libs/*.jar /deploy/app.jar
+EXPOSE 8080
+CMD java -jar -Dserver.port=8080 /deploy/app.jar
