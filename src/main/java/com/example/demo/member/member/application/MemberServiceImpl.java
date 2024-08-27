@@ -2,8 +2,8 @@ package com.example.demo.member.member.application;
 
 import com.example.demo.board.board.domain.Board;
 import com.example.demo.board.board.domain.BoardRepository;
-import com.example.demo.board.boardscore.domain.BoardScore;
-import com.example.demo.board.boardscore.domain.BoardScoreRepository;
+import com.example.demo.board.comment.domain.Comment;
+import com.example.demo.board.comment.domain.CommentRepository;
 import com.example.demo.config.exception.RequestDataException;
 import com.example.demo.config.util.methodtimer.MethodTimer;
 import com.example.demo.config.exception.DuplicatedException;
@@ -26,7 +26,7 @@ public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
     private final BoardRepository boardRepository;
-    private final BoardScoreRepository boardScoreRepository;
+    private final CommentRepository commentRepository;
 
     private final PasswordEncoder passwordEncoder;
 
@@ -50,7 +50,6 @@ public class MemberServiceImpl implements MemberService {
         String takenPassword = takenDto.password();
         if(!passwordEncoder.matches(takenPassword, savedPassword)) throw new RequestDataException("비밀번호가 일치하지 않습니다");
 
-        boardScoreRepository.deleteByMember(savedEntity);
         boardRepository.deleteByMember(savedEntity);
         memberRepository.deleteById(takenMemberId);
     }
@@ -76,14 +75,14 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public Page<MemberResponse.BoardScoreInfo> findBoardScoreById(Long takenMemberId, int takenPage) {
+    public Page<MemberResponse.CommentInfo> findCommentById(Long takenMemberId, int takenPage) {
         Member savedEntity = memberRepository.findById(takenMemberId)
                 .orElseThrow(() -> new NotFoundDataException("해당 유저를 찾지 못했습니다"));
 
         PageRequest pageRequest = PageRequest.of(takenPage - 1, 10, Sort.by("id").descending());
-        Page<BoardScore> savedBoardScorePage = boardScoreRepository.findByMember(savedEntity, pageRequest);
+        Page<Comment> savedComment = commentRepository.findByMember(savedEntity, pageRequest);
 
-        return savedBoardScorePage.map(MemberResponse.BoardScoreInfo::toDto);
+        return savedComment.map(MemberResponse.CommentInfo::toDto);
     }
 
     @Override

@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.*;
 public class FindBoardController {
     private final BoardServiceImpl boardServiceImpl;
 
-    @PostMapping("/{boardId}")
+    @GetMapping("/{boardId}")
     @Operation(summary = "게시글 호출")
     @ApiResponses(
             value = {

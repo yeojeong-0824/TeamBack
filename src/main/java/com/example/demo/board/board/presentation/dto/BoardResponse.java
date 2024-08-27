@@ -1,7 +1,6 @@
 package com.example.demo.board.board.presentation.dto;
 
 import com.example.demo.board.board.domain.Board;
-import com.example.demo.board.boardscore.domain.BoardScore;
 import lombok.*;
 
 import java.util.List;

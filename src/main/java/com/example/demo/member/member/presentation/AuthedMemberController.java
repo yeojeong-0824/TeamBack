@@ -64,7 +64,7 @@ public class AuthedMemberController {
         return ResponseEntity.ok(memberService.findBoardById(memberId, page));
     }
 
-    @GetMapping("/boardScore")
+    @GetMapping("/comment")
     @Operation(summary = "해당 회원의 별점 등록 목록 확인", description = "해당 회원이 등록한 별점의 정보를 받아옵니다.")
     @ApiResponses(
             value = {
@@ -73,13 +73,13 @@ public class AuthedMemberController {
                     @ApiResponse(responseCode = "403", description = "권한 없음"),
             }
     )
-    public ResponseEntity<Page<MemberResponse.BoardScoreInfo>> findBoardScoreById(@RequestParam(required = false, defaultValue = "1", value = "page") int page,
+    public ResponseEntity<Page<MemberResponse.CommentInfo>> findBoardScoreById(@RequestParam(required = false, defaultValue = "1", value = "page") int page,
                                                                              HttpServletRequest request) {
         String ip = request.getRemoteAddr();
         log.info("{}: 작성 게시글 호출", ip);
 
         Long memberId = SecurityUtil.getCurrentMemberId();
-        return ResponseEntity.ok(memberService.findBoardScoreById(memberId, page));
+        return ResponseEntity.ok(memberService.findCommentById(memberId, page));
     }
 
     @DeleteMapping

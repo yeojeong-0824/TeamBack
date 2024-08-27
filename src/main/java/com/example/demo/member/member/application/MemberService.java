@@ -14,5 +14,5 @@ public interface MemberService {
     void checkDuplicated(MemberRequest.DataConfirmMember takenDto);
     void patchById(Long takenMemberId, MemberRequest.PatchMember takenDto);
     Page<MemberResponse.BoardInfo> findBoardById(Long takenMemberId, int takenPage);
-    Page<MemberResponse.BoardScoreInfo> findBoardScoreById(Long takenMemberId, int takenPage);
+    Page<MemberResponse.CommentInfo> findCommentById(Long takenMemberId, int takenPage);
 }

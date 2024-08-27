@@ -8,8 +8,6 @@ import com.example.demo.board.board.presentation.dto.BoardRequest;
 import com.example.demo.board.board.presentation.dto.BoardResponse;
 import com.example.demo.board.board.presentation.dto.GoogleApiRequest;
 import com.example.demo.board.board.presentation.dto.GoogleApiResponse;
-import com.example.demo.board.boardscore.domain.BoardScore;
-import com.example.demo.board.boardscore.domain.BoardScoreRepository;
 import com.example.demo.config.util.methodtimer.MethodTimer;
 import com.example.demo.config.exception.NotFoundDataException;
 import com.example.demo.config.exception.RequestDataException;
@@ -42,7 +40,6 @@ public class BoardServiceImpl implements BoardService {
 
     private final BoardRepository boardRepository;
     private final MemberRepository memberRepository;
-    private final BoardScoreRepository boardScoreRepository;
 
     private final RedisRepository redisRepository;
     private final AutocompleteService autocompleteService;
@@ -116,7 +113,7 @@ public class BoardServiceImpl implements BoardService {
 
         redisRepository.restViewCount(id);
 
-        Optional<BoardScore> boardScoreByMember = boardScoreRepository.findByBoard_IdAndMember_Id(id, memberId);
+//        Optional<BoardScore> boardScoreByMember = boardScoreRepository.findByBoard_IdAndMember_Id(id, memberId);
         return new BoardResponse.BoardReadResponse(board);
     }
 

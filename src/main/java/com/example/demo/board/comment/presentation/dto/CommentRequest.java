@@ -7,12 +7,13 @@ import com.example.demo.member.member.domain.Member;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 
 public class CommentRequest {
     @Builder
     public record Save(
-            @NotBlank
+            @NotNull
             @Min(1) @Max(5)
             Integer score,
             String comment
@@ -28,7 +29,7 @@ public class CommentRequest {
     }
 
     public record Edit(
-            @NotBlank
+            @NotNull
             @Min(1) @Max(5)
             Integer score,
             String comment

@@ -1,7 +1,7 @@
 package com.example.demo.member.member.presentation.dto;
 
 import com.example.demo.board.board.domain.Board;
-import com.example.demo.board.boardscore.domain.BoardScore;
+import com.example.demo.board.comment.domain.Comment;
 import com.example.demo.member.member.domain.Member;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
@@ -56,22 +56,33 @@ public class MemberResponse {
     }
 
     @Builder
-    @Schema(name = "유저가 남긴 별점 정보 호출")
-    public record BoardScoreInfo(
+    @Schema(name = "유저가 작성한 댓글 정보 호출")
+    public record CommentInfo(
             @Schema(example = "1")
-            Long boardId,
-
-            @Schema(example = "소인국 갔다온 썰 푼다")
-            String boardTitle,
+            CommentBoardInfo boardInfo,
 
             @Schema(example = "5")
-            Integer score
+            Integer score,
+
+            @Schema(example = "소인국 가보니까 진짜 쪼만했음")
+            String comment
     ){
-        public static BoardScoreInfo toDto(BoardScore boardScore) {
-            return BoardScoreInfo.builder()
-                    .boardId(boardScore.getBoard().getId())
-                    .boardTitle(boardScore.getBoard().getTitle())
-                    .score(boardScore.getScore())
+        @Builder
+        private record CommentBoardInfo(
+                @Schema(example = "1")
+                Long id,
+
+                @Schema(example = "소인국 갔다온 썰 푼다")
+                String title
+        ){}
+        public static CommentInfo toDto(Comment comment) {
+            return CommentInfo.builder()
+                    .boardInfo(CommentBoardInfo.builder()
+                            .id(comment.getBoard().getId())
+                            .title(comment.getBoard().getTitle())
+                            .build())
+                    .score(comment.getScore())
+                    .comment(comment.getComment())
                     .build();
         }
     }
