@@ -8,7 +8,7 @@ spring:
     host: localhost
     port: 6379
 
-JWTKey: DevKey
+JWTKey: DevKey1
 EmailPassword: ${emailPassword}
 
 autocomplete:
