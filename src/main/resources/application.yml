@@ -8,7 +8,7 @@ spring:
     host: redis
     port: 6379
 
-JWTKey: DevKey1
+JWTKey: DevKey12
 EmailPassword: ${emailPassword}
 
 autocomplete:
