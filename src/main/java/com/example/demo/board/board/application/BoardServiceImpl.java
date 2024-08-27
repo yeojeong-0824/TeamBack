@@ -109,7 +109,7 @@ public class BoardServiceImpl implements BoardService {
         Board board = boardRepository.findById(id)
                 .orElseThrow(() -> new NotFoundDataException("해당 게시글을 찾을 수 없습니다."));
 
-        redisRepository.restViewCount(id);
+//        redisRepository.restViewCount(id);
 
         long increasesViewCount = redisRepository.incrementViewCount(id);
 
