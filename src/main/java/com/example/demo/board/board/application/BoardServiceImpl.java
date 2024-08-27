@@ -18,6 +18,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.redisson.api.RLock;
+import org.redisson.api.RedissonClient;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -30,6 +32,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @Service
@@ -43,6 +46,8 @@ public class BoardServiceImpl implements BoardService {
 
     private final RedisRepository redisRepository;
     private final AutocompleteService autocompleteService;
+
+    private final RedissonClient redissonClient;
 
     // 게시글 작성
     @Override
@@ -106,17 +111,26 @@ public class BoardServiceImpl implements BoardService {
     @Override
     @MethodTimer(method = "개별 게시글 조회")
     public BoardResponse.BoardReadResponse findById(Long id, Long memberId) {
+        final String lockName = "like:lock";
+        final RLock lock = redissonClient.getLock(lockName);
+
         Board board = boardRepository.findById(id)
                 .orElseThrow(() -> new NotFoundDataException("해당 게시글을 찾을 수 없습니다."));
 
-        long increasesViewCount = redisRepository.incrementViewCount(id);
+        try {
+            if(!lock.tryLock(1, 3, TimeUnit.SECONDS)) return null;
 
-        board.addViewCount((int) increasesViewCount);
-        boardRepository.save(board);
+            board.addViewCount();
+            boardRepository.save(board);
 
-        redisRepository.restViewCount(id);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if(lock != null && lock.isLocked()) {
+                lock.unlock();
+            }
+        }
 
-//        Optional<BoardScore> boardScoreByMember = boardScoreRepository.findByBoard_IdAndMember_Id(id, memberId);
         return new BoardResponse.BoardReadResponse(board);
     }
 
