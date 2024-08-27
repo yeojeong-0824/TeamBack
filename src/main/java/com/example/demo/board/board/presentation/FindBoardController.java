@@ -33,7 +33,7 @@ public class FindBoardController {
     public ResponseEntity<BoardResponse.BoardReadResponse> getBoard(@PathVariable("boardId") Long boardId,
                                                                     HttpServletRequest requestArr){
         String ip = requestArr.getRemoteAddr();
-        log.info("{}: 개별 게시글 호출", ip);
+        log.info("{}: 개별 게시글 엔드포인트 호출", ip);
 
         Long memberId = SecurityUtil.getCurrentMemberId();
 
@@ -53,7 +53,7 @@ public class FindBoardController {
             HttpServletRequest requestArr){
 
         String ip = requestArr.getRemoteAddr();
-        log.info("{}: 게시글 목록 호출", ip);
+        log.info("{}: 게시글 목록 엔드포인트 호출", ip);
 
         return ResponseEntity.ok(boardServiceImpl.findAll(page));
     }
@@ -74,7 +74,7 @@ public class FindBoardController {
             HttpServletRequest requestArr){
 
         String ip = requestArr.getRemoteAddr();
-        log.info("{}: 조건에 따른 게시글 검색, 정렬 호출", ip);
+        log.info("{}: 조건에 따른 게시글 검색, 정렬 엔드포인트 호출", ip);
 
         return ResponseEntity.ok(boardServiceImpl.findAllBySearchKeyword(searchKeyword, keyword, sortKeyword, page));
     }

@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/board/comment")
@@ -38,6 +40,9 @@ public class FindCommentController {
             @PathVariable("boardId") Long boardId,
             HttpServletRequest request
     ) {
+        String ip = request.getRemoteAddr();
+        log.info("{}: 게시글에 작성된 댓글 조회 엔드포인트 호출", ip);
+
         Page<CommentResponse.FindByBoardId> rtn = commentService.findByBoardId(boardId, page);
         return ResponseEntity.ok(rtn);
     }

@@ -47,6 +47,7 @@ public class BoardServiceImpl implements BoardService {
     // 게시글 작성
     @Override
     @Transactional
+    @MethodTimer(method = "게시글 작성")
     public void save(BoardRequest.DefaultBoard request, Long memberId) {
         Member member = memberRepository.findById(memberId).
                 orElseThrow(() -> new NotFoundDataException("해당 회원을 찾을 수 없습니다."));
@@ -71,6 +72,7 @@ public class BoardServiceImpl implements BoardService {
     // 게시글 수정
     @Override
     @Transactional
+    @MethodTimer(method = "게시글 수정")
     public void updateById(Long id, Long memberId, BoardRequest.BoardUpdateRequest request) {
         Board board = boardRepository.findById(id)
                 .orElseThrow(() -> new NotFoundDataException("해당 게시글을 찾을 수 없습니다."));
@@ -85,6 +87,7 @@ public class BoardServiceImpl implements BoardService {
     // 게시글 삭제
     @Override
     @Transactional
+    @MethodTimer(method = "게시글 삭제")
     public void deleteById(Long id, Long memberId) {
         Board board = boardRepository.findById(id)
                 .orElseThrow(() -> new NotFoundDataException("해당 게시글을 찾을 수 없습니다."));
@@ -101,7 +104,7 @@ public class BoardServiceImpl implements BoardService {
     // 하나의 게시글1
     @Transactional
     @Override
-    @MethodTimer(method = "BoardService.findById()")
+    @MethodTimer(method = "개별 게시글 조회")
     public BoardResponse.BoardReadResponse findById(Long id, Long memberId) {
         Board board = boardRepository.findById(id)
                 .orElseThrow(() -> new NotFoundDataException("해당 게시글을 찾을 수 없습니다."));
@@ -119,6 +122,7 @@ public class BoardServiceImpl implements BoardService {
 
     // 전체 게시글
     @Override
+    @MethodTimer(method = "게시글 조회")
     public Page<BoardResponse.BoardListResponse> findAll(int page) {
         PageRequest request = PageRequest.of(page - 1, 10, Sort.by("id").descending());
 
@@ -128,6 +132,7 @@ public class BoardServiceImpl implements BoardService {
 
     // 조건에 따른 게시글 검색, 정렬
     @Override
+    @MethodTimer(method = "조건에 따른 게시글 조회")
     public Page<BoardResponse.BoardListResponse> findAllBySearchKeyword(String searchKeyword, String keyword, String sortKeyword, int page) {
         // 생성 날짜
         PageRequest request = PageRequest.of(page - 1, 10, Sort.by("id").descending());

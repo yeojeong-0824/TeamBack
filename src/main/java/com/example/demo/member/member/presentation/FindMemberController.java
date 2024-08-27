@@ -46,7 +46,7 @@ public class FindMemberController {
 
                                               HttpServletRequest request) {
         String ip = request.getRemoteAddr();
-        log.info("{}: 새로운 비밀번호 발급 호출", ip);
+        log.info("{}: 새로운 비밀번호 발급 엔드포인트 호출", ip);
 
         String newPassword = memberService.createNewPassword(username, email);
         findMemberEmailService.sendNewPasswordEmail(email, newPassword);
@@ -69,7 +69,7 @@ public class FindMemberController {
 
                                                HttpServletRequest request) {
         String ip = request.getRemoteAddr();
-        log.info("{}: 아이디 찾기 호출", ip);
+        log.info("{}: 아이디 찾기 엔드포인트 호출", ip);
 
         String username = memberService.findUsernameByEmail(email);
         findMemberEmailService.sendUsernameEmail(email, username);

@@ -44,7 +44,7 @@ public class AuthedBoardController {
             HttpServletRequest requestArr
     ){
         String ip = requestArr.getRemoteAddr();
-        log.info("{}: 게시글 작성 호출", ip);
+        log.info("{}: 게시글 작성 엔드포인트 호출", ip);
 
         Long memberId = SecurityUtil.getCurrentMemberId();
 
@@ -58,7 +58,7 @@ public class AuthedBoardController {
                                                             HttpServletRequest requestArr){
 
         String ip = requestArr.getRemoteAddr();
-        log.info("{}: 검색 호출", ip);
+        log.info("{}: 검색 엔드포인트 호출", ip);
 
         return ResponseEntity.ok(boardService.getSearchLocation(textQuery));
     }
@@ -78,7 +78,7 @@ public class AuthedBoardController {
             HttpServletRequest requestArr
     ){
         String ip = requestArr.getRemoteAddr();
-        log.info("{}: 게시글 수정 호출", ip);
+        log.info("{}: 게시글 수정 엔드포인트 호출", ip);
 
         Long memberId = SecurityUtil.getCurrentMemberId();
         boardService.updateById(boardId, memberId, request);
@@ -97,7 +97,7 @@ public class AuthedBoardController {
     public ResponseEntity<String> boardDelete(@PathVariable("boardId") Long boardId,
                                               HttpServletRequest requestArr){
         String ip = requestArr.getRemoteAddr();
-        log.info("{}: 게시글 삭제 호출", ip);
+        log.info("{}: 게시글 삭제 엔드포인트 호출", ip);
 
         Long memberId = SecurityUtil.getCurrentMemberId();
         boardService.deleteById(boardId, memberId);

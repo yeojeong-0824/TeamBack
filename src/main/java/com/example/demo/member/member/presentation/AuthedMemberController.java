@@ -40,7 +40,7 @@ public class AuthedMemberController {
     )
     public ResponseEntity<MemberResponse.FindMember> findById(HttpServletRequest request) {
         String ip = request.getRemoteAddr();
-        log.info("{}: 회원정보 호출", ip);
+        log.info("{}: 회원정보 엔드포인트 호출", ip);
 
         Long memberId = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(memberService.findById(memberId));
@@ -58,7 +58,7 @@ public class AuthedMemberController {
     public ResponseEntity<Page<MemberResponse.BoardInfo>> findBoardById(@RequestParam(required = false, defaultValue = "1", value = "page") int page,
                                                                         HttpServletRequest request) {
         String ip = request.getRemoteAddr();
-        log.info("{}: 작성 게시글 호출", ip);
+        log.info("{}: 작성한 게시글 엔드포인트 호출", ip);
 
         Long memberId = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(memberService.findBoardById(memberId, page));
@@ -76,7 +76,7 @@ public class AuthedMemberController {
     public ResponseEntity<Page<MemberResponse.CommentInfo>> findBoardScoreById(@RequestParam(required = false, defaultValue = "1", value = "page") int page,
                                                                              HttpServletRequest request) {
         String ip = request.getRemoteAddr();
-        log.info("{}: 작성 게시글 호출", ip);
+        log.info("{}: 작성한 댓글 엔드포인트 호출", ip);
 
         Long memberId = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(memberService.findCommentById(memberId, page));
@@ -95,7 +95,7 @@ public class AuthedMemberController {
                                                  @Valid @RequestBody MemberRequest.DeleteMember takenDto,
                                                  HttpServletRequest request) {
         String ip = request.getRemoteAddr();
-        log.info("{}: 유저 탈퇴 호출", ip);
+        log.info("{}: 유저 탈퇴 엔드포인트 호출", ip);
 
         Long memberId = SecurityUtil.getCurrentMemberId();
         memberService.deleteByMemberId(memberId, takenDto);
@@ -116,7 +116,7 @@ public class AuthedMemberController {
                                                 @Valid @RequestBody MemberRequest.PatchMember takenDto,
                                                 HttpServletRequest request) {
         String ip = request.getRemoteAddr();
-        log.info("{}: 회원 정보 수정 호출", ip);
+        log.info("{}: 회원 정보 수정 엔드포인트 호출", ip);
 
         Long memberId = SecurityUtil.getCurrentMemberId();
         memberService.patchById(memberId, takenDto);

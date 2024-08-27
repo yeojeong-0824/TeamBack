@@ -9,6 +9,7 @@ import com.example.demo.board.comment.presentation.dto.CommentRequest;
 import com.example.demo.board.comment.presentation.dto.CommentResponse;
 import com.example.demo.config.exception.NotFoundDataException;
 import com.example.demo.config.exception.RequestDataException;
+import com.example.demo.config.util.methodtimer.MethodTimer;
 import com.example.demo.member.member.domain.Member;
 import com.example.demo.member.member.domain.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.stream.Collectors;
 
@@ -28,6 +30,8 @@ public class CommentServiceImpl implements CommentService {
     private final CommentRepository commentRepository;
 
     @Override
+    @Transactional
+    @MethodTimer(method = "댓글 작성")
     public void save(CommentRequest.Save takenDto, Long takenBoardId, Long takenMemberId) {
         Board savedBoard = boardRepository.findById(takenBoardId)
                 .orElseThrow(() -> new NotFoundDataException("해당 게시글을 찾을 수 없습니다"));
@@ -39,6 +43,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
+    @MethodTimer(method = "게시글에 작성된 댓글 조회")
     public Page<CommentResponse.FindByBoardId> findByBoardId(Long takenBoardId, int page) {
         PageRequest request = PageRequest.of(page - 1, 10, Sort.by("id").descending());
         Page<Comment> commentList = commentRepository.findAllByBoardId(takenBoardId, request);
@@ -47,6 +52,8 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
+    @Transactional
+    @MethodTimer(method = "댓글 수정")
     public void updateById(Long commentId, Long takenBoardId, Long takenMemberId, CommentRequest.Edit editDto){
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new NotFoundDataException("해당 댓글을 찾을 수 없습니다"));
@@ -59,6 +66,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
+    @MethodTimer(method = "댓글 삭제")
     public void deleteById(Long commentId, Long takenMemberId){
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new NotFoundDataException("해당 댓글을 찾을 수 없습니다"));

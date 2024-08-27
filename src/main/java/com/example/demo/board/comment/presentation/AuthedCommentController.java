@@ -43,11 +43,11 @@ public class AuthedCommentController {
             HttpServletRequest request
     ) {
         String ip = request.getRemoteAddr();
-        log.info("{}: 별점 등록 호출", ip);
+        log.info("{}: 댓글 작성 엔드포인트 호출", ip);
 
         Long memberId = SecurityUtil.getCurrentMemberId();
         commentService.save(takenDto, boardId, memberId);
-        return ResponseEntity.ok("별점 등록에 성공하였습니다");
+        return ResponseEntity.ok("댓글 등록에 성공하였습니다");
     }
 
     @PutMapping("/{boardId}/{commentId}")
@@ -64,9 +64,12 @@ public class AuthedCommentController {
             @Valid @RequestBody CommentRequest.Edit takenDto,
             HttpServletRequest request
     ){
+        String ip = request.getRemoteAddr();
+        log.info("{}: 댓글 수정 엔드포인트 호출", ip);
+
         Long memberId = SecurityUtil.getCurrentMemberId();
         commentService.updateById(commentId, boardId, memberId, takenDto);
-        return ResponseEntity.ok("별점 수정에 성공하였습니다");
+        return ResponseEntity.ok("댓글 수정에 성공하였습니다");
     }
 
     @DeleteMapping("/{commentId}")
@@ -81,8 +84,11 @@ public class AuthedCommentController {
             @PathVariable Long commentId,
             HttpServletRequest request
     ){
+        String ip = request.getRemoteAddr();
+        log.info("{}: 댓글 삭제 엔드포인트 호출", ip);
+
         Long memberId = SecurityUtil.getCurrentMemberId();
         commentService.deleteById(commentId, memberId);
-        return ResponseEntity.ok("별점 삭제에 성공하였습니다");
+        return ResponseEntity.ok("댓글 삭제에 성공하였습니다");
     }
 }

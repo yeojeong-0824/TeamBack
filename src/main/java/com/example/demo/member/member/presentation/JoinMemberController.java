@@ -55,7 +55,7 @@ public class JoinMemberController {
                                        @Valid @RequestBody MemberRequest.SaveMember takenDto,
                                        HttpServletRequest request) {
         String ip = request.getRemoteAddr();
-        log.info("{}: 유저 생성 API 호출", ip);
+        log.info("{}: 유저 생성 엔드포인트 호출", ip);
 
 //        if(!joinMemberEmailService.checkAuthedEmail(takenDto.email()))
 //            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("인증되지 않은 이메일입니다");
@@ -77,7 +77,7 @@ public class JoinMemberController {
                                                                      @Valid @RequestBody MemberRequest.DataConfirmMember takenDto,
                                                                      HttpServletRequest request) {
         String ip = request.getRemoteAddr();
-        log.info("{}: 중복 검사 API 호출", ip);
+        log.info("{}: 중복 검사 엔드포인트 호출", ip);
 
         memberService.checkDuplicated(takenDto);
         return ResponseEntity.ok("중복되지 않았습니다");
@@ -98,7 +98,7 @@ public class JoinMemberController {
                                                 @PathVariable("email") String email,
                                                 HttpServletRequest request) {
         String ip = request.getRemoteAddr();
-        log.info("{}: 이메일 인증코드 전송 API 호출", ip);
+        log.info("{}: 이메일 인증코드 전송 엔드포인트 호출", ip);
 
         memberService.checkDuplicatedByEmail(email);
 
@@ -125,7 +125,7 @@ public class JoinMemberController {
 
                                                      HttpServletRequest request) {
         String ip = request.getRemoteAddr();
-        log.info("{}: 이메일 인증 API 호출", ip);
+        log.info("{}: 이메일 인증 엔드포인트 호출", ip);
 
         return joinMemberEmailService.checkAuthedKey(email, takenDto.key()) ?
                 ResponseEntity.ok("이메일 인증에 성공하였습니다") :
