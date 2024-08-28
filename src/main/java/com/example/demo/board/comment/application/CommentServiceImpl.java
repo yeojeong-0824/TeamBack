@@ -2,14 +2,13 @@ package com.example.demo.board.comment.application;
 
 import com.example.demo.board.board.domain.Board;
 import com.example.demo.board.board.domain.BoardRepository;
-import com.example.demo.board.board.presentation.dto.BoardResponse;
 import com.example.demo.board.comment.domain.Comment;
 import com.example.demo.board.comment.domain.CommentRepository;
 import com.example.demo.board.comment.presentation.dto.CommentRequest;
 import com.example.demo.board.comment.presentation.dto.CommentResponse;
 import com.example.demo.config.exception.NotFoundDataException;
 import com.example.demo.config.exception.RequestDataException;
-import com.example.demo.config.util.methodtimer.MethodTimer;
+import com.example.demo.config.util.customannotation.MethodTimer;
 import com.example.demo.member.member.domain.Member;
 import com.example.demo.member.member.domain.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,8 +17,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor

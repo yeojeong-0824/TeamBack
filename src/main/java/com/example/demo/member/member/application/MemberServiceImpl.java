@@ -5,7 +5,7 @@ import com.example.demo.board.board.domain.BoardRepository;
 import com.example.demo.board.comment.domain.Comment;
 import com.example.demo.board.comment.domain.CommentRepository;
 import com.example.demo.config.exception.RequestDataException;
-import com.example.demo.config.util.methodtimer.MethodTimer;
+import com.example.demo.config.util.customannotation.MethodTimer;
 import com.example.demo.config.exception.DuplicatedException;
 import com.example.demo.config.exception.NotFoundDataException;
 import com.example.demo.member.member.presentation.dto.MemberRequest;

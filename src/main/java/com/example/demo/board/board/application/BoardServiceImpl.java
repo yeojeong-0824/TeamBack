@@ -8,17 +8,17 @@ import com.example.demo.board.board.presentation.dto.BoardRequest;
 import com.example.demo.board.board.presentation.dto.BoardResponse;
 import com.example.demo.board.board.presentation.dto.GoogleApiRequest;
 import com.example.demo.board.board.presentation.dto.GoogleApiResponse;
-import com.example.demo.config.util.methodtimer.MethodTimer;
+import com.example.demo.config.util.customannotation.MethodTimer;
 import com.example.demo.config.exception.NotFoundDataException;
 import com.example.demo.config.exception.RequestDataException;
 import com.example.demo.config.redis.RedisRepository;
+import com.example.demo.config.util.customannotation.RedissonLocker;
 import com.example.demo.member.member.domain.Member;
 import com.example.demo.member.member.domain.MemberRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -31,8 +31,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @Service
@@ -109,27 +107,14 @@ public class BoardServiceImpl implements BoardService {
     // 하나의 게시글1
     @Transactional
     @Override
+    @RedissonLocker(key = "findBoardById")
     @MethodTimer(method = "개별 게시글 조회")
     public BoardResponse.BoardReadResponse findById(Long id, Long memberId) {
-        final String lockName = "like:lock";
-        final RLock lock = redissonClient.getLock(lockName);
-
         Board board = boardRepository.findById(id)
                 .orElseThrow(() -> new NotFoundDataException("해당 게시글을 찾을 수 없습니다."));
 
-        try {
-            if(!lock.tryLock(1, 3, TimeUnit.SECONDS)) return null;
-
-            board.addViewCount();
-            boardRepository.save(board);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if(lock != null && lock.isLocked()) {
-                lock.unlock();
-            }
-        }
+        board.addViewCount();
+        boardRepository.save(board);
 
         return new BoardResponse.BoardReadResponse(board);
     }
