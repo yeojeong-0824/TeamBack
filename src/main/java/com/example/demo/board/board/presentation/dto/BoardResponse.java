@@ -74,7 +74,8 @@ public class BoardResponse {
             String longitude,  // 경도
             String title,
             Integer view,
-            Integer avgScore
+            Integer avgScore,
+            Integer commentCount
     ) {
         public BoardListResponse(Board board) {
             this(
@@ -85,7 +86,8 @@ public class BoardResponse {
                     board.getLongitude(),
                     board.getTitle(),
                     board.getView(),
-                    board.getAvgScore()
+                    board.getAvgScore(),
+                    board.getCommentCount()
             );
         }
     }
