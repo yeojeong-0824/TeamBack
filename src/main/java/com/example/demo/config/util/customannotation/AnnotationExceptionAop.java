@@ -62,8 +62,6 @@ public class AnnotationExceptionAop {
                 log.info("Lock({}) 획득 실패", lockName);
                 return null;
             }
-
-            log.info("Lock({}) 획득", lockName);
             Object result = joinPoint.proceed();
             return result;
 
@@ -75,7 +73,6 @@ public class AnnotationExceptionAop {
 
         } finally {
             if (locked && lock.isHeldByCurrentThread()) {
-                log.info("Lock({}) 해제", lockName);
                 lock.unlock();
             }
         }

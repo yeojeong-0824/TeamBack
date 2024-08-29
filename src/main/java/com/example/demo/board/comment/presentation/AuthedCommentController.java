@@ -2,6 +2,7 @@ package com.example.demo.board.comment.presentation;
 
 import com.example.demo.board.comment.application.CommentService;
 import com.example.demo.board.comment.presentation.dto.CommentRequest;
+import com.example.demo.config.util.customannotation.MethodTimer;
 import com.example.demo.security.SecurityUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -28,6 +29,7 @@ public class AuthedCommentController {
 
     private final CommentService commentService;
 
+    @MethodTimer(method = "댓글 작성 호출")
     @PostMapping("/{boardId}")
     @Operation(summary = "댓글 등록", description = "게시글에 댓글을 기록합니다.")
     @ApiResponses(
@@ -39,17 +41,13 @@ public class AuthedCommentController {
     public ResponseEntity<String> save(
             @PathVariable("boardId") Long boardId,
             @Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
-            @Valid @RequestBody CommentRequest.Save takenDto,
-            HttpServletRequest request
-    ) {
-        String ip = request.getRemoteAddr();
-        log.info("{}: 댓글 작성 엔드포인트 호출", ip);
-
+            @Valid @RequestBody CommentRequest.Save takenDto) {
         Long memberId = SecurityUtil.getCurrentMemberId();
         commentService.save(takenDto, boardId, memberId);
         return ResponseEntity.ok("댓글 등록에 성공하였습니다");
     }
 
+    @MethodTimer(method = "댓글 수정 호출")
     @PutMapping("/{commentId}")
     @Operation(summary = "댓글 수정", description = "게시글 댓글을 수정합니다")
     @ApiResponses(
@@ -60,17 +58,13 @@ public class AuthedCommentController {
     )
     public ResponseEntity<String> edit(
             @PathVariable("commentId") Long commentId,
-            @Valid @RequestBody CommentRequest.Edit takenDto,
-            HttpServletRequest request
-    ){
-        String ip = request.getRemoteAddr();
-        log.info("{}: 댓글 수정 엔드포인트 호출", ip);
-
+            @Valid @RequestBody CommentRequest.Edit takenDto){
         Long memberId = SecurityUtil.getCurrentMemberId();
         commentService.updateById(commentId, memberId, takenDto);
         return ResponseEntity.ok("댓글 수정에 성공하였습니다");
     }
 
+    @MethodTimer(method = "댓글 삭제 호출")
     @DeleteMapping("/{commentId}")
     @Operation(summary = "댓글 삭제", description = "게시글 댓글을 삭제합니다.")
     @ApiResponses(
@@ -80,12 +74,7 @@ public class AuthedCommentController {
             }
     )
     public ResponseEntity<String> delete(
-            @PathVariable("commentId") Long commentId,
-            HttpServletRequest request
-    ){
-        String ip = request.getRemoteAddr();
-        log.info("{}: 댓글 삭제 엔드포인트 호출", ip);
-
+            @PathVariable("commentId") Long commentId){
         Long memberId = SecurityUtil.getCurrentMemberId();
         commentService.deleteById(commentId, memberId);
         return ResponseEntity.ok("댓글 삭제에 성공하였습니다");

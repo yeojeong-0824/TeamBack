@@ -1,5 +1,6 @@
 package com.example.demo.member.member.presentation;
 
+import com.example.demo.config.util.customannotation.MethodTimer;
 import com.example.demo.member.member.application.MemberService;
 import com.example.demo.member.member.presentation.dto.MemberRequest;
 import com.example.demo.member.email.application.JoinMemberEmailService;
@@ -42,6 +43,8 @@ public class JoinMemberController {
     4. 회원가입(회원가입 시 이메일 인증을 진행하지 않았을 때는 인증되지 않은 이메일을 반환)
      */
 
+
+    @MethodTimer(method = "회원가입 호출")
     @PostMapping
     @Operation(summary = "회원가입", description = "회원을 생성합니다.")
     @ApiResponses(
@@ -52,11 +55,7 @@ public class JoinMemberController {
         }
     )
     public ResponseEntity<String> save(@Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
-                                       @Valid @RequestBody MemberRequest.SaveMember takenDto,
-                                       HttpServletRequest request) {
-        String ip = request.getRemoteAddr();
-        log.info("{}: 유저 생성 엔드포인트 호출", ip);
-
+                                       @Valid @RequestBody MemberRequest.SaveMember takenDto) {
         if(!joinMemberEmailService.checkAuthedEmail(takenDto.email()))
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("인증되지 않은 이메일입니다");
 
@@ -64,6 +63,8 @@ public class JoinMemberController {
         return ResponseEntity.status(HttpStatus.CREATED).body("생성이 완료되었습니다");
     }
 
+
+    @MethodTimer(method = "아이디 및 닉네임 중복 검사 호출")
     @PostMapping("/confirm")
     @Operation(summary = "아이디 및 닉네임 중복 검사", description = "아이디 및 닉네임이 이미 사용되고 있는지 확인합니다.")
     @ApiResponses(
@@ -74,15 +75,13 @@ public class JoinMemberController {
             }
     )
     public ResponseEntity<String> checkDuplicatedByDataConfirmMember(@Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
-                                                                     @Valid @RequestBody MemberRequest.DataConfirmMember takenDto,
-                                                                     HttpServletRequest request) {
-        String ip = request.getRemoteAddr();
-        log.info("{}: 중복 검사 엔드포인트 호출", ip);
-
+                                                                     @Valid @RequestBody MemberRequest.DataConfirmMember takenDto) {
         memberService.checkDuplicated(takenDto);
         return ResponseEntity.ok("중복되지 않았습니다");
     }
 
+
+    @MethodTimer(method = "이메일 중복 확인 및 회원가입 인증 이메일 발송 호출")
     @GetMapping("/emailAuthed/{email}")
     @Operation(summary = "이메일 중복 확인 및 회원가입 인증 이메일 발송", description = "이메일이 중복되었는지 확인 후 중복되지 않았으면 인증 이메일을 발송합니다.")
     @ApiResponses(
@@ -95,11 +94,7 @@ public class JoinMemberController {
     public ResponseEntity<String> authedByEmail(@NotBlank @Size(min = 1, max = 50) @Schema(example = "example@naver.com")
                                                 @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$",
                                                          message = "유효한 이메일이 아닙니다.")
-                                                @PathVariable("email") String email,
-                                                HttpServletRequest request) {
-        String ip = request.getRemoteAddr();
-        log.info("{}: 이메일 인증코드 전송 엔드포인트 호출", ip);
-
+                                                @PathVariable("email") String email) {
         memberService.checkDuplicatedByEmail(email);
 
         String key = joinMemberEmailService.createAuthedKey();
@@ -107,6 +102,8 @@ public class JoinMemberController {
         return ResponseEntity.ok("이메일 인증 코드 전송되었습니다");
     }
 
+
+    @MethodTimer(method = "이메일 인증 확인 호출")
     @PostMapping("/emailAuthed/{email}")
     @Operation(summary = "이메일 인증코드 확인", description = "이메일 인증을 시도합니다. 이메일 인증 이메일이 발송되지 않았으면 이메일 인증 실패를 하게 됩니다.")
     @ApiResponses(
@@ -121,12 +118,7 @@ public class JoinMemberController {
                                                      @PathVariable("email") String email,
 
                                                      @Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
-                                                     @RequestBody MemberRequest.EmailAuthedKey takenDto,
-
-                                                     HttpServletRequest request) {
-        String ip = request.getRemoteAddr();
-        log.info("{}: 이메일 인증 엔드포인트 호출", ip);
-
+                                                     @RequestBody MemberRequest.EmailAuthedKey takenDto) {
         return joinMemberEmailService.checkAuthedKey(email, takenDto.key()) ?
                 ResponseEntity.ok("이메일 인증에 성공하였습니다") :
                 ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("이메일 인증에 실패하였습니다");

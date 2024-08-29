@@ -3,6 +3,7 @@ package com.example.demo.board.comment.presentation;
 import com.example.demo.board.comment.application.CommentService;
 import com.example.demo.board.comment.presentation.dto.CommentRequest;
 import com.example.demo.board.comment.presentation.dto.CommentResponse;
+import com.example.demo.config.util.customannotation.MethodTimer;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -28,8 +29,10 @@ import java.util.List;
 public class FindCommentController {
 
     private final CommentService commentService;
+
+    @MethodTimer(method = "게시글에 작성된 댓글 호출")
     @GetMapping("/{boardId}")
-    @Operation(summary = "댓글 받기", description = "게시글에 댓글 불러옵니다.")
+    @Operation(summary = "게시글에 작성된 댓글 호출", description = "게시글에 댓글 불러옵니다.")
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "댓글 등록 완료")

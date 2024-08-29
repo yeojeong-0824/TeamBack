@@ -16,3 +16,12 @@ autocomplete:
   suffix: "_suffix"
   key: "autocomplete"
   score-key: "autocomplete:score"
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always

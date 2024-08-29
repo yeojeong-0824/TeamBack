@@ -3,6 +3,8 @@ package com.example.demo.board.board.presentation;
 import com.example.demo.board.board.application.BoardService;
 import com.example.demo.board.board.presentation.dto.GoogleApiResponse;
 import com.example.demo.board.board.presentation.dto.BoardRequest;
+import com.example.demo.config.util.customannotation.MethodTimer;
+import com.example.demo.config.util.customannotation.RedissonLocker;
 import com.example.demo.security.SecurityUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -29,6 +31,7 @@ public class AuthedBoardController {
     private final BoardService boardService;
 
     // 통일성을 주기위해 메서드 명을 save로 바꿨습니다!
+    @MethodTimer(method = "게시글 작성")
     @PostMapping
     @Operation(summary = "게시글 작성")
     @ApiResponses(
@@ -39,29 +42,22 @@ public class AuthedBoardController {
             }
     )
     public ResponseEntity<String> save(
-            @Valid @RequestBody BoardRequest.SaveBoard request,
-            HttpServletRequest requestArr
+            @Valid @RequestBody BoardRequest.SaveBoard request
     ){
-        String ip = requestArr.getRemoteAddr();
-        log.info("{}: 게시글 작성 엔드포인트 호출", ip);
-
         Long memberId = SecurityUtil.getCurrentMemberId();
 
         boardService.save(request, memberId);
         return ResponseEntity.status(HttpStatus.CREATED).body("게시글 작성 성공");
     }
 
+    @MethodTimer(method = "구글 API를 이용한 장소 검색")
     @GetMapping("/search")
     @Operation(summary = "구글 api 를 이용한 장소 검색")
-    public ResponseEntity<GoogleApiResponse> locationSearch(@RequestParam String textQuery,
-                                                            HttpServletRequest requestArr){
-
-        String ip = requestArr.getRemoteAddr();
-        log.info("{}: 검색 엔드포인트 호출", ip);
-
+    public ResponseEntity<GoogleApiResponse> locationSearch(@RequestParam String textQuery){
         return ResponseEntity.ok(boardService.getSearchLocation(textQuery));
     }
 
+    @MethodTimer(method = "게시글 수정")
     @PutMapping("/update/{boardId}")
     @Operation(summary = "게시글 수정")
     @ApiResponses(
@@ -73,17 +69,13 @@ public class AuthedBoardController {
     )
     public ResponseEntity<String> boardUpdate(
             @Valid @RequestBody BoardRequest.PutBoard request,
-            @PathVariable Long boardId,
-            HttpServletRequest requestArr
-    ){
-        String ip = requestArr.getRemoteAddr();
-        log.info("{}: 게시글 수정 엔드포인트 호출", ip);
-
+            @PathVariable Long boardId){
         Long memberId = SecurityUtil.getCurrentMemberId();
         boardService.updateById(boardId, memberId, request);
         return ResponseEntity.ok("게시글 수정 성공");
     }
 
+    @MethodTimer(method = "게시글 삭제")
     @DeleteMapping("/delete/{boardId}")
     @Operation(summary = "게시글 삭제")
     @ApiResponses(
@@ -93,11 +85,7 @@ public class AuthedBoardController {
                     @ApiResponse(responseCode = "403", description = "권한 없음"),
             }
     )
-    public ResponseEntity<String> boardDelete(@PathVariable("boardId") Long boardId,
-                                              HttpServletRequest requestArr){
-        String ip = requestArr.getRemoteAddr();
-        log.info("{}: 게시글 삭제 엔드포인트 호출", ip);
-
+    public ResponseEntity<String> boardDelete(@PathVariable("boardId") Long boardId){
         Long memberId = SecurityUtil.getCurrentMemberId();
         boardService.deleteById(boardId, memberId);
         return ResponseEntity.ok("게시글 삭제 성공");

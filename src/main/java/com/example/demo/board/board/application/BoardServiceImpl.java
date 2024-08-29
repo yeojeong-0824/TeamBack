@@ -8,9 +8,7 @@ import com.example.demo.board.board.presentation.dto.BoardRequest;
 import com.example.demo.board.board.presentation.dto.BoardResponse;
 import com.example.demo.board.board.presentation.dto.GoogleApiRequest;
 import com.example.demo.board.board.presentation.dto.GoogleApiResponse;
-import com.example.demo.board.comment.domain.Comment;
 import com.example.demo.config.exception.AuthorityException;
-import com.example.demo.config.util.customannotation.MethodTimer;
 import com.example.demo.config.exception.NotFoundDataException;
 import com.example.demo.config.exception.RequestDataException;
 import com.example.demo.config.redis.RedisRepository;
@@ -52,7 +50,6 @@ public class BoardServiceImpl implements BoardService {
     // 게시글 작성
     @Override
     @Transactional
-    @MethodTimer(method = "게시글 작성")
     public void save(BoardRequest.SaveBoard takenDto, Long takenMemberId) {
         Member member = memberRepository.findById(takenMemberId).
                 orElseThrow(() -> new NotFoundDataException("해당 회원을 찾을 수 없습니다."));
@@ -66,7 +63,6 @@ public class BoardServiceImpl implements BoardService {
     // 게시글 수정
     @Override
     @Transactional
-    @MethodTimer(method = "게시글 수정")
     public void updateById(Long takenBoardId, Long takenMemberId, BoardRequest.PutBoard takenDto) {
         Board board = boardRepository.findById(takenBoardId)
                 .orElseThrow(() -> new NotFoundDataException("해당 게시글을 찾을 수 없습니다."));
@@ -81,7 +77,6 @@ public class BoardServiceImpl implements BoardService {
     // 게시글 삭제
     @Override
     @Transactional
-    @MethodTimer(method = "게시글 삭제")
     public void deleteById(Long takenBoardId, Long takenMemberId) {
         Board board = boardRepository.findById(takenBoardId)
                 .orElseThrow(() -> new NotFoundDataException("해당 게시글을 찾을 수 없습니다."));
@@ -99,7 +94,6 @@ public class BoardServiceImpl implements BoardService {
     @Transactional
     @Override
     @RedissonLocker(key = "findBoardById")
-    @MethodTimer(method = "개별 게시글 조회")
     public BoardResponse.FindBoard findById(Long takenBoardId, Long takenMemberId) {
         Board board = boardRepository.findById(takenBoardId)
                 .orElseThrow(() -> new NotFoundDataException("해당 게시글을 찾을 수 없습니다."));
@@ -112,7 +106,6 @@ public class BoardServiceImpl implements BoardService {
 
     // 전체 게시글
     @Override
-    @MethodTimer(method = "게시글 조회")
     public Page<BoardResponse.FindBoardList> findAll(int takenPage) {
         PageRequest request = PageRequest.of(takenPage - 1, 10, Sort.by("id").descending());
 
@@ -122,7 +115,6 @@ public class BoardServiceImpl implements BoardService {
 
     // 조건에 따른 게시글 검색, 정렬
     @Override
-    @MethodTimer(method = "조건에 따른 게시글 조회")
     public Page<BoardResponse.FindBoardList> findAllBySearchKeyword(String takenSearchKeyword, String takenKeywork, String takenSortKeyword, int takenPage) {
         // 생성 날짜
         PageRequest request = PageRequest.of(takenPage - 1, 10, Sort.by("id").descending());
