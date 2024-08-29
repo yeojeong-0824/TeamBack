@@ -1,9 +1,6 @@
 package com.example.demo.config.exception.handler;
 
-import com.example.demo.config.exception.DuplicatedException;
-import com.example.demo.config.exception.NotFoundDataException;
-import com.example.demo.config.exception.RequestDataException;
-import com.example.demo.config.exception.ServerException;
+import com.example.demo.config.exception.*;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
@@ -65,5 +62,12 @@ public class GlobalExceptionHandler {
         List<String> errorMessage = List.of(ex.getMessage());
         errorMessage.forEach(log::error);
         return ResponseEntity.status(HttpStatus.CONFLICT).body(new ExceptionMessage(errorMessage));
+    }
+
+    @ExceptionHandler(AuthorityException.class)
+    public ResponseEntity<ExceptionMessage> handlerAuthorityException(AuthorityException ex) {
+        List<String> errorMessage = List.of(ex.getMessage());
+        errorMessage.forEach(log::error);
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ExceptionMessage(errorMessage));
     }
 }

@@ -81,7 +81,7 @@ public class AuthedCommentController {
             }
     )
     public ResponseEntity<String> delete(
-            @PathVariable Long commentId,
+            @PathVariable("commentId") Long commentId,
             HttpServletRequest request
     ){
         String ip = request.getRemoteAddr();

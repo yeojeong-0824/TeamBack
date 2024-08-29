@@ -5,7 +5,7 @@ import lombok.Builder;
 public class BoardRequest {
 
     @Builder
-    public record DefaultBoard(
+    public record SaveBoard(
             String locationName,
             String formattedAddress,
             String latitude,  // 위도
@@ -15,7 +15,7 @@ public class BoardRequest {
     ) {
     }
 
-    public record BoardUpdateRequest(
+    public record PutBoard(
             String locationName,
             String formattedAddress,
             String latitude,  // 위도

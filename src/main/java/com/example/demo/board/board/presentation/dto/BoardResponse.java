@@ -3,70 +3,19 @@ package com.example.demo.board.board.presentation.dto;
 import com.example.demo.board.board.domain.Board;
 import lombok.*;
 
-import java.util.List;
-
-@Getter
-@Setter
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
 public class BoardResponse {
 
-    private Long id;
-    private String locationName;
-    private String formattedAddress;
-    private String latitude;  // 위도
-    private String longitude;  // 경도
-    private String title;
-    private String body;
-    private Integer view;
-    private Integer likeCount;
+//    private Long id;
+//    private String locationName;
+//    private String formattedAddress;
+//    private String latitude;  // 위도
+//    private String longitude;  // 경도
+//    private String title;
+//    private String body;
+//    private Integer view;
+//    private Integer likeCount;
 
-    public record BoardSaveResponse(
-            String locationName,
-            String formattedAddress,
-            String latitude,  // 위도
-            String longitude,  // 경도
-            String title,
-            String body,
-            Integer view
-    ) {
-        public BoardSaveResponse(Board board) {
-            this(
-                    board.getLocationName(),
-                    board.getFormattedAddress(),
-                    board.getLatitude(),
-                    board.getLongitude(),
-                    board.getTitle(),
-                    board.getBody(),
-                    board.getView()
-            );
-        }
-    }
-
-    public record BoardUpdateResponse(
-            String locationName,
-            String formattedAddress,
-            String latitude,  // 위도
-            String longitude,  // 경도
-            String title,
-            String body,
-            Integer view
-    ) {
-        public BoardUpdateResponse(Board board) {
-            this(
-                    board.getLocationName(),
-                    board.getFormattedAddress(),
-                    board.getLatitude(),
-                    board.getLongitude(),
-                    board.getTitle(),
-                    board.getBody(),
-                    board.getView()
-            );
-        }
-    }
-
-    public record BoardListResponse(
+    public record FindBoardList(
             Long id,
             String locationName,
             String formattedAddress,
@@ -77,7 +26,7 @@ public class BoardResponse {
             Integer avgScore,
             Integer commentCount
     ) {
-        public BoardListResponse(Board board) {
+        public FindBoardList(Board board) {
             this(
                     board.getId(),
                     board.getLocationName(),
@@ -92,7 +41,7 @@ public class BoardResponse {
         }
     }
 
-    public record BoardReadResponse(
+    public record FindBoard(
             String locationName,
             String formattedAddress,
             String latitude,  // 위도
@@ -110,7 +59,7 @@ public class BoardResponse {
                 String nickname
         ){}
 
-        public BoardReadResponse(Board board) {
+        public FindBoard(Board board) {
             this(
                     board.getLocationName(),
                     board.getFormattedAddress(),

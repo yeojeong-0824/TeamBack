@@ -30,8 +30,8 @@ public class FindBoardController {
                     @ApiResponse(responseCode = "404", description = "존재하는 게시글 없음")
             }
     )
-    public ResponseEntity<BoardResponse.BoardReadResponse> getBoard(@PathVariable("boardId") Long boardId,
-                                                                    HttpServletRequest requestArr){
+    public ResponseEntity<BoardResponse.FindBoard> getBoard(@PathVariable("boardId") Long boardId,
+                                                            HttpServletRequest requestArr){
         String ip = requestArr.getRemoteAddr();
         log.info("{}: 개별 게시글 엔드포인트 호출", ip);
 
@@ -48,7 +48,7 @@ public class FindBoardController {
                     @ApiResponse(responseCode = "400", description = "모든 게시글 검색 실패")
             }
     )
-    public ResponseEntity<Page<BoardResponse.BoardListResponse>> boardList(
+    public ResponseEntity<Page<BoardResponse.FindBoardList>> boardList(
             @RequestParam(required = false, defaultValue = "1", value = "page") int page,
             HttpServletRequest requestArr){
 
@@ -66,7 +66,7 @@ public class FindBoardController {
                     @ApiResponse(responseCode = "400", description = "게시글 검색, 정렬 실패")
             }
     )
-    public ResponseEntity<Page<BoardResponse.BoardListResponse>> boardSearch(
+    public ResponseEntity<Page<BoardResponse.FindBoardList>> boardSearch(
             @RequestParam(value = "keyword") String keyword,
             @RequestParam(value = "searchKeyword") String searchKeyword,
             @RequestParam(value = "sortKeyword") String sortKeyword,

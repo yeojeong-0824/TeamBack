@@ -59,7 +59,7 @@ public class Board extends BaseTime {
     @Column(nullable = false)
     private Integer commentCount;
 
-    public void update(BoardRequest.BoardUpdateRequest request){
+    public void update(BoardRequest.PutBoard request){
         this.locationName = request.locationName();
         this.formattedAddress = request.formattedAddress();
         this.latitude = request.latitude();

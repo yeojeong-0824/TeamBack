@@ -8,6 +8,7 @@ import com.example.demo.board.board.presentation.dto.BoardRequest;
 import com.example.demo.board.board.presentation.dto.BoardResponse;
 import com.example.demo.board.board.presentation.dto.GoogleApiRequest;
 import com.example.demo.board.board.presentation.dto.GoogleApiResponse;
+import com.example.demo.config.exception.AuthorityException;
 import com.example.demo.config.util.customannotation.MethodTimer;
 import com.example.demo.config.exception.NotFoundDataException;
 import com.example.demo.config.exception.RequestDataException;
@@ -51,7 +52,7 @@ public class BoardServiceImpl implements BoardService {
     @Override
     @Transactional
     @MethodTimer(method = "게시글 작성")
-    public void save(BoardRequest.DefaultBoard request, Long memberId) {
+    public void save(BoardRequest.SaveBoard request, Long memberId) {
         Member member = memberRepository.findById(memberId).
                 orElseThrow(() -> new NotFoundDataException("해당 회원을 찾을 수 없습니다."));
 
@@ -76,7 +77,7 @@ public class BoardServiceImpl implements BoardService {
     @Override
     @Transactional
     @MethodTimer(method = "게시글 수정")
-    public void updateById(Long id, Long memberId, BoardRequest.BoardUpdateRequest request) {
+    public void updateById(Long id, Long memberId, BoardRequest.PutBoard request) {
         Board board = boardRepository.findById(id)
                 .orElseThrow(() -> new NotFoundDataException("해당 게시글을 찾을 수 없습니다."));
 
@@ -96,7 +97,7 @@ public class BoardServiceImpl implements BoardService {
                 .orElseThrow(() -> new NotFoundDataException("해당 게시글을 찾을 수 없습니다."));
 
         if (!memberId.equals(board.getMember().getId())) {
-            throw new RequestDataException("게시글을 작성한 회원이 아닙니다");
+            throw new AuthorityException("게시글을 작성한 회원이 아닙니다");
         }
 
         redisRepository.deleteViewCount(id);
@@ -109,20 +110,20 @@ public class BoardServiceImpl implements BoardService {
     @Override
     @RedissonLocker(key = "findBoardById")
     @MethodTimer(method = "개별 게시글 조회")
-    public BoardResponse.BoardReadResponse findById(Long id, Long memberId) {
+    public BoardResponse.FindBoard findById(Long id, Long memberId) {
         Board board = boardRepository.findById(id)
                 .orElseThrow(() -> new NotFoundDataException("해당 게시글을 찾을 수 없습니다."));
 
         board.addViewCount();
         boardRepository.save(board);
 
-        return new BoardResponse.BoardReadResponse(board);
+        return new BoardResponse.FindBoard(board);
     }
 
     // 전체 게시글
     @Override
     @MethodTimer(method = "게시글 조회")
-    public Page<BoardResponse.BoardListResponse> findAll(int page) {
+    public Page<BoardResponse.FindBoardList> findAll(int page) {
         PageRequest request = PageRequest.of(page - 1, 10, Sort.by("id").descending());
 
         Page<Board> boardList = boardRepository.findAll(request);
@@ -132,7 +133,7 @@ public class BoardServiceImpl implements BoardService {
     // 조건에 따른 게시글 검색, 정렬
     @Override
     @MethodTimer(method = "조건에 따른 게시글 조회")
-    public Page<BoardResponse.BoardListResponse> findAllBySearchKeyword(String searchKeyword, String keyword, String sortKeyword, int page) {
+    public Page<BoardResponse.FindBoardList> findAllBySearchKeyword(String searchKeyword, String keyword, String sortKeyword, int page) {
         // 생성 날짜
         PageRequest request = PageRequest.of(page - 1, 10, Sort.by("id").descending());
 
@@ -200,7 +201,7 @@ public class BoardServiceImpl implements BoardService {
         }
     }
 
-    public Page<BoardResponse.BoardListResponse> toDtoPage(Page<Board> boardList) {
-        return boardList.map(BoardResponse.BoardListResponse::new);
+    public Page<BoardResponse.FindBoardList> toDtoPage(Page<Board> boardList) {
+        return boardList.map(BoardResponse.FindBoardList::new);
     }
 }

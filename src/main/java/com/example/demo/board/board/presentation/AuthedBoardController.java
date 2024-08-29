@@ -39,7 +39,7 @@ public class AuthedBoardController {
             }
     )
     public ResponseEntity<String> save(
-            @Valid @RequestBody BoardRequest.DefaultBoard request,
+            @Valid @RequestBody BoardRequest.SaveBoard request,
             HttpServletRequest requestArr
     ){
         String ip = requestArr.getRemoteAddr();
@@ -72,7 +72,7 @@ public class AuthedBoardController {
             }
     )
     public ResponseEntity<String> boardUpdate(
-            @Valid @RequestBody BoardRequest.BoardUpdateRequest request,
+            @Valid @RequestBody BoardRequest.PutBoard request,
             @PathVariable Long boardId,
             HttpServletRequest requestArr
     ){

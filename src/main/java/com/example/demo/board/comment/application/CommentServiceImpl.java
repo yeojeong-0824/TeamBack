@@ -9,6 +9,7 @@ import com.example.demo.board.comment.presentation.dto.CommentResponse;
 import com.example.demo.config.exception.NotFoundDataException;
 import com.example.demo.config.exception.RequestDataException;
 import com.example.demo.config.util.customannotation.MethodTimer;
+import com.example.demo.config.util.customannotation.RedissonLocker;
 import com.example.demo.member.member.domain.Member;
 import com.example.demo.member.member.domain.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -29,11 +30,15 @@ public class CommentServiceImpl implements CommentService {
     @Override
     @Transactional
     @MethodTimer(method = "댓글 작성")
+    @RedissonLocker(key = "saveComment")
     public void save(CommentRequest.Save takenDto, Long takenBoardId, Long takenMemberId) {
         Board savedBoard = boardRepository.findById(takenBoardId)
                 .orElseThrow(() -> new NotFoundDataException("해당 게시글을 찾을 수 없습니다"));
         Member savedMember = memberRepository.findById(takenMemberId)
                 .orElseThrow(() -> new NotFoundDataException("해당 유저를 찾을 수 없습니다"));
+
+        savedBoard.commentCountUp();
+        boardRepository.save(savedBoard);
 
         Comment entity = CommentRequest.Save.toEntity(takenDto, savedBoard, savedMember);
         commentRepository.save(entity);
@@ -64,15 +69,20 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @MethodTimer(method = "댓글 삭제")
+    @RedissonLocker(key = "deleteComment")
     public void deleteById(Long commentId, Long takenMemberId){
-        Comment comment = commentRepository.findById(commentId)
+        Comment savedComment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new NotFoundDataException("해당 댓글을 찾을 수 없습니다"));
 
-        if(!takenMemberId.equals(comment.getMember().getId())){
+        if(!takenMemberId.equals(savedComment.getMember().getId())){
             throw new RequestDataException("게시글을 작성한 회원이 아닙니다");
         }
 
-        commentRepository.deleteById(commentId);
+        Board savedBoard = savedComment.getBoard();
+        savedBoard.commentCountDown();
+        boardRepository.save(savedBoard);
+
+        commentRepository.delete(savedComment);
     }
 
     public Page<CommentResponse.FindByBoardId> toDtoPage(Page<Comment> commentList){
