@@ -1,4 +1,4 @@
-package com.example.demo.member.email.application;
+package com.example.demo.member.email.application.memberemailservice;
 
 public interface MemberEmailService {
     void sendAuthedEmail(String email, String authedKey);

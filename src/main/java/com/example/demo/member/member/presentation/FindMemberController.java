@@ -1,7 +1,7 @@
 package com.example.demo.member.member.presentation;
 
 import com.example.demo.config.util.customannotation.MethodTimer;
-import com.example.demo.member.email.application.MemberEmailService;
+import com.example.demo.member.email.application.memberemailservice.MemberEmailService;
 import com.example.demo.member.member.application.memberservice.MemberService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Schema;

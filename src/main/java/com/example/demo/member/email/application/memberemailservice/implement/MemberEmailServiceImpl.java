@@ -1,6 +1,8 @@
-package com.example.demo.member.email.application;
+package com.example.demo.member.email.application.memberemailservice.implement;
 
 import com.example.demo.config.exception.NotFoundDataException;
+import com.example.demo.member.email.application.EmailSender;
+import com.example.demo.member.email.application.memberemailservice.MemberEmailService;
 import com.example.demo.member.email.domain.Email;
 import com.example.demo.member.email.domain.EmailRepository;
 import com.example.demo.member.email.presentation.dto.SendEmail;
