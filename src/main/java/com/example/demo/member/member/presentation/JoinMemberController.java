@@ -1,9 +1,9 @@
 package com.example.demo.member.member.presentation;
 
 import com.example.demo.config.util.customannotation.MethodTimer;
+import com.example.demo.member.email.application.MemberEmailService;
 import com.example.demo.member.member.application.MemberService;
 import com.example.demo.member.member.presentation.dto.MemberRequest;
-import com.example.demo.member.email.application.JoinMemberEmailService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -11,7 +11,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -33,7 +32,7 @@ import org.springframework.web.bind.annotation.*;
 public class JoinMemberController {
 
     private final MemberService memberService;
-    private final JoinMemberEmailService joinMemberEmailService;
+    private final MemberEmailService memberEmailService;
 
     /*
     회원가입 작동 방식:
@@ -57,7 +56,7 @@ public class JoinMemberController {
     public ResponseEntity<String> save(@Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
                                        @Valid @RequestBody MemberRequest.SaveMember takenDto) {
 
-        if(!joinMemberEmailService.checkAuthedEmail(takenDto.email()))
+        if(!memberEmailService.checkAuthedEmail(takenDto.email()))
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("인증되지 않은 이메일입니다");
 
         memberService.save(takenDto);
@@ -100,8 +99,8 @@ public class JoinMemberController {
 
         memberService.checkDuplicatedByEmail(email);
 
-        String key = joinMemberEmailService.createAuthedKey();
-        joinMemberEmailService.sendAuthedEmail(email, key);
+        String key = memberEmailService.createAuthedKey();
+        memberEmailService.sendAuthedEmail(email, key);
 
         return ResponseEntity.ok("이메일 인증 코드 전송되었습니다");
     }
@@ -124,7 +123,7 @@ public class JoinMemberController {
                                                      @Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
                                                      @RequestBody MemberRequest.EmailAuthedKey takenDto) {
 
-        return joinMemberEmailService.checkAuthedKey(email, takenDto.key()) ?
+        return memberEmailService.checkAuthedKey(email, takenDto.key()) ?
                 ResponseEntity.ok("이메일 인증에 성공하였습니다") :
                 ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("이메일 인증에 실패하였습니다");
     }

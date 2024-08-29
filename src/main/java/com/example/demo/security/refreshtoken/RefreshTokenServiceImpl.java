@@ -25,14 +25,13 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
         if(savedOptionalRefreshToken.isEmpty()) return null;
 
         RefreshToken savedRefreshToken = savedOptionalRefreshToken.get();
-        savedRefreshToken.counting();
 
-        if(savedRefreshToken.getCount() < 0) {
-            this.deleteById(token);
+        if(savedRefreshToken.getCount() <= 1) {
+            refreshTokenRepository.deleteById(token);
             return null;
         }
 
-        refreshTokenRepository.save(savedRefreshToken);
+        savedRefreshToken.counting();
         return savedRefreshToken;
     }
 

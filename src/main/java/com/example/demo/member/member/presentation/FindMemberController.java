@@ -1,14 +1,13 @@
 package com.example.demo.member.member.presentation;
 
 import com.example.demo.config.util.customannotation.MethodTimer;
+import com.example.demo.member.email.application.MemberEmailService;
 import com.example.demo.member.member.application.MemberService;
-import com.example.demo.member.email.application.FindMemberEmailService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +25,7 @@ import org.springframework.web.bind.annotation.*;
 public class FindMemberController {
 
     private final MemberService memberService;
-    private final FindMemberEmailService findMemberEmailService;
+    private final MemberEmailService memberEmailService;
 
     @MethodTimer(method = "새로운 비밀번호 발급 호출")
     @PatchMapping("/password")
@@ -47,7 +46,7 @@ public class FindMemberController {
                                               @RequestParam("email") String email) {
 
         String newPassword = memberService.createNewPassword(username, email);
-        findMemberEmailService.sendNewPasswordEmail(email, newPassword);
+        memberEmailService.sendNewPasswordEmail(email, newPassword);
 
         return ResponseEntity.ok("비밀번호 재발급에 성공하였습니다");
     }
@@ -68,7 +67,7 @@ public class FindMemberController {
                                                @RequestParam("email") String email) {
 
         String username = memberService.findUsernameByEmail(email);
-        findMemberEmailService.sendUsernameEmail(email, username);
+        memberEmailService.sendUsernameEmail(email, username);
 
         return ResponseEntity.ok("아이디 찾기를 성공하였습니다");
     }
