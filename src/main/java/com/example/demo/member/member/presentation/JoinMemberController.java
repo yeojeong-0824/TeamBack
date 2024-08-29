@@ -57,8 +57,8 @@ public class JoinMemberController {
         String ip = request.getRemoteAddr();
         log.info("{}: 유저 생성 엔드포인트 호출", ip);
 
-//        if(!joinMemberEmailService.checkAuthedEmail(takenDto.email()))
-//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("인증되지 않은 이메일입니다");
+        if(!joinMemberEmailService.checkAuthedEmail(takenDto.email()))
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("인증되지 않은 이메일입니다");
 
         memberService.save(takenDto);
         return ResponseEntity.status(HttpStatus.CREATED).body("생성이 완료되었습니다");

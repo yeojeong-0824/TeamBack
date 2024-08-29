@@ -32,7 +32,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Transactional
     @Override
-    @MethodTimer(method = "로그인 로직")
+    @MethodTimer(method = "회원가입 로직")
     public void save(MemberRequest.SaveMember takenMemberRequest) {
         String encodingPassword = passwordEncoder.encode(takenMemberRequest.password());
         Member takenMember = MemberRequest.SaveMember.toEntity(takenMemberRequest, encodingPassword);
