@@ -2,7 +2,7 @@ package com.example.demo.member.member.presentation;
 
 import com.example.demo.config.util.customannotation.MethodTimer;
 import com.example.demo.security.SecurityUtil;
-import com.example.demo.member.member.application.MemberService;
+import com.example.demo.member.member.application.memberservice.MemberService;
 import com.example.demo.member.member.presentation.dto.MemberRequest;
 import com.example.demo.member.member.presentation.dto.MemberResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -11,7 +11,6 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

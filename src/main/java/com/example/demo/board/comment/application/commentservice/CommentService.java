@@ -1,4 +1,4 @@
-package com.example.demo.board.comment.application;
+package com.example.demo.board.comment.application.commentservice;
 
 import com.example.demo.board.comment.presentation.dto.CommentRequest;
 import com.example.demo.board.comment.presentation.dto.CommentResponse;

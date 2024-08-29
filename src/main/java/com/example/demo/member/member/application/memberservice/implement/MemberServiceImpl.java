@@ -1,4 +1,4 @@
-package com.example.demo.member.member.application;
+package com.example.demo.member.member.application.memberservice.implement;
 
 import com.example.demo.board.board.domain.Board;
 import com.example.demo.board.board.domain.BoardRepository;
@@ -7,6 +7,7 @@ import com.example.demo.board.comment.domain.CommentRepository;
 import com.example.demo.config.exception.RequestDataException;
 import com.example.demo.config.exception.DuplicatedException;
 import com.example.demo.config.exception.NotFoundDataException;
+import com.example.demo.member.member.application.memberservice.MemberService;
 import com.example.demo.member.member.presentation.dto.MemberRequest;
 import com.example.demo.member.member.domain.Member;
 import com.example.demo.member.member.domain.MemberRepository;

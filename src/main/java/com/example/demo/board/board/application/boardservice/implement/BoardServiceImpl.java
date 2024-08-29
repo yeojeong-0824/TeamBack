@@ -1,7 +1,8 @@
-package com.example.demo.board.board.application;
+package com.example.demo.board.board.application.boardservice.implement;
 
 import com.example.demo.autocomplate.application.AutocompleteService;
 import com.example.demo.autocomplate.presentation.dto.AutocompleteResponse;
+import com.example.demo.board.board.application.boardservice.BoardService;
 import com.example.demo.board.board.domain.Board;
 import com.example.demo.board.board.domain.BoardRepository;
 import com.example.demo.board.board.presentation.dto.BoardRequest;

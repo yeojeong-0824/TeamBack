@@ -1,7 +1,8 @@
-package com.example.demo.board.comment.application;
+package com.example.demo.board.comment.application.commentservice.implement;
 
 import com.example.demo.board.board.domain.Board;
 import com.example.demo.board.board.domain.BoardRepository;
+import com.example.demo.board.comment.application.commentservice.CommentService;
 import com.example.demo.board.comment.domain.Comment;
 import com.example.demo.board.comment.domain.CommentRepository;
 import com.example.demo.board.comment.presentation.dto.CommentRequest;

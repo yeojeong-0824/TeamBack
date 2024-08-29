@@ -1,4 +1,4 @@
-package com.example.demo.member.member.application;
+package com.example.demo.member.member.application.memberdetails.implement;
 
 import com.example.demo.member.member.domain.Member;
 import com.example.demo.member.member.presentation.dto.MemberDetails;
