@@ -82,7 +82,7 @@ public class BoardServiceImpl implements BoardService {
                 .orElseThrow(() -> new NotFoundDataException("해당 게시글을 찾을 수 없습니다."));
 
         if (!memberId.equals(board.getMember().getId())) {
-            throw new RequestDataException("게시글을 작성한 회원이 아닙니다");
+            throw new AuthorityException("게시글을 작성한 회원이 아닙니다");
         }
 
         board.update(request);

@@ -6,6 +6,7 @@ import com.example.demo.board.comment.domain.Comment;
 import com.example.demo.board.comment.domain.CommentRepository;
 import com.example.demo.board.comment.presentation.dto.CommentRequest;
 import com.example.demo.board.comment.presentation.dto.CommentResponse;
+import com.example.demo.config.exception.AuthorityException;
 import com.example.demo.config.exception.NotFoundDataException;
 import com.example.demo.config.exception.RequestDataException;
 import com.example.demo.config.util.customannotation.MethodTimer;
@@ -61,7 +62,7 @@ public class CommentServiceImpl implements CommentService {
                 .orElseThrow(() -> new NotFoundDataException("해당 댓글을 찾을 수 없습니다"));
 
         if(!takenMemberId.equals(comment.getMember().getId())){
-            throw new RequestDataException("게시글을 작성한 회원이 아닙니다");
+            throw new AuthorityException("게시글을 작성한 회원이 아닙니다");
         }
 
         comment.update(editDto);
@@ -75,7 +76,7 @@ public class CommentServiceImpl implements CommentService {
                 .orElseThrow(() -> new NotFoundDataException("해당 댓글을 찾을 수 없습니다"));
 
         if(!takenMemberId.equals(savedComment.getMember().getId())){
-            throw new RequestDataException("게시글을 작성한 회원이 아닙니다");
+            throw new AuthorityException("게시글을 작성한 회원이 아닙니다");
         }
 
         Board savedBoard = savedComment.getBoard();
