@@ -1,6 +1,6 @@
 package com.example.demo.member.member.presentation;
 
-import com.example.demo.config.util.SecurityUtil;
+import com.example.demo.security.SecurityUtil;
 import com.example.demo.member.member.application.MemberService;
 import com.example.demo.member.member.presentation.dto.MemberRequest;
 import com.example.demo.member.member.presentation.dto.MemberResponse;

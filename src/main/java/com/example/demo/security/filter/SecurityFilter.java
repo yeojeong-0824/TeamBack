@@ -1,5 +1,6 @@
-package com.example.demo.security;
+package com.example.demo.security.filter;
 
+import com.example.demo.security.JwtProvider;
 import com.example.demo.security.filter.JwtFilter;
 import com.example.demo.security.filter.LoginFilter;
 import com.example.demo.security.refreshtoken.RefreshTokenService;

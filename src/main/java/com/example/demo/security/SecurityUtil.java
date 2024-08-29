@@ -1,4 +1,4 @@
-package com.example.demo.config.util;
+package com.example.demo.security;
 
 import com.example.demo.member.member.presentation.dto.MemberDetails;
 import org.springframework.security.core.Authentication;

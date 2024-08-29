@@ -2,7 +2,7 @@ package com.example.demo.board.comment.presentation;
 
 import com.example.demo.board.comment.application.CommentService;
 import com.example.demo.board.comment.presentation.dto.CommentRequest;
-import com.example.demo.config.util.SecurityUtil;
+import com.example.demo.security.SecurityUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
