@@ -1,6 +1,6 @@
 package com.example.demo.security;
 
-import com.example.demo.member.member.presentation.dto.MemberDetails;
+import com.example.demo.domain.member.member.presentation.dto.MemberDetails;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 

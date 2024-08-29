@@ -1,6 +1,6 @@
 package com.example.demo.security.filter;
 
-import com.example.demo.member.member.presentation.dto.MemberDetails;
+import com.example.demo.domain.member.member.presentation.dto.MemberDetails;
 import com.example.demo.security.JwtProvider;
 import com.example.demo.security.refreshtoken.domain.RefreshToken;
 import com.example.demo.security.refreshtoken.refreshtokenservice.RefreshTokenService;
