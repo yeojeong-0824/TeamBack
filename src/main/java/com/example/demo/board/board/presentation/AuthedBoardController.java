@@ -1,16 +1,14 @@
 package com.example.demo.board.board.presentation;
 
-import com.example.demo.board.board.application.BoardService;
+import com.example.demo.board.board.application.boardservice.BoardService;
 import com.example.demo.board.board.presentation.dto.GoogleApiResponse;
 import com.example.demo.board.board.presentation.dto.BoardRequest;
 import com.example.demo.config.util.customannotation.MethodTimer;
-import com.example.demo.config.util.customannotation.RedissonLocker;
 import com.example.demo.security.SecurityUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

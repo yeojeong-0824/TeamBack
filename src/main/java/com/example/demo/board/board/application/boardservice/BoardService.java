@@ -1,4 +1,4 @@
-package com.example.demo.board.board.application;
+package com.example.demo.board.board.application.boardservice;
 
 import com.example.demo.board.board.presentation.dto.BoardRequest;
 import com.example.demo.board.board.presentation.dto.BoardResponse;

@@ -1,14 +1,13 @@
 package com.example.demo.member.member.presentation;
 
 import com.example.demo.config.util.customannotation.MethodTimer;
-import com.example.demo.member.member.application.MemberService;
+import com.example.demo.member.member.application.memberservice.MemberService;
 import com.example.demo.member.email.application.FindMemberEmailService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;

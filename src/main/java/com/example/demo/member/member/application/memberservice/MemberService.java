@@ -1,4 +1,4 @@
-package com.example.demo.member.member.application;
+package com.example.demo.member.member.application.memberservice;
 
 import com.example.demo.member.member.presentation.dto.MemberRequest;
 import com.example.demo.member.member.presentation.dto.MemberResponse;
