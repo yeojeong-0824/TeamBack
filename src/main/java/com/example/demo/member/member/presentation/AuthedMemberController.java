@@ -65,7 +65,7 @@ public class AuthedMemberController {
     }
 
     @GetMapping("/comment")
-    @Operation(summary = "해당 회원의 별점 등록 목록 확인", description = "해당 회원이 등록한 별점의 정보를 받아옵니다.")
+    @Operation(summary = "해당 회원의 작성 댓글 목록 확인", description = "해당 회원이 작성한 댓글의 정보를 받아옵니다.")
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "조회 완료"),

@@ -8,6 +8,7 @@ import com.example.demo.board.board.presentation.dto.BoardRequest;
 import com.example.demo.board.board.presentation.dto.BoardResponse;
 import com.example.demo.board.board.presentation.dto.GoogleApiRequest;
 import com.example.demo.board.board.presentation.dto.GoogleApiResponse;
+import com.example.demo.board.comment.domain.Comment;
 import com.example.demo.config.exception.AuthorityException;
 import com.example.demo.config.util.customannotation.MethodTimer;
 import com.example.demo.config.exception.NotFoundDataException;
@@ -94,7 +95,7 @@ public class BoardServiceImpl implements BoardService {
         boardRepository.delete(board);
     }
 
-    // 하나의 게시글1
+    // 하나의 게시글
     @Transactional
     @Override
     @RedissonLocker(key = "findBoardById")

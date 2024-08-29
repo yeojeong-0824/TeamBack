@@ -19,6 +19,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class CommentServiceImpl implements CommentService {
@@ -38,11 +40,50 @@ public class CommentServiceImpl implements CommentService {
         Member savedMember = memberRepository.findById(takenMemberId)
                 .orElseThrow(() -> new NotFoundDataException("해당 유저를 찾을 수 없습니다"));
 
-        savedBoard.commentCountUp();
-        boardRepository.save(savedBoard);
-
         Comment entity = CommentRequest.Save.toEntity(takenDto, savedBoard, savedMember);
         commentRepository.save(entity);
+
+        int avgScore = getAvgScore(savedBoard);
+        savedBoard.avgScorePatch(avgScore);
+
+        savedBoard.commentCountUp();
+        boardRepository.save(savedBoard);
+    }
+
+    @Override
+    @MethodTimer(method = "댓글 삭제")
+    @RedissonLocker(key = "deleteComment")
+    public void deleteById(Long takenCommentId, Long takenMemberId){
+        Comment savedComment = commentRepository.findById(takenCommentId)
+                .orElseThrow(() -> new NotFoundDataException("해당 댓글을 찾을 수 없습니다"));
+
+        if(!takenMemberId.equals(savedComment.getMember().getId())) throw new AuthorityException("게시글을 작성한 회원이 아닙니다");
+        Board savedBoard = savedComment.getBoard();
+        commentRepository.delete(savedComment);
+
+        int avgScore = getAvgScore(savedBoard);
+        savedBoard.avgScorePatch(avgScore);
+
+        savedBoard.commentCountDown();
+        boardRepository.save(savedBoard);
+    }
+
+
+    private int getAvgScore(Board board) {
+        List<Comment> commentList = board.getComments();
+
+        int size = 0;
+        int sum = 0;
+
+        for(Comment comment : commentList) {
+            int score = comment.getScore();
+            if(comment.getScore() == 0) continue;
+
+            size++;
+            sum += score;
+        }
+
+        return (sum * 100) / size;
     }
 
     @Override
@@ -61,29 +102,8 @@ public class CommentServiceImpl implements CommentService {
         Comment savedComment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new NotFoundDataException("해당 댓글을 찾을 수 없습니다"));
 
-        if(!takenMemberId.equals(savedComment.getMember().getId())){
-            throw new AuthorityException("게시글을 작성한 회원이 아닙니다");
-        }
-
+        if(!takenMemberId.equals(savedComment.getMember().getId())) throw new AuthorityException("게시글을 작성한 회원이 아닙니다");
         savedComment.update(takenDto);
-    }
-
-    @Override
-    @MethodTimer(method = "댓글 삭제")
-    @RedissonLocker(key = "deleteComment")
-    public void deleteById(Long takenCommentId, Long takenMemberId){
-        Comment savedComment = commentRepository.findById(takenCommentId)
-                .orElseThrow(() -> new NotFoundDataException("해당 댓글을 찾을 수 없습니다"));
-
-        if(!takenMemberId.equals(savedComment.getMember().getId())){
-            throw new AuthorityException("게시글을 작성한 회원이 아닙니다");
-        }
-
-        Board savedBoard = savedComment.getBoard();
-        savedBoard.commentCountDown();
-        boardRepository.save(savedBoard);
-
-        commentRepository.delete(savedComment);
     }
 
     private Page<CommentResponse.FindByBoardId> toDtoPage(Page<Comment> commentList){

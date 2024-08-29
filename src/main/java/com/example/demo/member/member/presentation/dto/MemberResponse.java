@@ -58,7 +58,6 @@ public class MemberResponse {
     @Builder
     @Schema(name = "유저가 작성한 댓글 정보 호출")
     public record CommentInfo(
-            @Schema(example = "1")
             CommentBoardInfo boardInfo,
 
             @Schema(example = "5")

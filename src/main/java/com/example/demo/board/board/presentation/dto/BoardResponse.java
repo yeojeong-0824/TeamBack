@@ -12,6 +12,7 @@ public class BoardResponse {
             String latitude,  // 위도
             String longitude,  // 경도
             String title,
+
             Integer view,
             Integer avgScore,
             Integer commentCount
@@ -24,6 +25,7 @@ public class BoardResponse {
                     .latitude(board.getLatitude())
                     .longitude(board.getLongitude())
                     .title(board.getTitle())
+
                     .view(board.getView())
                     .avgScore(board.getAvgScore())
                     .commentCount(board.getCommentCount())
@@ -37,10 +39,14 @@ public class BoardResponse {
             String formattedAddress,
             String latitude,  // 위도
             String longitude,  // 경도
+
             String title,
             String body,  // Body 변수명을 소문자로 변경
+
             Integer view,
             Integer avgScore,
+            Integer commentCount,
+
             MemberInfo member
     ) {
         @Builder
@@ -55,10 +61,13 @@ public class BoardResponse {
                     .formattedAddress(board.getFormattedAddress())
                     .latitude(board.getLatitude())
                     .longitude(board.getLongitude())
+
                     .title(board.getTitle())
                     .body(board.getBody())
+
                     .view(board.getView())
                     .avgScore(board.getAvgScore())
+                    .commentCount(board.getCommentCount())
                     .member(MemberInfo.builder()
                             .userId(board.getMember().getId())
                             .nickname(board.getMember().getNickname())
