@@ -37,10 +37,4 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
         savedRefreshToken.counting();
         return savedRefreshToken;
     }
-
-    @Override
-    public void deleteById(String token) {
-        refreshTokenRepository.deleteById(token);
-    }
-
 }
