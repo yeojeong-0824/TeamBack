@@ -38,14 +38,8 @@ public class FindCommentController {
                     @ApiResponse(responseCode = "200", description = "댓글 등록 완료")
             }
     )
-    public ResponseEntity<Page<CommentResponse.FindByBoardId>> findByBoardId(
-            @RequestParam(required = false, defaultValue = "1", value = "page") int page,
-            @PathVariable("boardId") Long boardId,
-            HttpServletRequest request
-    ) {
-        String ip = request.getRemoteAddr();
-        log.info("{}: 게시글에 작성된 댓글 조회 엔드포인트 호출", ip);
-
+    public ResponseEntity<Page<CommentResponse.FindByBoardId>> findByBoardId(@RequestParam(required = false, defaultValue = "1", value = "page") int page,
+                                                                             @PathVariable("boardId") Long boardId) {
         Page<CommentResponse.FindByBoardId> rtn = commentService.findByBoardId(boardId, page);
         return ResponseEntity.ok(rtn);
     }

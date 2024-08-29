@@ -38,10 +38,10 @@ public class AuthedCommentController {
                     @ApiResponse(responseCode = "403", description = "권한 없음")
             }
     )
-    public ResponseEntity<String> save(
-            @PathVariable("boardId") Long boardId,
-            @Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
-            @Valid @RequestBody CommentRequest.Save takenDto) {
+    public ResponseEntity<String> save(@PathVariable("boardId") Long boardId,
+                                       @Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
+                                       @Valid @RequestBody CommentRequest.Save takenDto) {
+
         Long memberId = SecurityUtil.getCurrentMemberId();
         commentService.save(takenDto, boardId, memberId);
         return ResponseEntity.ok("댓글 등록에 성공하였습니다");
@@ -56,9 +56,10 @@ public class AuthedCommentController {
                     @ApiResponse(responseCode = "403", description = "권한 없음")
             }
     )
-    public ResponseEntity<String> edit(
-            @PathVariable("commentId") Long commentId,
-            @Valid @RequestBody CommentRequest.Edit takenDto){
+    public ResponseEntity<String> edit(@PathVariable("commentId") Long commentId,
+                                       @Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
+                                       @Valid @RequestBody CommentRequest.Edit takenDto) {
+
         Long memberId = SecurityUtil.getCurrentMemberId();
         commentService.updateById(commentId, memberId, takenDto);
         return ResponseEntity.ok("댓글 수정에 성공하였습니다");
@@ -73,8 +74,8 @@ public class AuthedCommentController {
                     @ApiResponse(responseCode = "403", description = "권한 없음")
             }
     )
-    public ResponseEntity<String> delete(
-            @PathVariable("commentId") Long commentId){
+    public ResponseEntity<String> delete(@PathVariable("commentId") Long commentId) {
+
         Long memberId = SecurityUtil.getCurrentMemberId();
         commentService.deleteById(commentId, memberId);
         return ResponseEntity.ok("댓글 삭제에 성공하였습니다");

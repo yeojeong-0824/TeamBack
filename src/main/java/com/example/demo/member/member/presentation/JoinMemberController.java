@@ -56,6 +56,7 @@ public class JoinMemberController {
     )
     public ResponseEntity<String> save(@Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
                                        @Valid @RequestBody MemberRequest.SaveMember takenDto) {
+
         if(!joinMemberEmailService.checkAuthedEmail(takenDto.email()))
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("인증되지 않은 이메일입니다");
 
@@ -76,6 +77,7 @@ public class JoinMemberController {
     )
     public ResponseEntity<String> checkDuplicatedByDataConfirmMember(@Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
                                                                      @Valid @RequestBody MemberRequest.DataConfirmMember takenDto) {
+
         memberService.checkDuplicated(takenDto);
         return ResponseEntity.ok("중복되지 않았습니다");
     }
@@ -95,10 +97,12 @@ public class JoinMemberController {
                                                 @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$",
                                                          message = "유효한 이메일이 아닙니다.")
                                                 @PathVariable("email") String email) {
+
         memberService.checkDuplicatedByEmail(email);
 
         String key = joinMemberEmailService.createAuthedKey();
         joinMemberEmailService.sendAuthedEmail(email, key);
+
         return ResponseEntity.ok("이메일 인증 코드 전송되었습니다");
     }
 
@@ -119,6 +123,7 @@ public class JoinMemberController {
 
                                                      @Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
                                                      @RequestBody MemberRequest.EmailAuthedKey takenDto) {
+
         return joinMemberEmailService.checkAuthedKey(email, takenDto.key()) ?
                 ResponseEntity.ok("이메일 인증에 성공하였습니다") :
                 ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("이메일 인증에 실패하였습니다");

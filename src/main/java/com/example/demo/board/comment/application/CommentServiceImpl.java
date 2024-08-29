@@ -43,9 +43,7 @@ public class CommentServiceImpl implements CommentService {
 
         int avgScore = getAvgScore(savedBoard);
         savedBoard.avgScorePatch(avgScore);
-
         savedBoard.commentCountUp();
-        boardRepository.save(savedBoard);
     }
 
     @Override
@@ -55,18 +53,19 @@ public class CommentServiceImpl implements CommentService {
         Comment savedComment = commentRepository.findById(takenCommentId)
                 .orElseThrow(() -> new NotFoundDataException("해당 댓글을 찾을 수 없습니다"));
 
-        if(!takenMemberId.equals(savedComment.getMember().getId())) throw new AuthorityException("게시글을 작성한 회원이 아닙니다");
-        Board savedBoard = savedComment.getBoard();
+        if(!takenMemberId.equals(savedComment.getMember().getId()))
+            throw new AuthorityException("게시글을 작성한 회원이 아닙니다");
+
         commentRepository.delete(savedComment);
 
+        Board savedBoard = savedComment.getBoard();
         int avgScore = getAvgScore(savedBoard);
         savedBoard.avgScorePatch(avgScore);
-
         savedBoard.commentCountDown();
-        boardRepository.save(savedBoard);
     }
 
 
+    // 게시글 평점 평균 구하는 메서드
     private int getAvgScore(Board board) {
         List<Comment> commentList = board.getComments();
 
@@ -98,8 +97,14 @@ public class CommentServiceImpl implements CommentService {
         Comment savedComment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new NotFoundDataException("해당 댓글을 찾을 수 없습니다"));
 
-        if(!takenMemberId.equals(savedComment.getMember().getId())) throw new AuthorityException("게시글을 작성한 회원이 아닙니다");
+        if(!takenMemberId.equals(savedComment.getMember().getId()))
+            throw new AuthorityException("게시글을 작성한 회원이 아닙니다");
+
         savedComment.update(takenDto);
+
+        Board savedBoard = savedComment.getBoard();
+        int avgScore = getAvgScore(savedBoard);
+        savedBoard.avgScorePatch(avgScore);
     }
 
     private Page<CommentResponse.FindByBoardId> toDtoPage(Page<Comment> commentList){

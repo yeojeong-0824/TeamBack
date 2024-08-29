@@ -48,6 +48,7 @@ public class MemberServiceImpl implements MemberService {
         if(!passwordEncoder.matches(takenPassword, savedPassword)) throw new RequestDataException("비밀번호가 일치하지 않습니다");
 
         boardRepository.deleteByMember(savedEntity);
+        commentRepository.deleteByMember(savedEntity);
         memberRepository.deleteById(takenMemberId);
     }
 
@@ -91,7 +92,6 @@ public class MemberServiceImpl implements MemberService {
 
         String newPassword = this.createNewPassword();
         savedEntity.patchPassword(passwordEncoder.encode(newPassword));
-        memberRepository.save(savedEntity);
 
         return newPassword;
     }
@@ -145,6 +145,5 @@ public class MemberServiceImpl implements MemberService {
 
         String newPassword = takenDto.newPassword() == null ? null : passwordEncoder.encode(takenDto.newPassword());
         savedEntity.patchMember(takenDto, newPassword);
-        memberRepository.save(savedEntity);
     }
 }
