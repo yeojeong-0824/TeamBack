@@ -1,4 +1,4 @@
-package com.example.demo.security.refreshtoken;
+package com.example.demo.security.refreshtoken.domain;
 
 import org.springframework.data.repository.CrudRepository;
 

@@ -1,4 +1,4 @@
-package com.example.demo.security.refreshtoken;
+package com.example.demo.security.refreshtoken.domain;
 
 import jakarta.persistence.Id;
 import lombok.*;

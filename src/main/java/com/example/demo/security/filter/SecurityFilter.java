@@ -1,9 +1,7 @@
 package com.example.demo.security.filter;
 
 import com.example.demo.security.JwtProvider;
-import com.example.demo.security.filter.JwtFilter;
-import com.example.demo.security.filter.LoginFilter;
-import com.example.demo.security.refreshtoken.RefreshTokenService;
+import com.example.demo.security.refreshtoken.refreshtokenservice.RefreshTokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
