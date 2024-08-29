@@ -13,21 +13,6 @@ public class RedisRepository {
 
     private final RedisTemplate<String, Object> redisTemplate;
 
-    public void setData(String key, Object value, Duration time) {
-        ValueOperations<String, Object> redisValueOperations = redisTemplate.opsForValue();
-        redisValueOperations.set(key, value, time);
-    }
-
-    public void setData(String key, Object value) {
-        ValueOperations<String, Object> redisValueOperations = redisTemplate.opsForValue();
-        redisValueOperations.set(key, value);
-    }
-
-    public Object getDataByKey(String key) {
-        ValueOperations<String, Object> redisValueOperations = redisTemplate.opsForValue();
-        return redisValueOperations.get(key);
-    }
-
     public void deleteKey(String key) {
         redisTemplate.delete(key);
     }

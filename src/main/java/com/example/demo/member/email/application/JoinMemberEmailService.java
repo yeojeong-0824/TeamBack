@@ -1,15 +1,12 @@
 package com.example.demo.member.email.application;
 
 import com.example.demo.config.exception.NotFoundDataException;
-import com.example.demo.config.redis.RedisIdentifier;
-import com.example.demo.config.redis.RedisRepository;
 import com.example.demo.member.email.domain.Email;
 import com.example.demo.member.email.domain.EmailRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.Duration;
 import java.util.Random;
 
 /**
