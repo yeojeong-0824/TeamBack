@@ -50,7 +50,7 @@ public class AuthedCommentController {
         return ResponseEntity.ok("댓글 등록에 성공하였습니다");
     }
 
-    @PutMapping("/{boardId}/{commentId}")
+    @PutMapping("/{commentId}")
     @Operation(summary = "댓글 수정", description = "게시글 댓글을 수정합니다")
     @ApiResponses(
             value = {
@@ -59,8 +59,7 @@ public class AuthedCommentController {
             }
     )
     public ResponseEntity<String> edit(
-            @PathVariable Long boardId,
-            @PathVariable Long commentId,
+            @PathVariable("commentId") Long commentId,
             @Valid @RequestBody CommentRequest.Edit takenDto,
             HttpServletRequest request
     ){
@@ -68,7 +67,7 @@ public class AuthedCommentController {
         log.info("{}: 댓글 수정 엔드포인트 호출", ip);
 
         Long memberId = SecurityUtil.getCurrentMemberId();
-        commentService.updateById(commentId, boardId, memberId, takenDto);
+        commentService.updateById(commentId, memberId, takenDto);
         return ResponseEntity.ok("댓글 수정에 성공하였습니다");
     }
 

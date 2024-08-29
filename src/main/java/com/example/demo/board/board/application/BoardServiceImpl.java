@@ -52,22 +52,11 @@ public class BoardServiceImpl implements BoardService {
     @Override
     @Transactional
     @MethodTimer(method = "게시글 작성")
-    public void save(BoardRequest.SaveBoard request, Long memberId) {
-        Member member = memberRepository.findById(memberId).
+    public void save(BoardRequest.SaveBoard takenDto, Long takenMemberId) {
+        Member member = memberRepository.findById(takenMemberId).
                 orElseThrow(() -> new NotFoundDataException("해당 회원을 찾을 수 없습니다."));
 
-        Board board = Board.builder()
-                .locationName(request.locationName())
-                .formattedAddress(request.formattedAddress())
-                .latitude(request.latitude())
-                .longitude(request.longitude())
-                .title(request.title())
-                .body(request.body())
-                .view(0)
-                .commentCount(0)
-                .member(member)
-                .avgScore(0)
-                .build();
+        Board board = BoardRequest.SaveBoard.toEntity(takenDto, member);
 
         Board save = boardRepository.save(board);
         autocompleteService.addAutocomplete(save.getTitle());
@@ -77,30 +66,30 @@ public class BoardServiceImpl implements BoardService {
     @Override
     @Transactional
     @MethodTimer(method = "게시글 수정")
-    public void updateById(Long id, Long memberId, BoardRequest.PutBoard request) {
-        Board board = boardRepository.findById(id)
+    public void updateById(Long takenBoardId, Long takenMemberId, BoardRequest.PutBoard takenDto) {
+        Board board = boardRepository.findById(takenBoardId)
                 .orElseThrow(() -> new NotFoundDataException("해당 게시글을 찾을 수 없습니다."));
 
-        if (!memberId.equals(board.getMember().getId())) {
+        if (!takenMemberId.equals(board.getMember().getId())) {
             throw new AuthorityException("게시글을 작성한 회원이 아닙니다");
         }
 
-        board.update(request);
+        board.update(takenDto);
     }
 
     // 게시글 삭제
     @Override
     @Transactional
     @MethodTimer(method = "게시글 삭제")
-    public void deleteById(Long id, Long memberId) {
-        Board board = boardRepository.findById(id)
+    public void deleteById(Long takenBoardId, Long takenMemberId) {
+        Board board = boardRepository.findById(takenBoardId)
                 .orElseThrow(() -> new NotFoundDataException("해당 게시글을 찾을 수 없습니다."));
 
-        if (!memberId.equals(board.getMember().getId())) {
+        if (!takenMemberId.equals(board.getMember().getId())) {
             throw new AuthorityException("게시글을 작성한 회원이 아닙니다");
         }
 
-        redisRepository.deleteViewCount(id);
+        redisRepository.deleteViewCount(takenBoardId);
 
         boardRepository.delete(board);
     }
@@ -110,21 +99,21 @@ public class BoardServiceImpl implements BoardService {
     @Override
     @RedissonLocker(key = "findBoardById")
     @MethodTimer(method = "개별 게시글 조회")
-    public BoardResponse.FindBoard findById(Long id, Long memberId) {
-        Board board = boardRepository.findById(id)
+    public BoardResponse.FindBoard findById(Long takenBoardId, Long takenMemberId) {
+        Board board = boardRepository.findById(takenBoardId)
                 .orElseThrow(() -> new NotFoundDataException("해당 게시글을 찾을 수 없습니다."));
 
         board.addViewCount();
         boardRepository.save(board);
 
-        return new BoardResponse.FindBoard(board);
+        return BoardResponse.FindBoard.toDto(board);
     }
 
     // 전체 게시글
     @Override
     @MethodTimer(method = "게시글 조회")
-    public Page<BoardResponse.FindBoardList> findAll(int page) {
-        PageRequest request = PageRequest.of(page - 1, 10, Sort.by("id").descending());
+    public Page<BoardResponse.FindBoardList> findAll(int takenPage) {
+        PageRequest request = PageRequest.of(takenPage - 1, 10, Sort.by("id").descending());
 
         Page<Board> boardList = boardRepository.findAll(request);
         return toDtoPage(boardList);
@@ -133,28 +122,28 @@ public class BoardServiceImpl implements BoardService {
     // 조건에 따른 게시글 검색, 정렬
     @Override
     @MethodTimer(method = "조건에 따른 게시글 조회")
-    public Page<BoardResponse.FindBoardList> findAllBySearchKeyword(String searchKeyword, String keyword, String sortKeyword, int page) {
+    public Page<BoardResponse.FindBoardList> findAllBySearchKeyword(String takenSearchKeyword, String takenKeywork, String takenSortKeyword, int takenPage) {
         // 생성 날짜
-        PageRequest request = PageRequest.of(page - 1, 10, Sort.by("id").descending());
+        PageRequest request = PageRequest.of(takenPage - 1, 10, Sort.by("id").descending());
 
-        if (sortKeyword != null) {
-            request = switch (sortKeyword) {
-                case "score" -> PageRequest.of(page - 1, 10, Sort.by("avgScore").descending());
-                case "comment" -> PageRequest.of(page - 1, 10, Sort.by("commentCount").descending());
+        if (takenSortKeyword != null) {
+            request = switch (takenSortKeyword) {
+                case "score" -> PageRequest.of(takenPage - 1, 10, Sort.by("avgScore").descending());
+                case "comment" -> PageRequest.of(takenPage - 1, 10, Sort.by("commentCount").descending());
                 default -> request;
             };
         }
 
         Page<Board> boardList;
-        if (searchKeyword.equals("content")) {
+        if (takenSearchKeyword.equals("content")) {
             // 제목과 내용에 검색어와 일치하는 게시글 검색
-            boardList = boardRepository.findByTitleOrBodyContaining(keyword, request);
-        } else if (searchKeyword.equals("location")) {
+            boardList = boardRepository.findByTitleOrBodyContaining(takenKeywork, request);
+        } else if (takenSearchKeyword.equals("location")) {
             // 주소와 가게 이름이 검색어와 일치하는 게시글 검색
-            boardList = boardRepository.findByFormattedAddressOrLocationNameContaining(keyword, request);
-        } else if (searchKeyword.equals("title")) {
+            boardList = boardRepository.findByFormattedAddressOrLocationNameContaining(takenKeywork, request);
+        } else if (takenSearchKeyword.equals("title")) {
             // 자동완성 기능을 통해 제목 검색
-            List<String> autocompleteTitles = autocompleteService.getAutocomplete(keyword).list().stream()
+            List<String> autocompleteTitles = autocompleteService.getAutocomplete(takenKeywork).list().stream()
                     .map(AutocompleteResponse.Data::value)
                     .collect(Collectors.toList());
             boardList = boardRepository.findByTitleIn(autocompleteTitles, request);
@@ -201,7 +190,7 @@ public class BoardServiceImpl implements BoardService {
         }
     }
 
-    public Page<BoardResponse.FindBoardList> toDtoPage(Page<Board> boardList) {
-        return boardList.map(BoardResponse.FindBoardList::new);
+    private Page<BoardResponse.FindBoardList> toDtoPage(Page<Board> boardList) {
+        return boardList.map(BoardResponse.FindBoardList::toDto);
     }
 }

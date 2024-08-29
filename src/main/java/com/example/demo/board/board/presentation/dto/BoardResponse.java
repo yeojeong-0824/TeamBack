@@ -4,17 +4,7 @@ import com.example.demo.board.board.domain.Board;
 import lombok.*;
 
 public class BoardResponse {
-
-//    private Long id;
-//    private String locationName;
-//    private String formattedAddress;
-//    private String latitude;  // 위도
-//    private String longitude;  // 경도
-//    private String title;
-//    private String body;
-//    private Integer view;
-//    private Integer likeCount;
-
+    @Builder
     public record FindBoardList(
             Long id,
             String locationName,
@@ -26,21 +16,22 @@ public class BoardResponse {
             Integer avgScore,
             Integer commentCount
     ) {
-        public FindBoardList(Board board) {
-            this(
-                    board.getId(),
-                    board.getLocationName(),
-                    board.getFormattedAddress(),
-                    board.getLatitude(),
-                    board.getLongitude(),
-                    board.getTitle(),
-                    board.getView(),
-                    board.getAvgScore(),
-                    board.getCommentCount()
-            );
+        public static FindBoardList toDto(Board board) {
+            return FindBoardList.builder()
+                    .id(board.getId())
+                    .locationName(board.getLocationName())
+                    .formattedAddress(board.getFormattedAddress())
+                    .latitude(board.getLatitude())
+                    .longitude(board.getLongitude())
+                    .title(board.getTitle())
+                    .view(board.getView())
+                    .avgScore(board.getAvgScore())
+                    .commentCount(board.getCommentCount())
+                    .build();
         }
     }
 
+    @Builder
     public record FindBoard(
             String locationName,
             String formattedAddress,
@@ -53,30 +44,26 @@ public class BoardResponse {
             MemberInfo member
     ) {
         @Builder
-        public record MemberInfo (
+        private record MemberInfo (
                 Long userId,
-                Integer age,
                 String nickname
         ){}
 
-        public FindBoard(Board board) {
-            this(
-                    board.getLocationName(),
-                    board.getFormattedAddress(),
-                    board.getLatitude(),
-                    board.getLongitude(),
-                    board.getTitle(),
-                    board.getBody(),
-                    board.getView(),
-                    board.getAvgScore(),
-                    MemberInfo.builder()
+        public static FindBoard toDto(Board board) {
+            return FindBoard.builder()
+                    .locationName(board.getLocationName())
+                    .formattedAddress(board.getFormattedAddress())
+                    .latitude(board.getLatitude())
+                    .longitude(board.getLongitude())
+                    .title(board.getTitle())
+                    .body(board.getBody())
+                    .view(board.getView())
+                    .avgScore(board.getAvgScore())
+                    .member(MemberInfo.builder()
                             .userId(board.getMember().getId())
-                            .age(board.getMember().getAge())
                             .nickname(board.getMember().getNickname())
-                            .build()
-            );
+                            .build())
+                    .build();
         }
     }
-
-
 }

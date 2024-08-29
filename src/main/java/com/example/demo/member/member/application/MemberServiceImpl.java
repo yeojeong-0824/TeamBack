@@ -33,9 +33,9 @@ public class MemberServiceImpl implements MemberService {
     @Transactional
     @Override
     @MethodTimer(method = "회원가입 로직")
-    public void save(MemberRequest.SaveMember takenMemberRequest) {
-        String encodingPassword = passwordEncoder.encode(takenMemberRequest.password());
-        Member takenMember = MemberRequest.SaveMember.toEntity(takenMemberRequest, encodingPassword);
+    public void save(MemberRequest.SaveMember takenDto) {
+        String encodingPassword = passwordEncoder.encode(takenDto.password());
+        Member takenMember = MemberRequest.SaveMember.toEntity(takenDto, encodingPassword);
         memberRepository.save(takenMember);
     }
 

@@ -8,7 +8,6 @@ import com.example.demo.board.comment.presentation.dto.CommentRequest;
 import com.example.demo.board.comment.presentation.dto.CommentResponse;
 import com.example.demo.config.exception.AuthorityException;
 import com.example.demo.config.exception.NotFoundDataException;
-import com.example.demo.config.exception.RequestDataException;
 import com.example.demo.config.util.customannotation.MethodTimer;
 import com.example.demo.config.util.customannotation.RedissonLocker;
 import com.example.demo.member.member.domain.Member;
@@ -35,6 +34,7 @@ public class CommentServiceImpl implements CommentService {
     public void save(CommentRequest.Save takenDto, Long takenBoardId, Long takenMemberId) {
         Board savedBoard = boardRepository.findById(takenBoardId)
                 .orElseThrow(() -> new NotFoundDataException("해당 게시글을 찾을 수 없습니다"));
+
         Member savedMember = memberRepository.findById(takenMemberId)
                 .orElseThrow(() -> new NotFoundDataException("해당 유저를 찾을 수 없습니다"));
 
@@ -47,8 +47,8 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @MethodTimer(method = "게시글에 작성된 댓글 조회")
-    public Page<CommentResponse.FindByBoardId> findByBoardId(Long takenBoardId, int page) {
-        PageRequest request = PageRequest.of(page - 1, 10, Sort.by("id").descending());
+    public Page<CommentResponse.FindByBoardId> findByBoardId(Long takenBoardId, int takenPage) {
+        PageRequest request = PageRequest.of(takenPage - 1, 10, Sort.by("id").descending());
         Page<Comment> commentList = commentRepository.findAllByBoardId(takenBoardId, request);
 
         return toDtoPage(commentList);
@@ -57,22 +57,22 @@ public class CommentServiceImpl implements CommentService {
     @Override
     @Transactional
     @MethodTimer(method = "댓글 수정")
-    public void updateById(Long commentId, Long takenBoardId, Long takenMemberId, CommentRequest.Edit editDto){
-        Comment comment = commentRepository.findById(commentId)
+    public void updateById(Long commentId, Long takenMemberId, CommentRequest.Edit takenDto){
+        Comment savedComment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new NotFoundDataException("해당 댓글을 찾을 수 없습니다"));
 
-        if(!takenMemberId.equals(comment.getMember().getId())){
+        if(!takenMemberId.equals(savedComment.getMember().getId())){
             throw new AuthorityException("게시글을 작성한 회원이 아닙니다");
         }
 
-        comment.update(editDto);
+        savedComment.update(takenDto);
     }
 
     @Override
     @MethodTimer(method = "댓글 삭제")
     @RedissonLocker(key = "deleteComment")
-    public void deleteById(Long commentId, Long takenMemberId){
-        Comment savedComment = commentRepository.findById(commentId)
+    public void deleteById(Long takenCommentId, Long takenMemberId){
+        Comment savedComment = commentRepository.findById(takenCommentId)
                 .orElseThrow(() -> new NotFoundDataException("해당 댓글을 찾을 수 없습니다"));
 
         if(!takenMemberId.equals(savedComment.getMember().getId())){
@@ -86,7 +86,7 @@ public class CommentServiceImpl implements CommentService {
         commentRepository.delete(savedComment);
     }
 
-    public Page<CommentResponse.FindByBoardId> toDtoPage(Page<Comment> commentList){
+    private Page<CommentResponse.FindByBoardId> toDtoPage(Page<Comment> commentList){
         return commentList.map(CommentResponse.FindByBoardId::toDto);
     }
 }

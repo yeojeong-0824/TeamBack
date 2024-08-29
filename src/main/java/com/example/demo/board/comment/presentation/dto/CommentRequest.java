@@ -14,8 +14,9 @@ public class CommentRequest {
     @Builder
     public record Save(
             @NotNull
-            @Min(1) @Max(5)
+            @Min(0) @Max(5)
             Integer score,
+            @NotBlank
             String comment
     ){
         public static Comment toEntity(Save dto, Board board, Member member) {
@@ -30,8 +31,9 @@ public class CommentRequest {
 
     public record Edit(
             @NotNull
-            @Min(1) @Max(5)
+            @Min(0) @Max(5)
             Integer score,
+            @NotBlank
             String comment
     ){
     }
