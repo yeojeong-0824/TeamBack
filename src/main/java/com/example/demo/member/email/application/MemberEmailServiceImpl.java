@@ -1,10 +1,9 @@
 package com.example.demo.member.email.application;
 
 import com.example.demo.config.exception.NotFoundDataException;
-import com.example.demo.member.email.EmailSender;
 import com.example.demo.member.email.domain.Email;
 import com.example.demo.member.email.domain.EmailRepository;
-import com.example.demo.member.email.dto.SendEmail;
+import com.example.demo.member.email.presentation.dto.SendEmail;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -69,7 +68,6 @@ public class MemberEmailServiceImpl implements MemberEmailService {
         if(!savedEntity.getValue().equals(authedKey)) return false;
 
         savedEntity.authedEmail(AUTHED);
-        emailRepository.save(savedEntity);
         return true;
     }
 

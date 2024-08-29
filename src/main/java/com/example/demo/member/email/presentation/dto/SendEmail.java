@@ -1,4 +1,4 @@
-package com.example.demo.member.email.dto;
+package com.example.demo.member.email.presentation.dto;
 
 import lombok.Builder;
 
@@ -7,7 +7,6 @@ public class SendEmail {
     public record JoinEmail(
             String email,
             String title,
-
             String authedKey
     ){}
 }
