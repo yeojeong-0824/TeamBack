@@ -6,7 +6,18 @@ public class SendEmail {
     @Builder
     public record JoinEmail(
             String email,
-            String title,
             String authedKey
+    ){}
+
+    @Builder
+    public record FindPassword(
+            String email,
+            String password
+    ){}
+
+    @Builder
+    public record FindUsername(
+            String email,
+            String username
     ){}
 }

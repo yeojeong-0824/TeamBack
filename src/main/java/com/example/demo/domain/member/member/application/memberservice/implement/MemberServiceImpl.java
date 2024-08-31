@@ -84,7 +84,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public String createNewPassword(String takenUsername, String takenEmail) {
+    public String findPassword(String takenUsername, String takenEmail) {
         Member savedEntity = memberRepository.findByUsername(takenUsername)
                 .orElseThrow(() -> new NotFoundDataException("해당 유저를 찾지 못했습니다"));
 

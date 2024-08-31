@@ -2,16 +2,22 @@ package com.example.demo.domain.member.member.presentation;
 
 import com.example.demo.config.util.customannotation.MethodTimer;
 import com.example.demo.domain.member.email.application.memberemailservice.MemberEmailService;
+import com.example.demo.domain.member.email.presentation.dto.SendEmail;
 import com.example.demo.domain.member.member.application.memberservice.MemberService;
+import com.example.demo.domain.member.member.presentation.dto.MemberRequest;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -36,17 +42,18 @@ public class FindMemberController {
                     @ApiResponse(responseCode = "400", description = "입력 값이 잘못됨"),
             }
     )
-    public ResponseEntity<String> newPassword(@Size(min = 5, max = 30) @Schema(example = "user12")
-                                              @RequestParam("username")
-                                              String username,
+    public ResponseEntity<String> findPassword(@Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
+                                               @Valid @RequestBody MemberRequest.FindPassword takenDto) {
 
-                                              @Size(min = 1, max = 50) @Schema(example = "example@naver.com")
-                                              @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$",
-                                                      message = "유효한 이메일이 아닙니다.")
-                                              @RequestParam("email") String email) {
 
-        String newPassword = memberService.createNewPassword(username, email);
-        memberEmailService.sendNewPasswordEmail(email, newPassword);
+        String newPassword = memberService.findPassword(takenDto.username(), takenDto.email());
+
+        SendEmail.FindPassword dto = SendEmail.FindPassword.builder()
+                .email(takenDto.email())
+                .password(newPassword)
+                .build();
+
+        memberEmailService.sendFindPassword(dto);
 
         return ResponseEntity.ok("비밀번호 재발급에 성공하였습니다");
     }
@@ -61,13 +68,17 @@ public class FindMemberController {
                     @ApiResponse(responseCode = "400", description = "입력 값이 잘못됨"),
             }
     )
-    public ResponseEntity<String> findUsername(@Size(min = 1, max = 50) @Schema(example = "example@naver.com")
-                                               @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$",
-                                                        message = "유효한 이메일이 아닙니다.")
-                                               @RequestParam("email") String email) {
+    public ResponseEntity<String> findUsername(@Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
+                                               @Valid @RequestBody MemberRequest.FindUsername takenDto) {
 
-        String username = memberService.findUsernameByEmail(email);
-        memberEmailService.sendUsernameEmail(email, username);
+        String username = memberService.findUsernameByEmail(takenDto.email());
+
+        SendEmail.FindUsername dto = SendEmail.FindUsername.builder()
+                .email(takenDto.email())
+                .username(username)
+                .build();
+
+        memberEmailService.sendFindUsername(dto);
 
         return ResponseEntity.ok("아이디 찾기를 성공하였습니다");
     }

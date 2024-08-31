@@ -8,7 +8,7 @@ public interface MemberService {
     void save(MemberRequest.SaveMember takenMemberRequest);
     void deleteByMemberId(Long takenMemberId, MemberRequest.DeleteMember takenDto);
     MemberResponse.FindMember findById(Long takenMemberId);
-    String createNewPassword(String takenUsername, String takenEmail);
+    String findPassword(String takenUsername, String takenEmail);
     String findUsernameByEmail(String takenEmail);
     void checkDuplicatedByEmail(String takenEmail);
     void checkDuplicated(MemberRequest.DataConfirmMember takenDto);

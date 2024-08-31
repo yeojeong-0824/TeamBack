@@ -1,9 +1,9 @@
 package com.example.demo.domain.member.email.application.memberemailservice.implement;
 
 import com.example.demo.config.exception.NotFoundDataException;
+import com.example.demo.domain.member.email.application.emailsender.EmailSender;
 import com.example.demo.domain.member.email.domain.Email;
 import com.example.demo.domain.member.email.domain.EmailRepository;
-import com.example.demo.domain.member.email.application.EmailSender;
 import com.example.demo.domain.member.email.application.memberemailservice.MemberEmailService;
 import com.example.demo.domain.member.email.presentation.dto.SendEmail;
 import lombok.RequiredArgsConstructor;
@@ -27,38 +27,25 @@ public class MemberEmailServiceImpl implements MemberEmailService {
 
     @Transactional
     @Override
-    public void sendAuthedEmail(String email, String authedKey) {
-
-        SendEmail.JoinEmail dto = SendEmail.JoinEmail.builder()
-                .email(email)
-                .title("여정에 오신 것을 환영합니다")
-                .authedKey(authedKey)
-                .build();
-
+    public void sendAuthedEmail(SendEmail.JoinEmail dto) {
         Email entity = Email.builder()
-                .id(email)
-                .value(authedKey)
+                .id(dto.email())
+                .value(dto.authedKey())
                 .ttl(VALID_TIME)
                 .build();
 
         emailRepository.save(entity);
-        emailSender.joinSendEmail(dto);
+        emailSender.join(dto);
     }
 
     @Override
-    public void sendNewPasswordEmail(String email, String password) {
-        String title = "새로운 비밀번호 발급";
-        String text = "새로운 비밀번호: " + password;
-
-        emailSender.sendEmail(email, title, text);
+    public void sendFindPassword(SendEmail.FindPassword dto) {
+        emailSender.findPassword(dto);
     }
 
     @Override
-    public void sendUsernameEmail(String email, String username) {
-        String title = "아이디 찾기";
-        String text = "아이디: " + username;
-
-        emailSender.sendEmail(email, title, text);
+    public void sendFindUsername(SendEmail.FindUsername dto) {
+        emailSender.findUsername(dto);
     }
 
 
@@ -70,6 +57,7 @@ public class MemberEmailServiceImpl implements MemberEmailService {
         if(!savedEntity.getValue().equals(authedKey)) return false;
 
         savedEntity.authedEmail(AUTHED);
+        emailRepository.save(savedEntity);
         return true;
     }
 

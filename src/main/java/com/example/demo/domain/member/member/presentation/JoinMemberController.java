@@ -2,6 +2,7 @@ package com.example.demo.domain.member.member.presentation;
 
 import com.example.demo.config.util.customannotation.MethodTimer;
 import com.example.demo.domain.member.email.application.memberemailservice.MemberEmailService;
+import com.example.demo.domain.member.email.presentation.dto.SendEmail;
 import com.example.demo.domain.member.member.application.memberservice.MemberService;
 import com.example.demo.domain.member.member.presentation.dto.MemberRequest;
 import io.swagger.v3.oas.annotations.Operation;
@@ -12,6 +13,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
@@ -93,14 +95,18 @@ public class JoinMemberController {
             }
     )
     public ResponseEntity<String> authedByEmail(@NotBlank @Size(min = 1, max = 50) @Schema(example = "example@naver.com")
-                                                @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$",
-                                                         message = "유효한 이메일이 아닙니다.")
-                                                @PathVariable("email") String email) {
+                                                @Email @PathVariable("email") String email) {
 
         memberService.checkDuplicatedByEmail(email);
 
         String key = memberEmailService.createAuthedKey();
-        memberEmailService.sendAuthedEmail(email, key);
+
+        SendEmail.JoinEmail dto = SendEmail.JoinEmail.builder()
+                .email(email)
+                .authedKey(key)
+                .build();
+
+        memberEmailService.sendAuthedEmail(dto);
 
         return ResponseEntity.ok("이메일 인증 코드 전송되었습니다");
     }
@@ -116,9 +122,7 @@ public class JoinMemberController {
             }
     )
     public ResponseEntity<String> authedCheckByEmail(@Size(min = 1, max = 50) @Schema(example = "example@naver.com")
-                                                     @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$",
-                                                              message = "유효한 이메일이 아닙니다.")
-                                                     @PathVariable("email") String email,
+                                                     @Email @PathVariable("email") String email,
 
                                                      @Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
                                                      @RequestBody MemberRequest.EmailAuthedKey takenDto) {

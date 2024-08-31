@@ -5,8 +5,24 @@ import com.example.demo.domain.member.member.domain.Member;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
 import lombok.Builder;
+import org.springframework.web.bind.annotation.RequestParam;
 
 public class MemberRequest {
+
+    public record FindPassword(
+            @Size(min = 5, max = 30) @Schema(example = "user12")
+            String username,
+
+            @Schema(example = "example@naver.com")
+            @Size(min = 1, max = 50) @Email
+            String email
+    ){}
+
+    public record FindUsername(
+            @Schema(example = "example@naver.com")
+            @Size(min = 1, max = 50) @Email
+            String email
+    ){}
 
     @Schema(name = "유저 탈퇴")
     public record DeleteMember(

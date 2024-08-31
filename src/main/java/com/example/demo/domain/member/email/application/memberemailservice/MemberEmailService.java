@@ -1,10 +1,12 @@
 package com.example.demo.domain.member.email.application.memberemailservice;
 
+import com.example.demo.domain.member.email.presentation.dto.SendEmail;
+
 public interface MemberEmailService {
-    void sendAuthedEmail(String email, String authedKey);
+    void sendAuthedEmail(SendEmail.JoinEmail dto);
     boolean checkAuthedKey(String email, String authedKey);
     boolean checkAuthedEmail(String email);
     String createAuthedKey();
-    void sendNewPasswordEmail(String email, String password);
-    void sendUsernameEmail(String email, String username);
+    void sendFindPassword(SendEmail.FindPassword dto);
+    void sendFindUsername(SendEmail.FindUsername dto);
 }
