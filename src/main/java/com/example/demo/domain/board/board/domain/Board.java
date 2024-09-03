@@ -40,7 +40,7 @@ public class Board extends BaseTime {
     @Column(nullable = false)
     private String title;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 50000)
     private String body;
 
     @Column(nullable = false)
