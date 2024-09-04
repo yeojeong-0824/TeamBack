@@ -44,7 +44,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
             return null;
         }
 
-        log.error("로그인 시도: {}", username);
+        log.info("로그인 시도: {}", username);
         Authentication token = new UsernamePasswordAuthenticationToken(username, password);
         return authenticationManager.authenticate(token);
 
@@ -63,7 +63,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         Refresh Token: 사용자 정보를 로그인이 성공한 시점으로 암호화 후 DB에 저장 후 Header에 넣어줌
          */
 
-        log.error("로그인 성공");
+        log.info("로그인 성공");
         MemberDetails member = (MemberDetails) authResult.getPrincipal();
 
         long loginTime = System.currentTimeMillis();
