@@ -46,8 +46,6 @@ public class BoardServiceImpl implements BoardService {
     private final RedisRepository redisRepository;
     private final AutocompleteService autocompleteService;
 
-    private final RedissonClient redissonClient;
-
     // 게시글 작성
     @Override
     @Transactional
@@ -75,8 +73,8 @@ public class BoardServiceImpl implements BoardService {
         }
 
         board.update(takenDto);
-        boardRepository.save(board);
-        return BoardResponse.FindBoard.toDto(board);
+        Board save = boardRepository.save(board);
+        return BoardResponse.FindBoard.toDto(save);
     }
 
     // 게시글 삭제

@@ -5,8 +5,8 @@ import com.example.demo.domain.board.comment.presentation.dto.CommentResponse;
 import org.springframework.data.domain.Page;
 
 public interface CommentService {
-    void save(CommentRequest.Save takenDto, Long takenBoardId, Long takenMemberId);
+    CommentResponse.FindComment save(CommentRequest.Save takenDto, Long takenBoardId, Long takenMemberId);
     Page<CommentResponse.FindByBoardId> findByBoardId(Long takenBoardId, int page);
-    void updateById(Long commentId, Long takenMemberId, CommentRequest.Edit editDto);
-    void deleteById(Long commentId, Long takenMemberId);
+    CommentResponse.FindComment updateById(Long commentId, Long takenMemberId, CommentRequest.Edit editDto);
+    CommentResponse.DeleteComment deleteById(Long commentId, Long takenMemberId);
 }

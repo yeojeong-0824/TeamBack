@@ -32,7 +32,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     @Transactional
     @RedissonLocker(key = "saveComment")
-    public void save(CommentRequest.Save takenDto, Long takenBoardId, Long takenMemberId) {
+    public CommentResponse.FindComment save(CommentRequest.Save takenDto, Long takenBoardId, Long takenMemberId) {
         Board savedBoard = boardRepository.findById(takenBoardId)
                 .orElseThrow(() -> new NotFoundDataException("해당 게시글을 찾을 수 없습니다"));
 
@@ -40,17 +40,21 @@ public class CommentServiceImpl implements CommentService {
                 .orElseThrow(() -> new NotFoundDataException("해당 유저를 찾을 수 없습니다"));
 
         Comment entity = CommentRequest.Save.toEntity(takenDto, savedBoard, savedMember);
-        commentRepository.save(entity);
+        Comment save = commentRepository.save(entity);
 
+        savedBoard.commentCountUp();
         int avgScore = getAvgScore(savedBoard);
         savedBoard.avgScorePatch(avgScore);
-        savedBoard.commentCountUp();
+
+        boardRepository.save(savedBoard);
+
+        return CommentResponse.FindComment.toDto(save);
     }
 
     @Override
     @Transactional
     @RedissonLocker(key = "deleteComment")
-    public void deleteById(Long takenCommentId, Long takenMemberId){
+    public CommentResponse.DeleteComment deleteById(Long takenCommentId, Long takenMemberId){
         Comment savedComment = commentRepository.findById(takenCommentId)
                 .orElseThrow(() -> new NotFoundDataException("해당 댓글을 찾을 수 없습니다"));
 
@@ -60,14 +64,21 @@ public class CommentServiceImpl implements CommentService {
         commentRepository.delete(savedComment);
 
         Board savedBoard = savedComment.getBoard();
+
+        savedBoard.commentCountDown();
         int avgScore = getAvgScore(savedBoard);
         savedBoard.avgScorePatch(avgScore);
-        savedBoard.commentCountDown();
+
+        Board board = boardRepository.save(savedBoard);
+        return CommentResponse.DeleteComment.toDto(board);
     }
 
 
     // 게시글 평점 평균 구하는 메서드
     private int getAvgScore(Board board) {
+        int commentCount = board.getCommentCount();
+        if(commentCount == 0) return 0;
+
         List<Comment> commentList = board.getComments();
 
         int size = 0;
@@ -94,18 +105,23 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @Transactional
-    public void updateById(Long commentId, Long takenMemberId, CommentRequest.Edit takenDto){
+    public CommentResponse.FindComment updateById(Long commentId, Long takenMemberId, CommentRequest.Edit takenDto){
         Comment savedComment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new NotFoundDataException("해당 댓글을 찾을 수 없습니다"));
 
         if(!takenMemberId.equals(savedComment.getMember().getId()))
-            throw new AuthorityException("게시글을 작성한 회원이 아닙니다");
+            throw new AuthorityException("댓글을 작성한 회원이 아닙니다");
 
         savedComment.update(takenDto);
+        Comment save = commentRepository.save(savedComment);
 
         Board savedBoard = savedComment.getBoard();
         int avgScore = getAvgScore(savedBoard);
         savedBoard.avgScorePatch(avgScore);
+
+        boardRepository.save(savedBoard);
+
+        return CommentResponse.FindComment.toDto(save);
     }
 
     private Page<CommentResponse.FindByBoardId> toDtoPage(Page<Comment> commentList){
