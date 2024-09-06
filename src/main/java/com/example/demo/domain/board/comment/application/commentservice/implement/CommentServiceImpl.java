@@ -96,6 +96,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
+    @Transactional
     public Page<CommentResponse.FindByBoardId> findByBoardId(Long takenBoardId, int takenPage) {
         PageRequest request = PageRequest.of(takenPage - 1, 10, Sort.by("id").descending());
         Page<Comment> commentList = commentRepository.findAllByBoardId(takenBoardId, request);
