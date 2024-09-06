@@ -94,6 +94,7 @@ public class MemberServiceImpl implements MemberService {
         String newPassword = this.createNewPassword();
         savedEntity.patchPassword(passwordEncoder.encode(newPassword));
 
+        memberRepository.save(savedEntity);
         return newPassword;
     }
 

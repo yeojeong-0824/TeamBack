@@ -3,6 +3,8 @@ package com.example.demo.domain.board.board.presentation.dto;
 import com.example.demo.domain.board.board.domain.Board;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 public class BoardResponse {
     @Builder
     public record FindBoardList(
@@ -13,10 +15,24 @@ public class BoardResponse {
             String longitude,  // 경도
             String title,
 
+            MemberInfo member,
+
             Integer view,
             Integer avgScore,
             Integer commentCount
     ) {
+        @Builder
+        private record MemberInfo(
+                Long id,
+                String nickname
+        ){}
+
+        @Builder
+        private record TimeInfo(
+                LocalDateTime createTime,
+                LocalDateTime updateTime
+        ){}
+
         public static FindBoardList toDto(Board board) {
             return FindBoardList.builder()
                     .id(board.getId())
@@ -29,12 +45,17 @@ public class BoardResponse {
                     .view(board.getView())
                     .avgScore(board.getAvgScore())
                     .commentCount(board.getCommentCount())
+                    .member(MemberInfo.builder()
+                            .id(board.getMember().getId())
+                            .nickname(board.getMember().getNickname())
+                            .build())
                     .build();
         }
     }
 
     @Builder
     public record FindBoard(
+            Long id,
             String locationName,
             String formattedAddress,
             String latitude,  // 위도
@@ -57,6 +78,7 @@ public class BoardResponse {
 
         public static FindBoard toDto(Board board) {
             return FindBoard.builder()
+                    .id(board.getId())
                     .locationName(board.getLocationName())
                     .formattedAddress(board.getFormattedAddress())
                     .latitude(board.getLatitude())

@@ -37,20 +37,6 @@ public class FindBoardController {
         return ResponseEntity.ok(boardServiceImpl.findById(boardId, memberId));
     }
 
-    @MethodTimer(method = "모든 게시글 호출")
-    @GetMapping("/list")
-    @Operation(summary = "모든 게시글")
-    @ApiResponses(
-            value = {
-                    @ApiResponse(responseCode = "200", description = "모든 게시글 검색 성공"),
-                    @ApiResponse(responseCode = "400", description = "모든 게시글 검색 실패")
-            }
-    )
-    public ResponseEntity<Page<BoardResponse.FindBoardList>> boardList(
-            @RequestParam(required = false, defaultValue = "1", value = "page") int page){
-        return ResponseEntity.ok(boardServiceImpl.findAll(page));
-    }
-
     @MethodTimer(method = "조건에 따른 게시글 호출")
     @GetMapping
     @Operation(summary = "조건에 따른 게시글 검색, 정렬")

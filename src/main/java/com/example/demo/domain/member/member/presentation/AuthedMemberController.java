@@ -47,7 +47,7 @@ public class AuthedMemberController {
     }
 
     @MethodTimer(method = "해당 회원이 작성한 게시글 호출")
-    @GetMapping("/board")
+    @GetMapping("/boards")
     @Operation(summary = "해당 회원의 작성 게시글 확인", description = "해당 회원이 작성한 게시글의 정보를 받아옵니다.")
     @ApiResponses(
             value = {
@@ -63,7 +63,7 @@ public class AuthedMemberController {
     }
 
     @MethodTimer(method = "해당 회원이 작성한 댓글 호출")
-    @GetMapping("/comment")
+    @GetMapping("/comments")
     @Operation(summary = "해당 회원의 작성 댓글 목록 확인", description = "해당 회원이 작성한 댓글의 정보를 받아옵니다.")
     @ApiResponses(
             value = {

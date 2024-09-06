@@ -51,20 +51,22 @@ public class BoardServiceImpl implements BoardService {
     // 게시글 작성
     @Override
     @Transactional
-    public void save(BoardRequest.SaveBoard takenDto, Long takenMemberId) {
+    public BoardResponse.FindBoard save(BoardRequest.SaveBoard takenDto, Long takenMemberId) {
         Member member = memberRepository.findById(takenMemberId).
                 orElseThrow(() -> new NotFoundDataException("해당 회원을 찾을 수 없습니다."));
 
         Board board = BoardRequest.SaveBoard.toEntity(takenDto, member);
 
         Board save = boardRepository.save(board);
+
         autocompleteService.addAutocomplete(save.getTitle());
+        return BoardResponse.FindBoard.toDto(save);
     }
 
     // 게시글 수정
     @Override
     @Transactional
-    public void updateById(Long takenBoardId, Long takenMemberId, BoardRequest.PutBoard takenDto) {
+    public BoardResponse.FindBoard updateById(Long takenBoardId, Long takenMemberId, BoardRequest.PutBoard takenDto) {
         Board board = boardRepository.findById(takenBoardId)
                 .orElseThrow(() -> new NotFoundDataException("해당 게시글을 찾을 수 없습니다."));
 
@@ -73,6 +75,8 @@ public class BoardServiceImpl implements BoardService {
         }
 
         board.update(takenDto);
+        boardRepository.save(board);
+        return BoardResponse.FindBoard.toDto(board);
     }
 
     // 게시글 삭제
@@ -87,7 +91,6 @@ public class BoardServiceImpl implements BoardService {
         }
 
         redisRepository.deleteViewCount(takenBoardId);
-
         boardRepository.delete(board);
     }
 
@@ -103,15 +106,6 @@ public class BoardServiceImpl implements BoardService {
         boardRepository.save(board);
 
         return BoardResponse.FindBoard.toDto(board);
-    }
-
-    // 전체 게시글
-    @Override
-    public Page<BoardResponse.FindBoardList> findAll(int takenPage) {
-        PageRequest request = PageRequest.of(takenPage - 1, 10, Sort.by("id").descending());
-
-        Page<Board> boardList = boardRepository.findAll(request);
-        return toDtoPage(boardList);
     }
 
     // 조건에 따른 게시글 검색, 정렬

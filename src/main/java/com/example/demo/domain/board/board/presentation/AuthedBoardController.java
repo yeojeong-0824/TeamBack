@@ -1,6 +1,7 @@
 package com.example.demo.domain.board.board.presentation;
 
 import com.example.demo.domain.board.board.application.boardservice.BoardService;
+import com.example.demo.domain.board.board.presentation.dto.BoardResponse;
 import com.example.demo.domain.board.board.presentation.dto.GoogleApiResponse;
 import com.example.demo.domain.board.board.presentation.dto.BoardRequest;
 import com.example.demo.config.util.customannotation.MethodTimer;
@@ -39,13 +40,12 @@ public class AuthedBoardController {
                     @ApiResponse(responseCode = "403", description = "권한 없음"),
             }
     )
-    public ResponseEntity<String> save(
+    public ResponseEntity<BoardResponse.FindBoard> save(
             @Valid @RequestBody BoardRequest.SaveBoard request
     ){
         Long memberId = SecurityUtil.getCurrentMemberId();
 
-        boardService.save(request, memberId);
-        return ResponseEntity.status(HttpStatus.CREATED).body("게시글 작성 성공");
+        return ResponseEntity.status(HttpStatus.CREATED).body(boardService.save(request, memberId));
     }
 
     @MethodTimer(method = "구글 API를 이용한 장소 검색")
@@ -65,12 +65,11 @@ public class AuthedBoardController {
                     @ApiResponse(responseCode = "403", description = "권한 없음"),
             }
     )
-    public ResponseEntity<String> boardUpdate(
+    public ResponseEntity<BoardResponse.FindBoard> boardUpdate(
             @Valid @RequestBody BoardRequest.PutBoard request,
-            @PathVariable Long boardId){
+            @PathVariable("boardId") Long boardId){
         Long memberId = SecurityUtil.getCurrentMemberId();
-        boardService.updateById(boardId, memberId, request);
-        return ResponseEntity.ok("게시글 수정 성공");
+        return ResponseEntity.ok(boardService.updateById(boardId, memberId, request));
     }
 
     @MethodTimer(method = "게시글 삭제")
