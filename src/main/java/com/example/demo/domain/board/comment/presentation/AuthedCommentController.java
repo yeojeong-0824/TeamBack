@@ -41,7 +41,7 @@ public class AuthedCommentController {
     )
     public ResponseEntity<CommentResponse.FindComment> save(@PathVariable("boardId") Long boardId,
                                                             @Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
-                                       @Valid @RequestBody CommentRequest.Save takenDto) {
+                                                            @Valid @RequestBody CommentRequest.Save takenDto) {
 
         Long memberId = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.status(HttpStatus.CREATED).body(commentService.save(takenDto, boardId, memberId));
@@ -57,8 +57,8 @@ public class AuthedCommentController {
             }
     )
     public ResponseEntity<CommentResponse.FindComment> edit(@PathVariable("commentId") Long commentId,
-                                       @Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
-                                       @Valid @RequestBody CommentRequest.Edit takenDto) {
+                                                            @Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
+                                                            @Valid @RequestBody CommentRequest.Edit takenDto) {
 
         Long memberId = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(commentService.updateById(commentId, memberId, takenDto));

@@ -60,7 +60,7 @@ public class FindMemberController {
 
 
     @MethodTimer(method = "아이디 찾기 호출")
-    @GetMapping("/username")
+    @GetMapping("/username/{email}")
     @Operation(summary = "아이디 찾기", description = "해당 이메일로 회원가입이 된 아이디가 존재한다면, 해당 이메일로 아이디를 발송합니다.")
     @ApiResponses(
             value = {
@@ -69,12 +69,12 @@ public class FindMemberController {
             }
     )
     public ResponseEntity<String> findUsername(@Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
-                                               @Valid @RequestBody MemberRequest.FindUsername takenDto) {
+                                               @PathVariable("email") String email) {
 
-        String username = memberService.findUsernameByEmail(takenDto.email());
+        String username = memberService.findUsernameByEmail(email);
 
         SendEmail.FindUsername dto = SendEmail.FindUsername.builder()
-                .email(takenDto.email())
+                .email(email)
                 .username(username)
                 .build();
 
