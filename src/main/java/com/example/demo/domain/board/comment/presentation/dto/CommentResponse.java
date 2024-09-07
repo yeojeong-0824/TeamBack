@@ -1,7 +1,6 @@
 package com.example.demo.domain.board.comment.presentation.dto;
 
 import com.example.demo.domain.board.board.domain.Board;
-import com.example.demo.domain.board.board.presentation.dto.BoardResponse;
 import com.example.demo.domain.board.comment.domain.Comment;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;

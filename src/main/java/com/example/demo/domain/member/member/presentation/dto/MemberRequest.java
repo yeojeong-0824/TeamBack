@@ -9,16 +9,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 public class MemberRequest {
 
+    @Schema(name = "비밀번호 찾기")
     public record FindPassword(
             @Size(min = 5, max = 30) @Schema(example = "user12")
             String username,
 
-            @Schema(example = "example@naver.com")
-            @Size(min = 1, max = 50) @Email
-            String email
-    ){}
-
-    public record FindUsername(
             @Schema(example = "example@naver.com")
             @Size(min = 1, max = 50) @Email
             String email
