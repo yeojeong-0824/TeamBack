@@ -137,7 +137,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Transactional
     @Override
-    public void patchById(Long takenMemberId, MemberRequest.PatchMember takenDto) {
+    public MemberResponse.FindMember patchById(Long takenMemberId, MemberRequest.PatchMember takenDto) {
         Member savedEntity = memberRepository.findById(takenMemberId)
                 .orElseThrow(() -> new NotFoundDataException("해당 유저를 찾지 못했습니다"));
 
@@ -145,7 +145,26 @@ public class MemberServiceImpl implements MemberService {
         String takenPassword = takenDto.password();
         if(!passwordEncoder.matches(takenPassword, savedPassword)) throw new RequestDataException("비밀번호가 일치하지 않습니다");
 
-        String newPassword = takenDto.newPassword() == null ? null : passwordEncoder.encode(takenDto.newPassword());
-        savedEntity.patchMember(takenDto, newPassword);
+        savedEntity.patchMember(takenDto);
+        Member save = memberRepository.save(savedEntity);
+
+        return MemberResponse.FindMember.toDto(save);
+    }
+
+    @Transactional
+    @Override
+    public MemberResponse.FindMember patchPasswordById(Long takenMemberId, MemberRequest.PatchPassword takenDto) {
+        Member savedEntity = memberRepository.findById(takenMemberId)
+                .orElseThrow(() -> new NotFoundDataException("해당 유저를 찾지 못했습니다"));
+
+        String savedPassword = savedEntity.getPassword();
+        String takenPassword = takenDto.password();
+        if(!passwordEncoder.matches(takenPassword, savedPassword)) throw new RequestDataException("비밀번호가 일치하지 않습니다");
+
+        String password = passwordEncoder.encode(takenDto.newPassword());
+        savedEntity.patchPassword(password);
+        Member save = memberRepository.save(savedEntity);
+
+        return MemberResponse.FindMember.toDto(save);
     }
 }

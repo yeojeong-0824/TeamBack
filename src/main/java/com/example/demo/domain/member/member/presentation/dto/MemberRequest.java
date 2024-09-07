@@ -35,12 +35,6 @@ public class MemberRequest {
 
     @Schema(name = "유저 정보 수정")
     public record PatchMember(
-            @Size(min = 8, max = 30)
-            @Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*[0-9])\\S+$", // 비밀번호 정규식
-                    message = "비밀번호는 영문(대,소문자)과 숫자가 적어도 1개 이상씩 포함되어야 합니다")
-            @Schema(example = "1q2w3e4r")
-            String newPassword,
-
             @Size(min = 1, max = 10)
             @Schema(example = "소인국갔다옴")
             String nickname,
@@ -51,6 +45,21 @@ public class MemberRequest {
             @Schema(example = "1q2w3e4r")
             String password
     ) {}
+
+    @Schema(name = "유저 비밀번호 수정")
+    public record PatchPassword(
+            @Size(min = 8, max = 30)
+            @Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*[0-9])\\S+$", // 비밀번호 정규식
+                    message = "비밀번호는 영문(대,소문자)과 숫자가 적어도 1개 이상씩 포함되어야 합니다")
+            @Schema(example = "1q2w3e4r!")
+            String newPassword,
+
+            @NotBlank @Size(min = 8, max = 30)
+            @Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*[0-9])\\S+$", // 비밀번호 정규식
+                    message = "비밀번호는 영문(대,소문자)과 숫자가 적어도 1개 이상씩 포함되어야 합니다")
+            @Schema(example = "1q2w3e4r")
+            String password
+    ){}
 
     @Schema(name = "이메일 인증 코드")
     public record EmailAuthedKey (

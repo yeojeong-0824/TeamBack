@@ -12,7 +12,8 @@ public interface MemberService {
     String findUsernameByEmail(String takenEmail);
     void checkDuplicatedByEmail(String takenEmail);
     void checkDuplicated(MemberRequest.DataConfirmMember takenDto);
-    void patchById(Long takenMemberId, MemberRequest.PatchMember takenDto);
+    MemberResponse.FindMember patchById(Long takenMemberId, MemberRequest.PatchMember takenDto);
+    MemberResponse.FindMember patchPasswordById(Long takenMemberId, MemberRequest.PatchPassword takenDto);
     Page<MemberResponse.BoardInfo> findBoardById(Long takenMemberId, int takenPage);
     Page<MemberResponse.CommentInfo> findCommentById(Long takenMemberId, int takenPage);
 }

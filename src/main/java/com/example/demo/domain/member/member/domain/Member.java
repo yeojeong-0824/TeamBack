@@ -41,11 +41,7 @@ public class Member {
         this.password = password;
     }
 
-    public void patchMember(MemberRequest.PatchMember takenDto, String newPassword) {
-        if(newPassword != null) {
-            if (takenDto.password().equals(newPassword)) throw new ServerException("비밀번호 암호화가 진행되지 않았습니다");
-            this.password = newPassword;
-        }
+    public void patchMember(MemberRequest.PatchMember takenDto) {
         if(takenDto.nickname() != null) this.nickname = takenDto.nickname();
     }
 }
