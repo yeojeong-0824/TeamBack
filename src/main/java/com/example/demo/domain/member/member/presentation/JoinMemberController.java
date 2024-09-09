@@ -28,7 +28,7 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/member")
+@RequestMapping("/api/vi/members")
 @Validated
 @Tag(name = "회원가입 API")
 public class JoinMemberController {
@@ -67,7 +67,7 @@ public class JoinMemberController {
 
 
     @MethodTimer(method = "아이디 및 닉네임 중복 검사 호출")
-    @PostMapping("/confirm")
+    @PostMapping("/check")
     @Operation(summary = "아이디 및 닉네임 중복 검사", description = "아이디 및 닉네임이 이미 사용되고 있는지 확인합니다.")
     @ApiResponses(
             value = {

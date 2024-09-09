@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/member/authed")
+@RequestMapping("/api/vi/members/authed")
 @Tag(name = "유저 API (Authed)")
 @PreAuthorize("isAuthenticated()")
 public class AuthedMemberController {
@@ -115,7 +115,7 @@ public class AuthedMemberController {
     }
 
     @MethodTimer(method = "회원 비밀번호 수정 호출")
-    @PatchMapping("/password")
+    @PatchMapping("/passwords")
     @Operation(summary = "유저 비밀번호 수정", description = "회원 비밀번호 수정 호출")
     @ApiResponses(
             value = {

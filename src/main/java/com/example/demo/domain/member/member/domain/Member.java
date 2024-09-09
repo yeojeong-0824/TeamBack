@@ -1,6 +1,5 @@
 package com.example.demo.domain.member.member.domain;
 
-import com.example.demo.config.exception.ServerException;
 import com.example.demo.domain.member.member.presentation.dto.MemberRequest;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

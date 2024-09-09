@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/board/comment/authed")
+@RequestMapping("/api/vi/boards/comments/authed")
 @PreAuthorize("isAuthenticated()")
 @Tag(name = "댓글 API (Authed)")
 public class AuthedCommentController {
