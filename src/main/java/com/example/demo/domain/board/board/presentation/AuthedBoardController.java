@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/board/authed")
+@RequestMapping("/api/vi/boards/authed")
 @Tag(name = "게시글 API (Authed)")
 @PreAuthorize("isAuthenticated()")
 public class AuthedBoardController {
@@ -56,7 +56,7 @@ public class AuthedBoardController {
     }
 
     @MethodTimer(method = "게시글 수정")
-    @PutMapping("/update/{boardId}")
+    @PutMapping("/{boardId}")
     @Operation(summary = "게시글 수정")
     @ApiResponses(
             value = {
@@ -73,7 +73,7 @@ public class AuthedBoardController {
     }
 
     @MethodTimer(method = "게시글 삭제")
-    @DeleteMapping("/delete/{boardId}")
+    @DeleteMapping("/{boardId}")
     @Operation(summary = "게시글 삭제")
     @ApiResponses(
             value = {

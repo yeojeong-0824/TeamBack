@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/board")
+@RequestMapping("/api/vi/boards")
 @Tag(name = "게시글 찾기 API")
 public class FindBoardController {
     private final BoardServiceImpl boardServiceImpl;

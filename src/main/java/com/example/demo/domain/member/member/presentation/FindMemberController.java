@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/member/findMember")
+@RequestMapping("/api/vi/members/findMember")
 @Validated
 @Tag(name = "유저 찾기 API")
 public class FindMemberController {
@@ -34,7 +34,7 @@ public class FindMemberController {
     private final MemberEmailService memberEmailService;
 
     @MethodTimer(method = "새로운 비밀번호 발급 호출")
-    @PatchMapping("/password")
+    @PatchMapping("/passwords")
     @Operation(summary = "새로운 비밀번호 발급", description = "새로운 비밀번호를 발급합니다. 새로운 비밀번호는 해당 아이디의 이메일로 발송됩니다.")
     @ApiResponses(
             value = {
@@ -60,7 +60,7 @@ public class FindMemberController {
 
 
     @MethodTimer(method = "아이디 찾기 호출")
-    @GetMapping("/username/{email}")
+    @GetMapping("/usernames/{email}")
     @Operation(summary = "아이디 찾기", description = "해당 이메일로 회원가입이 된 아이디가 존재한다면, 해당 이메일로 아이디를 발송합니다.")
     @ApiResponses(
             value = {
