@@ -4,6 +4,11 @@ import lombok.Builder;
 
 public class SendEmail {
     @Builder
+    public record notificationEmail(
+            String email,
+            String message
+    ){}
+    @Builder
     public record JoinEmail(
             String email,
             String authedKey
