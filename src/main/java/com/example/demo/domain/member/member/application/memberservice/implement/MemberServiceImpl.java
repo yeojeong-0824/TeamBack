@@ -83,6 +83,7 @@ public class MemberServiceImpl implements MemberService {
         return savedComment.map(MemberResponse.CommentInfo::toDto);
     }
 
+
     @Override
     public String findPassword(String takenUsername, String takenEmail) {
         Member savedEntity = memberRepository.findByUsername(takenUsername)

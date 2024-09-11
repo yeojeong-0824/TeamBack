@@ -5,7 +5,8 @@ import com.example.demo.domain.member.member.domain.Member;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
 import lombok.Builder;
-import org.springframework.web.bind.annotation.RequestParam;
+
+import java.time.LocalDate;
 
 public class MemberRequest {
 
@@ -116,6 +117,7 @@ public class MemberRequest {
                     .age(dto.age())
                     .password(password)
                     .role(MemberRole.USER.getRole())
+                    .lastLoginDate(LocalDate.now())
                     .build();
         }
     }

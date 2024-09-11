@@ -1,5 +1,7 @@
 package com.example.demo.security.filter;
 
+import com.example.demo.domain.member.member.application.membernotification.MemberChangeService;
+import com.example.demo.domain.member.member.application.memberservice.MemberService;
 import com.example.demo.domain.member.member.presentation.dto.MemberDetails;
 import com.example.demo.security.JwtProvider;
 import com.example.demo.security.refreshtoken.domain.RefreshToken;
@@ -25,6 +27,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     private final AuthenticationManager authenticationManager;
     private final JwtProvider jwtProvider;
     private final RefreshTokenService refreshTokenService;
+    private final MemberChangeService memberChangeService;
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request,
@@ -65,6 +68,9 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
         log.info("로그인 성공");
         MemberDetails member = (MemberDetails) authResult.getPrincipal();
+
+        // 로그인 성공으로 마지막 로그인 시간 변경
+        memberChangeService.loginSuccessAndLastLoginDAteChange(member.getMemberId());
 
         long loginTime = System.currentTimeMillis();
 

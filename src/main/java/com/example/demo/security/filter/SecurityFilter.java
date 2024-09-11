@@ -1,5 +1,7 @@
 package com.example.demo.security.filter;
 
+import com.example.demo.domain.member.member.application.membernotification.MemberChangeService;
+import com.example.demo.domain.member.member.application.memberservice.MemberService;
 import com.example.demo.security.JwtProvider;
 import com.example.demo.security.refreshtoken.refreshtokenservice.RefreshTokenService;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +26,7 @@ public class SecurityFilter {
     private final AuthenticationManager authenticationManager;
     private final JwtProvider jwtProvider;
     private final RefreshTokenService refreshTokenService;
+    private final MemberChangeService memberChangeService;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -36,7 +39,7 @@ public class SecurityFilter {
                 .sessionManagement(auth -> auth.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
                 .addFilterBefore(new JwtFilter(jwtProvider, refreshTokenService), UsernamePasswordAuthenticationFilter.class)
-                .addFilterAt(new LoginFilter(authenticationManager, jwtProvider, refreshTokenService),
+                .addFilterAt(new LoginFilter(authenticationManager, jwtProvider, refreshTokenService, memberChangeService),
                         UsernamePasswordAuthenticationFilter.class)
 
                 .authorizeHttpRequests(auth -> auth
