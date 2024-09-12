@@ -39,7 +39,6 @@
 
 
 ## 사용 기술
-### BackEnd 
 <img src="https://github.com/user-attachments/assets/f965f8b7-843b-45f4-89e2-339e42af386d"> 
 
 ### 아키텍처
