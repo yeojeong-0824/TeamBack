@@ -43,20 +43,16 @@
 <img src="https://github.com/user-attachments/assets/f965f8b7-843b-45f4-89e2-339e42af386d"> 
 
 ## 팀소개
-#### 건우(BE)
 
-#### 은이(BE)
-
-#### 성빈(BE)
-
-#### 형준(FE)
+| 건우 | 은이 | 성빈 | 형준 |
+|------|------|------|-------|
+|  BE  |  BE  |  BE  |  FE |
 
 <br>
 
 ## 프로젝트 구조
 ```
-├─ ...
-├─ autocomplete
+├── autocomplete
 │   └── aplication
 │   └── presentaion.dto
 │
@@ -81,6 +77,4 @@
 │   ├── JwtProvider
 │   ├── SecurityConfig
 │   ├── SecurityUtil
-│
-└── settings.gradle
 ```
