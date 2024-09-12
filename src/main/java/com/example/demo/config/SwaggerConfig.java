@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Configuration;
 public class SwaggerConfig {
     @Bean
     public GroupedOpenApi group1() {
-        String[] paths = {"/member", "/member/**"};
+        String[] paths = {"/api/vi/members", "/api/vi/members/**"};
 
         return GroupedOpenApi.builder()
                 .group("유저 API")
@@ -24,7 +24,7 @@ public class SwaggerConfig {
 
     @Bean
     public GroupedOpenApi group2() {
-        String[] paths = {"/board", "/board/**"};
+        String[] paths = {"/api/vi/boards", "/api/vi/boards/**"};
 
         return GroupedOpenApi.builder()
                 .group("게시글 API")

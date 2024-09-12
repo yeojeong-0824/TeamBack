@@ -98,10 +98,6 @@ public class MemberRequest {
         @Schema(example = "1q2w3e4r")
         String password,
 
-        @NotBlank @Size(min = 1, max = 10)
-        @Schema(example = "걸리버")
-        String name,
-
         @NotNull
         @Min(1) @Max(120)
         @Schema(example = "90")
@@ -113,7 +109,6 @@ public class MemberRequest {
                     .username(dto.username())
                     .nickname(dto.nickname())
                     .email(dto.email())
-                    .name(dto.name())
                     .age(dto.age())
                     .password(password)
                     .role(MemberRole.USER.getRole())

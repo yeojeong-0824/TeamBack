@@ -66,9 +66,9 @@ public class JoinMemberController {
     }
 
 
-    @MethodTimer(method = "아이디 및 닉네임 중복 검사 호출")
-    @PostMapping("/check")
-    @Operation(summary = "아이디 및 닉네임 중복 검사", description = "아이디 및 닉네임이 이미 사용되고 있는지 확인합니다.")
+    @MethodTimer(method = "아이디 중복 검사 호출")
+    @GetMapping("/check/username/{username}")
+    @Operation(summary = "아이디 중복 검사", description = "이미 사용되고 있는 아이디인지 확인합니다.")
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "중복되지 않음"),
@@ -76,10 +76,25 @@ public class JoinMemberController {
                     @ApiResponse(responseCode = "409", description = "중복됨")
             }
     )
-    public ResponseEntity<String> checkDuplicatedByDataConfirmMember(@Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
-                                                                     @Valid @RequestBody MemberRequest.DataConfirmMember takenDto) {
+    public ResponseEntity<String> checkDuplicatedByUsername(@Size(min = 5, max = 30) @PathVariable("username") String username) {
 
-        memberService.checkDuplicated(takenDto);
+        memberService.checkDuplicatedByUsername(username);
+        return ResponseEntity.ok("중복되지 않았습니다");
+    }
+
+    @MethodTimer(method = "닉네임 중복 검사 호출")
+    @GetMapping("/check/nickname/{nickname}")
+    @Operation(summary = "닉네임 중복 검사", description = "이미 사용되고 있는 닉네임인지 확인합니다.")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "중복되지 않음"),
+                    @ApiResponse(responseCode = "400", description = "입력 값이 잘못됨"),
+                    @ApiResponse(responseCode = "409", description = "중복됨")
+            }
+    )
+    public ResponseEntity<String> checkDuplicatedByNickname(@Size(min = 1, max = 10) @PathVariable("nickname") String nickname) {
+
+        memberService.checkDuplicatedByNickname(nickname);
         return ResponseEntity.ok("중복되지 않았습니다");
     }
 
@@ -94,7 +109,7 @@ public class JoinMemberController {
                     @ApiResponse(responseCode = "409", description = "이메일이 중복 중복됨")
             }
     )
-    public ResponseEntity<String> authedByEmail(@NotBlank @Size(min = 1, max = 50) @Schema(example = "example@naver.com")
+    public ResponseEntity<String> authedByEmail(@Size(min = 1, max = 50) @Schema(example = "example@naver.com")
                                                 @Email @PathVariable("email") String email) {
 
         memberService.checkDuplicatedByEmail(email);

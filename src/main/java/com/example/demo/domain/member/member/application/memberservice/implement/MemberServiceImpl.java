@@ -119,15 +119,14 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public void checkDuplicated(MemberRequest.DataConfirmMember takenDto) {
-        String takenNickname = takenDto.nickname();
-        String takenUsername = takenDto.username();
-
-        if(memberRepository.existsByNickname(takenNickname))
-            throw new DuplicatedException("중복된 닉네임입니다");
-
+    public void checkDuplicatedByUsername(String takenUsername) {
         if(memberRepository.existsByUsername(takenUsername))
             throw new DuplicatedException("중복된 아이디입니다");
+    }
+    @Override
+    public void checkDuplicatedByNickname(String takenNickname) {
+        if(memberRepository.existsByNickname(takenNickname))
+            throw new DuplicatedException("중복된 닉네임입니다");
     }
 
     @Override

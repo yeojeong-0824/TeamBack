@@ -19,9 +19,6 @@ public class MemberResponse {
         @Schema(example = "example@naver.com")
         String email,
 
-        @Schema(example = "걸리버")
-        String name,
-
         @Schema(example = "90")
         Integer age
     ) {
@@ -30,7 +27,6 @@ public class MemberResponse {
                     .username(entity.getUsername())
                     .nickname(entity.getNickname())
                     .email(entity.getEmail())
-                    .name(entity.getName())
                     .age(entity.getAge())
                     .build();
         }
