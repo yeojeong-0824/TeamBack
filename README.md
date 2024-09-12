@@ -38,7 +38,7 @@
 
 ## 사용 기술
 ### BackEnd 
-<img src="https://github.com/user-attachments/assets/1d83e12e-8f07-4b01-be15-0c2deb8b2c12"> 
+<img src="https://github.com/user-attachments/assets/f965f8b7-843b-45f4-89e2-339e42af386d"> 
 
 ## 팀소개
 #### 건우(BE)
