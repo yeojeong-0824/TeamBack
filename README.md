@@ -42,6 +42,9 @@
 ### BackEnd 
 <img src="https://github.com/user-attachments/assets/f965f8b7-843b-45f4-89e2-339e42af386d"> 
 
+### 아키텍처
+<img src="https://github.com/user-attachments/assets/1a984f5e-d593-45c3-a631-7432e528bef7"> 
+
 ## 팀소개
 
 | 건우 | 은이 | 성빈 | 형준 |
@@ -57,11 +60,11 @@
 │   └── presentaion.dto
 │
 ├── config
+│   ├── SwaggerConfig
 │   └── batch
 │   └── exception
 │   └── redis
 │   └── util
-│   ├── SwaggerConfig
 │
 ├── domain
 │   └── board
@@ -72,9 +75,10 @@
 │       └── member
 │
 ├── security
-│   └── filter
-│   └── refreshtoken
 │   ├── JwtProvider
 │   ├── SecurityConfig
 │   ├── SecurityUtil
+│   └── filter
+│   └── refreshtoken
+
 ```
