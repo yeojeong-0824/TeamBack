@@ -56,3 +56,35 @@
 #### 성빈(BE)
 
 #### 형준(FE)
+
+## 프로젝트 구조
+```
+├─ ...
+├─ autocomplete
+│   └── aplication
+│   └── presentaion.dto
+│
+├── config
+│   └── batch
+│   └── exception
+│   └── redis
+│   └── util
+│   ├── SwaggerConfig
+│
+├── domain
+│   └── board
+│       └── board
+│       └── comment
+│   └── member
+│       └── email
+│       └── member
+│
+├── security
+│   └── filter
+│   └── refreshtoken
+│   ├── JwtProvider
+│   ├── SecurityConfig
+│   ├── SecurityUtil
+│
+└── settings.gradle
+```
