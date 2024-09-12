@@ -21,6 +21,27 @@ public class EmailSenderImpl implements EmailSender {
     private final TemplateEngine templateEngine;
 
     @Override
+    public void notificationMember(String email) {
+        try {
+            MimeMessage message = javaMailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+
+            Context context = new Context();
+            context.setVariable("message", "5개월 간 미접속");
+
+            helper.setSubject("5개월 이상 미접속 회원");
+            helper.setTo(email);
+
+            String content = templateEngine.process("notification", context);
+            helper.setText(content, true);
+
+            javaMailSender.send(message);
+        } catch (MessagingException e){
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
     public void join(SendEmail.JoinEmail dto) {
         try {
             MimeMessage message = javaMailSender.createMimeMessage();

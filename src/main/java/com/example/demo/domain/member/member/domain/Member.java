@@ -1,11 +1,14 @@
 package com.example.demo.domain.member.member.domain;
 
+import com.example.demo.config.exception.ServerException;
 import com.example.demo.domain.member.member.presentation.dto.MemberRequest;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDate;
 
 
 @Entity @Getter
@@ -36,11 +39,17 @@ public class Member {
     @Column(nullable = false)
     private String role;
 
+    @Column(nullable = false)
+    private LocalDate lastLoginDate;
+
     public void patchPassword(String password) {
         this.password = password;
     }
 
     public void patchMember(MemberRequest.PatchMember takenDto) {
         if(takenDto.nickname() != null) this.nickname = takenDto.nickname();
+    }
+    public void changeLastLoginDate() {
+        this.lastLoginDate = LocalDate.now();
     }
 }

@@ -25,6 +25,11 @@ public class MemberEmailServiceImpl implements MemberEmailService {
     private final String AUTHED = "Authed";
     private final int VALID_TIME = 5 * 60;
 
+    @Override
+    public void sendNotification(String email) {
+        emailSender.notificationMember(email);
+    }
+
     @Transactional
     @Override
     public void sendAuthedEmail(SendEmail.JoinEmail dto) {
