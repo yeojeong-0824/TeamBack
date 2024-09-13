@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 public class MemberChangeService {
 
     private final MemberRepository memberRepository;
-    public void loginSuccessAndLastLoginDAteChange(Long takenMemberId) {
+    public void loginSuccessAndLastLoginDateChange(Long takenMemberId) {
         Member member = memberRepository.findById(takenMemberId)
                 .orElseThrow(() -> new NotFoundDataException("해당 유저를 찾지 못했습니다"));
         member.changeLastLoginDate();

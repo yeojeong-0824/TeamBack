@@ -43,8 +43,6 @@ public class JoinMemberController {
     3. 아이디 및 닉네임 중복 검사 및 유효성 검사
     4. 회원가입(회원가입 시 이메일 인증을 진행하지 않았을 때는 인증되지 않은 이메일을 반환)
      */
-
-
     @MethodTimer(method = "회원가입 호출")
     @PostMapping
     @Operation(summary = "회원가입", description = "회원을 생성합니다.")

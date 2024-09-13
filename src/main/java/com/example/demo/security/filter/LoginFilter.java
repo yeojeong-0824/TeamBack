@@ -1,13 +1,13 @@
 package com.example.demo.security.filter;
 
 import com.example.demo.domain.member.member.application.membernotification.MemberChangeService;
-import com.example.demo.domain.member.member.application.memberservice.MemberService;
 import com.example.demo.domain.member.member.presentation.dto.MemberDetails;
 import com.example.demo.security.JwtProvider;
 import com.example.demo.security.refreshtoken.domain.RefreshToken;
 import com.example.demo.security.refreshtoken.refreshtokenservice.RefreshTokenService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -70,7 +70,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         MemberDetails member = (MemberDetails) authResult.getPrincipal();
 
         // 로그인 성공으로 마지막 로그인 시간 변경
-        memberChangeService.loginSuccessAndLastLoginDAteChange(member.getMemberId());
+        memberChangeService.loginSuccessAndLastLoginDateChange(member.getMemberId());
 
         long loginTime = System.currentTimeMillis();
 
@@ -86,8 +86,11 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
         refreshTokenService.save(saveToken);
 
-        response.addHeader(jwtProvider.JWT_HEADER_STRING, jwtProvider.TOKEN_PREFIX + jwtToken);
-        response.addHeader(jwtProvider.REFRESH_HEADER_STRING, jwtProvider.TOKEN_PREFIX + refreshToken);
+        Cookie jwt = new Cookie(jwtProvider.JWT_HEADER_STRING, jwtToken);
+        jwt.setMaxAge(jwtProvider.JWT_EXPIRATION_TIME / 1000);
+
+        response.addCookie(jwt);
+        response.setStatus(201);
     }
 
     @Override
@@ -97,6 +100,5 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
         log.error("로그인 실패");
         response.setStatus(401);
-
     }
 }
