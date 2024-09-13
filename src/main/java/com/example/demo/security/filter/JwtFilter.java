@@ -10,6 +10,7 @@ import com.example.demo.security.refreshtoken.domain.RefreshToken;
 import com.example.demo.security.refreshtoken.refreshtokenservice.RefreshTokenService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -56,8 +57,11 @@ public class JwtFilter extends OncePerRequestFilter {
 
             log.info("만료된 JWT Token 재발급 완료");
             MemberDetails reissueTokenMemberDetails = new MemberDetails(tokenMember);
-            String reissueToken = jwtProvider.createJwtToken(reissueTokenMemberDetails);
-            response.addHeader(jwtProvider.JWT_HEADER_STRING, jwtProvider.TOKEN_PREFIX + reissueToken);
+            String jwtToken = jwtProvider.createJwtToken(reissueTokenMemberDetails);
+
+            Cookie jwt = new Cookie(jwtProvider.JWT_HEADER_STRING, jwtToken);
+            jwt.setMaxAge(jwtProvider.JWT_EXPIRATION_TIME / 1000);
+            response.addCookie(jwt);
 
             Authentication authentication =
                     new UsernamePasswordAuthenticationToken(reissueTokenMemberDetails, null, reissueTokenMemberDetails.getAuthorities());
