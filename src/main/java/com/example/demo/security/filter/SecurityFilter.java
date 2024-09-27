@@ -34,7 +34,6 @@ public class SecurityFilter {
                 .csrf(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
-
                 .cors(auth -> auth.configurationSource(corsConfigurationSource()))
                 .sessionManagement(auth -> auth.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
@@ -48,20 +47,18 @@ public class SecurityFilter {
         return http.build();
     }
 
-    // 개발단계에서는 복잡성을 줄이기 위해 모든 요청을 허용함
-    private CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration config = new CorsConfiguration();
+
+        config.setAllowCredentials(true);  // 쿠키 사용 허용
+        //TODO : 나중에 아래 주소는 도메인 주소로 바꿔야 함.
+        config.setAllowedOrigins(List.of("http://localhost:8080", "http://localhost:3000"));  // 허용할 URL
+        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH"));  // 허용할 Http Method
+        config.setAllowedHeaders(List.of("Authorization"));  // 허용할 Header
+        config.setExposedHeaders(List.of("*"));
+
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-
-        configuration.addAllowedOriginPattern(CorsConfiguration.ALL);
-        configuration.addAllowedMethod(CorsConfiguration.ALL);
-        configuration.addAllowedHeader(CorsConfiguration.ALL);
-
-        configuration.setExposedHeaders(List.of(jwtProvider.REFRESH_HEADER_STRING, jwtProvider.JWT_HEADER_STRING));
-        configuration.setMaxAge(3600L);
-
-        source.registerCorsConfiguration("/**", configuration);
-
+        source.registerCorsConfiguration("/**", config);
         return source;
     }
 }
