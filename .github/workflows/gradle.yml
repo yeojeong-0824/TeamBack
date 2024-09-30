@@ -1,0 +1,61 @@
+name: CI/CD
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    name: CI
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: application.yml 파일 설정
+        run: echo ${{secrets.YML}} > ./application.yml
+
+      - name: 권한 부여
+        run: chmod +x ./gradlew
+        
+      - name: 빌드
+        run: ./gradlew build
+        
+      - name: Docker 이미지 빌드
+        run: docker build --no-cache -t ${{ secrets.DOCKERHUB_USERNAME }}/back .
+
+      - name: Docker 로그인
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_ID }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+      - name: Docker Image push
+        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/back
+
+  deploy:
+    name: CD
+    runs-on: ubuntu-latest
+    permissions: write-all
+    needs: build
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: EC2 접속 및 실행
+        uses: appleboy/ssh-action@v0.1.6
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_PRIVATE_KEY }}
+          port: ${{ secrets.EC2_PORT }}
+          script: |
+            sudo docker login -u ${{ secrets.DOCKERHUB_ID }} -p ${{ secrets.DOCKERHUB_PASSWORD }}
+            sudo docker pull ${{secrets.DOCKERHUB_USERNAME}}/back
+            sudo docker stop back
+            sudo docker container rm back
+            sudo docker run -dit -p 8080:8080 --name front --restart always ${{secrets.DOCKERHUB_USERNAME}}/back
+            sudo docker image prune -f
