@@ -96,10 +96,9 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
         // refresh Token
         Cookie refresh = new Cookie(jwtProvider.REFRESH_HEADER_STRING, refreshToken);
-        refresh.setMaxAge(jwtProvider.JWT_EXPIRATION_TIME / 1000);
+        refresh.setMaxAge(jwtProvider.REFRESH_EXPIRATION_TIME / 1000);
 
         response.addCookie(refresh);
-        response.setStatus(201);
     }
 
     @Override
