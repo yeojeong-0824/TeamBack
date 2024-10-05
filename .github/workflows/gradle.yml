@@ -23,7 +23,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: application.yml 파일 설정
-        run: echo ${{ secrets.APPLICATION_YML }} > ./application.yml
+        run: echo "${{ secrets.APPLICATION_YML }}" > ./application.yml
 
       - name: 권한 부여
         run: chmod +x ./gradlew
