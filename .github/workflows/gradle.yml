@@ -64,5 +64,5 @@ jobs:
             sudo docker pull ${{secrets.DOCKERHUB_USERNAME}}/back
             sudo docker stop back
             sudo docker container rm back
-            sudo docker run -dit -add-host host.docker.internal:host-gateway -p 8080:8080 --name back --restart always ${{secrets.DOCKERHUB_USERNAME}}/back
+            sudo docker run -dit --add-host host.docker.internal:host-gateway -p 8080:8080 --name back --restart always ${{secrets.DOCKERHUB_USERNAME}}/back
             sudo docker image prune -f
