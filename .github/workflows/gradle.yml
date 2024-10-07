@@ -67,5 +67,5 @@ jobs:
             sudo docker pull ${{secrets.DOCKERHUB_USERNAME}}/back
             sudo docker stop back
             sudo docker container rm back
-            sudo docker run -dit -p 8080:8080 --name back --network server --restart always ${{secrets.DOCKERHUB_USERNAME}}/back
+            sudo docker run -dit -p 8080:8080 --name back --link redis:redis --restart always ${{secrets.DOCKERHUB_USERNAME}}/back
             sudo docker image prune -f
