@@ -22,11 +22,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: application.yml 파일 설정
-        run: echo ${{ secrets.APPLICATION_YML }} > ./application.yml
 
-      - name: application.yml 내용 확인
-        run: cat ./application.yml
+      - name: application.yml 파일 설정
+        run: |
+          cd ./src/main/resources
+          echo "${{ secrets.APPLICATION_YML }}" > ./application.yml
 
       - name: 권한 부여
         run: chmod +x ./gradlew
