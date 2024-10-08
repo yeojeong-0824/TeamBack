@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/vi/boards/authed")
+@RequestMapping("/api/v1/boards/authed")
 @Tag(name = "게시글 API (Authed)")
 @PreAuthorize("isAuthenticated()")
 public class AuthedBoardController {

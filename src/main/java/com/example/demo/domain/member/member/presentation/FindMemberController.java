@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/vi/members/findMember")
+@RequestMapping("/api/v1/members/findMember")
 @Validated
 @Tag(name = "유저 찾기 API")
 public class FindMemberController {
