@@ -28,7 +28,7 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/vi/members")
+@RequestMapping("/api/v1/members")
 @Validated
 @Tag(name = "회원가입 API")
 public class JoinMemberController {
