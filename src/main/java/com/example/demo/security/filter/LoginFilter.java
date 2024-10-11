@@ -92,13 +92,13 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         jwt.setMaxAge(jwtProvider.JWT_EXPIRATION_TIME / 1000);
 
         response.addCookie(jwt);
-        response.setStatus(201);
 
         // refresh Token
         Cookie refresh = new Cookie(jwtProvider.REFRESH_HEADER_STRING, refreshToken);
         refresh.setMaxAge(jwtProvider.REFRESH_EXPIRATION_TIME / 1000);
 
         response.addCookie(refresh);
+        response.setStatus(201);
     }
 
     @Override
