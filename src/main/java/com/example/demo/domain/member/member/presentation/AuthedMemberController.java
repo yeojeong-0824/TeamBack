@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/v1/members/authed")
+@RequestMapping("/members/authed")
 @Tag(name = "유저 API (Authed)")
 @PreAuthorize("isAuthenticated()")
 public class AuthedMemberController {
