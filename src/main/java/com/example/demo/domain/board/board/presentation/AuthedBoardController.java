@@ -2,7 +2,6 @@ package com.example.demo.domain.board.board.presentation;
 
 import com.example.demo.domain.board.board.application.boardservice.BoardService;
 import com.example.demo.domain.board.board.presentation.dto.BoardResponse;
-import com.example.demo.domain.board.board.presentation.dto.GoogleApiResponse;
 import com.example.demo.domain.board.board.presentation.dto.BoardRequest;
 import com.example.demo.config.util.customannotation.MethodTimer;
 import com.example.demo.security.SecurityUtil;
@@ -46,13 +45,6 @@ public class AuthedBoardController {
         Long memberId = SecurityUtil.getCurrentMemberId();
 
         return ResponseEntity.status(HttpStatus.CREATED).body(boardService.save(request, memberId));
-    }
-
-    @MethodTimer(method = "구글 API를 이용한 장소 검색")
-    @GetMapping("/search")
-    @Operation(summary = "구글 api 를 이용한 장소 검색")
-    public ResponseEntity<GoogleApiResponse> locationSearch(@RequestParam String textQuery){
-        return ResponseEntity.ok(boardService.getSearchLocation(textQuery));
     }
 
     @MethodTimer(method = "게시글 수정")

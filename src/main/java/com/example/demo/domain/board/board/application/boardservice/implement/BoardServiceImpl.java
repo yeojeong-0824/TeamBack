@@ -7,8 +7,6 @@ import com.example.demo.domain.board.board.domain.Board;
 import com.example.demo.domain.board.board.domain.BoardRepository;
 import com.example.demo.domain.board.board.presentation.dto.BoardRequest;
 import com.example.demo.domain.board.board.presentation.dto.BoardResponse;
-import com.example.demo.domain.board.board.presentation.dto.GoogleApiRequest;
-import com.example.demo.domain.board.board.presentation.dto.GoogleApiResponse;
 import com.example.demo.config.exception.AuthorityException;
 import com.example.demo.config.exception.NotFoundDataException;
 import com.example.demo.config.exception.RequestDataException;
@@ -138,42 +136,6 @@ public class BoardServiceImpl implements BoardService {
         }
 
         return toDtoPage(boardList);
-    }
-
-    // 구글맵 api 를 사용한 장소 정보 불러오기
-    @Override
-    public GoogleApiResponse getSearchLocation(String textQuery) {
-        String url = "https://places.googleapis.com/v1/places:searchText";
-        String key = "나만의 키 값";
-
-        // 검색할 값
-        GoogleApiRequest result = GoogleApiRequest.builder()
-                .textQuery(textQuery)
-                .includedType("restaurant")
-                .languageCode("ko")
-                .build();
-
-        // 헤더 세팅
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Content-Type", "application/json");
-        headers.set("X-Goog-Api-Key", key);
-        headers.set("X-Goog-FieldMask", "places.displayName,places.location,places.formattedAddress");  // 내가 받을 정보를 세팅
-
-        // 보낼 바디와 헤더를 세팅
-        HttpEntity<GoogleApiRequest> entity = new HttpEntity<>(result, headers);
-
-        // post 로 요청
-        RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<String> responses = restTemplate.postForEntity(url, entity, String.class);
-
-        // 문자열을 dto 로 변환
-        ObjectMapper objectMapper = new ObjectMapper();
-
-        try {
-            return objectMapper.readValue(responses.getBody(), GoogleApiResponse.class);
-        } catch (JsonProcessingException e) {
-            throw new RequestDataException("구글 API 오브젝트 맵퍼 실패");
-        }
     }
 
     private Page<BoardResponse.FindBoardList> toDtoPage(Page<Board> boardList) {
