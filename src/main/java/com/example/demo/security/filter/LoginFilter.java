@@ -12,6 +12,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -86,10 +87,17 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
         refreshTokenService.save(saveToken);
 
+        // jwt Token
         Cookie jwt = new Cookie(jwtProvider.JWT_HEADER_STRING, jwtToken);
         jwt.setMaxAge(jwtProvider.JWT_EXPIRATION_TIME / 1000);
 
         response.addCookie(jwt);
+
+        // refresh Token
+        Cookie refresh = new Cookie(jwtProvider.REFRESH_HEADER_STRING, refreshToken);
+        refresh.setMaxAge(jwtProvider.REFRESH_EXPIRATION_TIME / 1000);
+
+        response.addCookie(refresh);
         response.setStatus(201);
     }
 
