@@ -88,13 +88,13 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         refreshTokenService.save(saveToken);
 
         // jwt Token
-        Cookie jwt = new Cookie(jwtProvider.JWT_HEADER_STRING, jwtToken);
+        Cookie jwt = new Cookie(jwtProvider.JWT_HEADER_STRING, jwtProvider.TOKEN_PREFIX + jwtToken);
         jwt.setMaxAge(jwtProvider.JWT_EXPIRATION_TIME / 1000);
 
         response.addCookie(jwt);
 
         // refresh Token
-        Cookie refresh = new Cookie(jwtProvider.REFRESH_HEADER_STRING, refreshToken);
+        Cookie refresh = new Cookie(jwtProvider.REFRESH_HEADER_STRING, jwtProvider.TOKEN_PREFIX + refreshToken);
         refresh.setMaxAge(jwtProvider.REFRESH_EXPIRATION_TIME / 1000);
 
         response.addCookie(refresh);
