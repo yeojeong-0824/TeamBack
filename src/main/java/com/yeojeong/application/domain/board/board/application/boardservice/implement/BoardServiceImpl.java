@@ -36,7 +36,7 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     @Transactional
-    public Board updateById(Board entity, Long memberId, Board updateEntity) {
+    public Board update(Board entity, Long memberId, Board updateEntity) {
         if (!memberId.equals(entity.getMember().getId())) throw new RestApiException(ErrorCode.USER_MISMATCH);
 
         entity.update(updateEntity);
@@ -45,7 +45,7 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     @Transactional
-    public void deleteById(Board entity, Long memberId) {
+    public void delete(Board entity, Long memberId) {
         if (!memberId.equals(entity.getMember().getId())) throw new RestApiException(ErrorCode.USER_MISMATCH);
         boardRepository.delete(entity);
     }

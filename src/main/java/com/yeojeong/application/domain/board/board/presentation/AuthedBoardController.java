@@ -54,11 +54,11 @@ public class AuthedBoardController {
                     @ApiResponse(responseCode = "403", description = "권한 없음"),
             }
     )
-    public ResponseEntity<BoardResponse.FindBoard> boardUpdate(
+    public ResponseEntity<BoardResponse.FindBoard> update(
             @Valid @RequestBody BoardRequest.PutBoard dto,
             @PathVariable("id") Long id){
         Long memberId = SecurityUtil.getCurrentMemberId();
-        return ResponseEntity.ok(boardFacade.updateById(id, memberId, dto));
+        return ResponseEntity.ok(boardFacade.update(id, memberId, dto));
     }
 
     @MethodTimer(method = "게시글 삭제")
@@ -71,9 +71,9 @@ public class AuthedBoardController {
                     @ApiResponse(responseCode = "403", description = "권한 없음"),
             }
     )
-    public ResponseEntity<String> boardDelete(@PathVariable("id") Long id){
+    public ResponseEntity<String> delete(@PathVariable("id") Long id){
         Long memberId = SecurityUtil.getCurrentMemberId();
-        boardFacade.deleteById(id, memberId);
+        boardFacade.delete(id, memberId);
         return ResponseEntity.ok("게시글 삭제 성공");
     }
 }
