@@ -1,6 +1,6 @@
 package com.yeojeong.application.domain.board.comment.presentation;
 
-import com.yeojeong.application.domain.board.comment.application.commentservice.CommentService;
+import com.yeojeong.application.domain.board.comment.application.commentfacade.CommentFacade;
 import com.yeojeong.application.domain.board.comment.presentation.dto.CommentRequest;
 import com.yeojeong.application.config.util.customannotation.MethodTimer;
 import com.yeojeong.application.domain.board.comment.presentation.dto.CommentResponse;
@@ -28,7 +28,7 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "댓글 API (Authed)")
 public class AuthedCommentController {
 
-    private final CommentService commentService;
+    private final CommentFacade commentFacade;
 
     @MethodTimer(method = "댓글 작성 호출")
     @PostMapping("/{boardId}")
@@ -41,14 +41,14 @@ public class AuthedCommentController {
     )
     public ResponseEntity<CommentResponse.FindComment> save(@PathVariable("boardId") Long boardId,
                                                             @Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
-                                                            @Valid @RequestBody CommentRequest.Save takenDto) {
+                                                            @Valid @RequestBody CommentRequest.Save dto) {
 
         Long memberId = SecurityUtil.getCurrentMemberId();
-        return ResponseEntity.status(HttpStatus.CREATED).body(commentService.save(takenDto, boardId, memberId));
+        return ResponseEntity.status(HttpStatus.CREATED).body(commentFacade.save(dto, boardId, memberId));
     }
 
     @MethodTimer(method = "댓글 수정 호출")
-    @PutMapping("/{commentId}")
+    @PutMapping("/{id}")
     @Operation(summary = "댓글 수정", description = "게시글 댓글을 수정합니다")
     @ApiResponses(
             value = {
@@ -56,16 +56,16 @@ public class AuthedCommentController {
                     @ApiResponse(responseCode = "403", description = "권한 없음")
             }
     )
-    public ResponseEntity<CommentResponse.FindComment> edit(@PathVariable("commentId") Long commentId,
+    public ResponseEntity<CommentResponse.FindComment> edit(@PathVariable("id") Long id,
                                                             @Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
-                                                            @Valid @RequestBody CommentRequest.Edit takenDto) {
+                                                            @Valid @RequestBody CommentRequest.Edit dto) {
 
         Long memberId = SecurityUtil.getCurrentMemberId();
-        return ResponseEntity.ok(commentService.updateById(commentId, memberId, takenDto));
+        return ResponseEntity.ok(commentFacade.updateById(id, memberId, dto));
     }
 
     @MethodTimer(method = "댓글 삭제 호출")
-    @DeleteMapping("/{commentId}")
+    @DeleteMapping("/{id}")
     @Operation(summary = "댓글 삭제", description = "게시글 댓글을 삭제합니다.")
     @ApiResponses(
             value = {
@@ -73,9 +73,9 @@ public class AuthedCommentController {
                     @ApiResponse(responseCode = "403", description = "권한 없음")
             }
     )
-    public ResponseEntity<CommentResponse.DeleteComment> delete(@PathVariable("commentId") Long commentId) {
+    public ResponseEntity<CommentResponse.DeleteComment> delete(@PathVariable("id") Long id) {
 
         Long memberId = SecurityUtil.getCurrentMemberId();
-        return ResponseEntity.ok(commentService.deleteById(commentId, memberId));
+        return ResponseEntity.ok(commentFacade.deleteById(id, memberId));
     }
 }

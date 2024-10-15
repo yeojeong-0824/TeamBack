@@ -8,6 +8,7 @@ import com.yeojeong.application.domain.board.board.application.boardservice.Boar
 import com.yeojeong.application.domain.board.board.domain.Board;
 import com.yeojeong.application.domain.board.board.domain.BoardRepository;
 import com.yeojeong.application.config.exception.NotFoundDataException;
+import com.yeojeong.application.domain.board.comment.domain.Comment;
 import com.yeojeong.application.domain.member.member.domain.Member;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,31 +33,23 @@ public class BoardServiceImpl implements BoardService {
     @Override
     @Transactional
     public Board save(Board entity, Member member) {
-        Board savedEntity = boardRepository.save(entity);
-        return savedEntity;
+        return boardRepository.save(entity);
     }
 
     @Override
     @Transactional
-    public Board updateById(Long id, Long memberId, Board entity) {
-        Board board = boardRepository.findById(id)
-                .orElseThrow(() -> new NotFoundDataException("해당 게시글을 찾을 수 없습니다."));
-        if (!memberId.equals(board.getMember().getId())) throw new RestApiException(ErrorCode.USER_MISMATCH);
+    public Board updateById(Board entity, Long memberId, Board updateEntity) {
+        if (!memberId.equals(entity.getMember().getId())) throw new RestApiException(ErrorCode.USER_MISMATCH);
 
-        board.update(entity);
-        Board savedEntity = boardRepository.save(board);
-
-        return savedEntity;
+        entity.update(updateEntity);
+        return boardRepository.save(board);
     }
 
     @Override
     @Transactional
-    public void deleteById(Long takenBoardId, Long takenMemberId) {
-        Board board = boardRepository.findById(takenBoardId)
-                .orElseThrow(() -> new NotFoundDataException("해당 게시글을 찾을 수 없습니다."));
-        if (!takenMemberId.equals(board.getMember().getId())) throw new RestApiException(ErrorCode.USER_MISMATCH);
-
-        boardRepository.delete(board);
+    public void deleteById(Board entity, Long memberId) {
+        if (!memberId.equals(entity.getMember().getId())) throw new RestApiException(ErrorCode.USER_MISMATCH);
+        boardRepository.delete(entity);
     }
 
     @Override
@@ -100,5 +93,44 @@ public class BoardServiceImpl implements BoardService {
         }
 
         return boardList;
+    }
+
+    @Override
+    public void createComment(Board board) {
+        board.commentCountUp();
+        updateComment(board);
+    }
+
+    @Override
+    public void deleteComment(Board board) {
+        board.commentCountDown();
+        updateComment(board);
+    }
+
+    @Override
+    @Transactional
+    public void updateComment(Board board) {
+        board.avgScorePatch(getAvgScore(board));
+        boardRepository.save(board);
+    }
+
+    private int getAvgScore(Board board) {
+        int commentCount = board.getCommentCount();
+        if(commentCount == 0) return 0;
+
+        List<Comment> commentList = board.getComments();
+
+        int size = 0;
+        int sum = 0;
+
+        for(Comment comment : commentList) {
+            int score = comment.getScore();
+            if(comment.getScore() == 0) continue;
+
+            size++;
+            sum += score;
+        }
+
+        return (sum * 100) / size;
     }
 }

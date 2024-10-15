@@ -1,12 +1,14 @@
 package com.yeojeong.application.domain.board.comment.application.commentservice;
 
+import com.yeojeong.application.domain.board.comment.domain.Comment;
 import com.yeojeong.application.domain.board.comment.presentation.dto.CommentRequest;
 import com.yeojeong.application.domain.board.comment.presentation.dto.CommentResponse;
 import org.springframework.data.domain.Page;
 
 public interface CommentService {
-    CommentResponse.FindComment save(CommentRequest.Save takenDto, Long takenBoardId, Long takenMemberId);
-    Page<CommentResponse.FindByBoardId> findByBoardId(Long takenBoardId, int page);
-    CommentResponse.FindComment updateById(Long commentId, Long takenMemberId, CommentRequest.Edit editDto);
-    CommentResponse.DeleteComment deleteById(Long commentId, Long takenMemberId);
+    Comment findById(Long id);
+    Comment save(Comment entity);
+    Page<Comment> findByBoardId(Long boardId, int page);
+    Comment updateById(Comment entity, Long memberId, Comment updateEntity);
+    void delete(Comment entity, Long memberId);
 }

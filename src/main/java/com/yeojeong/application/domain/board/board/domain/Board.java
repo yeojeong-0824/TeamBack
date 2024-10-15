@@ -59,13 +59,13 @@ public class Board extends BaseTime {
     @Column(nullable = false)
     private Integer commentCount;
 
-    public void update(Board request){
-        this.locationName = request.getLocationName();
-        this.formattedAddress = request.getFormattedAddress();
-        this.latitude = request.getLatitude();
-        this.longitude = request.getLongitude();
-        this.title = request.getTitle();
-        this.body = request.getBody();
+    public void update(Board updateEntity){
+        this.locationName = updateEntity.getLocationName();
+        this.formattedAddress = updateEntity.getFormattedAddress();
+        this.latitude = updateEntity.getLatitude();
+        this.longitude = updateEntity.getLongitude();
+        this.title = updateEntity.getTitle();
+        this.body = updateEntity.getBody();
     }
 
     public void addViewCount() {
@@ -76,7 +76,7 @@ public class Board extends BaseTime {
 
     public void commentCountDown(){this.commentCount -= 1;}
 
-    public void avgScorePatch(Integer avgScore) {
+    public void avgScorePatch(int avgScore) {
         this.avgScore = avgScore;
     }
 

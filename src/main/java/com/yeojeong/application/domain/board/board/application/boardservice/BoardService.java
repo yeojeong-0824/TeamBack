@@ -6,8 +6,11 @@ import org.springframework.data.domain.Page;
 
 public interface BoardService {
     Board save(Board entity, Member member);
-    Board updateById(Long id, Long memberId, Board entity);
+    Board updateById(Board entity, Long memberId, Board updateEntity);
     Board findById(Long id);
     Page<Board> findAll(String searchKeyword, String keyword, String sortKeyword, int page);
-    void deleteById(Long id, Long memberId);
+    void deleteById(Board entity, Long memberId);
+    void createComment(Board board);
+    void deleteComment(Board board);
+    void updateComment(Board board);
 }

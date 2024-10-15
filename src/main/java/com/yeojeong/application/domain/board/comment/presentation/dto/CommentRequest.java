@@ -45,5 +45,11 @@ public class CommentRequest {
             @Schema(example = "여기 맛집임")
             String comment
     ){
+        public static Comment toEntity(Edit dto) {
+            return Comment.builder()
+                    .score(dto.score())
+                    .comment(dto.comment())
+                    .build();
+        }
     }
 }

@@ -1,6 +1,6 @@
 package com.yeojeong.application.domain.board.comment.presentation;
 
-import com.yeojeong.application.domain.board.comment.application.commentservice.CommentService;
+import com.yeojeong.application.domain.board.comment.application.commentfacade.CommentFacade;
 import com.yeojeong.application.domain.board.comment.presentation.dto.CommentResponse;
 import com.yeojeong.application.config.util.customannotation.MethodTimer;
 import io.swagger.v3.oas.annotations.Operation;
@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "댓글 API")
 public class FindCommentController {
 
-    private final CommentService commentService;
+    private final CommentFacade commentFacade;
 
     @MethodTimer(method = "게시글에 작성된 댓글 호출")
     @GetMapping("/{boardId}")
@@ -32,7 +32,7 @@ public class FindCommentController {
     )
     public ResponseEntity<Page<CommentResponse.FindByBoardId>> findByBoardId(@RequestParam(required = false, defaultValue = "1", value = "page") int page,
                                                                              @PathVariable("boardId") Long boardId) {
-        Page<CommentResponse.FindByBoardId> rtn = commentService.findByBoardId(boardId, page);
+        Page<CommentResponse.FindByBoardId> rtn = commentFacade.findByBoardId(boardId, page);
         return ResponseEntity.ok(rtn);
     }
 }
