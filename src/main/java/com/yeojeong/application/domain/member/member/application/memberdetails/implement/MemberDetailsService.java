@@ -1,5 +1,6 @@
 package com.yeojeong.application.domain.member.member.application.memberdetails.implement;
 
+import com.yeojeong.application.config.exception.handler.ErrorCode;
 import com.yeojeong.application.domain.member.member.domain.Member;
 import com.yeojeong.application.domain.member.member.presentation.dto.MemberDetails;
 import com.yeojeong.application.domain.member.member.domain.MemberRepository;
@@ -17,7 +18,7 @@ public class MemberDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Member member = memberRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("유저가 존재하지 않습니다"));
+                .orElseThrow(() -> new UsernameNotFoundException(ErrorCode.NOT_FOUND_USER.getMessage()));
 
         return new MemberDetails(member);
     }

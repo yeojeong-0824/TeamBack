@@ -54,7 +54,7 @@ public class BoardServiceImpl implements BoardService {
     @Transactional
     public Board findById(Long id) {
         return boardRepository.findById(id)
-                .orElseThrow(() -> new NotFoundDataException("해당 게시글을 찾을 수 없습니다."));
+                .orElseThrow(() -> new NotFoundDataException(ErrorCode.NOT_FOUND_BOARD));
     }
 
     @Override

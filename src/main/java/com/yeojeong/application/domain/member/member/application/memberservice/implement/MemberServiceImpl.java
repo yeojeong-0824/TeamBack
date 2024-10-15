@@ -1,22 +1,12 @@
 package com.yeojeong.application.domain.member.member.application.memberservice.implement;
 
-import com.yeojeong.application.domain.board.board.domain.Board;
-import com.yeojeong.application.domain.board.board.domain.BoardRepository;
-import com.yeojeong.application.domain.board.comment.domain.Comment;
-import com.yeojeong.application.domain.board.comment.domain.CommentRepository;
-import com.yeojeong.application.config.exception.RequestDataException;
+import com.yeojeong.application.config.exception.handler.ErrorCode;
 import com.yeojeong.application.config.exception.DuplicatedException;
 import com.yeojeong.application.config.exception.NotFoundDataException;
-import com.yeojeong.application.domain.member.member.presentation.dto.MemberResponse;
 import com.yeojeong.application.domain.member.member.application.memberservice.MemberService;
-import com.yeojeong.application.domain.member.member.presentation.dto.MemberRequest;
 import com.yeojeong.application.domain.member.member.domain.Member;
 import com.yeojeong.application.domain.member.member.domain.MemberRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,19 +19,19 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public Member findById(Long id) {
         return memberRepository.findById(id)
-                .orElseThrow(() -> new NotFoundDataException("해당 유저를 찾지 못했습니다"));
+                .orElseThrow(() -> new NotFoundDataException(ErrorCode.NOT_FOUND_USER));
     }
 
     @Override
     public Member findByUsername(String username) {
         return memberRepository.findByUsername(username)
-                .orElseThrow(() -> new NotFoundDataException("해당 유저를 찾지 못했습니다"));
+                .orElseThrow(() -> new NotFoundDataException(ErrorCode.NOT_FOUND_USER));
     }
 
     @Override
     public Member findByEmail(String email) {
         return memberRepository.findByEmail(email)
-                .orElseThrow(() -> new NotFoundDataException("해당 유저를 찾지 못했습니다"));
+                .orElseThrow(() -> new NotFoundDataException(ErrorCode.NOT_FOUND_USER));
     }
 
     @Transactional
@@ -66,19 +56,19 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public void checkDuplicatedByUsername(String username) {
         if(memberRepository.existsByUsername(username))
-            throw new DuplicatedException("중복된 아이디입니다");
+            throw new DuplicatedException(ErrorCode.DUPLICATED_ID);
     }
 
     @Override
     public void checkDuplicatedByNickname(String nickname) {
         if(memberRepository.existsByNickname(nickname))
-            throw new DuplicatedException("중복된 닉네임입니다");
+            throw new DuplicatedException(ErrorCode.DUPLICATED_NICKNAME);
     }
 
     @Override
     public void checkDuplicatedByEmail(String email) {
         if(memberRepository.existsByEmail(email))
-            throw new DuplicatedException("중복된 이메일입니다");
+            throw new DuplicatedException(ErrorCode.DUPLICATED_EMAIL);
     }
 
     @Transactional

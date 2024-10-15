@@ -7,6 +7,7 @@ import com.yeojeong.application.config.exception.ErrorResponse;
 import com.yeojeong.application.config.exception.handler.ErrorCode;
 import com.yeojeong.application.domain.member.member.presentation.dto.MemberDetails;
 import com.yeojeong.application.domain.member.member.domain.Member;
+import com.yeojeong.application.security.FilterExceptionHandler;
 import com.yeojeong.application.security.JwtProvider;
 import com.yeojeong.application.security.refreshtoken.domain.RefreshToken;
 import com.yeojeong.application.security.refreshtoken.refreshtokenservice.RefreshTokenService;
@@ -33,6 +34,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
     private final JwtProvider jwtProvider;
     private final RefreshTokenService refreshTokenService;
+    private final FilterExceptionHandler filterExceptionHandler;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
@@ -101,29 +103,24 @@ public class JwtFilter extends OncePerRequestFilter {
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
         } catch (Exception e) {
-            ErrorResponse errorResponse = null;
+            ErrorCode errorCode = null;
+            response.setStatus(401);
 
-            if (e instanceof TokenExpiredException){
+            if (e instanceof TokenExpiredException) {
                 response.setStatus(401);
-                errorResponse = new ErrorResponse(ErrorCode.EXPIRED_TOKEN);
-                log.info("JWT Token 유효기간이 만료되었습니다.");
+                errorCode = ErrorCode.EXPIRED_TOKEN;
+                log.error("JWT Token 유효기간이 만료되었습니다.");
 
-            } else if (e instanceof JWTDecodeException){
-                errorResponse = new ErrorResponse(ErrorCode.JWT_DECODE_FAIL);
-                log.info("JWT Token 변환이 실패하였습니다.");
+            } else if (e instanceof JWTDecodeException) {
+                errorCode = ErrorCode.JWT_DECODE_FAIL;
+                log.error("JWT Token 변환이 실패하였습니다.");
 
-            } else if(e instanceof JWTVerificationException){
-                errorResponse = new ErrorResponse(ErrorCode.JWT_SIGNATURE_FAIL);
-                log.info("JWT Token 인증이 실패하였습니다");
+            } else if (e instanceof JWTVerificationException) {
+                errorCode = ErrorCode.JWT_SIGNATURE_FAIL;
+                log.error("JWT Token 인증이 실패하였습니다");
             }
 
-            ObjectMapper objectMapper = new ObjectMapper();
-            String jsonErrorResponse = objectMapper.writeValueAsString(errorResponse);
-
-            response.setStatus(HttpStatus.UNAUTHORIZED.value());
-            response.setCharacterEncoding("utf-8");
-            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-            response.getWriter().write(jsonErrorResponse);
+            filterExceptionHandler.filterException(errorCode, response);
         }
 
         filterChain.doFilter(request, response);
