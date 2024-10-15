@@ -1,23 +1,18 @@
-package com.yeojeong.application.domain.member.member.application.memberfacade;
+package com.yeojeong.application.domain.member.member.application.memberfacade.implement;
 
-import com.yeojeong.application.config.exception.DuplicatedException;
 import com.yeojeong.application.config.exception.NotFoundDataException;
 import com.yeojeong.application.config.exception.RequestDataException;
 import com.yeojeong.application.domain.board.board.application.boardservice.BoardService;
 import com.yeojeong.application.domain.board.board.domain.Board;
-import com.yeojeong.application.domain.board.board.domain.BoardRepository;
 import com.yeojeong.application.domain.board.comment.application.commentservice.CommentService;
 import com.yeojeong.application.domain.board.comment.domain.Comment;
-import com.yeojeong.application.domain.board.comment.domain.CommentRepository;
+import com.yeojeong.application.domain.member.member.application.memberfacade.MemberFacade;
 import com.yeojeong.application.domain.member.member.application.memberservice.MemberService;
 import com.yeojeong.application.domain.member.member.domain.Member;
-import com.yeojeong.application.domain.member.member.domain.MemberRepository;
 import com.yeojeong.application.domain.member.member.presentation.dto.MemberRequest;
 import com.yeojeong.application.domain.member.member.presentation.dto.MemberResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
