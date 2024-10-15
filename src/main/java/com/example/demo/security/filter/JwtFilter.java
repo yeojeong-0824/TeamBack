@@ -3,11 +3,14 @@ package com.example.demo.security.filter;
 import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
+import com.example.demo.config.exception.ErrorResponse;
+import com.example.demo.config.exception.handler.ErrorCode;
 import com.example.demo.domain.member.member.presentation.dto.MemberDetails;
 import com.example.demo.domain.member.member.domain.Member;
 import com.example.demo.security.JwtProvider;
 import com.example.demo.security.refreshtoken.domain.RefreshToken;
 import com.example.demo.security.refreshtoken.refreshtokenservice.RefreshTokenService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
@@ -15,6 +18,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -41,7 +46,12 @@ public class JwtFilter extends OncePerRequestFilter {
         Step 3: Refresh 토큰이 존재한다면 Jwt를 재발급
         Step 4: 필터 종료
         */
-        String refreshTokenHeader = request.getHeader(jwtProvider.REFRESH_HEADER_STRING);
+
+        // 쿠키에서 refresh token 가져오는 코드
+        String refreshTokenHeader = resolveTokenFromCookie(request, "Refresh");
+
+        // String refreshTokenHeader = request.getHeader("Set-Cookie");
+
         if(refreshTokenHeader != null) {
             log.info("JWT Token 재발급");
             refreshTokenHeader = refreshTokenHeader.replace(jwtProvider.TOKEN_PREFIX, "");
@@ -77,7 +87,11 @@ public class JwtFilter extends OncePerRequestFilter {
         Step 2: Jwt 토큰을 복호화 실패시(재발급 횟수 초과: 401, 변조: 400) 오류를 반환, 성공시 인증에 성공
         Step 3: 필터 종료
          */
-        String jwtTokenHeader = request.getHeader(jwtProvider.JWT_HEADER_STRING);
+        //String jwtTokenHeader = request.getHeader(jwtProvider.JWT_HEADER_STRING);
+
+        // cookie 에서 jwt token 가져오는 코드
+        String jwtTokenHeader = resolveTokenFromCookie(request, "Authorization");
+
         if(jwtTokenHeader == null) {
             filterChain.doFilter(request, response);
             return;
@@ -92,18 +106,45 @@ public class JwtFilter extends OncePerRequestFilter {
                     new UsernamePasswordAuthenticationToken(jwtTokenMemberDetails, null, jwtTokenMemberDetails.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        } catch(TokenExpiredException e) {
-            response.setStatus(401);
-            log.info("JWT Token 유효기간이 만료되었습니다.");
+        } catch (Exception e) {
+            ErrorResponse errorResponse = null;
 
-        } catch (JWTDecodeException e) {
-            log.info("JWT Token 값이 잘못되었습니다");
+            if (e instanceof TokenExpiredException){
+                response.setStatus(401);
+                errorResponse = new ErrorResponse(ErrorCode.EXPIRED_TOKEN);
+                log.info("JWT Token 유효기간이 만료되었습니다.");
 
-        } catch (JWTVerificationException e) {
-            log.info("JWT Token 인증이 실패하였습니다");
+            } else if (e instanceof JWTDecodeException){
+                errorResponse = new ErrorResponse(ErrorCode.JWT_DECODE_FAIL);
+                log.info("JWT Token 변환이 실패하였습니다.");
 
+            } else if(e instanceof JWTVerificationException){
+                errorResponse = new ErrorResponse(ErrorCode.JWT_SIGNATURE_FAIL);
+                log.info("JWT Token 인증이 실패하였습니다");
+            }
+
+            ObjectMapper objectMapper = new ObjectMapper();
+            String jsonErrorResponse = objectMapper.writeValueAsString(errorResponse);
+
+            response.setStatus(HttpStatus.UNAUTHORIZED.value());
+            response.setCharacterEncoding("utf-8");
+            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+            response.getWriter().write(jsonErrorResponse);
         }
 
         filterChain.doFilter(request, response);
+    }
+
+    // 특정 쿠키를 가져오는 메소드
+    private String resolveTokenFromCookie(HttpServletRequest request, String cookieName) {
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookieName.equals(cookie.getName())) {
+                    return cookie.getValue();
+                }
+            }
+        }
+        return null;
     }
 }

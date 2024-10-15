@@ -1,5 +1,7 @@
 package com.example.demo.domain.board.comment.application.commentservice.implement;
 
+import com.example.demo.config.exception.RestApiException;
+import com.example.demo.config.exception.handler.ErrorCode;
 import com.example.demo.domain.board.board.domain.Board;
 import com.example.demo.domain.board.board.domain.BoardRepository;
 import com.example.demo.domain.board.comment.application.commentservice.CommentService;
@@ -59,7 +61,7 @@ public class CommentServiceImpl implements CommentService {
                 .orElseThrow(() -> new NotFoundDataException("해당 댓글을 찾을 수 없습니다"));
 
         if(!takenMemberId.equals(savedComment.getMember().getId()))
-            throw new AuthorityException("게시글을 작성한 회원이 아닙니다");
+            throw new RestApiException(ErrorCode.USER_MISMATCH);
 
         commentRepository.delete(savedComment);
 
@@ -111,7 +113,7 @@ public class CommentServiceImpl implements CommentService {
                 .orElseThrow(() -> new NotFoundDataException("해당 댓글을 찾을 수 없습니다"));
 
         if(!takenMemberId.equals(savedComment.getMember().getId()))
-            throw new AuthorityException("댓글을 작성한 회원이 아닙니다");
+            throw new RestApiException(ErrorCode.USER_MISMATCH);
 
         savedComment.update(takenDto);
         Comment save = commentRepository.save(savedComment);
