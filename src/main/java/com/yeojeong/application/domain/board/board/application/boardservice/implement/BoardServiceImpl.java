@@ -60,7 +60,7 @@ public class BoardServiceImpl implements BoardService {
     @Override
     public Page<Board> findByMember(Long memberId, int page) {
         PageRequest pageRequest = PageRequest.of(page - 1, 10, Sort.by("id").descending());
-        return boardRepository.findAllMemberId(memberId, pageRequest);
+        return boardRepository.findAllByMemberId(memberId, pageRequest);
     }
 
     // 조건에 따른 게시글 검색, 정렬
