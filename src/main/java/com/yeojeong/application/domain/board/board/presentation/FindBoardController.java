@@ -1,7 +1,7 @@
 package com.yeojeong.application.domain.board.board.presentation;
 
+import com.yeojeong.application.domain.board.board.application.boardfacade.BoardFacade;
 import com.yeojeong.application.domain.board.board.presentation.dto.BoardResponse;
-import com.yeojeong.application.domain.board.board.application.boardservice.implement.BoardServiceImpl;
 import com.yeojeong.application.config.util.customannotation.MethodTimer;
 import com.yeojeong.application.security.SecurityUtil;
 import io.swagger.v3.oas.annotations.Operation;
@@ -20,10 +20,11 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/boards")
 @Tag(name = "게시글 찾기 API")
 public class FindBoardController {
-    private final BoardServiceImpl boardServiceImpl;
+
+    private final BoardFacade boardFacade;
 
     @MethodTimer(method = "게시글 호출")
-    @GetMapping("/{boardId}")
+    @GetMapping("/{id}")
     @Operation(summary = "게시글 호출")
     @ApiResponses(
             value = {
@@ -31,10 +32,9 @@ public class FindBoardController {
                     @ApiResponse(responseCode = "404", description = "존재하는 게시글 없음")
             }
     )
-    public ResponseEntity<BoardResponse.FindBoard> getBoard(@PathVariable("boardId") Long boardId){
+    public ResponseEntity<BoardResponse.FindBoard> getBoard(@PathVariable("id") Long id){
         Long memberId = SecurityUtil.getCurrentMemberId();
-
-        return ResponseEntity.ok(boardServiceImpl.findById(boardId, memberId));
+        return ResponseEntity.ok(boardFacade.findById(id, memberId));
     }
 
     @MethodTimer(method = "조건에 따른 게시글 호출")
@@ -51,6 +51,6 @@ public class FindBoardController {
             @RequestParam(value = "searchKeyword") String searchKeyword,
             @RequestParam(value = "sortKeyword") String sortKeyword,
             @RequestParam(required = false, defaultValue = "1", value = "page") int page){
-        return ResponseEntity.ok(boardServiceImpl.findAllBySearchKeyword(searchKeyword, keyword, sortKeyword, page));
+        return ResponseEntity.ok(boardFacade.findAll(searchKeyword, keyword, sortKeyword, page));
     }
 }

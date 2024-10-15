@@ -1,13 +1,14 @@
 package com.yeojeong.application.domain.member.member.application.memberservice;
 
+import com.yeojeong.application.domain.member.member.domain.Member;
 import com.yeojeong.application.domain.member.member.presentation.dto.MemberResponse;
 import com.yeojeong.application.domain.member.member.presentation.dto.MemberRequest;
 import org.springframework.data.domain.Page;
 
 public interface MemberService {
+    Member findById(Long id);
     void save(MemberRequest.SaveMember takenMemberRequest);
     void deleteByMemberId(Long takenMemberId, MemberRequest.DeleteMember takenDto);
-    MemberResponse.FindMember findById(Long takenMemberId);
     String findPassword(String takenUsername, String takenEmail);
     String findUsernameByEmail(String takenEmail);
     void checkDuplicatedByEmail(String takenEmail);

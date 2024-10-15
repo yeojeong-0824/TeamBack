@@ -59,13 +59,13 @@ public class Board extends BaseTime {
     @Column(nullable = false)
     private Integer commentCount;
 
-    public void update(BoardRequest.PutBoard request){
-        this.locationName = request.locationName();
-        this.formattedAddress = request.formattedAddress();
-        this.latitude = request.latitude();
-        this.longitude = request.longitude();
-        this.title = request.title();
-        this.body = request.body();
+    public void update(Board request){
+        this.locationName = request.getLocationName();
+        this.formattedAddress = request.getFormattedAddress();
+        this.latitude = request.getLatitude();
+        this.longitude = request.getLongitude();
+        this.title = request.getTitle();
+        this.body = request.getBody();
     }
 
     public void addViewCount() {

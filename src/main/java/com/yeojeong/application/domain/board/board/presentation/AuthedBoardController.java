@@ -1,6 +1,6 @@
 package com.yeojeong.application.domain.board.board.presentation;
 
-import com.yeojeong.application.domain.board.board.application.boardservice.BoardService;
+import com.yeojeong.application.domain.board.board.application.boardfacade.BoardFacade;
 import com.yeojeong.application.domain.board.board.presentation.dto.BoardResponse;
 import com.yeojeong.application.domain.board.board.presentation.dto.BoardRequest;
 import com.yeojeong.application.config.util.customannotation.MethodTimer;
@@ -17,8 +17,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-// 유저 정보 불러오기 오류 수정했습니다
-// 게시글 작성까지 잘 되는 걸로 확인 했어요!
 @Slf4j
 @RequiredArgsConstructor
 @RestController
@@ -26,9 +24,9 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "게시글 API (Authed)")
 @PreAuthorize("isAuthenticated()")
 public class AuthedBoardController {
-    private final BoardService boardService;
 
-    // 통일성을 주기위해 메서드 명을 save로 바꿨습니다!
+    private final BoardFacade boardFacade;
+
     @MethodTimer(method = "게시글 작성")
     @PostMapping
     @Operation(summary = "게시글 작성")
@@ -40,15 +38,15 @@ public class AuthedBoardController {
             }
     )
     public ResponseEntity<BoardResponse.FindBoard> save(
-            @Valid @RequestBody BoardRequest.SaveBoard request
+            @Valid @RequestBody BoardRequest.SaveBoard dto
     ){
         Long memberId = SecurityUtil.getCurrentMemberId();
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(boardService.save(request, memberId));
+        return ResponseEntity.status(HttpStatus.CREATED).body(boardFacade.save(dto, memberId));
     }
 
     @MethodTimer(method = "게시글 수정")
-    @PutMapping("/{boardId}")
+    @PutMapping("/{id}")
     @Operation(summary = "게시글 수정")
     @ApiResponses(
             value = {
@@ -58,14 +56,14 @@ public class AuthedBoardController {
             }
     )
     public ResponseEntity<BoardResponse.FindBoard> boardUpdate(
-            @Valid @RequestBody BoardRequest.PutBoard request,
-            @PathVariable("boardId") Long boardId){
+            @Valid @RequestBody BoardRequest.PutBoard dto,
+            @PathVariable("id") Long id){
         Long memberId = SecurityUtil.getCurrentMemberId();
-        return ResponseEntity.ok(boardService.updateById(boardId, memberId, request));
+        return ResponseEntity.ok(boardFacade.updateById(id, memberId, dto));
     }
 
     @MethodTimer(method = "게시글 삭제")
-    @DeleteMapping("/{boardId}")
+    @DeleteMapping("/{id}")
     @Operation(summary = "게시글 삭제")
     @ApiResponses(
             value = {
@@ -74,9 +72,9 @@ public class AuthedBoardController {
                     @ApiResponse(responseCode = "403", description = "권한 없음"),
             }
     )
-    public ResponseEntity<String> boardDelete(@PathVariable("boardId") Long boardId){
+    public ResponseEntity<String> boardDelete(@PathVariable("id") Long id){
         Long memberId = SecurityUtil.getCurrentMemberId();
-        boardService.deleteById(boardId, memberId);
+        boardFacade.deleteById(id, memberId);
         return ResponseEntity.ok("게시글 삭제 성공");
     }
 }

@@ -39,6 +39,16 @@ public class BoardRequest {
             String title,
             String body
     ) {
+        public static Board toEntity(PutBoard dto) {
+            return Board.builder()
+                    .locationName(dto.locationName())
+                    .formattedAddress(dto.formattedAddress())
+                    .latitude(dto.latitude())
+                    .longitude(dto.longitude())
+                    .title(dto.title())
+                    .body(dto.body())
+                    .build();
+        }
     }
 
 }
