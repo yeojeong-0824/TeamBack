@@ -46,7 +46,7 @@ public class JwtFilter extends OncePerRequestFilter {
         Step 4: 필터 종료
         */
 
-        String refreshTokenHeader = request.getHeader("Set-Cookie");
+        String refreshTokenHeader = request.getHeader(jwtProvider.REFRESH_HEADER_STRING);
 
         if(refreshTokenHeader != null) {
             log.info("JWT Token 재발급");
