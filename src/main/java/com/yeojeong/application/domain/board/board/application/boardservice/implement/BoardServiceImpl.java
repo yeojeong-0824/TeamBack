@@ -11,7 +11,6 @@ import com.yeojeong.application.config.exception.NotFoundDataException;
 import com.yeojeong.application.domain.board.comment.domain.Comment;
 import com.yeojeong.application.domain.member.member.domain.Member;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -22,7 +21,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@Slf4j
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class BoardServiceImpl implements BoardService {
@@ -42,7 +40,7 @@ public class BoardServiceImpl implements BoardService {
         if (!memberId.equals(entity.getMember().getId())) throw new RestApiException(ErrorCode.USER_MISMATCH);
 
         entity.update(updateEntity);
-        return boardRepository.save(board);
+        return boardRepository.save(entity);
     }
 
     @Override
@@ -55,10 +53,8 @@ public class BoardServiceImpl implements BoardService {
     @Override
     @Transactional
     public Board findById(Long id) {
-        Board board = boardRepository.findById(id)
+        return boardRepository.findById(id)
                 .orElseThrow(() -> new NotFoundDataException("해당 게시글을 찾을 수 없습니다."));
-
-        return board;
     }
 
     // 조건에 따른 게시글 검색, 정렬

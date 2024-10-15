@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/boards/authed")
 @Tag(name = "게시글 API (Authed)")
-@PreAuthorize("isAuthenticated()")
 public class AuthedBoardController {
 
     private final BoardFacade boardFacade;

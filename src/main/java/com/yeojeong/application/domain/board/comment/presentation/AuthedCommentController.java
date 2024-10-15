@@ -24,7 +24,6 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/boards/comments/authed")
-@PreAuthorize("isAuthenticated()")
 @Tag(name = "댓글 API (Authed)")
 public class AuthedCommentController {
 

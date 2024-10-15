@@ -25,7 +25,6 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/members/authed")
 @Tag(name = "유저 API (Authed)")
-@PreAuthorize("isAuthenticated()")
 public class AuthedMemberController {
 
     private final MemberService memberService;
@@ -43,7 +42,7 @@ public class AuthedMemberController {
     public ResponseEntity<MemberResponse.FindMember> findById() {
 
         Long memberId = SecurityUtil.getCurrentMemberId();
-        return ResponseEntity.ok(memberService.findById(memberId));
+        return null;
     }
 
     @MethodTimer(method = "해당 회원이 작성한 게시글 호출")
