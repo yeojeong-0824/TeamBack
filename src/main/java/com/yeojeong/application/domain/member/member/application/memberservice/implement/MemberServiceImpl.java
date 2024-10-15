@@ -30,6 +30,12 @@ public class MemberServiceImpl implements MemberService {
 
     private final PasswordEncoder passwordEncoder;
 
+    @Override
+    public Member findById(Long id) {
+        return memberRepository.findById(id)
+                .orElseThrow(() -> new NotFoundDataException("해당 유저를 찾지 못했습니다"));
+    }
+
     @Transactional
     @Override
     public void save(MemberRequest.SaveMember takenDto) {
@@ -51,14 +57,6 @@ public class MemberServiceImpl implements MemberService {
         boardRepository.deleteByMember(savedEntity);
         commentRepository.deleteByMember(savedEntity);
         memberRepository.deleteById(takenMemberId);
-    }
-
-    @Override
-    public MemberResponse.FindMember findById(Long takenMemberId) {
-        Member savedEntity = memberRepository.findById(takenMemberId)
-                .orElseThrow(() -> new NotFoundDataException("해당 유저를 찾지 못했습니다"));
-
-        return MemberResponse.FindMember.toDto(savedEntity);
     }
 
     @Override

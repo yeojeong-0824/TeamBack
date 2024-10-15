@@ -7,15 +7,10 @@ import com.yeojeong.application.config.exception.handler.ErrorCode;
 import com.yeojeong.application.domain.board.board.application.boardservice.BoardService;
 import com.yeojeong.application.domain.board.board.domain.Board;
 import com.yeojeong.application.domain.board.board.domain.BoardRepository;
-import com.yeojeong.application.domain.board.board.presentation.dto.BoardRequest;
-import com.yeojeong.application.domain.board.board.presentation.dto.BoardResponse;
 import com.yeojeong.application.config.exception.NotFoundDataException;
-import com.yeojeong.application.config.redis.RedisRepository;
-import com.yeojeong.application.config.util.customannotation.RedissonLocker;
+import com.yeojeong.application.domain.board.comment.domain.Comment;
 import com.yeojeong.application.domain.member.member.domain.Member;
-import com.yeojeong.application.domain.member.member.domain.MemberRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -26,101 +21,66 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@Slf4j
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class BoardServiceImpl implements BoardService {
 
     private final BoardRepository boardRepository;
-    private final MemberRepository memberRepository;
-
-    private final RedisRepository redisRepository;
     private final AutocompleteService autocompleteService;
 
-    // 게시글 작성
     @Override
     @Transactional
-    public BoardResponse.FindBoard save(BoardRequest.SaveBoard takenDto, Long takenMemberId) {
-        Member member = memberRepository.findById(takenMemberId).
-                orElseThrow(() -> new NotFoundDataException("해당 회원을 찾을 수 없습니다."));
-
-        Board board = BoardRequest.SaveBoard.toEntity(takenDto, member);
-
-        Board save = boardRepository.save(board);
-
-        autocompleteService.addAutocomplete(save.getTitle());
-        return BoardResponse.FindBoard.toDto(save);
+    public Board save(Board entity, Member member) {
+        return boardRepository.save(entity);
     }
 
-    // 게시글 수정
     @Override
     @Transactional
-    public BoardResponse.FindBoard updateById(Long takenBoardId, Long takenMemberId, BoardRequest.PutBoard takenDto) {
-        Board board = boardRepository.findById(takenBoardId)
-                .orElseThrow(() -> new NotFoundDataException("해당 게시글을 찾을 수 없습니다."));
+    public Board updateById(Board entity, Long memberId, Board updateEntity) {
+        if (!memberId.equals(entity.getMember().getId())) throw new RestApiException(ErrorCode.USER_MISMATCH);
 
-        if (!takenMemberId.equals(board.getMember().getId())) {
-            throw new RestApiException(ErrorCode.USER_MISMATCH);
-        }
-
-        board.update(takenDto);
-        Board save = boardRepository.save(board);
-        return BoardResponse.FindBoard.toDto(save);
+        entity.update(updateEntity);
+        return boardRepository.save(entity);
     }
 
-    // 게시글 삭제
     @Override
     @Transactional
-    public void deleteById(Long takenBoardId, Long takenMemberId) {
-        Board board = boardRepository.findById(takenBoardId)
-                .orElseThrow(() -> new NotFoundDataException("해당 게시글을 찾을 수 없습니다."));
-
-        if (!takenMemberId.equals(board.getMember().getId())) {
-            throw new RestApiException(ErrorCode.USER_MISMATCH);
-        }
-
-        redisRepository.deleteViewCount(takenBoardId);
-        boardRepository.delete(board);
+    public void deleteById(Board entity, Long memberId) {
+        if (!memberId.equals(entity.getMember().getId())) throw new RestApiException(ErrorCode.USER_MISMATCH);
+        boardRepository.delete(entity);
     }
 
-    // 하나의 게시글
-    @Transactional
     @Override
-    @RedissonLocker(key = "findBoardById")
-    public BoardResponse.FindBoard findById(Long takenBoardId, Long takenMemberId) {
-        Board board = boardRepository.findById(takenBoardId)
+    @Transactional
+    public Board findById(Long id) {
+        return boardRepository.findById(id)
                 .orElseThrow(() -> new NotFoundDataException("해당 게시글을 찾을 수 없습니다."));
-
-        board.addViewCount();
-        boardRepository.save(board);
-
-        return BoardResponse.FindBoard.toDto(board);
     }
 
     // 조건에 따른 게시글 검색, 정렬
     @Override
-    public Page<BoardResponse.FindBoardList> findAllBySearchKeyword(String takenSearchKeyword, String takenKeywork, String takenSortKeyword, int takenPage) {
+    public Page<Board> findAll(String searchKeyword, String keyword, String sortKeyword, int page) {
         // 생성 날짜
-        PageRequest request = PageRequest.of(takenPage - 1, 10, Sort.by("id").descending());
+        PageRequest request = PageRequest.of(page - 1, 10, Sort.by("id").descending());
 
-        if (takenSortKeyword != null) {
-            request = switch (takenSortKeyword) {
-                case "score" -> PageRequest.of(takenPage - 1, 10, Sort.by("avgScore").descending());
-                case "comment" -> PageRequest.of(takenPage - 1, 10, Sort.by("commentCount").descending());
+        if (sortKeyword != null) {
+            request = switch (sortKeyword) {
+                case "score" -> PageRequest.of(page - 1, 10, Sort.by("avgScore").descending());
+                case "comment" -> PageRequest.of(page - 1, 10, Sort.by("commentCount").descending());
                 default -> request;
             };
         }
 
         Page<Board> boardList;
-        if (takenSearchKeyword.equals("content")) {
+        if (searchKeyword.equals("content")) {
             // 제목과 내용에 검색어와 일치하는 게시글 검색
-            boardList = boardRepository.findByTitleOrBodyContaining(takenKeywork, request);
-        } else if (takenSearchKeyword.equals("location")) {
+            boardList = boardRepository.findByTitleOrBodyContaining(keyword, request);
+        } else if (searchKeyword.equals("location")) {
             // 주소와 가게 이름이 검색어와 일치하는 게시글 검색
-            boardList = boardRepository.findByFormattedAddressOrLocationNameContaining(takenKeywork, request);
-        } else if (takenSearchKeyword.equals("title")) {
+            boardList = boardRepository.findByFormattedAddressOrLocationNameContaining(keyword, request);
+        } else if (searchKeyword.equals("title")) {
             // 자동완성 기능을 통해 제목 검색
-            List<String> autocompleteTitles = autocompleteService.getAutocomplete(takenKeywork).list().stream()
+            List<String> autocompleteTitles = autocompleteService.getAutocomplete(keyword).list().stream()
                     .map(AutocompleteResponse.Data::value)
                     .collect(Collectors.toList());
             boardList = boardRepository.findByTitleIn(autocompleteTitles, request);
@@ -128,10 +88,45 @@ public class BoardServiceImpl implements BoardService {
             boardList = boardRepository.findAll(request);
         }
 
-        return toDtoPage(boardList);
+        return boardList;
     }
 
-    private Page<BoardResponse.FindBoardList> toDtoPage(Page<Board> boardList) {
-        return boardList.map(BoardResponse.FindBoardList::toDto);
+    @Override
+    public void createComment(Board board) {
+        board.commentCountUp();
+        updateComment(board);
+    }
+
+    @Override
+    public void deleteComment(Board board) {
+        board.commentCountDown();
+        updateComment(board);
+    }
+
+    @Override
+    @Transactional
+    public void updateComment(Board board) {
+        board.avgScorePatch(getAvgScore(board));
+        boardRepository.save(board);
+    }
+
+    private int getAvgScore(Board board) {
+        int commentCount = board.getCommentCount();
+        if(commentCount == 0) return 0;
+
+        List<Comment> commentList = board.getComments();
+
+        int size = 0;
+        int sum = 0;
+
+        for(Comment comment : commentList) {
+            int score = comment.getScore();
+            if(comment.getScore() == 0) continue;
+
+            size++;
+            sum += score;
+        }
+
+        return (sum * 100) / size;
     }
 }

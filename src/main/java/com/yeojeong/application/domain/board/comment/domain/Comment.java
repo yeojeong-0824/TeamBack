@@ -32,8 +32,8 @@ public class Comment extends BaseTime {
     @JoinColumn(name = "board_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private Board board;
 
-    public void update(CommentRequest.Edit editDto) {
-        score = editDto.score();
-        comment = editDto.comment();
+    public void update(Comment updateEntity) {
+        score = updateEntity.getScore();
+        comment = updateEntity.getComment();
     }
 }

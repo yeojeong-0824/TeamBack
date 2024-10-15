@@ -102,12 +102,12 @@ public class CommentResponse {
                 Integer score
         ){}
 
-        public static DeleteComment toDto(Board savedBoard) {
+        public static DeleteComment toDto(Board board) {
             return DeleteComment.builder()
                     .board(BoardInfo.builder()
-                            .id(savedBoard.getId())
-                            .title(savedBoard.getTitle())
-                            .score(savedBoard.getAvgScore())
+                            .id(board.getId())
+                            .title(board.getTitle())
+                            .score(board.getAvgScore())
                             .build())
                     .build();
         }
