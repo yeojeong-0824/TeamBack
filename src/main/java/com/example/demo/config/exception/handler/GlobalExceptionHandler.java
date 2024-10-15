@@ -11,6 +11,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.util.List;
 import java.util.Set;
@@ -18,6 +19,26 @@ import java.util.Set;
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+    @ExceptionHandler(RestApiException.class)
+    public ResponseEntity<ErrorResponse> handleCustomException(RestApiException ex) {
+        ErrorCode errorCode = ex.getErrorCode();
+        log.error(errorCode.getHttpStatus() + " 잘못된 요청입니다.");
+        return ResponseEntity
+                .status(errorCode.getHttpStatus().value())
+                .body(new ErrorResponse(errorCode));
+    }
+
+    @ExceptionHandler({Exception.class})
+    public ResponseEntity<ErrorResponse> handleException(Exception e){
+        log.error("GlobalExceptionHandler 작동");
+        log.error(e.getClass().getName());
+
+        ErrorCode errorCode = ErrorCode.BAD_REQUEST;
+        return ResponseEntity
+                .status(errorCode.getHttpStatus().value())
+                .body(new ErrorResponse(errorCode));
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ExceptionMessage> handlerMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
         List<FieldError> fieldErrors = ex.getBindingResult().getFieldErrors();
@@ -36,7 +57,7 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ExceptionMessage(errorMessage));
     }
 
-    @ExceptionHandler(ServerException.class)
+    /*@ExceptionHandler(ServerException.class)
     public ResponseEntity<ExceptionMessage> handlerServerException(ServerException ex) {
         List<String> errorMessage = List.of("일시적인 오류가 발생하였습니다.");
         log.warn(ex.getMessage());
@@ -48,7 +69,7 @@ public class GlobalExceptionHandler {
         List<String> errorMessage = List.of(ex.getMessage());
         log.error(ex.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ExceptionMessage(errorMessage));
-    }
+    }*/
 
     @ExceptionHandler(NotFoundDataException.class)
     public ResponseEntity<ExceptionMessage> handlerNotFoundMemberException(NotFoundDataException ex) {
@@ -64,10 +85,10 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(new ExceptionMessage(errorMessage));
     }
 
-    @ExceptionHandler(AuthorityException.class)
+   /* @ExceptionHandler(AuthorityException.class)
     public ResponseEntity<ExceptionMessage> handlerAuthorityException(AuthorityException ex) {
         List<String> errorMessage = List.of(ex.getMessage());
         errorMessage.forEach(log::error);
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ExceptionMessage(errorMessage));
-    }
+    }*/
 }

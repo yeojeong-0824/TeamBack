@@ -2,6 +2,8 @@ package com.example.demo.domain.board.board.application.boardservice.implement;
 
 import com.example.demo.autocomplate.application.AutocompleteService;
 import com.example.demo.autocomplate.presentation.dto.AutocompleteResponse;
+import com.example.demo.config.exception.RestApiException;
+import com.example.demo.config.exception.handler.ErrorCode;
 import com.example.demo.domain.board.board.application.boardservice.BoardService;
 import com.example.demo.domain.board.board.domain.Board;
 import com.example.demo.domain.board.board.domain.BoardRepository;
@@ -67,7 +69,7 @@ public class BoardServiceImpl implements BoardService {
                 .orElseThrow(() -> new NotFoundDataException("해당 게시글을 찾을 수 없습니다."));
 
         if (!takenMemberId.equals(board.getMember().getId())) {
-            throw new AuthorityException("게시글을 작성한 회원이 아닙니다");
+            throw new RestApiException(ErrorCode.USER_MISMATCH);
         }
 
         board.update(takenDto);
@@ -83,7 +85,7 @@ public class BoardServiceImpl implements BoardService {
                 .orElseThrow(() -> new NotFoundDataException("해당 게시글을 찾을 수 없습니다."));
 
         if (!takenMemberId.equals(board.getMember().getId())) {
-            throw new AuthorityException("게시글을 작성한 회원이 아닙니다");
+            throw new RestApiException(ErrorCode.USER_MISMATCH);
         }
 
         redisRepository.deleteViewCount(takenBoardId);
