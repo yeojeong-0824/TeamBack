@@ -1,12 +1,12 @@
 package com.example.demo.security.filter;
 
-import com.example.demo.config.exception.RestApiException;
-import com.example.demo.config.exception.handler.ErrorCode;
-import com.example.demo.domain.member.member.application.membernotification.MemberChangeService;
-import com.example.demo.domain.member.member.presentation.dto.MemberDetails;
-import com.example.demo.security.JwtProvider;
-import com.example.demo.security.refreshtoken.domain.RefreshToken;
-import com.example.demo.security.refreshtoken.refreshtokenservice.RefreshTokenService;
+import com.yeojeong.application.config.exception.RestApiException;
+import com.yeojeong.application.config.exception.handler.ErrorCode;
+import com.yeojeong.application.domain.member.member.application.membernotification.MemberChangeService;
+import com.yeojeong.application.domain.member.member.presentation.dto.MemberDetails;
+import com.yeojeong.application.security.JwtProvider;
+import com.yeojeong.application.security.refreshtoken.domain.RefreshToken;
+import com.yeojeong.application.security.refreshtoken.refreshtokenservice.RefreshTokenService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;

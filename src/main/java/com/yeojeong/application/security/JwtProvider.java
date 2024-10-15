@@ -1,10 +1,10 @@
-package com.example.demo.security;
+package com.yeojeong.application.security;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.example.demo.domain.member.member.presentation.dto.MemberDetails;
-import com.example.demo.domain.member.member.domain.Member;
+import com.yeojeong.application.domain.member.member.presentation.dto.MemberDetails;
+import com.yeojeong.application.domain.member.member.domain.Member;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.core.GrantedAuthority;

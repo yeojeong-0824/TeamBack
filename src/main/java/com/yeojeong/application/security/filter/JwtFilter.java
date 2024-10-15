@@ -1,15 +1,15 @@
-package com.example.demo.security.filter;
+package com.yeojeong.application.security.filter;
 
 import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
-import com.example.demo.config.exception.ErrorResponse;
-import com.example.demo.config.exception.handler.ErrorCode;
-import com.example.demo.domain.member.member.presentation.dto.MemberDetails;
-import com.example.demo.domain.member.member.domain.Member;
-import com.example.demo.security.JwtProvider;
-import com.example.demo.security.refreshtoken.domain.RefreshToken;
-import com.example.demo.security.refreshtoken.refreshtokenservice.RefreshTokenService;
+import com.yeojeong.application.config.exception.ErrorResponse;
+import com.yeojeong.application.config.exception.handler.ErrorCode;
+import com.yeojeong.application.domain.member.member.presentation.dto.MemberDetails;
+import com.yeojeong.application.domain.member.member.domain.Member;
+import com.yeojeong.application.security.JwtProvider;
+import com.yeojeong.application.security.refreshtoken.domain.RefreshToken;
+import com.yeojeong.application.security.refreshtoken.refreshtokenservice.RefreshTokenService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
