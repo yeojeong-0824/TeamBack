@@ -1,6 +1,7 @@
 package com.yeojeong.application.domain.member.member.presentation.dto;
 
 import com.yeojeong.application.config.exception.ServerException;
+import com.yeojeong.application.config.exception.handler.ErrorCode;
 import com.yeojeong.application.domain.member.member.domain.Member;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
@@ -104,7 +105,7 @@ public class MemberRequest {
         Integer age
     ) {
         public static Member toEntity(SaveMember dto, String password) {
-            if(dto.password.equals(password)) throw new ServerException("비밀번호 암호화가 진행되지 않았습니다");
+            if(dto.password.equals(password)) throw new ServerException(ErrorCode.PASSWORD_NOT_ENCRYPTION);
             return Member.builder()
                     .username(dto.username())
                     .nickname(dto.nickname())

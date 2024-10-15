@@ -7,7 +7,27 @@ import org.springframework.http.HttpStatus;
 @Getter
 @RequiredArgsConstructor
 public enum ErrorCode {
+    // user
     USER_MISMATCH(HttpStatus.FORBIDDEN, "작성자와 로그인한 사용자가 일치하지 않습니다."),
+    NOT_FOUND_USER(HttpStatus.NOT_FOUND, "사용자를 찾을 수 없습니다."),
+    DUPLICATED_ID(HttpStatus.CONFLICT, "아이디가 중복되었습니다."),
+    DUPLICATED_NICKNAME(HttpStatus.CONFLICT, "닉네임이 중복되었습니다."),
+    PASSWORD_NOT_ENCRYPTION(HttpStatus.BAD_GATEWAY, "비밀번호가 암호화 되지 않았습니다."),
+    PASSWORD_NOT_MATCH(HttpStatus.BAD_REQUEST, "비밀번호가 일치하지 않습니다."),
+
+    // board
+    NOT_FOUND_BOARD(HttpStatus.NOT_FOUND, "게시글을 찾을 수 없습니다."),
+
+    // comment
+    NOT_FOUND_COMMENT(HttpStatus.NOT_FOUND, "댓글을 찾을 수 없습니다."),
+
+    // email
+    NOT_FOUND_EMAIL(HttpStatus.NOT_FOUND, "이메일을 찾을 수 없습니다."),
+    EMAIL_MISMATCH(HttpStatus.FORBIDDEN, "작성한 이메일과 로그인한 사용자의 이메일이 일치하지 않습니다."),
+    DUPLICATED_EMAIL(HttpStatus.CONFLICT, "이메일이 중복되었습니다."),
+
+    // sql
+    SQL_INTEGRITY_VIOLATION(HttpStatus.BAD_REQUEST, "SQL 무결성 제약 조건이 위배되었습니다"),
 
     // JWT 관련
     UNAUTHORIZED_CLIENT(HttpStatus.BAD_REQUEST, "접근 토큰이 없습니다."),
