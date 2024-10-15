@@ -57,6 +57,12 @@ public class BoardServiceImpl implements BoardService {
                 .orElseThrow(() -> new NotFoundDataException("해당 게시글을 찾을 수 없습니다."));
     }
 
+    @Override
+    public Page<Board> findByMember(Long memberId, int page) {
+        PageRequest pageRequest = PageRequest.of(page - 1, 10, Sort.by("id").descending());
+        return boardRepository.findAllMemberId(memberId, pageRequest);
+    }
+
     // 조건에 따른 게시글 검색, 정렬
     @Override
     public Page<Board> findAll(String searchKeyword, String keyword, String sortKeyword, int page) {

@@ -3,7 +3,7 @@ package com.yeojeong.application.domain.member.member.presentation;
 import com.yeojeong.application.config.util.customannotation.MethodTimer;
 import com.yeojeong.application.domain.member.email.application.memberemailservice.MemberEmailService;
 import com.yeojeong.application.domain.member.email.presentation.dto.SendEmail;
-import com.yeojeong.application.domain.member.member.application.memberservice.MemberService;
+import com.yeojeong.application.domain.member.member.application.memberfacade.MemberFacade;
 import com.yeojeong.application.domain.member.member.presentation.dto.MemberRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -31,7 +31,7 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "회원가입 API")
 public class JoinMemberController {
 
-    private final MemberService memberService;
+    private final MemberFacade memberFacade;
     private final MemberEmailService memberEmailService;
 
     /*
@@ -52,12 +52,12 @@ public class JoinMemberController {
         }
     )
     public ResponseEntity<String> save(@Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
-                                       @Valid @RequestBody MemberRequest.SaveMember takenDto) {
+                                       @Valid @RequestBody MemberRequest.SaveMember dto) {
 
-        if(!memberEmailService.checkAuthedEmail(takenDto.email()))
+        if(!memberEmailService.checkAuthedEmail(dto.email()))
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("인증되지 않은 이메일입니다");
 
-        memberService.save(takenDto);
+        memberFacade.save(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body("생성이 완료되었습니다");
     }
 
@@ -74,7 +74,7 @@ public class JoinMemberController {
     )
     public ResponseEntity<String> checkDuplicatedByUsername(@Size(min = 5, max = 30) @PathVariable("username") String username) {
 
-        memberService.checkDuplicatedByUsername(username);
+        memberFacade.checkDuplicatedByUsername(username);
         return ResponseEntity.ok("중복되지 않았습니다");
     }
 
@@ -90,7 +90,7 @@ public class JoinMemberController {
     )
     public ResponseEntity<String> checkDuplicatedByNickname(@Size(min = 1, max = 10) @PathVariable("nickname") String nickname) {
 
-        memberService.checkDuplicatedByNickname(nickname);
+        memberFacade.checkDuplicatedByNickname(nickname);
         return ResponseEntity.ok("중복되지 않았습니다");
     }
 
@@ -108,7 +108,7 @@ public class JoinMemberController {
     public ResponseEntity<String> authedByEmail(@Size(min = 1, max = 50) @Schema(example = "example@naver.com")
                                                 @Email @PathVariable("email") String email) {
 
-        memberService.checkDuplicatedByEmail(email);
+        memberFacade.checkDuplicatedByEmail(email);
 
         String key = memberEmailService.createAuthedKey();
 

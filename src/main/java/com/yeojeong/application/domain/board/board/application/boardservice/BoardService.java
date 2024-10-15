@@ -8,6 +8,7 @@ public interface BoardService {
     Board save(Board entity, Member member);
     Board updateById(Board entity, Long memberId, Board updateEntity);
     Board findById(Long id);
+    Page<Board> findByMember(Long memberId, int page);
     Page<Board> findAll(String searchKeyword, String keyword, String sortKeyword, int page);
     void deleteById(Board entity, Long memberId);
     void createComment(Board board);

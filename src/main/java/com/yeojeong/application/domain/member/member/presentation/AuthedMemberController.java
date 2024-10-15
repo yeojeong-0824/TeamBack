@@ -1,9 +1,9 @@
 package com.yeojeong.application.domain.member.member.presentation;
 
 import com.yeojeong.application.config.util.customannotation.MethodTimer;
+import com.yeojeong.application.domain.member.member.application.memberfacade.MemberFacade;
 import com.yeojeong.application.domain.member.member.presentation.dto.MemberResponse;
 import com.yeojeong.application.security.SecurityUtil;
-import com.yeojeong.application.domain.member.member.application.memberservice.MemberService;
 import com.yeojeong.application.domain.member.member.presentation.dto.MemberRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -17,7 +17,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
@@ -27,7 +26,7 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "유저 API (Authed)")
 public class AuthedMemberController {
 
-    private final MemberService memberService;
+    private final MemberFacade memberFacade;
 
     @MethodTimer(method = "회원 정보 호출")
     @GetMapping
@@ -41,8 +40,8 @@ public class AuthedMemberController {
     )
     public ResponseEntity<MemberResponse.FindMember> findById() {
 
-        Long memberId = SecurityUtil.getCurrentMemberId();
-        return null;
+        Long id = SecurityUtil.getCurrentMemberId();
+        return ResponseEntity.ok(memberFacade.findById(id));
     }
 
     @MethodTimer(method = "해당 회원이 작성한 게시글 호출")
@@ -57,8 +56,8 @@ public class AuthedMemberController {
     )
     public ResponseEntity<Page<MemberResponse.BoardInfo>> findBoardById(@RequestParam(required = false, defaultValue = "1", value = "page") int page) {
 
-        Long memberId = SecurityUtil.getCurrentMemberId();
-        return ResponseEntity.ok(memberService.findBoardById(memberId, page));
+        Long id = SecurityUtil.getCurrentMemberId();
+        return ResponseEntity.ok(memberFacade.findBoardById(id, page));
     }
 
     @MethodTimer(method = "해당 회원이 작성한 댓글 호출")
@@ -73,8 +72,8 @@ public class AuthedMemberController {
     )
     public ResponseEntity<Page<MemberResponse.CommentInfo>> findBoardScoreById(@RequestParam(required = false, defaultValue = "1", value = "page") int page) {
 
-        Long memberId = SecurityUtil.getCurrentMemberId();
-        return ResponseEntity.ok(memberService.findCommentById(memberId, page));
+        Long id = SecurityUtil.getCurrentMemberId();
+        return ResponseEntity.ok(memberFacade.findCommentById(id, page));
     }
 
     @MethodTimer(method = "회원 탈퇴 호출")
@@ -88,10 +87,10 @@ public class AuthedMemberController {
             }
     )
     public ResponseEntity<String> deleteByUserId(@Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
-                                                 @Valid @RequestBody MemberRequest.DeleteMember takenDto) {
+                                                 @Valid @RequestBody MemberRequest.DeleteMember dto) {
 
-        Long memberId = SecurityUtil.getCurrentMemberId();
-        memberService.deleteByMemberId(memberId, takenDto);
+        Long id = SecurityUtil.getCurrentMemberId();
+        memberFacade.delete(id, dto);
 
         return ResponseEntity.ok("유저 탈퇴에 성공했습니다");
     }
@@ -107,26 +106,9 @@ public class AuthedMemberController {
             }
     )
     public ResponseEntity<MemberResponse.FindMember> patchMember(@Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
-                                                                 @Valid @RequestBody MemberRequest.PatchMember takenDto) {
+                                                                 @Valid @RequestBody MemberRequest.PatchMember dto) {
 
-        Long memberId = SecurityUtil.getCurrentMemberId();
-        return ResponseEntity.ok(memberService.patchById(memberId, takenDto));
-    }
-
-    @MethodTimer(method = "회원 비밀번호 수정 호출")
-    @PatchMapping("/passwords")
-    @Operation(summary = "유저 비밀번호 수정", description = "회원 비밀번호 수정 호출")
-    @ApiResponses(
-            value = {
-                    @ApiResponse(responseCode = "200", description = "수정 완료"),
-                    @ApiResponse(responseCode = "400", description = "유저를 찾지 못함"),
-                    @ApiResponse(responseCode = "403", description = "권한 없음"),
-            }
-    )
-    public ResponseEntity<MemberResponse.FindMember> patchPassword(@Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
-                                                                   @Valid @RequestBody MemberRequest.PatchPassword takenDto) {
-
-        Long memberId = SecurityUtil.getCurrentMemberId();
-        return ResponseEntity.ok(memberService.patchPasswordById(memberId, takenDto));
+        Long id = SecurityUtil.getCurrentMemberId();
+        return ResponseEntity.ok(memberFacade.patch(id, dto));
     }
 }

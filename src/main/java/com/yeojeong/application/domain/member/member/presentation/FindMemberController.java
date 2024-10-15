@@ -3,7 +3,7 @@ package com.yeojeong.application.domain.member.member.presentation;
 import com.yeojeong.application.config.util.customannotation.MethodTimer;
 import com.yeojeong.application.domain.member.email.application.memberemailservice.MemberEmailService;
 import com.yeojeong.application.domain.member.email.presentation.dto.SendEmail;
-import com.yeojeong.application.domain.member.member.application.memberservice.MemberService;
+import com.yeojeong.application.domain.member.member.application.memberfacade.MemberFacade;
 import com.yeojeong.application.domain.member.member.presentation.dto.MemberRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -27,7 +27,7 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "유저 찾기 API")
 public class FindMemberController {
 
-    private final MemberService memberService;
+    private final MemberFacade memberFacade;
     private final MemberEmailService memberEmailService;
 
     @MethodTimer(method = "새로운 비밀번호 발급 호출")
@@ -40,17 +40,15 @@ public class FindMemberController {
             }
     )
     public ResponseEntity<String> findPassword(@Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
-                                               @Valid @RequestBody MemberRequest.FindPassword takenDto) {
+                                               @Valid @RequestBody MemberRequest.FindPassword dto) {
+        String newPassword = memberFacade.findPassword(dto.username(), dto.email());
 
-
-        String newPassword = memberService.findPassword(takenDto.username(), takenDto.email());
-
-        SendEmail.FindPassword dto = SendEmail.FindPassword.builder()
-                .email(takenDto.email())
+        SendEmail.FindPassword sendDto = SendEmail.FindPassword.builder()
+                .email(dto.email())
                 .password(newPassword)
                 .build();
 
-        memberEmailService.sendFindPassword(dto);
+        memberEmailService.sendFindPassword(sendDto);
 
         return ResponseEntity.ok("비밀번호 재발급에 성공하였습니다");
     }
@@ -68,14 +66,14 @@ public class FindMemberController {
     public ResponseEntity<String> findUsername(@Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
                                                @PathVariable("email") String email) {
 
-        String username = memberService.findUsernameByEmail(email);
+        String username = memberFacade.findUsernameByEmail(email);
 
-        SendEmail.FindUsername dto = SendEmail.FindUsername.builder()
+        SendEmail.FindUsername sendDto = SendEmail.FindUsername.builder()
                 .email(email)
                 .username(username)
                 .build();
 
-        memberEmailService.sendFindUsername(dto);
+        memberEmailService.sendFindUsername(sendDto);
 
         return ResponseEntity.ok("아이디 찾기를 성공하였습니다");
     }

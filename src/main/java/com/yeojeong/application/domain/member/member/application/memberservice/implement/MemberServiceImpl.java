@@ -25,10 +25,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
-    private final BoardRepository boardRepository;
-    private final CommentRepository commentRepository;
-
-    private final PasswordEncoder passwordEncoder;
 
     @Override
     public Member findById(Long id) {
@@ -36,133 +32,59 @@ public class MemberServiceImpl implements MemberService {
                 .orElseThrow(() -> new NotFoundDataException("해당 유저를 찾지 못했습니다"));
     }
 
+    @Override
+    public Member findByUsername(String username) {
+        return memberRepository.findByUsername(username)
+                .orElseThrow(() -> new NotFoundDataException("해당 유저를 찾지 못했습니다"));
+    }
+
+    @Override
+    public Member findByEmail(String email) {
+        return memberRepository.findByEmail(email)
+                .orElseThrow(() -> new NotFoundDataException("해당 유저를 찾지 못했습니다"));
+    }
+
     @Transactional
     @Override
-    public void save(MemberRequest.SaveMember takenDto) {
-        String encodingPassword = passwordEncoder.encode(takenDto.password());
-        Member takenMember = MemberRequest.SaveMember.toEntity(takenDto, encodingPassword);
-        memberRepository.save(takenMember);
+    public void save(Member entity) {
+        memberRepository.save(entity);
     }
 
     @Transactional
     @Override
-    public void deleteByMemberId(Long takenMemberId, MemberRequest.DeleteMember takenDto) {
-        Member savedEntity = memberRepository.findById(takenMemberId)
-                .orElseThrow(() -> new NotFoundDataException("해당 유저를 찾지 못했습니다"));
-
-        String savedPassword = savedEntity.getPassword();
-        String takenPassword = takenDto.password();
-        if(!passwordEncoder.matches(takenPassword, savedPassword)) throw new RequestDataException("비밀번호가 일치하지 않습니다");
-
-        boardRepository.deleteByMember(savedEntity);
-        commentRepository.deleteByMember(savedEntity);
-        memberRepository.deleteById(takenMemberId);
+    public void delete(Member entity) {
+        memberRepository.delete(entity);
     }
 
+    @Transactional
     @Override
-    public Page<MemberResponse.BoardInfo> findBoardById(Long takenMemberId, int takenPage) {
-        Member savedEntity = memberRepository.findById(takenMemberId)
-                .orElseThrow(() -> new NotFoundDataException("해당 유저를 찾지 못했습니다"));
-
-        PageRequest pageRequest = PageRequest.of(takenPage - 1, 10, Sort.by("id").descending());
-        Page<Board> savedBoardPage = boardRepository.findByMember(savedEntity, pageRequest);
-
-        return savedBoardPage.map(MemberResponse.BoardInfo::toDto);
-    }
-
-    @Override
-    public Page<MemberResponse.CommentInfo> findCommentById(Long takenMemberId, int takenPage) {
-        Member savedEntity = memberRepository.findById(takenMemberId)
-                .orElseThrow(() -> new NotFoundDataException("해당 유저를 찾지 못했습니다"));
-
-        PageRequest pageRequest = PageRequest.of(takenPage - 1, 10, Sort.by("id").descending());
-        Page<Comment> savedComment = commentRepository.findByMember(savedEntity, pageRequest);
-
-        return savedComment.map(MemberResponse.CommentInfo::toDto);
+    public void pathPassword(Member entity, String password) {
+        memberRepository.save(entity);
     }
 
 
     @Override
-    public String findPassword(String takenUsername, String takenEmail) {
-        Member savedEntity = memberRepository.findByUsername(takenUsername)
-                .orElseThrow(() -> new NotFoundDataException("해당 유저를 찾지 못했습니다"));
-
-        if(!savedEntity.getEmail().equals(takenEmail))
-            throw new NotFoundDataException("해당 유저의 이메일을 찾지 못했습니다");
-
-        String newPassword = this.createNewPassword();
-        savedEntity.patchPassword(passwordEncoder.encode(newPassword));
-
-        memberRepository.save(savedEntity);
-        return newPassword;
-    }
-
-    private String createNewPassword() {
-        String password = "";
-        for(int i = 0; i < 4; i++) {
-            password += (char) ((int) (Math.random() * 26) + 97);
-        }
-        for(int i = 0; i < 4; i++) {
-            password += (int) (Math.random() * 10);
-        }
-        return password;
-    }
-
-    @Override
-    public String findUsernameByEmail(String takenEmail) {
-        Member savedEntity = memberRepository.findByEmail(takenEmail)
-                .orElseThrow(() -> new NotFoundDataException("해당 유저를 찾지 못했습니다"));
-
-        return savedEntity.getUsername();
-    }
-
-    @Override
-    public void checkDuplicatedByUsername(String takenUsername) {
-        if(memberRepository.existsByUsername(takenUsername))
+    public void checkDuplicatedByUsername(String username) {
+        if(memberRepository.existsByUsername(username))
             throw new DuplicatedException("중복된 아이디입니다");
     }
+
     @Override
-    public void checkDuplicatedByNickname(String takenNickname) {
-        if(memberRepository.existsByNickname(takenNickname))
+    public void checkDuplicatedByNickname(String nickname) {
+        if(memberRepository.existsByNickname(nickname))
             throw new DuplicatedException("중복된 닉네임입니다");
     }
 
     @Override
-    public void checkDuplicatedByEmail(String takenEmail) {
-        if(memberRepository.existsByEmail(takenEmail))
+    public void checkDuplicatedByEmail(String email) {
+        if(memberRepository.existsByEmail(email))
             throw new DuplicatedException("중복된 이메일입니다");
     }
 
     @Transactional
     @Override
-    public MemberResponse.FindMember patchById(Long takenMemberId, MemberRequest.PatchMember takenDto) {
-        Member savedEntity = memberRepository.findById(takenMemberId)
-                .orElseThrow(() -> new NotFoundDataException("해당 유저를 찾지 못했습니다"));
-
-        String savedPassword = savedEntity.getPassword();
-        String takenPassword = takenDto.password();
-        if(!passwordEncoder.matches(takenPassword, savedPassword)) throw new RequestDataException("비밀번호가 일치하지 않습니다");
-
-        savedEntity.patchMember(takenDto);
-        Member save = memberRepository.save(savedEntity);
-
-        return MemberResponse.FindMember.toDto(save);
-    }
-
-    @Transactional
-    @Override
-    public MemberResponse.FindMember patchPasswordById(Long takenMemberId, MemberRequest.PatchPassword takenDto) {
-        Member savedEntity = memberRepository.findById(takenMemberId)
-                .orElseThrow(() -> new NotFoundDataException("해당 유저를 찾지 못했습니다"));
-
-        String savedPassword = savedEntity.getPassword();
-        String takenPassword = takenDto.password();
-        if(!passwordEncoder.matches(takenPassword, savedPassword)) throw new RequestDataException("비밀번호가 일치하지 않습니다");
-
-        String password = passwordEncoder.encode(takenDto.newPassword());
-        savedEntity.patchPassword(password);
-        Member save = memberRepository.save(savedEntity);
-
-        return MemberResponse.FindMember.toDto(save);
+    public Member patch(Member member, Member updateMember) {
+        member.patchMember(updateMember);
+        return memberRepository.save(member);
     }
 }

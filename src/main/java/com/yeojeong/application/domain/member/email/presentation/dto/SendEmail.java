@@ -18,7 +18,14 @@ public class SendEmail {
     public record FindPassword(
             String email,
             String password
-    ){}
+    ){
+        public static FindPassword toSendEmail(String email, String password) {
+            return SendEmail.FindPassword.builder()
+                    .email(email)
+                    .password(password)
+                    .build();
+        }
+    }
 
     @Builder
     public record FindUsername(

@@ -55,6 +55,12 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
+    public Page<Comment> findByMemberId(Long memberId, int page) {
+        PageRequest request = PageRequest.of(page - 1, 10, Sort.by("id").descending());
+        return commentRepository.findAllMemberId(memberId, request);
+    }
+
+    @Override
     @Transactional
     public Comment updateById(Comment entity, Long memberId, Comment updateEntity) {
         if(!memberId.equals(entity.getMember().getId()))

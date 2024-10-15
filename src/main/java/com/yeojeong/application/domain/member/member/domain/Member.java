@@ -42,8 +42,9 @@ public class Member {
         this.password = password;
     }
 
-    public void patchMember(MemberRequest.PatchMember takenDto) {
-        if(takenDto.nickname() != null) this.nickname = takenDto.nickname();
+    public void patchMember(Member entity) {
+        if(entity.getNickname() != null) this.nickname = entity.getNickname();
+        if(entity.getAge() != null) this.age = entity.getAge();
     }
     public void changeLastLoginDate() {
         this.lastLoginDate = LocalDate.now();
