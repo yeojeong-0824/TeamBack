@@ -47,10 +47,7 @@ public class JwtFilter extends OncePerRequestFilter {
         Step 4: 필터 종료
         */
 
-        // 쿠키에서 refresh token 가져오는 코드
-        String refreshTokenHeader = resolveTokenFromCookie(request, "Refresh");
-
-        // String refreshTokenHeader = request.getHeader("Set-Cookie");
+        String refreshTokenHeader = request.getHeader(jwtProvider.REFRESH_HEADER_STRING);
 
         if(refreshTokenHeader != null) {
             log.info("JWT Token 재발급");
@@ -87,10 +84,7 @@ public class JwtFilter extends OncePerRequestFilter {
         Step 2: Jwt 토큰을 복호화 실패시(재발급 횟수 초과: 401, 변조: 400) 오류를 반환, 성공시 인증에 성공
         Step 3: 필터 종료
          */
-        //String jwtTokenHeader = request.getHeader(jwtProvider.JWT_HEADER_STRING);
-
-        // cookie 에서 jwt token 가져오는 코드
-        String jwtTokenHeader = resolveTokenFromCookie(request, "Authorization");
+        String jwtTokenHeader = request.getHeader(jwtProvider.JWT_HEADER_STRING);
 
         if(jwtTokenHeader == null) {
             filterChain.doFilter(request, response);
@@ -135,16 +129,4 @@ public class JwtFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
-    // 특정 쿠키를 가져오는 메소드
-    private String resolveTokenFromCookie(HttpServletRequest request, String cookieName) {
-        Cookie[] cookies = request.getCookies();
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if (cookieName.equals(cookie.getName())) {
-                    return cookie.getValue();
-                }
-            }
-        }
-        return null;
-    }
 }
