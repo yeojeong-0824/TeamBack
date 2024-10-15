@@ -27,7 +27,6 @@ public class GlobalExceptionHandler {
     @ExceptionHandler({Exception.class})
     public ResponseEntity<ErrorResponse> handleException(Exception e){
         log.error("GlobalExceptionHandler 작동");
-        log.error(e.getClass().getName());
 
         ErrorCode errorCode = ErrorCode.BAD_REQUEST;
         return ResponseEntity
@@ -47,44 +46,37 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
-    public ResponseEntity<ExceptionMessage> handlerDataIntegrityViolationException(DataIntegrityViolationException ex) {
-        List<String> errorMessage = List.of("입력 값이 잘못되었습니다.");
+    public ResponseEntity<ErrorResponse> handlerDataIntegrityViolationException(DataIntegrityViolationException ex) {
+        ErrorCode errorCode = ErrorCode.SQL_INTEGRITY_VIOLATION;
         log.error("SQL 무결성 제약 조건이 위배되었습니다");
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ExceptionMessage(errorMessage));
+        return ResponseEntity.status(errorCode.getHttpStatus()).body(new ErrorResponse(errorCode));
     }
 
-    /*@ExceptionHandler(ServerException.class)
-    public ResponseEntity<ExceptionMessage> handlerServerException(ServerException ex) {
-        List<String> errorMessage = List.of("일시적인 오류가 발생하였습니다.");
-        log.warn(ex.getMessage());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ExceptionMessage(errorMessage));
+    @ExceptionHandler(ServerException.class)
+    public ResponseEntity<ErrorResponse> handlerServerException(ServerException ex) {
+        ErrorCode errorCode = ex.getErrorCode();
+        log.error(errorCode.getMessage());
+        return ResponseEntity.status(errorCode.getHttpStatus()).body(new ErrorResponse(errorCode));
     }
 
     @ExceptionHandler(RequestDataException.class)
-    public ResponseEntity<ExceptionMessage> handlerRequestDataException(RequestDataException ex) {
-        List<String> errorMessage = List.of(ex.getMessage());
-        log.error(ex.getMessage());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ExceptionMessage(errorMessage));
-    }*/
+    public ResponseEntity<ErrorResponse> handlerRequestDataException(RequestDataException ex) {
+        ErrorCode errorCode = ex.getErrorCode();
+        log.error(errorCode.getMessage());
+        return ResponseEntity.status(errorCode.getHttpStatus()).body(new ErrorResponse(errorCode));
+    }
 
     @ExceptionHandler(NotFoundDataException.class)
-    public ResponseEntity<ExceptionMessage> handlerNotFoundMemberException(NotFoundDataException ex) {
-        List<String> errorMessage = List.of(ex.getMessage());
-        errorMessage.forEach(log::error);
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ExceptionMessage(errorMessage));
+    public ResponseEntity<ErrorResponse> handlerNotFoundMemberException(NotFoundDataException ex) {
+        ErrorCode errorCode = ex.getErrorCode();
+        log.error(errorCode.getMessage());
+        return ResponseEntity.status(errorCode.getHttpStatus()).body(new ErrorResponse(errorCode));
     }
 
     @ExceptionHandler(DuplicatedException.class)
-    public ResponseEntity<ExceptionMessage> handlerDuplicatedException(DuplicatedException ex) {
-        List<String> errorMessage = List.of(ex.getMessage());
-        errorMessage.forEach(log::error);
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(new ExceptionMessage(errorMessage));
+    public ResponseEntity<ErrorResponse> handlerDuplicatedException(DuplicatedException ex) {
+        ErrorCode errorCode = ex.getErrorCode();
+        log.error(errorCode.getMessage());
+        return ResponseEntity.status(errorCode.getHttpStatus()).body(new ErrorResponse(errorCode));
     }
-
-   /* @ExceptionHandler(AuthorityException.class)
-    public ResponseEntity<ExceptionMessage> handlerAuthorityException(AuthorityException ex) {
-        List<String> errorMessage = List.of(ex.getMessage());
-        errorMessage.forEach(log::error);
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ExceptionMessage(errorMessage));
-    }*/
 }

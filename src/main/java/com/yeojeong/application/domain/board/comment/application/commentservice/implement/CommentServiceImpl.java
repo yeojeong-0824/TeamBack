@@ -31,7 +31,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public Comment findById(Long id) {
         return commentRepository.findById(id)
-                .orElseThrow(() -> new NotFoundDataException("해당 댓글을 찾을 수 없습니다"));
+                .orElseThrow(() -> new NotFoundDataException(ErrorCode.NOT_FOUND_COMMENT));
     }
 
     @Override
