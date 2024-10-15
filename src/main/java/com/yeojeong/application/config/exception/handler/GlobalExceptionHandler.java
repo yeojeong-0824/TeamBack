@@ -27,7 +27,6 @@ public class GlobalExceptionHandler {
     @ExceptionHandler({Exception.class})
     public ResponseEntity<ErrorResponse> handleException(Exception e){
         log.error("GlobalExceptionHandler 작동");
-        log.error(e.getClass().getName());
 
         ErrorCode errorCode = ErrorCode.BAD_REQUEST;
         return ResponseEntity
@@ -46,12 +45,20 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ExceptionMessage(errorMessage));
     }
 
+    // origin
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<ExceptionMessage> handlerDataIntegrityViolationException(DataIntegrityViolationException ex) {
         List<String> errorMessage = List.of("입력 값이 잘못되었습니다.");
         log.error("SQL 무결성 제약 조건이 위배되었습니다");
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ExceptionMessage(errorMessage));
     }
+
+    /*@ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<ExceptionMessage> handlerDataIntegrityViolationException(DataIntegrityViolationException ex) {
+        ErrorCode errorCode = ex.
+        log.error("SQL 무결성 제약 조건이 위배되었습니다");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ExceptionMessage(errorMessage));
+    }*/
 
     /*@ExceptionHandler(ServerException.class)
     public ResponseEntity<ExceptionMessage> handlerServerException(ServerException ex) {
