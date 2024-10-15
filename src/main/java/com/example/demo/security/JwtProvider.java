@@ -26,8 +26,7 @@ public class JwtProvider {
     //JWT Token의 재발급은 10번으로 제한
     public final Integer REFRESH_COUNT = 10;
 
-    // cookie 에서는 빈칸이 되지 않아서 빈칸을 삭제
-    public final String TOKEN_PREFIX = "Bearer";
+    public final String TOKEN_PREFIX = "Bearer ";
     public final String JWT_HEADER_STRING = "Authorization";
     public final String REFRESH_HEADER_STRING = "Refresh";
 

@@ -34,7 +34,7 @@ public class SecurityFilter {
                 .csrf(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
-                .cors(auth -> auth.configurationSource(corsConfigurationSource()))
+                //.cors(auth -> auth.configurationSource(corsConfigurationSource()))
                 .sessionManagement(auth -> auth.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
                 .exceptionHandling(e -> e

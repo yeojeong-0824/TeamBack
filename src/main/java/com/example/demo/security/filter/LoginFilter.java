@@ -1,5 +1,7 @@
 package com.example.demo.security.filter;
 
+import com.example.demo.config.exception.RestApiException;
+import com.example.demo.config.exception.handler.ErrorCode;
 import com.example.demo.domain.member.member.application.membernotification.MemberChangeService;
 import com.example.demo.domain.member.member.presentation.dto.MemberDetails;
 import com.example.demo.security.JwtProvider;
@@ -87,17 +89,9 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
         refreshTokenService.save(saveToken);
 
-        // jwt Token
-        Cookie jwt = new Cookie(jwtProvider.JWT_HEADER_STRING, jwtProvider.TOKEN_PREFIX + jwtToken);
-        jwt.setMaxAge(jwtProvider.JWT_EXPIRATION_TIME / 1000);
-
-        response.addCookie(jwt);
-
-        // refresh Token
-        Cookie refresh = new Cookie(jwtProvider.REFRESH_HEADER_STRING, jwtProvider.TOKEN_PREFIX + refreshToken);
-        refresh.setMaxAge(jwtProvider.REFRESH_EXPIRATION_TIME / 1000);
-
-        response.addCookie(refresh);
+        // Response Token
+        response.addHeader(jwtProvider.JWT_HEADER_STRING, jwtProvider.TOKEN_PREFIX + jwtToken);
+        response.addHeader(jwtProvider.REFRESH_HEADER_STRING, jwtProvider.TOKEN_PREFIX + refreshToken);
         response.setStatus(201);
     }
 
@@ -105,6 +99,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     protected void unsuccessfulAuthentication(HttpServletRequest request,
                                               HttpServletResponse response,
                                               AuthenticationException failed) throws IOException, ServletException {
+
 
         log.error("로그인 실패");
         response.setStatus(401);
