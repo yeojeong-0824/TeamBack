@@ -28,18 +28,18 @@ public class BoardFacadeImpl implements BoardFacade {
     }
 
     @Override
-    public BoardResponse.FindBoard updateById(Long id, Long memberId, BoardRequest.PutBoard dto) {
+    public BoardResponse.FindBoard update(Long id, Long memberId, BoardRequest.PutBoard dto) {
         Board savedEntity = boardService.findById(id);
         Board entity = BoardRequest.PutBoard.toEntity(dto);
-        Board rtnEntity = boardService.updateById(savedEntity, memberId, entity);
+        Board rtnEntity = boardService.update(savedEntity, memberId, entity);
 
         return BoardResponse.FindBoard.toDto(rtnEntity);
     }
 
     @Override
-    public void deleteById(Long id, Long memberId) {
+    public void delete(Long id, Long memberId) {
         Board savedEntity = boardService.findById(id);
-        boardService.deleteById(savedEntity, memberId);
+        boardService.delete(savedEntity, memberId);
     }
 
     @Override

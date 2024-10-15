@@ -6,7 +6,7 @@ import org.springframework.data.domain.Page;
 
 public interface CommentFacade {
     CommentResponse.FindComment save(CommentRequest.Save dto, Long boardId, Long memberId);
-    CommentResponse.DeleteComment deleteById(Long id, Long memberId);
+    CommentResponse.DeleteComment delete(Long id, Long memberId);
     Page<CommentResponse.FindByBoardId> findByBoardId(Long boardId, int page);
-    CommentResponse.FindComment updateById(Long id, Long memberId, CommentRequest.Edit dto);
+    CommentResponse.FindComment update(Long id, Long memberId, CommentRequest.Edit dto);
 }

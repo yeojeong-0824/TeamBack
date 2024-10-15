@@ -33,7 +33,7 @@ public class CommentFacadeImpl implements CommentFacade {
     }
 
     @Override
-    public CommentResponse.DeleteComment deleteById(Long id, Long memberId) {
+    public CommentResponse.DeleteComment delete(Long id, Long memberId) {
         Comment savedEntity = commentService.findById(id);
         Board board = savedEntity.getBoard();
 
@@ -49,10 +49,10 @@ public class CommentFacadeImpl implements CommentFacade {
     }
 
     @Override
-    public CommentResponse.FindComment updateById(Long id, Long memberId, CommentRequest.Edit dto) {
+    public CommentResponse.FindComment update(Long id, Long memberId, CommentRequest.Edit dto) {
         Comment savedEntity = commentService.findById(id);
         Comment entity = CommentRequest.Edit.toEntity(dto);
-        Comment rtnEntity = commentService.updateById(savedEntity, memberId, entity);
+        Comment rtnEntity = commentService.update(savedEntity, memberId, entity);
 
         Board board = rtnEntity.getBoard();
         boardService.updateComment(board);

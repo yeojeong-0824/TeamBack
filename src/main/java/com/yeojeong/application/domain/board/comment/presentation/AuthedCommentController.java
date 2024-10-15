@@ -47,7 +47,7 @@ public class AuthedCommentController {
     }
 
     @MethodTimer(method = "댓글 수정 호출")
-    @PutMapping("/{id}")
+    @PatchMapping("/{id}")
     @Operation(summary = "댓글 수정", description = "게시글 댓글을 수정합니다")
     @ApiResponses(
             value = {
@@ -55,12 +55,12 @@ public class AuthedCommentController {
                     @ApiResponse(responseCode = "403", description = "권한 없음")
             }
     )
-    public ResponseEntity<CommentResponse.FindComment> edit(@PathVariable("id") Long id,
+    public ResponseEntity<CommentResponse.FindComment> path(@PathVariable("id") Long id,
                                                             @Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
                                                             @Valid @RequestBody CommentRequest.Edit dto) {
 
         Long memberId = SecurityUtil.getCurrentMemberId();
-        return ResponseEntity.ok(commentFacade.updateById(id, memberId, dto));
+        return ResponseEntity.ok(commentFacade.update(id, memberId, dto));
     }
 
     @MethodTimer(method = "댓글 삭제 호출")
@@ -75,6 +75,6 @@ public class AuthedCommentController {
     public ResponseEntity<CommentResponse.DeleteComment> delete(@PathVariable("id") Long id) {
 
         Long memberId = SecurityUtil.getCurrentMemberId();
-        return ResponseEntity.ok(commentFacade.deleteById(id, memberId));
+        return ResponseEntity.ok(commentFacade.delete(id, memberId));
     }
 }

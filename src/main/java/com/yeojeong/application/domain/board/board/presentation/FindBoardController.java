@@ -32,7 +32,7 @@ public class FindBoardController {
                     @ApiResponse(responseCode = "404", description = "존재하는 게시글 없음")
             }
     )
-    public ResponseEntity<BoardResponse.FindBoard> getBoard(@PathVariable("id") Long id){
+    public ResponseEntity<BoardResponse.FindBoard> findById(@PathVariable("id") Long id){
         Long memberId = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(boardFacade.findById(id, memberId));
     }
@@ -46,7 +46,7 @@ public class FindBoardController {
                     @ApiResponse(responseCode = "400", description = "게시글 검색, 정렬 실패")
             }
     )
-    public ResponseEntity<Page<BoardResponse.FindBoardList>> boardSearch(
+    public ResponseEntity<Page<BoardResponse.FindBoardList>> findAll(
             @RequestParam(value = "keyword") String keyword,
             @RequestParam(value = "searchKeyword") String searchKeyword,
             @RequestParam(value = "sortKeyword") String sortKeyword,
