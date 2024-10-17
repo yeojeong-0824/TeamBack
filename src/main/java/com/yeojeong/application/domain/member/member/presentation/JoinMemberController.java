@@ -51,14 +51,14 @@ public class JoinMemberController {
                 @ApiResponse(responseCode = "401", description = "인증되지 않은 이메일")
         }
     )
-    public ResponseEntity<String> save(@Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
+    public ResponseEntity<Void> save(@Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
                                        @Valid @RequestBody MemberRequest.SaveMember dto) {
 
         if(!memberEmailService.checkAuthedEmail(dto.email()))
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("인증되지 않은 이메일입니다");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 
         memberFacade.save(dto);
-        return ResponseEntity.status(HttpStatus.CREATED).body("생성이 완료되었습니다");
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
 
@@ -72,10 +72,10 @@ public class JoinMemberController {
                     @ApiResponse(responseCode = "409", description = "중복됨")
             }
     )
-    public ResponseEntity<String> checkDuplicatedByUsername(@Size(min = 5, max = 30) @PathVariable("username") String username) {
+    public ResponseEntity<Void> checkDuplicatedByUsername(@Size(min = 5, max = 30) @PathVariable("username") String username) {
 
         memberFacade.checkDuplicatedByUsername(username);
-        return ResponseEntity.ok("중복되지 않았습니다");
+        return ResponseEntity.ok().build();
     }
 
     @MethodTimer(method = "닉네임 중복 검사 호출")
@@ -88,10 +88,10 @@ public class JoinMemberController {
                     @ApiResponse(responseCode = "409", description = "중복됨")
             }
     )
-    public ResponseEntity<String> checkDuplicatedByNickname(@Size(min = 1, max = 10) @PathVariable("nickname") String nickname) {
+    public ResponseEntity<Void> checkDuplicatedByNickname(@Size(min = 1, max = 10) @PathVariable("nickname") String nickname) {
 
         memberFacade.checkDuplicatedByNickname(nickname);
-        return ResponseEntity.ok("중복되지 않았습니다");
+        return ResponseEntity.ok().build();
     }
 
 
@@ -105,7 +105,7 @@ public class JoinMemberController {
                     @ApiResponse(responseCode = "409", description = "이메일이 중복 중복됨")
             }
     )
-    public ResponseEntity<String> authedByEmail(@Size(min = 1, max = 50) @Schema(example = "example@naver.com")
+    public ResponseEntity<Void> authedByEmail(@Size(min = 1, max = 50) @Schema(example = "example@naver.com")
                                                 @Email @PathVariable("email") String email) {
 
         memberFacade.checkDuplicatedByEmail(email);
@@ -119,7 +119,7 @@ public class JoinMemberController {
 
         memberEmailService.sendAuthedEmail(dto);
 
-        return ResponseEntity.ok("이메일 인증 코드 전송되었습니다");
+        return ResponseEntity.ok().build();
     }
 
 
@@ -132,14 +132,14 @@ public class JoinMemberController {
                     @ApiResponse(responseCode = "401", description = "이메일 인증 실패")
             }
     )
-    public ResponseEntity<String> authedCheckByEmail(@Size(min = 1, max = 50) @Schema(example = "example@naver.com")
+    public ResponseEntity<Void> authedCheckByEmail(@Size(min = 1, max = 50) @Schema(example = "example@naver.com")
                                                      @Email @PathVariable("email") String email,
 
                                                      @Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
                                                      @RequestBody MemberRequest.EmailAuthedKey takenDto) {
 
         return memberEmailService.checkAuthedKey(email, takenDto.key()) ?
-                ResponseEntity.ok("이메일 인증에 성공하였습니다") :
-                ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("이메일 인증에 실패하였습니다");
+                ResponseEntity.ok().build() :
+                ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 }
