@@ -39,7 +39,7 @@ public class FindMemberController {
                     @ApiResponse(responseCode = "400", description = "입력 값이 잘못됨"),
             }
     )
-    public ResponseEntity<String> findPassword(@Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
+    public ResponseEntity<Void> findPassword(@Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
                                                @Valid @RequestBody MemberRequest.FindPassword dto) {
         String newPassword = memberFacade.findPassword(dto.username(), dto.email());
 
@@ -49,8 +49,7 @@ public class FindMemberController {
                 .build();
 
         memberEmailService.sendFindPassword(sendDto);
-
-        return ResponseEntity.ok("비밀번호 재발급에 성공하였습니다");
+        return ResponseEntity.ok().build();
     }
 
 
@@ -63,7 +62,7 @@ public class FindMemberController {
                     @ApiResponse(responseCode = "400", description = "입력 값이 잘못됨"),
             }
     )
-    public ResponseEntity<String> findUsername(@Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
+    public ResponseEntity<Void> findUsername(@Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
                                                @PathVariable("email") String email) {
 
         String username = memberFacade.findUsernameByEmail(email);
@@ -74,7 +73,6 @@ public class FindMemberController {
                 .build();
 
         memberEmailService.sendFindUsername(sendDto);
-
-        return ResponseEntity.ok("아이디 찾기를 성공하였습니다");
+        return ResponseEntity.ok().build();
     }
 }
