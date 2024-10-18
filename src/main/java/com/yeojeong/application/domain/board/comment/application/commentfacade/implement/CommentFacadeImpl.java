@@ -1,5 +1,7 @@
 package com.yeojeong.application.domain.board.comment.application.commentfacade.implement;
 
+import com.yeojeong.application.config.exception.RestApiException;
+import com.yeojeong.application.config.exception.handler.ErrorCode;
 import com.yeojeong.application.domain.board.board.application.boardservice.BoardService;
 import com.yeojeong.application.domain.board.board.domain.Board;
 import com.yeojeong.application.domain.board.comment.application.commentfacade.CommentFacade;
@@ -35,9 +37,11 @@ public class CommentFacadeImpl implements CommentFacade {
     @Override
     public CommentResponse.Delete delete(Long id, Long memberId) {
         Comment savedEntity = commentService.findById(id);
-        Board board = savedEntity.getBoard();
+        checkMember(savedEntity, memberId);
 
-        commentService.delete(savedEntity, memberId);
+        Board board = savedEntity.getBoard();
+        commentService.delete(savedEntity);
+
         if(savedEntity.getScore() != 0) boardService.deleteComment(board);
         return CommentResponse.Delete.toDto(board);
     }
@@ -51,12 +55,18 @@ public class CommentFacadeImpl implements CommentFacade {
     @Override
     public CommentResponse.FindById update(Long id, Long memberId, CommentRequest.Put dto) {
         Comment savedEntity = commentService.findById(id);
+        checkMember(savedEntity, memberId);
+
         Comment entity = CommentRequest.Put.toEntity(dto);
-        Comment rtnEntity = commentService.update(savedEntity, memberId, entity);
+        Comment rtnEntity = commentService.update(savedEntity, entity);
 
         Board board = rtnEntity.getBoard();
         boardService.updateComment(board);
 
         return CommentResponse.FindById.toDto(rtnEntity);
+    }
+
+    private void checkMember(Comment comment, Long memberId) {
+        if(memberId.equals(comment.getMember().getId())) throw new RestApiException(ErrorCode.USER_MISMATCH);
     }
 }

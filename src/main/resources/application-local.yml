@@ -1,4 +1,9 @@
 spring:
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/website
@@ -10,3 +15,12 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: false
+
+JWTKey: DevKey12
+EmailPassword: ${emailPassword}
+
+autocomplete:
+  limit: 10
+  suffix: "_suffix"
+  key: "autocomplete"
+  score-key: "autocomplete:score"

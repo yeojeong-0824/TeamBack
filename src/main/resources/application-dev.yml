@@ -1,0 +1,14 @@
+spring:
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
+JWTKey: DevKey12
+EmailPassword: ${emailPassword}
+
+autocomplete:
+  limit: 10
+  suffix: "_suffix"
+  key: "autocomplete"
+  score-key: "autocomplete:score"
