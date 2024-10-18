@@ -1,7 +1,12 @@
 package com.yeojeong.application.security.filter;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.yeojeong.application.config.exception.ErrorResponse;
+import com.yeojeong.application.config.exception.RestApiException;
+import com.yeojeong.application.config.exception.handler.ErrorCode;
 import com.yeojeong.application.domain.member.member.application.membernotification.MemberChangeService;
 import com.yeojeong.application.domain.member.member.presentation.dto.MemberDetails;
+import com.yeojeong.application.security.FilterExceptionHandler;
 import com.yeojeong.application.security.JwtProvider;
 import com.yeojeong.application.security.refreshtoken.domain.RefreshToken;
 import com.yeojeong.application.security.refreshtoken.refreshtokenservice.RefreshTokenService;
@@ -12,6 +17,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -28,22 +34,22 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     private final JwtProvider jwtProvider;
     private final RefreshTokenService refreshTokenService;
     private final MemberChangeService memberChangeService;
+    private final FilterExceptionHandler filterExceptionHandler;
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request,
                                                 HttpServletResponse response) throws AuthenticationException {
 
         String username = obtainUsername(request);
+
         if(username == null) {
             log.error("아이디가 공백입니다");
-            response.setStatus(401);
-            return null;
+            throw new RestApiException(ErrorCode.BLANK_ID);
         }
 
         String password = obtainPassword(request);
         if(password == null) {
             log.error("비밀번호가 공백입니다");
-            response.setStatus(401);
             return null;
         }
 
@@ -99,6 +105,6 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
                                               AuthenticationException failed) throws IOException, ServletException {
 
         log.error("로그인 실패");
-        response.setStatus(401);
+        filterExceptionHandler.filterException(ErrorCode.FAIL_LOGIN, response);
     }
 }

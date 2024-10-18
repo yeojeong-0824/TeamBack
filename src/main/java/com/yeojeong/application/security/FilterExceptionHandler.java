@@ -1,5 +1,6 @@
 package com.yeojeong.application.security;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yeojeong.application.config.exception.ErrorResponse;
 import com.yeojeong.application.config.exception.handler.ErrorCode;
@@ -12,6 +13,7 @@ import java.io.IOException;
 @Service
 public class FilterExceptionHandler {
     public void filterException(ErrorCode errorCode, HttpServletResponse response) throws IOException {
+
         ErrorResponse errorResponse = new ErrorResponse(errorCode);
 
         ObjectMapper objectMapper = new ObjectMapper();

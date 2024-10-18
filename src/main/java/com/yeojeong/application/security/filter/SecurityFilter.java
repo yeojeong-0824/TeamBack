@@ -38,15 +38,17 @@ public class SecurityFilter {
                 .cors(auth -> auth.configurationSource(corsConfigurationSource()))
                 .sessionManagement(auth -> auth.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
+
                 .exceptionHandling(e -> e
                         .authenticationEntryPoint(new JwtAuthenticationEntryPoint(filterExceptionHandler))
                         .accessDeniedHandler(new JwtAccessDeniedHandler(filterExceptionHandler)))
 
-                .addFilterBefore(new JwtFilter(jwtProvider, refreshTokenService, filterExceptionHandler), UsernamePasswordAuthenticationFilter.class)
-                .addFilterAt(new LoginFilter(authenticationManager, jwtProvider, refreshTokenService, memberChangeService),
+                .addFilterBefore(new JwtFilter(jwtProvider, refreshTokenService), UsernamePasswordAuthenticationFilter.class)
+                .addFilterAt(new LoginFilter(authenticationManager, jwtProvider, refreshTokenService, memberChangeService, filterExceptionHandler),
                         UsernamePasswordAuthenticationFilter.class)
 
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/boards/authed/**").authenticated()
                         .anyRequest().permitAll());
 
         return http.build();

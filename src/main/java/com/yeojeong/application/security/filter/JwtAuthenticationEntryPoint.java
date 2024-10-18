@@ -22,6 +22,15 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
     private final FilterExceptionHandler filterExceptionHandler;
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
-        filterExceptionHandler.filterException(ErrorCode.UNAUTHORIZED_CLIENT, response);
+        log.info("AuthenticationEntryPoint 작동");
+
+        ErrorCode errorCode = (ErrorCode) request.getAttribute("exception");
+
+        if (errorCode == null) {
+            errorCode = ErrorCode.UNAUTHORIZED_CLIENT;
+        }
+
+        filterExceptionHandler.filterException(errorCode, response);
+
     }
 }
