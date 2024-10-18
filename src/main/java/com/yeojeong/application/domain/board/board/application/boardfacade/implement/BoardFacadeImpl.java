@@ -8,8 +8,12 @@ import com.yeojeong.application.domain.board.board.presentation.dto.BoardRespons
 import com.yeojeong.application.domain.member.member.application.memberservice.MemberService;
 import com.yeojeong.application.domain.member.member.domain.Member;
 import lombok.RequiredArgsConstructor;
+import lombok.Synchronized;
+import org.hibernate.sql.results.graph.collection.internal.SetInitializer;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+
+import java.io.Serializable;
 
 @Service
 @RequiredArgsConstructor
@@ -43,7 +47,7 @@ public class BoardFacadeImpl implements BoardFacade {
     }
 
     @Override
-    public BoardResponse.FindById findById(Long id, Long memberId) {
+    public synchronized BoardResponse.FindById findById(Long id, Long memberId) {
         Board savedEntity = boardService.findById(id);
         return BoardResponse.FindById.toDto(savedEntity);
     }
