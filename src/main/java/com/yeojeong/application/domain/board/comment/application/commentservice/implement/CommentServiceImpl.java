@@ -33,8 +33,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @Transactional
-    public void delete(Comment entity, Long memberId){
-        if(memberId.equals(entity.getMember().getId())) throw new RestApiException(ErrorCode.USER_MISMATCH);
+    public void delete(Comment entity) {
         commentRepository.delete(entity);
     }
 
@@ -53,10 +52,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @Transactional
-    public Comment update(Comment entity, Long memberId, Comment updateEntity) {
-        if(!memberId.equals(entity.getMember().getId()))
-            throw new RestApiException(ErrorCode.USER_MISMATCH);
-
+    public Comment update(Comment entity, Comment updateEntity) {
         entity.update(updateEntity);
         return commentRepository.save(entity);
     }

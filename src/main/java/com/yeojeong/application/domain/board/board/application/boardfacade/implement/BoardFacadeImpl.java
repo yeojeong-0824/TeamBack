@@ -1,5 +1,7 @@
 package com.yeojeong.application.domain.board.board.application.boardfacade.implement;
 
+import com.yeojeong.application.config.exception.RestApiException;
+import com.yeojeong.application.config.exception.handler.ErrorCode;
 import com.yeojeong.application.domain.board.board.application.boardfacade.BoardFacade;
 import com.yeojeong.application.domain.board.board.application.boardservice.BoardService;
 import com.yeojeong.application.domain.board.board.domain.Board;
@@ -34,8 +36,10 @@ public class BoardFacadeImpl implements BoardFacade {
     @Override
     public BoardResponse.FindById update(Long id, Long memberId, BoardRequest.Put dto) {
         Board savedEntity = boardService.findById(id);
+        checkMember(savedEntity, memberId);
+
         Board entity = BoardRequest.Put.toEntity(dto);
-        Board rtnEntity = boardService.update(savedEntity, memberId, entity);
+        Board rtnEntity = boardService.update(savedEntity, entity);
 
         return BoardResponse.FindById.toDto(rtnEntity);
     }
@@ -43,7 +47,9 @@ public class BoardFacadeImpl implements BoardFacade {
     @Override
     public void delete(Long id, Long memberId) {
         Board savedEntity = boardService.findById(id);
-        boardService.delete(savedEntity, memberId);
+        checkMember(savedEntity, memberId);
+
+        boardService.delete(savedEntity);
     }
 
     @Override
@@ -56,5 +62,9 @@ public class BoardFacadeImpl implements BoardFacade {
     public Page<BoardResponse.FindAll> findAll(String searchKeyword, String keyword, String sortKeyword, int page) {
         Page<Board> savedEntityPage = boardService.findAll(searchKeyword, keyword, sortKeyword, page);
         return savedEntityPage.map(BoardResponse.FindAll::toDto);
+    }
+
+    private void checkMember(Board board, Long memberId) {
+        if (!memberId.equals(board.getMember().getId())) throw new RestApiException(ErrorCode.USER_MISMATCH);
     }
 }
