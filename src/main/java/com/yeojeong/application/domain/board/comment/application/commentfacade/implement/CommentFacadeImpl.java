@@ -21,7 +21,7 @@ public class CommentFacadeImpl implements CommentFacade {
     private final CommentService commentService;
 
     @Override
-    public CommentResponse.FindComment save(CommentRequest.Save dto, Long boardId, Long memberId) {
+    public CommentResponse.FindById save(CommentRequest.Save dto, Long boardId, Long memberId) {
         Board board = boardService.findById(boardId);
         Member member = memberService.findById(memberId);
 
@@ -29,17 +29,17 @@ public class CommentFacadeImpl implements CommentFacade {
         Comment savedEntity = commentService.save(entity);
 
         if(dto.score() != 0) boardService.createComment(board);
-        return CommentResponse.FindComment.toDto(savedEntity);
+        return CommentResponse.FindById.toDto(savedEntity);
     }
 
     @Override
-    public CommentResponse.DeleteComment delete(Long id, Long memberId) {
+    public CommentResponse.Delete delete(Long id, Long memberId) {
         Comment savedEntity = commentService.findById(id);
         Board board = savedEntity.getBoard();
 
         commentService.delete(savedEntity, memberId);
         if(savedEntity.getScore() != 0) boardService.deleteComment(board);
-        return CommentResponse.DeleteComment.toDto(board);
+        return CommentResponse.Delete.toDto(board);
     }
 
     @Override
@@ -49,14 +49,14 @@ public class CommentFacadeImpl implements CommentFacade {
     }
 
     @Override
-    public CommentResponse.FindComment update(Long id, Long memberId, CommentRequest.Edit dto) {
+    public CommentResponse.FindById update(Long id, Long memberId, CommentRequest.Put dto) {
         Comment savedEntity = commentService.findById(id);
-        Comment entity = CommentRequest.Edit.toEntity(dto);
+        Comment entity = CommentRequest.Put.toEntity(dto);
         Comment rtnEntity = commentService.update(savedEntity, memberId, entity);
 
         Board board = rtnEntity.getBoard();
         boardService.updateComment(board);
 
-        return CommentResponse.FindComment.toDto(rtnEntity);
+        return CommentResponse.FindById.toDto(rtnEntity);
     }
 }

@@ -7,7 +7,7 @@ import lombok.Builder;
 public class BoardRequest {
 
     @Builder
-    public record SaveBoard(
+    public record Save(
             String locationName,
             String formattedAddress,
             String latitude,  // 위도
@@ -15,7 +15,7 @@ public class BoardRequest {
             String title,
             String body
     ) {
-        public static Board toEntity(SaveBoard dto, Member member) {
+        public static Board toEntity(Save dto, Member member) {
             return Board.builder()
                     .locationName(dto.locationName())
                     .formattedAddress(dto.formattedAddress())
@@ -31,7 +31,7 @@ public class BoardRequest {
         }
     }
 
-    public record PutBoard(
+    public record Put(
             String locationName,
             String formattedAddress,
             String latitude,  // 위도
@@ -39,7 +39,7 @@ public class BoardRequest {
             String title,
             String body
     ) {
-        public static Board toEntity(PutBoard dto) {
+        public static Board toEntity(Put dto) {
             return Board.builder()
                     .locationName(dto.locationName())
                     .formattedAddress(dto.formattedAddress())

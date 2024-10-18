@@ -22,7 +22,7 @@ public class MemberRequest {
     ){}
 
     @Schema(name = "유저 탈퇴")
-    public record DeleteMember(
+    public record Delete(
             @NotBlank @Size(min = 8, max = 30)
             @Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*[0-9])\\S+$", // 비밀번호 정규식
                     message = "비밀번호는 영문(대,소문자)과 숫자가 적어도 1개 이상씩 포함되어야 합니다")
@@ -31,7 +31,7 @@ public class MemberRequest {
     ) {}
 
     @Schema(name = "유저 정보 수정")
-    public record PatchMember(
+    public record Patch(
             @NotBlank @Size(min = 8, max = 30)
             @Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*[0-9])\\S+$", // 비밀번호 정규식
                     message = "비밀번호는 영문(대,소문자)과 숫자가 적어도 1개 이상씩 포함되어야 합니다")
@@ -52,7 +52,7 @@ public class MemberRequest {
             @Schema(example = "90", nullable = true)
             Integer age
     ) {
-        public static Member toEntity(PatchMember dto) {
+        public static Member toEntity(Patch dto) {
             return Member.builder()
                     .nickname(dto.nickname)
                     .age(dto.age)

@@ -14,7 +14,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
@@ -36,8 +35,8 @@ public class AuthedBoardController {
                     @ApiResponse(responseCode = "403", description = "권한 없음"),
             }
     )
-    public ResponseEntity<BoardResponse.FindBoard> save(
-            @Valid @RequestBody BoardRequest.SaveBoard dto
+    public ResponseEntity<BoardResponse.FindById> save(
+            @Valid @RequestBody BoardRequest.Save dto
     ){
         Long memberId = SecurityUtil.getCurrentMemberId();
 
@@ -54,8 +53,8 @@ public class AuthedBoardController {
                     @ApiResponse(responseCode = "403", description = "권한 없음"),
             }
     )
-    public ResponseEntity<BoardResponse.FindBoard> update(
-            @Valid @RequestBody BoardRequest.PutBoard dto,
+    public ResponseEntity<BoardResponse.FindById> update(
+            @Valid @RequestBody BoardRequest.Put dto,
             @PathVariable("id") Long id){
         Long memberId = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(boardFacade.update(id, memberId, dto));

@@ -38,7 +38,7 @@ public class AuthedMemberController {
                     @ApiResponse(responseCode = "403", description = "권한 없음"),
             }
     )
-    public ResponseEntity<MemberResponse.FindMember> findById() {
+    public ResponseEntity<MemberResponse.FindById> findById() {
 
         Long id = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(memberFacade.findById(id));
@@ -81,18 +81,18 @@ public class AuthedMemberController {
     @Operation(summary = "유저 탈퇴", description = "회원 탈퇴를 진행합니다.")
     @ApiResponses(
             value = {
-                    @ApiResponse(responseCode = "204", description = "유저 탈퇴"),
+                    @ApiResponse(responseCode = "200", description = "유저 탈퇴"),
                     @ApiResponse(responseCode = "400", description = "유저를 찾지 못함"),
                     @ApiResponse(responseCode = "403", description = "권한 없음"),
             }
     )
-    public ResponseEntity<Void> deleteByUserId(@Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
+    public ResponseEntity<String> deleteByUserId(@Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
                                                  @Valid @RequestBody MemberRequest.DeleteMember dto) {
 
         Long id = SecurityUtil.getCurrentMemberId();
         memberFacade.delete(id, dto);
 
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok("유저 탈퇴에 성공했습니다");
     }
 
     @MethodTimer(method = "회원 정보 수정 호출")

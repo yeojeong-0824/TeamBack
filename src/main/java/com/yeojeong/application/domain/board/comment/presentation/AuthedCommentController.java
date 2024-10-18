@@ -17,7 +17,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
@@ -38,8 +37,8 @@ public class AuthedCommentController {
                     @ApiResponse(responseCode = "403", description = "권한 없음")
             }
     )
-    public ResponseEntity<CommentResponse.FindComment> save(@PathVariable("boardId") Long boardId,
-                                                            @Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
+    public ResponseEntity<CommentResponse.FindById> save(@PathVariable("boardId") Long boardId,
+                                                         @Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
                                                             @Valid @RequestBody CommentRequest.Save dto) {
 
         Long memberId = SecurityUtil.getCurrentMemberId();
@@ -47,7 +46,7 @@ public class AuthedCommentController {
     }
 
     @MethodTimer(method = "댓글 수정 호출")
-    @PatchMapping("/{id}")
+    @PutMapping("/{id}")
     @Operation(summary = "댓글 수정", description = "게시글 댓글을 수정합니다")
     @ApiResponses(
             value = {
@@ -55,9 +54,9 @@ public class AuthedCommentController {
                     @ApiResponse(responseCode = "403", description = "권한 없음")
             }
     )
-    public ResponseEntity<CommentResponse.FindComment> path(@PathVariable("id") Long id,
-                                                            @Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
-                                                            @Valid @RequestBody CommentRequest.Edit dto) {
+    public ResponseEntity<CommentResponse.FindById> path(@PathVariable("id") Long id,
+                                                         @Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
+                                                            @Valid @RequestBody CommentRequest.Put dto) {
 
         Long memberId = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(commentFacade.update(id, memberId, dto));
@@ -72,7 +71,7 @@ public class AuthedCommentController {
                     @ApiResponse(responseCode = "403", description = "권한 없음")
             }
     )
-    public ResponseEntity<CommentResponse.DeleteComment> delete(@PathVariable("id") Long id) {
+    public ResponseEntity<CommentResponse.Delete> delete(@PathVariable("id") Long id) {
 
         Long memberId = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(commentFacade.delete(id, memberId));

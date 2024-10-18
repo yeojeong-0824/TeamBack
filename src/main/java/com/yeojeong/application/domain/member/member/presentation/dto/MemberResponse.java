@@ -9,7 +9,7 @@ import lombok.*;
 public class MemberResponse {
     @Builder
     @Schema(name = "유저 정보 호출")
-    public record FindMember (
+    public record FindById(
         @Schema(example = "user12")
         String username,
 
@@ -22,8 +22,8 @@ public class MemberResponse {
         @Schema(example = "90")
         Integer age
     ) {
-        public static FindMember toDto(Member entity) {
-            return FindMember.builder()
+        public static FindById toDto(Member entity) {
+            return FindById.builder()
                     .username(entity.getUsername())
                     .nickname(entity.getNickname())
                     .email(entity.getEmail())

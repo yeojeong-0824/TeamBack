@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 
 public class BoardResponse {
     @Builder
-    public record FindBoardList(
+    public record FindAll(
             Long id,
             String locationName,
             String formattedAddress,
@@ -33,8 +33,8 @@ public class BoardResponse {
                 LocalDateTime updateTime
         ){}
 
-        public static FindBoardList toDto(Board board) {
-            return FindBoardList.builder()
+        public static FindAll toDto(Board board) {
+            return FindAll.builder()
                     .id(board.getId())
                     .locationName(board.getLocationName())
                     .formattedAddress(board.getFormattedAddress())
@@ -54,7 +54,7 @@ public class BoardResponse {
     }
 
     @Builder
-    public record FindBoard(
+    public record FindById(
             Long id,
             String locationName,
             String formattedAddress,
@@ -76,8 +76,8 @@ public class BoardResponse {
                 String nickname
         ){}
 
-        public static FindBoard toDto(Board board) {
-            return FindBoard.builder()
+        public static FindById toDto(Board board) {
+            return FindById.builder()
                     .id(board.getId())
                     .locationName(board.getLocationName())
                     .formattedAddress(board.getFormattedAddress())
