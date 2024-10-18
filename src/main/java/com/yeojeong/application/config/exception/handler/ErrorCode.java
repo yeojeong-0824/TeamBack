@@ -14,6 +14,10 @@ public enum ErrorCode {
     DUPLICATED_NICKNAME(HttpStatus.CONFLICT, "닉네임이 중복되었습니다."),
     PASSWORD_NOT_ENCRYPTION(HttpStatus.BAD_GATEWAY, "비밀번호가 암호화 되지 않았습니다."),
     PASSWORD_NOT_MATCH(HttpStatus.BAD_REQUEST, "비밀번호가 일치하지 않습니다."),
+    BLANK_ID(HttpStatus.BAD_REQUEST, "아이디가 비어있습니다."),
+    BLANK_PASSWORD(HttpStatus.BAD_REQUEST, "비밀번호가 비어있습니다."),
+    FAIL_LOGIN(HttpStatus.BAD_REQUEST, "로그인에 실패하였습니다."),
+    REFRESH_TOKEN_NOT_VALID(HttpStatus.BAD_REQUEST, "Refresh Token 이 유효하지 않습니다."),
 
     // board
     NOT_FOUND_BOARD(HttpStatus.NOT_FOUND, "게시글을 찾을 수 없습니다."),

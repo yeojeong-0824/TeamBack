@@ -3,24 +3,18 @@ package com.yeojeong.application.security.filter;
 import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
-import com.yeojeong.application.config.exception.ErrorResponse;
 import com.yeojeong.application.config.exception.handler.ErrorCode;
 import com.yeojeong.application.domain.member.member.presentation.dto.MemberDetails;
 import com.yeojeong.application.domain.member.member.domain.Member;
-import com.yeojeong.application.security.FilterExceptionHandler;
 import com.yeojeong.application.security.JwtProvider;
 import com.yeojeong.application.security.refreshtoken.domain.RefreshToken;
 import com.yeojeong.application.security.refreshtoken.refreshtokenservice.RefreshTokenService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -34,7 +28,6 @@ public class JwtFilter extends OncePerRequestFilter {
 
     private final JwtProvider jwtProvider;
     private final RefreshTokenService refreshTokenService;
-    private final FilterExceptionHandler filterExceptionHandler;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
@@ -56,25 +49,25 @@ public class JwtFilter extends OncePerRequestFilter {
             refreshTokenHeader = refreshTokenHeader.replace(jwtProvider.TOKEN_PREFIX, "");
 
             RefreshToken savedRefreshToken = refreshTokenService.findById(refreshTokenHeader);
+
             if(savedRefreshToken == null) {
-                log.info("Refresh Token이 유효하지 않습니다");
-                response.setStatus(401);
+                request.setAttribute("exception", ErrorCode.REFRESH_TOKEN_NOT_VALID);
+                filterChain.doFilter(request, response);
                 return;
             }
 
             Member tokenMember = jwtProvider.decodeToken(refreshTokenHeader, String.valueOf(savedRefreshToken.getExpirationTime()));
 
             log.info("만료된 JWT Token 재발급 완료");
+
             MemberDetails reissueTokenMemberDetails = new MemberDetails(tokenMember);
             String jwtToken = jwtProvider.createJwtToken(reissueTokenMemberDetails);
-
-            Cookie jwt = new Cookie(jwtProvider.JWT_HEADER_STRING, jwtToken);
-            jwt.setMaxAge(jwtProvider.JWT_EXPIRATION_TIME / 1000);
-            response.addCookie(jwt);
 
             Authentication authentication =
                     new UsernamePasswordAuthenticationToken(reissueTokenMemberDetails, null, reissueTokenMemberDetails.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authentication);
+
+            response.addHeader(jwtProvider.JWT_HEADER_STRING, jwtProvider.TOKEN_PREFIX + jwtToken);
 
             filterChain.doFilter(request, response);
             return;
@@ -107,20 +100,16 @@ public class JwtFilter extends OncePerRequestFilter {
             response.setStatus(401);
 
             if (e instanceof TokenExpiredException) {
-                response.setStatus(401);
-                errorCode = ErrorCode.EXPIRED_TOKEN;
-                log.error("JWT Token 유효기간이 만료되었습니다.");
+                errorCode =  ErrorCode.EXPIRED_TOKEN;
 
             } else if (e instanceof JWTDecodeException) {
                 errorCode = ErrorCode.JWT_DECODE_FAIL;
-                log.error("JWT Token 변환이 실패하였습니다.");
 
             } else if (e instanceof JWTVerificationException) {
                 errorCode = ErrorCode.JWT_SIGNATURE_FAIL;
-                log.error("JWT Token 인증이 실패하였습니다");
             }
 
-            filterExceptionHandler.filterException(errorCode, response);
+            request.setAttribute("exception", errorCode);
         }
 
         filterChain.doFilter(request, response);

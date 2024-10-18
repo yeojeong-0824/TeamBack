@@ -1,13 +1,14 @@
 package com.yeojeong.application.security.filter;
 
+import com.yeojeong.application.config.exception.handler.ErrorCode;
 import com.yeojeong.application.domain.member.member.application.membernotification.MemberChangeService;
 import com.yeojeong.application.domain.member.member.presentation.dto.MemberDetails;
 import com.yeojeong.application.security.JwtProvider;
+import com.yeojeong.application.security.filter.exception.FilterException;
 import com.yeojeong.application.security.refreshtoken.domain.RefreshToken;
 import com.yeojeong.application.security.refreshtoken.refreshtokenservice.RefreshTokenService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -34,17 +35,14 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
                                                 HttpServletResponse response) throws AuthenticationException {
 
         String username = obtainUsername(request);
+
         if(username == null) {
-            log.error("아이디가 공백입니다");
-            response.setStatus(401);
-            return null;
+            throw new FilterException(ErrorCode.BLANK_ID);
         }
 
         String password = obtainPassword(request);
         if(password == null) {
-            log.error("비밀번호가 공백입니다");
-            response.setStatus(401);
-            return null;
+            throw new FilterException(ErrorCode.BLANK_PASSWORD);
         }
 
         log.info("로그인 시도: {}", username);
@@ -97,8 +95,6 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     protected void unsuccessfulAuthentication(HttpServletRequest request,
                                               HttpServletResponse response,
                                               AuthenticationException failed) throws IOException, ServletException {
-
-        log.error("로그인 실패");
-        response.setStatus(401);
+        throw new FilterException(ErrorCode.FAIL_LOGIN);
     }
 }

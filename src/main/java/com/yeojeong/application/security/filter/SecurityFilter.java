@@ -1,8 +1,11 @@
 package com.yeojeong.application.security.filter;
 
 import com.yeojeong.application.domain.member.member.application.membernotification.MemberChangeService;
-import com.yeojeong.application.security.FilterExceptionHandler;
+import com.yeojeong.application.security.filter.exception.JwtException;
 import com.yeojeong.application.security.JwtProvider;
+import com.yeojeong.application.security.filter.exception.JwtAccessDeniedHandler;
+import com.yeojeong.application.security.filter.exception.JwtAuthenticationEntryPoint;
+import com.yeojeong.application.security.filter.exception.SecurityFilterException;
 import com.yeojeong.application.security.refreshtoken.refreshtokenservice.RefreshTokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -27,7 +30,8 @@ public class SecurityFilter {
     private final JwtProvider jwtProvider;
     private final RefreshTokenService refreshTokenService;
     private final MemberChangeService memberChangeService;
-    private final FilterExceptionHandler filterExceptionHandler;
+    private final JwtException jwtException;
+    private final SecurityFilterException securityFilterException;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -38,15 +42,18 @@ public class SecurityFilter {
                 .cors(auth -> auth.configurationSource(corsConfigurationSource()))
                 .sessionManagement(auth -> auth.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
-                .exceptionHandling(e -> e
-                        .authenticationEntryPoint(new JwtAuthenticationEntryPoint(filterExceptionHandler))
-                        .accessDeniedHandler(new JwtAccessDeniedHandler(filterExceptionHandler)))
 
-                .addFilterBefore(new JwtFilter(jwtProvider, refreshTokenService, filterExceptionHandler), UsernamePasswordAuthenticationFilter.class)
-                .addFilterAt(new LoginFilter(authenticationManager, jwtProvider, refreshTokenService, memberChangeService),
-                        UsernamePasswordAuthenticationFilter.class)
+                .exceptionHandling(e -> e
+                        .authenticationEntryPoint(new JwtAuthenticationEntryPoint(jwtException))
+                        .accessDeniedHandler(new JwtAccessDeniedHandler(jwtException)))
+
+                .addFilterBefore(new JwtFilter(jwtProvider, refreshTokenService), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(securityFilterException, UsernamePasswordAuthenticationFilter.class)
+                .addFilterAt(new LoginFilter(authenticationManager, jwtProvider, refreshTokenService, memberChangeService), UsernamePasswordAuthenticationFilter.class)
 
                 .authorizeHttpRequests(auth -> auth
+                        // TODO : 검증이 필요한 URL 추가
+                        .requestMatchers("/boards/authed/**").authenticated()
                         .anyRequest().permitAll());
 
         return http.build();
