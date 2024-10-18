@@ -35,7 +35,7 @@ public class CommentRequest {
     }
 
     @Schema(name = "댓글 수정")
-    public record Edit(
+    public record Put(
             @NotNull
             @Min(0) @Max(5)
             @Schema(example = "3", description = "0이면 평점을 넣지 않은 것으로 간주합니다")
@@ -45,7 +45,7 @@ public class CommentRequest {
             @Schema(example = "여기 맛집임")
             String comment
     ){
-        public static Comment toEntity(Edit dto) {
+        public static Comment toEntity(Put dto) {
             return Comment.builder()
                     .score(dto.score())
                     .comment(dto.comment())

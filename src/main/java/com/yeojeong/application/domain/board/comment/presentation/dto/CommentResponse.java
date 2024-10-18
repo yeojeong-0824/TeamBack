@@ -44,7 +44,7 @@ public class CommentResponse {
     }
 
     @Builder
-    public record FindComment(
+    public record FindById(
             @Schema(example = "1")
             Long id,
 
@@ -73,8 +73,8 @@ public class CommentResponse {
                 Integer score
         ){}
 
-        public static FindComment toDto(Comment entity) {
-            return FindComment.builder()
+        public static FindById toDto(Comment entity) {
+            return FindById.builder()
                     .id(entity.getId())
                     .score(entity.getScore())
                     .comment(entity.getComment())
@@ -92,7 +92,7 @@ public class CommentResponse {
     }
 
     @Builder
-    public record DeleteComment(
+    public record Delete(
             BoardInfo board
     ) {
         @Builder
@@ -102,8 +102,8 @@ public class CommentResponse {
                 Integer score
         ){}
 
-        public static DeleteComment toDto(Board board) {
-            return DeleteComment.builder()
+        public static Delete toDto(Board board) {
+            return Delete.builder()
                     .board(BoardInfo.builder()
                             .id(board.getId())
                             .title(board.getTitle())

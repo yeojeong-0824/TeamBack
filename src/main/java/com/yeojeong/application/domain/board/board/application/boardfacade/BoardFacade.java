@@ -5,9 +5,9 @@ import com.yeojeong.application.domain.board.board.presentation.dto.BoardRespons
 import org.springframework.data.domain.Page;
 
 public interface BoardFacade {
-    BoardResponse.FindBoard save(BoardRequest.SaveBoard dto, Long memberId);
-    BoardResponse.FindBoard update(Long id, Long memberId, BoardRequest.PutBoard dto);
+    BoardResponse.FindById save(BoardRequest.Save dto, Long memberId);
+    BoardResponse.FindById update(Long id, Long memberId, BoardRequest.Put dto);
     void delete(Long id, Long memberId);
-    BoardResponse.FindBoard findById(Long id, Long memberId);
-    Page<BoardResponse.FindBoardList> findAll(String searchKeyword, String keyword, String sortKeyword, int page);
+    BoardResponse.FindById findById(Long id, Long memberId);
+    Page<BoardResponse.FindAll> findAll(String searchKeyword, String keyword, String sortKeyword, int page);
 }

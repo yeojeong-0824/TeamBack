@@ -38,7 +38,7 @@ public class AuthedMemberController {
                     @ApiResponse(responseCode = "403", description = "권한 없음"),
             }
     )
-    public ResponseEntity<MemberResponse.FindMember> findById() {
+    public ResponseEntity<MemberResponse.FindById> findById() {
 
         Long id = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(memberFacade.findById(id));
@@ -87,7 +87,7 @@ public class AuthedMemberController {
             }
     )
     public ResponseEntity<String> deleteByUserId(@Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
-                                                 @Valid @RequestBody MemberRequest.DeleteMember dto) {
+                                                 @Valid @RequestBody MemberRequest.Delete dto) {
 
         Long id = SecurityUtil.getCurrentMemberId();
         memberFacade.delete(id, dto);
@@ -105,8 +105,8 @@ public class AuthedMemberController {
                     @ApiResponse(responseCode = "403", description = "권한 없음"),
             }
     )
-    public ResponseEntity<MemberResponse.FindMember> patchMember(@Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
-                                                                 @Valid @RequestBody MemberRequest.PatchMember dto) {
+    public ResponseEntity<MemberResponse.FindById> patchMember(@Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
+                                                                 @Valid @RequestBody MemberRequest.Patch dto) {
 
         Long id = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(memberFacade.patch(id, dto));

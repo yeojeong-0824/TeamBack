@@ -19,21 +19,21 @@ public class BoardFacadeImpl implements BoardFacade {
     private final MemberService memberService;
 
     @Override
-    public BoardResponse.FindBoard save(BoardRequest.SaveBoard dto, Long memberId) {
+    public BoardResponse.FindById save(BoardRequest.Save dto, Long memberId) {
         Member member = memberService.findById(memberId);
-        Board entity = BoardRequest.SaveBoard.toEntity(dto, member);
+        Board entity = BoardRequest.Save.toEntity(dto, member);
         Board savedEntity = boardService.save(entity, member);
 
-        return BoardResponse.FindBoard.toDto(savedEntity);
+        return BoardResponse.FindById.toDto(savedEntity);
     }
 
     @Override
-    public BoardResponse.FindBoard update(Long id, Long memberId, BoardRequest.PutBoard dto) {
+    public BoardResponse.FindById update(Long id, Long memberId, BoardRequest.Put dto) {
         Board savedEntity = boardService.findById(id);
-        Board entity = BoardRequest.PutBoard.toEntity(dto);
+        Board entity = BoardRequest.Put.toEntity(dto);
         Board rtnEntity = boardService.update(savedEntity, memberId, entity);
 
-        return BoardResponse.FindBoard.toDto(rtnEntity);
+        return BoardResponse.FindById.toDto(rtnEntity);
     }
 
     @Override
@@ -43,14 +43,14 @@ public class BoardFacadeImpl implements BoardFacade {
     }
 
     @Override
-    public BoardResponse.FindBoard findById(Long id, Long memberId) {
+    public BoardResponse.FindById findById(Long id, Long memberId) {
         Board savedEntity = boardService.findById(id);
-        return BoardResponse.FindBoard.toDto(savedEntity);
+        return BoardResponse.FindById.toDto(savedEntity);
     }
 
     @Override
-    public Page<BoardResponse.FindBoardList> findAll(String searchKeyword, String keyword, String sortKeyword, int page) {
+    public Page<BoardResponse.FindAll> findAll(String searchKeyword, String keyword, String sortKeyword, int page) {
         Page<Board> savedEntityPage = boardService.findAll(searchKeyword, keyword, sortKeyword, page);
-        return savedEntityPage.map(BoardResponse.FindBoardList::toDto);
+        return savedEntityPage.map(BoardResponse.FindAll::toDto);
     }
 }
