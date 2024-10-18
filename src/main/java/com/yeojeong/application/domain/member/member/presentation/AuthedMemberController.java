@@ -81,18 +81,18 @@ public class AuthedMemberController {
     @Operation(summary = "유저 탈퇴", description = "회원 탈퇴를 진행합니다.")
     @ApiResponses(
             value = {
-                    @ApiResponse(responseCode = "200", description = "유저 탈퇴"),
+                    @ApiResponse(responseCode = "204", description = "유저 탈퇴"),
                     @ApiResponse(responseCode = "400", description = "유저를 찾지 못함"),
                     @ApiResponse(responseCode = "403", description = "권한 없음"),
             }
     )
-    public ResponseEntity<String> deleteByUserId(@Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
-                                                 @Valid @RequestBody MemberRequest.DeleteMember dto) {
+    public ResponseEntity<Void> deleteByUserId(@Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
+                                                 @Valid @RequestBody MemberRequest.Delete dto) {
 
         Long id = SecurityUtil.getCurrentMemberId();
         memberFacade.delete(id, dto);
 
-        return ResponseEntity.ok("유저 탈퇴에 성공했습니다");
+        return ResponseEntity.noContent().build();
     }
 
     @MethodTimer(method = "회원 정보 수정 호출")
@@ -105,8 +105,8 @@ public class AuthedMemberController {
                     @ApiResponse(responseCode = "403", description = "권한 없음"),
             }
     )
-    public ResponseEntity<MemberResponse.FindMember> patchMember(@Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
-                                                                 @Valid @RequestBody MemberRequest.PatchMember dto) {
+    public ResponseEntity<MemberResponse.FindById> patchMember(@Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
+                                                                 @Valid @RequestBody MemberRequest.Patch dto) {
 
         Long id = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(memberFacade.patch(id, dto));
