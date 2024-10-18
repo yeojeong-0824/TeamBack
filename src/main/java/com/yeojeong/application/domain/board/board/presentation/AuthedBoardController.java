@@ -65,14 +65,14 @@ public class AuthedBoardController {
     @Operation(summary = "게시글 삭제")
     @ApiResponses(
             value = {
-                    @ApiResponse(responseCode = "200", description = "게시글 삭제 성공"),
+                    @ApiResponse(responseCode = "204", description = "게시글 삭제 성공"),
                     @ApiResponse(responseCode = "400", description = "게시글 삭제 실패"),
                     @ApiResponse(responseCode = "403", description = "권한 없음"),
             }
     )
-    public ResponseEntity<String> delete(@PathVariable("id") Long id){
+    public ResponseEntity<Void> delete(@PathVariable("id") Long id){
         Long memberId = SecurityUtil.getCurrentMemberId();
         boardFacade.delete(id, memberId);
-        return ResponseEntity.ok("게시글 삭제 성공");
+        return ResponseEntity.noContent().build();
     }
 }

@@ -10,9 +10,3 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: false
-
-  profiles:
-    active: local
-redis:
-  host: localhost
-  port: 6379
