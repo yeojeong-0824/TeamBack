@@ -28,9 +28,9 @@ public class MemberFacadeImpl implements MemberFacade {
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    public MemberResponse.FindMember findById(Long id) {
+    public MemberResponse.FindById findById(Long id) {
         Member savedEntity = memberService.findById(id);
-        return MemberResponse.FindMember.toDto(savedEntity);
+        return MemberResponse.FindById.toDto(savedEntity);
     }
 
     @Override
@@ -41,7 +41,7 @@ public class MemberFacadeImpl implements MemberFacade {
     }
 
     @Override
-    public void delete(long id, MemberRequest.DeleteMember dto) {
+    public void delete(long id, MemberRequest.Delete dto) {
         Member savedEntity = memberService.findById(id);
 
         String savedPassword = savedEntity.getPassword();
@@ -109,7 +109,7 @@ public class MemberFacadeImpl implements MemberFacade {
 
     @Transactional
     @Override
-    public MemberResponse.FindMember patch(Long id, MemberRequest.PatchMember dto) {
+    public MemberResponse.FindById patch(Long id, MemberRequest.Patch dto) {
         Member savedEntity = memberService.findById(id);
 
         if(dto.password() != null) {
@@ -117,9 +117,9 @@ public class MemberFacadeImpl implements MemberFacade {
             memberService.pathPassword(savedEntity, newPassword);
         }
 
-        Member entity = MemberRequest.PatchMember.toEntity(dto);
+        Member entity = MemberRequest.Patch.toEntity(dto);
         Member rtnEntity = memberService.patch(entity, entity);
 
-        return MemberResponse.FindMember.toDto(rtnEntity);
+        return MemberResponse.FindById.toDto(rtnEntity);
     }
 }

@@ -5,9 +5,9 @@ import com.yeojeong.application.domain.member.member.presentation.dto.MemberResp
 import org.springframework.data.domain.Page;
 
 public interface MemberFacade {
-    MemberResponse.FindMember findById(Long id);
+    MemberResponse.FindById findById(Long id);
     void save(MemberRequest.SaveMember dto);
-    void delete(long id, MemberRequest.DeleteMember dto);
+    void delete(long id, MemberRequest.Delete dto);
     Page<MemberResponse.BoardInfo> findBoardById(long id, int page);
     Page<MemberResponse.CommentInfo> findCommentById(long id, int page);
     String findPassword(String username, String email);
@@ -15,5 +15,5 @@ public interface MemberFacade {
     void checkDuplicatedByUsername(String username);
     void checkDuplicatedByNickname(String nickname);
     void checkDuplicatedByEmail(String email);
-    MemberResponse.FindMember patch(Long id, MemberRequest.PatchMember dto);
+    MemberResponse.FindById patch(Long id, MemberRequest.Patch dto);
 }
