@@ -1,4 +1,4 @@
-package com.yeojeong.application.security.refreshtoken.domain;
+package com.yeojeong.application.security.config.refreshtoken.domain;
 
 import org.springframework.data.repository.CrudRepository;
 

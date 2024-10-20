@@ -3,7 +3,7 @@ package com.yeojeong.application.domain.member.member.presentation;
 import com.yeojeong.application.config.util.customannotation.MethodTimer;
 import com.yeojeong.application.domain.member.member.application.memberfacade.MemberFacade;
 import com.yeojeong.application.domain.member.member.presentation.dto.MemberResponse;
-import com.yeojeong.application.security.SecurityUtil;
+import com.yeojeong.application.security.config.SecurityUtil;
 import com.yeojeong.application.domain.member.member.presentation.dto.MemberRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

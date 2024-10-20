@@ -1,4 +1,4 @@
-package com.yeojeong.application.security;
+package com.yeojeong.application.security.config;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;

@@ -4,7 +4,7 @@ import com.yeojeong.application.domain.board.board.application.boardfacade.Board
 import com.yeojeong.application.domain.board.board.presentation.dto.BoardResponse;
 import com.yeojeong.application.domain.board.board.presentation.dto.BoardRequest;
 import com.yeojeong.application.config.util.customannotation.MethodTimer;
-import com.yeojeong.application.security.SecurityUtil;
+import com.yeojeong.application.security.config.SecurityUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
