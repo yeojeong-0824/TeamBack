@@ -1,8 +1,8 @@
-package com.yeojeong.application.security.refreshtoken.refreshtokenservice.implement;
+package com.yeojeong.application.security.config.refreshtoken.service.implement;
 
-import com.yeojeong.application.security.refreshtoken.domain.RefreshToken;
-import com.yeojeong.application.security.refreshtoken.domain.RefreshTokenRepository;
-import com.yeojeong.application.security.refreshtoken.refreshtokenservice.RefreshTokenService;
+import com.yeojeong.application.security.config.refreshtoken.domain.RefreshToken;
+import com.yeojeong.application.security.config.refreshtoken.domain.RefreshTokenRepository;
+import com.yeojeong.application.security.config.refreshtoken.service.RefreshTokenService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

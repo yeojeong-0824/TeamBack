@@ -2,11 +2,11 @@ package com.yeojeong.application.security.filter;
 
 import com.yeojeong.application.domain.member.member.application.membernotification.MemberChangeService;
 import com.yeojeong.application.security.filter.exception.JwtException;
-import com.yeojeong.application.security.JwtProvider;
+import com.yeojeong.application.security.config.JwtProvider;
 import com.yeojeong.application.security.filter.exception.JwtAccessDeniedHandler;
 import com.yeojeong.application.security.filter.exception.JwtAuthenticationEntryPoint;
 import com.yeojeong.application.security.filter.exception.SecurityFilterException;
-import com.yeojeong.application.security.refreshtoken.refreshtokenservice.RefreshTokenService;
+import com.yeojeong.application.security.config.refreshtoken.service.RefreshTokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

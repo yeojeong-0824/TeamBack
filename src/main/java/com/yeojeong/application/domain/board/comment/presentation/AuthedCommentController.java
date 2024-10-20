@@ -4,7 +4,7 @@ import com.yeojeong.application.domain.board.comment.application.commentfacade.C
 import com.yeojeong.application.domain.board.comment.presentation.dto.CommentRequest;
 import com.yeojeong.application.config.util.customannotation.MethodTimer;
 import com.yeojeong.application.domain.board.comment.presentation.dto.CommentResponse;
-import com.yeojeong.application.security.SecurityUtil;
+import com.yeojeong.application.security.config.SecurityUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;

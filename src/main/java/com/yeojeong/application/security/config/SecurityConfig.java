@@ -1,4 +1,4 @@
-package com.yeojeong.application.security;
+package com.yeojeong.application.security.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
