@@ -14,6 +14,7 @@ import com.yeojeong.application.domain.member.member.domain.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -23,6 +24,7 @@ public class CommentFacadeImpl implements CommentFacade {
     private final CommentService commentService;
 
     @Override
+    @Transactional
     public CommentResponse.FindById save(CommentRequest.Save dto, Long boardId, Long memberId) {
         Board board = boardService.findById(boardId);
         Member member = memberService.findById(memberId);
@@ -35,6 +37,7 @@ public class CommentFacadeImpl implements CommentFacade {
     }
 
     @Override
+    @Transactional
     public CommentResponse.Delete delete(Long id, Long memberId) {
         Comment savedEntity = commentService.findById(id);
         checkMember(savedEntity, memberId);
@@ -53,12 +56,14 @@ public class CommentFacadeImpl implements CommentFacade {
     }
 
     @Override
+    @Transactional
     public CommentResponse.FindById update(Long id, Long memberId, CommentRequest.Put dto) {
         Comment savedEntity = commentService.findById(id);
         checkMember(savedEntity, memberId);
 
         Comment entity = CommentRequest.Put.toEntity(dto);
-        Comment rtnEntity = commentService.update(savedEntity, entity);
+        savedEntity.update(entity);
+        Comment rtnEntity = commentService.update(savedEntity);
 
         Board board = rtnEntity.getBoard();
         boardService.updateComment(board);

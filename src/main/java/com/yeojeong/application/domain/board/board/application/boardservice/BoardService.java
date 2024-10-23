@@ -6,7 +6,7 @@ import org.springframework.data.domain.Page;
 
 public interface BoardService {
     Board save(Board entity, Member member);
-    Board update(Board entity, Board updateEntity);
+    Board update(Board entity);
     Board findById(Long id);
     Page<Board> findByMember(Long memberId, int page);
     Page<Board> findAll(String searchKeyword, String keyword, String sortKeyword, int page);

@@ -26,19 +26,16 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    @Transactional
     public Comment save(Comment entity) {
         return commentRepository.save(entity);
     }
 
     @Override
-    @Transactional
     public void delete(Comment entity) {
         commentRepository.delete(entity);
     }
 
     @Override
-    @Transactional
     public Page<Comment> findByBoardId(Long boardId, int page) {
         PageRequest request = PageRequest.of(page - 1, 10, Sort.by("id").descending());
         return commentRepository.findAllByBoardId(boardId, request);
@@ -51,9 +48,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    @Transactional
-    public Comment update(Comment entity, Comment updateEntity) {
-        entity.update(updateEntity);
+    public Comment update(Comment entity) {
         return commentRepository.save(entity);
     }
 }

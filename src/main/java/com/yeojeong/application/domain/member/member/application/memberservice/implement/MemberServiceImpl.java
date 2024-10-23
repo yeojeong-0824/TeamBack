@@ -34,22 +34,14 @@ public class MemberServiceImpl implements MemberService {
                 .orElseThrow(() -> new NotFoundDataException(ErrorCode.NOT_FOUND_USER));
     }
 
-    @Transactional
     @Override
     public void save(Member entity) {
         memberRepository.save(entity);
     }
 
-    @Transactional
     @Override
     public void delete(Member entity) {
         memberRepository.delete(entity);
-    }
-
-    @Transactional
-    @Override
-    public void pathPassword(Member entity, String password) {
-        memberRepository.save(entity);
     }
 
 
@@ -71,10 +63,8 @@ public class MemberServiceImpl implements MemberService {
             throw new DuplicatedException(ErrorCode.DUPLICATED_EMAIL);
     }
 
-    @Transactional
     @Override
-    public Member patch(Member member, Member updateMember) {
-        member.patchMember(updateMember);
-        return memberRepository.save(member);
+    public Member patch(Member entity) {
+        return memberRepository.save(entity);
     }
 }
