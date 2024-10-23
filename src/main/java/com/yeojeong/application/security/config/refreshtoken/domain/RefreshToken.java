@@ -1,4 +1,4 @@
-package com.yeojeong.application.security.refreshtoken.domain;
+package com.yeojeong.application.security.config.refreshtoken.domain;
 
 import jakarta.persistence.Id;
 import lombok.*;

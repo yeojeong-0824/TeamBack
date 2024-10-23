@@ -1,4 +1,4 @@
-package com.yeojeong.application.security;
+package com.yeojeong.application.security.config;
 
 import com.yeojeong.application.domain.member.member.presentation.dto.MemberDetails;
 import org.springframework.security.core.Authentication;
