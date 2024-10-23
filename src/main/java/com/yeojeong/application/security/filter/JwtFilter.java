@@ -11,6 +11,7 @@ import com.yeojeong.application.security.config.refreshtoken.domain.RefreshToken
 import com.yeojeong.application.security.config.refreshtoken.service.RefreshTokenService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -41,12 +42,23 @@ public class JwtFilter extends OncePerRequestFilter {
         Step 3: Refresh 토큰이 존재한다면 Jwt를 재발급
         Step 4: 필터 종료
         */
+        String refreshTokenHeader = null;
 
-        String refreshTokenHeader = request.getHeader(jwtProvider.REFRESH_HEADER_STRING);
+        log.info("jwtFilter 작동");
+
+        Cookie[] cookies = request.getCookies();
+        for(Cookie cookie : cookies) {
+            if (cookie.getName().equals(jwtProvider.REFRESH_HEADER_STRING)) {
+                refreshTokenHeader = cookie.getValue();
+            }
+        }
+
+        log.info("refresh Token : " + refreshTokenHeader);
+
 
         if(refreshTokenHeader != null) {
             log.info("JWT Token 재발급");
-            refreshTokenHeader = refreshTokenHeader.replace(jwtProvider.TOKEN_PREFIX, "");
+            refreshTokenHeader = refreshTokenHeader.replace(jwtProvider.TOKEN_PREFIX_JWT, "");
 
             RefreshToken savedRefreshToken = refreshTokenService.findById(refreshTokenHeader);
 
@@ -67,7 +79,7 @@ public class JwtFilter extends OncePerRequestFilter {
                     new UsernamePasswordAuthenticationToken(reissueTokenMemberDetails, null, reissueTokenMemberDetails.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
-            response.addHeader(jwtProvider.JWT_HEADER_STRING, jwtProvider.TOKEN_PREFIX + jwtToken);
+            response.addHeader(jwtProvider.JWT_HEADER_STRING, jwtProvider.TOKEN_PREFIX_JWT + jwtToken);
 
             filterChain.doFilter(request, response);
             return;
@@ -86,7 +98,7 @@ public class JwtFilter extends OncePerRequestFilter {
             return;
         }
 
-        jwtTokenHeader = jwtTokenHeader.replace(jwtProvider.TOKEN_PREFIX, "");
+        jwtTokenHeader = jwtTokenHeader.replace(jwtProvider.TOKEN_PREFIX_JWT, "");
 
         try {
             Member jwtTokenMember = jwtProvider.decodeToken(jwtTokenHeader, jwtProvider.SECRET);
