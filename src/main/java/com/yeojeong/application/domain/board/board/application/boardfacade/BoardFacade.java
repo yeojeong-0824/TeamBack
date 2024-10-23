@@ -8,6 +8,6 @@ public interface BoardFacade {
     BoardResponse.FindById save(BoardRequest.Save dto, Long memberId);
     BoardResponse.FindById update(Long id, Long memberId, BoardRequest.Put dto);
     void delete(Long id, Long memberId);
-    BoardResponse.FindById findById(Long id, Long memberId);
+    BoardResponse.FindById findById(Long id);
     Page<BoardResponse.FindAll> findAll(String searchKeyword, String keyword, String sortKeyword, int page);
 }

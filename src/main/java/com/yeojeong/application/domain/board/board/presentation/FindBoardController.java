@@ -34,7 +34,7 @@ public class FindBoardController {
     )
     public ResponseEntity<BoardResponse.FindById> findById(@PathVariable("id") Long id){
         Long memberId = SecurityUtil.getCurrentMemberId();
-        return ResponseEntity.ok(boardFacade.findById(id, memberId));
+        return ResponseEntity.ok(boardFacade.findById(id));
     }
 
     @MethodTimer(method = "조건에 따른 게시글 호출")

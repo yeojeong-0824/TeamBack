@@ -2,6 +2,7 @@ package com.yeojeong.application.domain.board.board.application.boardfacade.impl
 
 import com.yeojeong.application.config.exception.RestApiException;
 import com.yeojeong.application.config.exception.handler.ErrorCode;
+import com.yeojeong.application.config.util.customannotation.RedisLocker;
 import com.yeojeong.application.domain.board.board.application.boardfacade.BoardFacade;
 import com.yeojeong.application.domain.board.board.application.boardservice.BoardService;
 import com.yeojeong.application.domain.board.board.domain.Board;
@@ -10,12 +11,9 @@ import com.yeojeong.application.domain.board.board.presentation.dto.BoardRespons
 import com.yeojeong.application.domain.member.member.application.memberservice.MemberService;
 import com.yeojeong.application.domain.member.member.domain.Member;
 import lombok.RequiredArgsConstructor;
-import lombok.Synchronized;
-import org.hibernate.sql.results.graph.collection.internal.SetInitializer;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
-
-import java.io.Serializable;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -25,6 +23,7 @@ public class BoardFacadeImpl implements BoardFacade {
     private final MemberService memberService;
 
     @Override
+    @Transactional
     public BoardResponse.FindById save(BoardRequest.Save dto, Long memberId) {
         Member member = memberService.findById(memberId);
         Board entity = BoardRequest.Save.toEntity(dto, member);
@@ -34,17 +33,20 @@ public class BoardFacadeImpl implements BoardFacade {
     }
 
     @Override
+    @Transactional
     public BoardResponse.FindById update(Long id, Long memberId, BoardRequest.Put dto) {
         Board savedEntity = boardService.findById(id);
         checkMember(savedEntity, memberId);
 
         Board entity = BoardRequest.Put.toEntity(dto);
-        Board rtnEntity = boardService.update(savedEntity, entity);
+        savedEntity.update(entity);
 
+        Board rtnEntity = boardService.update(savedEntity);
         return BoardResponse.FindById.toDto(rtnEntity);
     }
 
     @Override
+    @Transactional
     public void delete(Long id, Long memberId) {
         Board savedEntity = boardService.findById(id);
         checkMember(savedEntity, memberId);
@@ -53,9 +55,13 @@ public class BoardFacadeImpl implements BoardFacade {
     }
 
     @Override
-    public synchronized BoardResponse.FindById findById(Long id, Long memberId) {
+    @Transactional
+    @RedisLocker(key = "findById")
+    public BoardResponse.FindById findById(Long id) {
         Board savedEntity = boardService.findById(id);
-        return BoardResponse.FindById.toDto(savedEntity);
+        savedEntity.addViewCount();
+        Board rtnEntity = boardService.update(savedEntity);
+        return BoardResponse.FindById.toDto(rtnEntity);
     }
 
     @Override

@@ -10,6 +10,6 @@ public interface CommentService {
     Comment save(Comment entity);
     Page<Comment> findByBoardId(Long boardId, int page);
     Page<Comment> findByMemberId(Long memberId, int page);
-    Comment update(Comment entity, Comment updateEntity);
+    Comment update(Comment entity);
     void delete(Comment entity);
 }

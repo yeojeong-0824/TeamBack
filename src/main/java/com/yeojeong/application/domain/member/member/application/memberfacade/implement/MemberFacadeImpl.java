@@ -34,6 +34,7 @@ public class MemberFacadeImpl implements MemberFacade {
     }
 
     @Override
+    @Transactional
     public void save(MemberRequest.SaveMember dto) {
         String encodingPassword = passwordEncoder.encode(dto.password());
         Member entity = MemberRequest.SaveMember.toEntity(dto, encodingPassword);
@@ -41,6 +42,7 @@ public class MemberFacadeImpl implements MemberFacade {
     }
 
     @Override
+    @Transactional
     public void delete(long id, MemberRequest.Delete dto) {
         Member savedEntity = memberService.findById(id);
 
@@ -65,6 +67,7 @@ public class MemberFacadeImpl implements MemberFacade {
 
 
     @Override
+    @Transactional
     public String findPassword(String username, String email) {
         Member savedEntity = memberService.findByUsername(username);
         if(!savedEntity.getEmail().equals(email)) throw new NotFoundDataException(ErrorCode.NOT_FOUND_EMAIL);
@@ -72,7 +75,7 @@ public class MemberFacadeImpl implements MemberFacade {
         String newPassword = this.createNewPassword();
         savedEntity.patchPassword(passwordEncoder.encode(newPassword));
 
-        memberService.pathPassword(savedEntity, newPassword);
+        memberService.patch(savedEntity);
         return newPassword;
     }
 
@@ -107,18 +110,19 @@ public class MemberFacadeImpl implements MemberFacade {
         memberService.checkDuplicatedByEmail(email);
     }
 
-    @Transactional
     @Override
+    @Transactional
     public MemberResponse.FindById patch(Long id, MemberRequest.Patch dto) {
         Member savedEntity = memberService.findById(id);
 
         if(dto.password() != null) {
             String newPassword = passwordEncoder.encode(dto.password());
-            memberService.pathPassword(savedEntity, newPassword);
+            savedEntity.patchPassword(newPassword);
         }
 
         Member entity = MemberRequest.Patch.toEntity(dto);
-        Member rtnEntity = memberService.patch(entity, entity);
+        savedEntity.patchMember(entity);
+        Member rtnEntity = memberService.patch(entity);
 
         return MemberResponse.FindById.toDto(rtnEntity);
     }

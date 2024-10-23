@@ -7,8 +7,7 @@ import java.lang.annotation.Target;
 
 @Target({ElementType.METHOD, ElementType.ANNOTATION_TYPE})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface RedissonLocker {
+public @interface RedisLocker {
     String key();
-    long waitTime() default 5000L;
-    long leaseTime() default 2000L;
+    long timeout() default 30L;
 }

@@ -9,11 +9,10 @@ public interface MemberService {
 
     void save(Member member);
     void delete(Member member);
-    void pathPassword(Member member, String password);
 
     void checkDuplicatedByEmail(String takenEmail);
     void checkDuplicatedByUsername(String takenUsername);
     void checkDuplicatedByNickname(String takenNickname);
 
-    Member patch(Member member, Member updateMember);
+    Member patch(Member entity);
 }
