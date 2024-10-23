@@ -29,26 +29,21 @@ public class BoardServiceImpl implements BoardService {
     private final AutocompleteService autocompleteService;
 
     @Override
-    @Transactional
     public Board save(Board entity, Member member) {
         return boardRepository.save(entity);
     }
 
     @Override
-    @Transactional
-    public Board update(Board entity, Board updateEntity) {
-        entity.update(updateEntity);
+    public Board update(Board entity) {
         return boardRepository.save(entity);
     }
 
     @Override
-    @Transactional
     public void delete(Board entity) {
         boardRepository.delete(entity);
     }
 
     @Override
-    @Transactional
     public Board findById(Long id) {
         return boardRepository.findById(id)
                 .orElseThrow(() -> new NotFoundDataException(ErrorCode.NOT_FOUND_BOARD));

@@ -54,8 +54,8 @@ public class JoinMemberController {
     public ResponseEntity<Void> save(@Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
                                        @Valid @RequestBody MemberRequest.SaveMember dto) {
 
-        if(!memberEmailService.checkAuthedEmail(dto.email()))
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+//        if(!memberEmailService.checkAuthedEmail(dto.email()))
+//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 
         memberFacade.save(dto);
         return ResponseEntity.status(HttpStatus.CREATED).build();
