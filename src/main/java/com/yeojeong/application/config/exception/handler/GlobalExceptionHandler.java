@@ -18,7 +18,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(RestApiException.class)
     public ResponseEntity<ErrorResponse> handleCustomException(RestApiException ex) {
         ErrorCode errorCode = ex.getErrorCode();
-        log.error(errorCode.getHttpStatus() + " 잘못된 요청입니다.");
+        log.error(errorCode.getMessage());
         return ResponseEntity
                 .status(errorCode.getHttpStatus().value())
                 .body(new ErrorResponse(errorCode));

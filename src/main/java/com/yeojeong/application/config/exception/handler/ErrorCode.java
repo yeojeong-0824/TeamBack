@@ -39,6 +39,9 @@ public enum ErrorCode {
     EXPIRED_TOKEN(HttpStatus.UNAUTHORIZED, "유효기간이 만료된 토큰입니다."),
     JWT_DECODE_FAIL(HttpStatus.UNAUTHORIZED, "JWT Token 변환이 실패하였습니다. 올바른 토큰이 필요합니다."),
     JWT_SIGNATURE_FAIL(HttpStatus.UNAUTHORIZED, "JWT Token 값이 잘못되었습니다. 올바른 토큰이 필요합니다."),
+    NOT_FOUND_REFRESH(HttpStatus.NOT_FOUND, "Refresh Token 값을 DB 에서 찾을 수 없습니다."),
+    NOT_FOUND_COOKIE_REFRESH(HttpStatus.NOT_FOUND, "Cookie 에 Refresh Token 값이 없습니다."),
+    NOT_FOUND_SESSION(HttpStatus.NOT_FOUND, "Session 을 찾을 수 없습니다."),
 
     BAD_REQUEST(HttpStatus.BAD_REQUEST, "Invalid request"),
     NOT_FOUND(HttpStatus.NOT_FOUND, "잘못된 요청입니다.");
