@@ -6,7 +6,7 @@ import com.yeojeong.application.security.config.JwtProvider;
 import com.yeojeong.application.security.filter.exception.JwtAccessDeniedHandler;
 import com.yeojeong.application.security.filter.exception.JwtAuthenticationEntryPoint;
 import com.yeojeong.application.security.filter.exception.SecurityFilterException;
-import com.yeojeong.application.security.config.refreshtoken.service.RefreshTokenService;
+import com.yeojeong.application.security.config.refreshtoken.application.RefreshTokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

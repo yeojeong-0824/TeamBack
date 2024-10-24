@@ -6,9 +6,10 @@ import com.yeojeong.application.domain.member.member.presentation.dto.MemberDeta
 import com.yeojeong.application.security.config.JwtProvider;
 import com.yeojeong.application.security.filter.exception.FilterException;
 import com.yeojeong.application.security.config.refreshtoken.domain.RefreshToken;
-import com.yeojeong.application.security.config.refreshtoken.service.RefreshTokenService;
+import com.yeojeong.application.security.config.refreshtoken.application.RefreshTokenService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -78,15 +79,19 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         RefreshToken saveToken = RefreshToken.builder()
                 .id(refreshToken)
                 .expirationTime(loginTime + jwtProvider.REFRESH_EXPIRATION_TIME)
-                .count(jwtProvider.REFRESH_COUNT)
                 .ttl(jwtProvider.REFRESH_EXPIRATION_TIME / 1000)
                 .build();
 
         refreshTokenService.save(saveToken);
 
-        // Response Token
-        response.addHeader(jwtProvider.JWT_HEADER_STRING, jwtProvider.TOKEN_PREFIX + jwtToken);
-        response.addHeader(jwtProvider.REFRESH_HEADER_STRING, jwtProvider.TOKEN_PREFIX + refreshToken);
+        // Refresh Token - Cookie
+        Cookie refreshCookie = new Cookie(jwtProvider.REFRESH_HEADER_STRING, jwtProvider.TOKEN_PREFIX_REFRESH + refreshToken);
+        refreshCookie.setHttpOnly(true);
+        refreshCookie.setMaxAge(jwtProvider.REFRESH_EXPIRATION_TIME / 1000);
+
+        // JWT token
+        response.addHeader(jwtProvider.JWT_HEADER_STRING, jwtProvider.TOKEN_PREFIX_JWT + jwtToken);
+        response.addCookie(refreshCookie);
 
         response.setStatus(201);
     }

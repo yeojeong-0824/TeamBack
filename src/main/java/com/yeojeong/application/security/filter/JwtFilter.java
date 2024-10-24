@@ -7,8 +7,7 @@ import com.yeojeong.application.config.exception.handler.ErrorCode;
 import com.yeojeong.application.domain.member.member.presentation.dto.MemberDetails;
 import com.yeojeong.application.domain.member.member.domain.Member;
 import com.yeojeong.application.security.config.JwtProvider;
-import com.yeojeong.application.security.config.refreshtoken.domain.RefreshToken;
-import com.yeojeong.application.security.config.refreshtoken.service.RefreshTokenService;
+import com.yeojeong.application.security.config.refreshtoken.application.RefreshTokenService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -35,45 +34,6 @@ public class JwtFilter extends OncePerRequestFilter {
                                     FilterChain filterChain) throws ServletException, IOException {
 
         /*
-        1. Jwt 재발급
-        Step 1: Refresh 토큰을 DB에 있는 지 확인  > count 초과 시 null을 반환
-        Step 2: Refresh 토큰이 null 이라면, 오류를 반환(401)
-        Step 3: Refresh 토큰이 존재한다면 Jwt를 재발급
-        Step 4: 필터 종료
-        */
-
-        String refreshTokenHeader = request.getHeader(jwtProvider.REFRESH_HEADER_STRING);
-
-        if(refreshTokenHeader != null) {
-            log.info("JWT Token 재발급");
-            refreshTokenHeader = refreshTokenHeader.replace(jwtProvider.TOKEN_PREFIX, "");
-
-            RefreshToken savedRefreshToken = refreshTokenService.findById(refreshTokenHeader);
-
-            if(savedRefreshToken == null) {
-                request.setAttribute("exception", ErrorCode.REFRESH_TOKEN_NOT_VALID);
-                filterChain.doFilter(request, response);
-                return;
-            }
-
-            Member tokenMember = jwtProvider.decodeToken(refreshTokenHeader, String.valueOf(savedRefreshToken.getExpirationTime()));
-
-            log.info("만료된 JWT Token 재발급 완료");
-
-            MemberDetails reissueTokenMemberDetails = new MemberDetails(tokenMember);
-            String jwtToken = jwtProvider.createJwtToken(reissueTokenMemberDetails);
-
-            Authentication authentication =
-                    new UsernamePasswordAuthenticationToken(reissueTokenMemberDetails, null, reissueTokenMemberDetails.getAuthorities());
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-
-            response.addHeader(jwtProvider.JWT_HEADER_STRING, jwtProvider.TOKEN_PREFIX + jwtToken);
-
-            filterChain.doFilter(request, response);
-            return;
-        }
-
-        /*
         Jwt 확인
         Step 1: Jwt 토큰이 존재하는지 확인 -> 없다면 필터 종료
         Step 2: Jwt 토큰을 복호화 실패시(재발급 횟수 초과: 401, 변조: 400) 오류를 반환, 성공시 인증에 성공
@@ -86,7 +46,7 @@ public class JwtFilter extends OncePerRequestFilter {
             return;
         }
 
-        jwtTokenHeader = jwtTokenHeader.replace(jwtProvider.TOKEN_PREFIX, "");
+        jwtTokenHeader = jwtTokenHeader.replace(jwtProvider.TOKEN_PREFIX_JWT, "");
 
         try {
             Member jwtTokenMember = jwtProvider.decodeToken(jwtTokenHeader, jwtProvider.SECRET);
