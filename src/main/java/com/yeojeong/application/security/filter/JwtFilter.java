@@ -7,11 +7,9 @@ import com.yeojeong.application.config.exception.handler.ErrorCode;
 import com.yeojeong.application.domain.member.member.presentation.dto.MemberDetails;
 import com.yeojeong.application.domain.member.member.domain.Member;
 import com.yeojeong.application.security.config.JwtProvider;
-import com.yeojeong.application.security.config.refreshtoken.domain.RefreshToken;
-import com.yeojeong.application.security.config.refreshtoken.service.RefreshTokenService;
+import com.yeojeong.application.security.config.refreshtoken.application.RefreshTokenService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -37,28 +35,29 @@ public class JwtFilter extends OncePerRequestFilter {
 
         /*
         1. Jwt 재발급
-        Step 1: Refresh 토큰을 DB에 있는 지 확인  > count 초과 시 null을 반환
+        Step 1: Refresh 토큰을 DB에 있는 지 확인
         Step 2: Refresh 토큰이 null 이라면, 오류를 반환(401)
         Step 3: Refresh 토큰이 존재한다면 Jwt를 재발급
         Step 4: 필터 종료
         */
-        String refreshTokenHeader = null;
+        /*String refreshTokenHeader = null;
 
         log.info("jwtFilter 작동");
 
-        Cookie[] cookies = request.getCookies();
-        for(Cookie cookie : cookies) {
-            if (cookie.getName().equals(jwtProvider.REFRESH_HEADER_STRING)) {
-                refreshTokenHeader = cookie.getValue();
+        if (request.getCookies() != null) {
+            Cookie[] cookies = request.getCookies();
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals(jwtProvider.REFRESH_HEADER_STRING)) {
+                    refreshTokenHeader = cookie.getValue();
+                }
             }
         }
-
         log.info("refresh Token : " + refreshTokenHeader);
 
 
         if(refreshTokenHeader != null) {
             log.info("JWT Token 재발급");
-            refreshTokenHeader = refreshTokenHeader.replace(jwtProvider.TOKEN_PREFIX_JWT, "");
+            refreshTokenHeader = refreshTokenHeader.replace(jwtProvider.TOKEN_PREFIX_REFRESH, "");
 
             RefreshToken savedRefreshToken = refreshTokenService.findById(refreshTokenHeader);
 
@@ -83,7 +82,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
             filterChain.doFilter(request, response);
             return;
-        }
+        }*/
 
         /*
         Jwt 확인

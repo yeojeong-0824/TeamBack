@@ -16,7 +16,7 @@ public class RefreshToken {
     @TimeToLive
     private long ttl;
 
-    public void counting() {
+    /*public void counting() {
         this.count--;
-    }
+    }*/
 }

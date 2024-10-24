@@ -5,6 +5,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.yeojeong.application.domain.member.member.presentation.dto.MemberDetails;
 import com.yeojeong.application.domain.member.member.domain.Member;
+import com.yeojeong.application.domain.member.member.presentation.dto.MemberResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.core.GrantedAuthority;
@@ -17,14 +18,14 @@ public class JwtProvider {
     @Value("${JWTKey}")
     public String SECRET;
 
-    //JWT Token는 하루의 유효기간을 가짐
-    public final int JWT_EXPIRATION_TIME = 24 * 60 * 60 * 1000;
+    //JWT Token는 1시간의 유효기간을 가짐
+    public final int JWT_EXPIRATION_TIME = 60 * 60 * 1000;
 
-    //Refresh Token는 보름의 유효기간을 가짐
-    public final int REFRESH_EXPIRATION_TIME = 15 * 24 * 60 * 60 * 1000;
+    //Refresh Token는 하루의 유효기간을 가짐
+    public final int REFRESH_EXPIRATION_TIME = 24 * 60 * 60 * 1000;
 
     //JWT Token의 재발급은 10번으로 제한
-    public final Integer REFRESH_COUNT = 10;
+    //public final Integer REFRESH_COUNT = 10;
     public final String TOKEN_PREFIX_JWT = "Bearer ";
 
     // cookie 에서는 빈칸이 되지 않아서 빈칸을 삭제
