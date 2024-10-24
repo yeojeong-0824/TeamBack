@@ -34,57 +34,6 @@ public class JwtFilter extends OncePerRequestFilter {
                                     FilterChain filterChain) throws ServletException, IOException {
 
         /*
-        1. Jwt 재발급
-        Step 1: Refresh 토큰을 DB에 있는 지 확인
-        Step 2: Refresh 토큰이 null 이라면, 오류를 반환(401)
-        Step 3: Refresh 토큰이 존재한다면 Jwt를 재발급
-        Step 4: 필터 종료
-        */
-        /*String refreshTokenHeader = null;
-
-        log.info("jwtFilter 작동");
-
-        if (request.getCookies() != null) {
-            Cookie[] cookies = request.getCookies();
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().equals(jwtProvider.REFRESH_HEADER_STRING)) {
-                    refreshTokenHeader = cookie.getValue();
-                }
-            }
-        }
-        log.info("refresh Token : " + refreshTokenHeader);
-
-
-        if(refreshTokenHeader != null) {
-            log.info("JWT Token 재발급");
-            refreshTokenHeader = refreshTokenHeader.replace(jwtProvider.TOKEN_PREFIX_REFRESH, "");
-
-            RefreshToken savedRefreshToken = refreshTokenService.findById(refreshTokenHeader);
-
-            if(savedRefreshToken == null) {
-                request.setAttribute("exception", ErrorCode.REFRESH_TOKEN_NOT_VALID);
-                filterChain.doFilter(request, response);
-                return;
-            }
-
-            Member tokenMember = jwtProvider.decodeToken(refreshTokenHeader, String.valueOf(savedRefreshToken.getExpirationTime()));
-
-            log.info("만료된 JWT Token 재발급 완료");
-
-            MemberDetails reissueTokenMemberDetails = new MemberDetails(tokenMember);
-            String jwtToken = jwtProvider.createJwtToken(reissueTokenMemberDetails);
-
-            Authentication authentication =
-                    new UsernamePasswordAuthenticationToken(reissueTokenMemberDetails, null, reissueTokenMemberDetails.getAuthorities());
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-
-            response.addHeader(jwtProvider.JWT_HEADER_STRING, jwtProvider.TOKEN_PREFIX_JWT + jwtToken);
-
-            filterChain.doFilter(request, response);
-            return;
-        }*/
-
-        /*
         Jwt 확인
         Step 1: Jwt 토큰이 존재하는지 확인 -> 없다면 필터 종료
         Step 2: Jwt 토큰을 복호화 실패시(재발급 횟수 초과: 401, 변조: 400) 오류를 반환, 성공시 인증에 성공

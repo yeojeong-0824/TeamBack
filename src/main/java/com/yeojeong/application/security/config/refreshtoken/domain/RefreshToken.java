@@ -12,11 +12,6 @@ public class RefreshToken {
     @Id
     private String id;
     private Long expirationTime;
-    private Integer count;
     @TimeToLive
     private long ttl;
-
-    /*public void counting() {
-        this.count--;
-    }*/
 }

@@ -25,7 +25,6 @@ public class JwtProvider {
     public final int REFRESH_EXPIRATION_TIME = 24 * 60 * 60 * 1000;
 
     //JWT Token의 재발급은 10번으로 제한
-    //public final Integer REFRESH_COUNT = 10;
     public final String TOKEN_PREFIX_JWT = "Bearer ";
 
     // cookie 에서는 빈칸이 되지 않아서 빈칸을 삭제
