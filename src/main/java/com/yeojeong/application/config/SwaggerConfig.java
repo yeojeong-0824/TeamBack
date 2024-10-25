@@ -31,4 +31,14 @@ public class SwaggerConfig {
                 .pathsToMatch(paths)
                 .build();
     }
+
+    @Bean
+    public GroupedOpenApi group3() {
+        String[] paths = {"/token", "/token/**"};
+
+        return GroupedOpenApi.builder()
+                .group("토큰 API")
+                .pathsToMatch(paths)
+                .build();
+    }
 }
