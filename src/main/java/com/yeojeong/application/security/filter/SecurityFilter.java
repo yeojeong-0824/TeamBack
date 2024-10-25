@@ -52,8 +52,9 @@ public class SecurityFilter {
                 .addFilterAt(new LoginFilter(authenticationManager, jwtProvider, refreshTokenService, memberChangeService), UsernamePasswordAuthenticationFilter.class)
 
                 .authorizeHttpRequests(auth -> auth
-                        // TODO : 검증이 필요한 URL 추가
+                        .requestMatchers("/members/authed/**").authenticated()
                         .requestMatchers("/boards/authed/**").authenticated()
+                        .requestMatchers("/boards/comments/authed/**").authenticated()
                         .anyRequest().permitAll());
 
         return http.build();
