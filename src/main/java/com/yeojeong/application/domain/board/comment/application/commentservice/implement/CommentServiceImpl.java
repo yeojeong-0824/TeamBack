@@ -37,7 +37,8 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public Page<Comment> findByBoardId(Long boardId, int page) {
-        PageRequest request = PageRequest.of(page - 1, 10, Sort.by("id").descending());
+        int pageSize = 10;
+        PageRequest request = PageRequest.of(page - 1, pageSize, Sort.by("id").descending());
         return commentRepository.findAllByBoardId(boardId, request);
     }
 
