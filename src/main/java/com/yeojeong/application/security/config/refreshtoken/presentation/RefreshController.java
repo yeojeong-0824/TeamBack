@@ -2,8 +2,6 @@ package com.yeojeong.application.security.config.refreshtoken.presentation;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.yeojeong.application.config.exception.RestApiException;
-import com.yeojeong.application.config.exception.handler.ErrorCode;
 import com.yeojeong.application.config.util.customannotation.MethodTimer;
 import com.yeojeong.application.domain.member.member.presentation.dto.MemberDetails;
 import com.yeojeong.application.security.config.JwtProvider;
@@ -81,7 +79,7 @@ public class RefreshController {
             HttpServletRequest request, HttpServletResponse response
     ){
         String accessToken = request.getHeader(jwtProvider.JWT_HEADER_STRING);
-        if (accessToken == null) throw new RestApiException(ErrorCode.UNAUTHORIZED_CLIENT);
+        if (accessToken == null) return null;//throw new RestApiException(ErrorCode.UNAUTHORIZED_CLIENT);
 
         String token = accessToken.replace(jwtProvider.TOKEN_PREFIX_JWT, "");
 

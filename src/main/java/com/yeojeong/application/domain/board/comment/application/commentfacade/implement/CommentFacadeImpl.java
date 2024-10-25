@@ -1,7 +1,6 @@
 package com.yeojeong.application.domain.board.comment.application.commentfacade.implement;
 
-import com.yeojeong.application.config.exception.RestApiException;
-import com.yeojeong.application.config.exception.handler.ErrorCode;
+import com.yeojeong.application.config.exception.OwnershipException;
 import com.yeojeong.application.domain.board.board.application.boardservice.BoardService;
 import com.yeojeong.application.domain.board.board.domain.Board;
 import com.yeojeong.application.domain.board.comment.application.commentfacade.CommentFacade;
@@ -72,6 +71,6 @@ public class CommentFacadeImpl implements CommentFacade {
     }
 
     private void checkMember(Comment comment, Long memberId) {
-        if(memberId.equals(comment.getMember().getId())) throw new RestApiException(ErrorCode.USER_MISMATCH);
+        if(memberId.equals(comment.getMember().getId())) throw new OwnershipException("댓글을 작성한 회원이 아닙니다.");
     }
 }

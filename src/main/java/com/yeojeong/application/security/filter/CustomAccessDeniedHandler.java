@@ -1,22 +1,18 @@
-package com.yeojeong.application.security.filter.exception;
+package com.yeojeong.application.security.filter;
 
-import com.yeojeong.application.config.exception.handler.ErrorCode;
+import com.yeojeong.application.config.exception.response.ExceptionResponseSender;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;
 
 import java.io.IOException;
 
-@Slf4j
-@RequiredArgsConstructor
-public class JwtAccessDeniedHandler implements AccessDeniedHandler {
-    private final JwtException jwtException;
+public class CustomAccessDeniedHandler implements AccessDeniedHandler {
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {
-        jwtException.filterException(ErrorCode.FORBIDDEN_CLIENT, response);
+        ExceptionResponseSender.createExceptionResponse(HttpStatus.FORBIDDEN.value(), request, response, "권한이 없습니다.");
     }
 }

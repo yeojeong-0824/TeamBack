@@ -1,7 +1,6 @@
 package com.yeojeong.application.domain.member.email.application.memberemailservice.implement;
 
 import com.yeojeong.application.config.exception.NotFoundDataException;
-import com.yeojeong.application.config.exception.handler.ErrorCode;
 import com.yeojeong.application.domain.member.email.application.emailsender.EmailSender;
 import com.yeojeong.application.domain.member.email.domain.Email;
 import com.yeojeong.application.domain.member.email.domain.EmailRepository;
@@ -59,7 +58,7 @@ public class MemberEmailServiceImpl implements MemberEmailService {
     @Transactional
     @Override
     public boolean checkAuthedKey(String email, String authedKey) {
-        Email savedEntity = emailRepository.findById(email).orElseThrow(() -> new NotFoundDataException(ErrorCode.NOT_FOUND_EMAIL));
+        Email savedEntity = emailRepository.findById(email).orElseThrow(() -> new NotFoundDataException("이메일 정보가 없습니다."));
         if(!savedEntity.getValue().equals(authedKey)) return false;
 
         savedEntity.authedEmail(AUTHED);
@@ -70,7 +69,7 @@ public class MemberEmailServiceImpl implements MemberEmailService {
     @Transactional
     @Override
     public boolean checkAuthedEmail(String email) {
-        Email savedEntity = emailRepository.findById(email).orElseThrow(() -> new NotFoundDataException(ErrorCode.NOT_FOUND_EMAIL));
+        Email savedEntity = emailRepository.findById(email).orElseThrow(() -> new NotFoundDataException("이메일 정보가 없습니다."));
         if(!savedEntity.getValue().equals(AUTHED)) return false;
 
         emailRepository.deleteById(email);

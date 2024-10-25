@@ -1,6 +1,6 @@
 package com.yeojeong.application.domain.member.member.application.memberdetails.implement;
 
-import com.yeojeong.application.config.exception.handler.ErrorCode;
+import com.yeojeong.application.domain.member.member.application.memberservice.MemberService;
 import com.yeojeong.application.domain.member.member.domain.Member;
 import com.yeojeong.application.domain.member.member.presentation.dto.MemberDetails;
 import com.yeojeong.application.domain.member.member.domain.MemberRepository;
@@ -14,12 +14,10 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class MemberDetailsService implements UserDetailsService {
 
-    private final MemberRepository memberRepository;
+    private final MemberService memberService;
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Member member = memberRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException(ErrorCode.NOT_FOUND_USER.getMessage()));
-
+        Member member = memberService.findByUsername(username);
         return new MemberDetails(member);
     }
 }
