@@ -1,6 +1,5 @@
 package com.yeojeong.application.domain.member.member.application.memberservice.implement;
 
-import com.yeojeong.application.config.exception.handler.ErrorCode;
 import com.yeojeong.application.config.exception.DuplicatedException;
 import com.yeojeong.application.config.exception.NotFoundDataException;
 import com.yeojeong.application.domain.member.member.application.memberservice.MemberService;
@@ -8,7 +7,6 @@ import com.yeojeong.application.domain.member.member.domain.Member;
 import com.yeojeong.application.domain.member.member.domain.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -19,19 +17,19 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public Member findById(Long id) {
         return memberRepository.findById(id)
-                .orElseThrow(() -> new NotFoundDataException(ErrorCode.NOT_FOUND_USER));
+                .orElseThrow(() -> new NotFoundDataException("해당 유저를 찾을 수 없습니다."));
     }
 
     @Override
     public Member findByUsername(String username) {
         return memberRepository.findByUsername(username)
-                .orElseThrow(() -> new NotFoundDataException(ErrorCode.NOT_FOUND_USER));
+                .orElseThrow(() -> new NotFoundDataException("해당 유저를 찾을 수 없습니다."));
     }
 
     @Override
     public Member findByEmail(String email) {
         return memberRepository.findByEmail(email)
-                .orElseThrow(() -> new NotFoundDataException(ErrorCode.NOT_FOUND_USER));
+                .orElseThrow(() -> new NotFoundDataException("해당 유저를 찾을 수 없습니다."));
     }
 
     @Override
@@ -48,19 +46,19 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public void checkDuplicatedByUsername(String username) {
         if(memberRepository.existsByUsername(username))
-            throw new DuplicatedException(ErrorCode.DUPLICATED_ID);
+            throw new DuplicatedException("중복된 아이디 입니다.");
     }
 
     @Override
     public void checkDuplicatedByNickname(String nickname) {
         if(memberRepository.existsByNickname(nickname))
-            throw new DuplicatedException(ErrorCode.DUPLICATED_NICKNAME);
+            throw new DuplicatedException("중복된 닉네임 입니다");
     }
 
     @Override
     public void checkDuplicatedByEmail(String email) {
         if(memberRepository.existsByEmail(email))
-            throw new DuplicatedException(ErrorCode.DUPLICATED_EMAIL);
+            throw new DuplicatedException("중복된 이메일 입니다.");
     }
 
     @Override

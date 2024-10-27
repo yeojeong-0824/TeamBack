@@ -1,10 +1,9 @@
 package com.yeojeong.application.security.filter;
 
-import com.yeojeong.application.config.exception.handler.ErrorCode;
+import com.yeojeong.application.config.exception.response.ExceptionResponseSender;
 import com.yeojeong.application.domain.member.member.application.membernotification.MemberChangeService;
 import com.yeojeong.application.domain.member.member.presentation.dto.MemberDetails;
 import com.yeojeong.application.security.config.JwtProvider;
-import com.yeojeong.application.security.filter.exception.FilterException;
 import com.yeojeong.application.security.config.refreshtoken.domain.RefreshToken;
 import com.yeojeong.application.security.config.refreshtoken.application.RefreshTokenService;
 import jakarta.servlet.FilterChain;
@@ -14,6 +13,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -36,14 +36,15 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
                                                 HttpServletResponse response) throws AuthenticationException {
 
         String username = obtainUsername(request);
-
         if(username == null) {
-            throw new FilterException(ErrorCode.BLANK_ID);
+            failLogin(request, response);
+            return null;
         }
 
         String password = obtainPassword(request);
         if(password == null) {
-            throw new FilterException(ErrorCode.BLANK_PASSWORD);
+            failLogin(request, response);
+            return null;
         }
 
         log.info("로그인 시도: {}", username);
@@ -57,18 +58,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
                                             HttpServletResponse response,
                                             FilterChain chain,
                                             Authentication authResult) throws IOException, ServletException {
-
-        /*
-        로그인에 성공했다면 Jwt Token과 Refresh Token을 발급
-
-        JWT Token: 사용자 정보를 Secret Key를 이용하여 암호화 후 Header에 넣어줌
-        Refresh Token: 사용자 정보를 로그인이 성공한 시점으로 암호화 후 DB에 저장 후 Header에 넣어줌
-         */
-
-        log.info("로그인 성공");
         MemberDetails member = (MemberDetails) authResult.getPrincipal();
-
-        // 로그인 성공으로 마지막 로그인 시간 변경
         memberChangeService.loginSuccessAndLastLoginDateChange(member.getMemberId());
 
         long loginTime = System.currentTimeMillis();
@@ -100,6 +90,10 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     protected void unsuccessfulAuthentication(HttpServletRequest request,
                                               HttpServletResponse response,
                                               AuthenticationException failed) throws IOException, ServletException {
-        throw new FilterException(ErrorCode.FAIL_LOGIN);
+        failLogin(request, response);
+    }
+
+    private void failLogin(HttpServletRequest request, HttpServletResponse response) {
+        ExceptionResponseSender.createExceptionResponse(HttpStatus.UNAUTHORIZED.value(), request, response, "로그인에 실패했습니다.");
     }
 }

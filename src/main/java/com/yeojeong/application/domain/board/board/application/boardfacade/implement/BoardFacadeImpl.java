@@ -1,7 +1,6 @@
 package com.yeojeong.application.domain.board.board.application.boardfacade.implement;
 
-import com.yeojeong.application.config.exception.RestApiException;
-import com.yeojeong.application.config.exception.handler.ErrorCode;
+import com.yeojeong.application.config.exception.OwnershipException;
 import com.yeojeong.application.config.util.customannotation.RedisLocker;
 import com.yeojeong.application.domain.board.board.application.boardfacade.BoardFacade;
 import com.yeojeong.application.domain.board.board.application.boardservice.BoardService;
@@ -71,6 +70,6 @@ public class BoardFacadeImpl implements BoardFacade {
     }
 
     private void checkMember(Board board, Long memberId) {
-        if (!memberId.equals(board.getMember().getId())) throw new RestApiException(ErrorCode.USER_MISMATCH);
+        if (!memberId.equals(board.getMember().getId())) throw new OwnershipException("게시글을 작성한 사용자가 아닙니다.");
     }
 }

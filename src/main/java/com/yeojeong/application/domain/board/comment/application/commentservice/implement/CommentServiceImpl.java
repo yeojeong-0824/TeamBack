@@ -1,7 +1,5 @@
 package com.yeojeong.application.domain.board.comment.application.commentservice.implement;
 
-import com.yeojeong.application.config.exception.RestApiException;
-import com.yeojeong.application.config.exception.handler.ErrorCode;
 import com.yeojeong.application.domain.board.comment.application.commentservice.CommentService;
 import com.yeojeong.application.domain.board.comment.domain.Comment;
 import com.yeojeong.application.domain.board.comment.domain.CommentRepository;
@@ -11,7 +9,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -22,7 +19,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public Comment findById(Long id) {
         return commentRepository.findById(id)
-                .orElseThrow(() -> new NotFoundDataException(ErrorCode.NOT_FOUND_COMMENT));
+                .orElseThrow(() -> new NotFoundDataException("해당 댓글을 찾을 수 없습니다."));
     }
 
     @Override

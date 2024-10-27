@@ -1,11 +1,7 @@
 package com.yeojeong.application.security.filter;
 
 import com.yeojeong.application.domain.member.member.application.membernotification.MemberChangeService;
-import com.yeojeong.application.security.filter.exception.JwtException;
 import com.yeojeong.application.security.config.JwtProvider;
-import com.yeojeong.application.security.filter.exception.JwtAccessDeniedHandler;
-import com.yeojeong.application.security.filter.exception.JwtAuthenticationEntryPoint;
-import com.yeojeong.application.security.filter.exception.SecurityFilterException;
 import com.yeojeong.application.security.config.refreshtoken.application.RefreshTokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -30,8 +26,6 @@ public class SecurityFilter {
     private final JwtProvider jwtProvider;
     private final RefreshTokenService refreshTokenService;
     private final MemberChangeService memberChangeService;
-    private final JwtException jwtException;
-    private final SecurityFilterException securityFilterException;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -42,14 +36,11 @@ public class SecurityFilter {
                 .cors(auth -> auth.configurationSource(corsConfigurationSource()))
                 .sessionManagement(auth -> auth.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
-
-                .exceptionHandling(e -> e
-                        .authenticationEntryPoint(new JwtAuthenticationEntryPoint(jwtException))
-                        .accessDeniedHandler(new JwtAccessDeniedHandler(jwtException)))
-
-                .addFilterBefore(new JwtFilter(jwtProvider, refreshTokenService), UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(securityFilterException, UsernamePasswordAuthenticationFilter.class)
                 .addFilterAt(new LoginFilter(authenticationManager, jwtProvider, refreshTokenService, memberChangeService), UsernamePasswordAuthenticationFilter.class)
+                .addFilterAfter(new JwtFilter(jwtProvider, refreshTokenService), LoginFilter.class)
+
+                .exceptionHandling(auth -> auth
+                        .accessDeniedHandler(new CustomAccessDeniedHandler()))
 
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/members/authed/**").authenticated()
@@ -61,11 +52,8 @@ public class SecurityFilter {
     }
 
     public CorsConfigurationSource corsConfigurationSource() {
-        // 백엔드와 프론트엔드의 통신을 원활하게 하기 위함.
-        // 이 설정을 따로 해두지 않으면 프론트 쪽에서 쿠키가 넘어가지 않을 수 있음.
         CorsConfiguration config = new CorsConfiguration();
-
-        config.setAllowCredentials(true);  // 쿠키 사용 허용
+        config.setAllowCredentials(true);
 
         config.addAllowedOriginPattern(CorsConfiguration.ALL);
         config.addAllowedMethod(CorsConfiguration.ALL);

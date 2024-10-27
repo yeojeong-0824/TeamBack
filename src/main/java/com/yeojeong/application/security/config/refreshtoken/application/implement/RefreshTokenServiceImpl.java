@@ -1,8 +1,5 @@
 package com.yeojeong.application.security.config.refreshtoken.application.implement;
 
-import com.yeojeong.application.config.exception.RestApiException;
-import com.yeojeong.application.config.exception.handler.ErrorCode;
-import com.yeojeong.application.domain.member.member.domain.Member;
 import com.yeojeong.application.domain.member.member.presentation.dto.MemberDetails;
 import com.yeojeong.application.security.config.JwtProvider;
 import com.yeojeong.application.security.config.refreshtoken.domain.RefreshToken;
@@ -52,10 +49,12 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
             savedRefreshToken = findById(refreshTokenHeader);
 
             if(savedRefreshToken == null) {
-                throw new RestApiException(ErrorCode.REFRESH_TOKEN_NOT_VALID);
+                return null;
+//                throw new RestApiException(ErrorCode.REFRESH_TOKEN_NOT_VALID);
             }
         } else {
-            throw new RestApiException(ErrorCode.NOT_FOUND_COOKIE_REFRESH);
+            return null;
+//            throw new RestApiException(ErrorCode.NOT_FOUND_COOKIE_REFRESH);
         }
         return savedRefreshToken;
     }

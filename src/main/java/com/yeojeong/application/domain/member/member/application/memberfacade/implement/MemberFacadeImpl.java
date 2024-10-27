@@ -2,7 +2,6 @@ package com.yeojeong.application.domain.member.member.application.memberfacade.i
 
 import com.yeojeong.application.config.exception.NotFoundDataException;
 import com.yeojeong.application.config.exception.RequestDataException;
-import com.yeojeong.application.config.exception.handler.ErrorCode;
 import com.yeojeong.application.domain.board.board.application.boardservice.BoardService;
 import com.yeojeong.application.domain.board.board.domain.Board;
 import com.yeojeong.application.domain.board.comment.application.commentservice.CommentService;
@@ -48,7 +47,7 @@ public class MemberFacadeImpl implements MemberFacade {
 
         String savedPassword = savedEntity.getPassword();
         String takenPassword = dto.password();
-        if(!passwordEncoder.matches(takenPassword, savedPassword)) throw new RequestDataException(ErrorCode.PASSWORD_NOT_MATCH);
+        if(!passwordEncoder.matches(takenPassword, savedPassword)) throw new RequestDataException("비밀번호가 일치하지 않습니다.");
 
         memberService.delete(savedEntity);
     }
@@ -70,7 +69,7 @@ public class MemberFacadeImpl implements MemberFacade {
     @Transactional
     public String findPassword(String username, String email) {
         Member savedEntity = memberService.findByUsername(username);
-        if(!savedEntity.getEmail().equals(email)) throw new NotFoundDataException(ErrorCode.NOT_FOUND_EMAIL);
+        if(!savedEntity.getEmail().equals(email)) throw new NotFoundDataException("입력 값이 일치하지 않습니다.");
 
         String newPassword = this.createNewPassword();
         savedEntity.patchPassword(passwordEncoder.encode(newPassword));

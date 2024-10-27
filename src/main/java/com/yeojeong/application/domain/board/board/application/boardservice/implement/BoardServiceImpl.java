@@ -2,8 +2,6 @@ package com.yeojeong.application.domain.board.board.application.boardservice.imp
 
 import com.yeojeong.application.autocomplate.application.AutocompleteService;
 import com.yeojeong.application.autocomplate.presentation.dto.AutocompleteResponse;
-import com.yeojeong.application.config.exception.RestApiException;
-import com.yeojeong.application.config.exception.handler.ErrorCode;
 import com.yeojeong.application.domain.board.board.application.boardservice.BoardService;
 import com.yeojeong.application.domain.board.board.domain.Board;
 import com.yeojeong.application.domain.board.board.domain.BoardRepository;
@@ -46,7 +44,7 @@ public class BoardServiceImpl implements BoardService {
     @Override
     public Board findById(Long id) {
         return boardRepository.findById(id)
-                .orElseThrow(() -> new NotFoundDataException(ErrorCode.NOT_FOUND_BOARD));
+                .orElseThrow(() -> new NotFoundDataException("해당 게시글을 찾을 수 없습니다."));
     }
 
     @Override
