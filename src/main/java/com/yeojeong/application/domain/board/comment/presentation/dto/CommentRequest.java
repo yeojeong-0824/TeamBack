@@ -3,7 +3,7 @@ package com.yeojeong.application.domain.board.comment.presentation.dto;
 
 import com.yeojeong.application.domain.board.board.domain.Board;
 import com.yeojeong.application.domain.board.comment.domain.Comment;
-import com.yeojeong.application.domain.member.member.domain.Member;
+import com.yeojeong.application.domain.member.domain.Member;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;

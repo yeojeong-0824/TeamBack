@@ -1,6 +1,6 @@
 package com.yeojeong.application.security.filter;
 
-import com.yeojeong.application.domain.member.member.application.membernotification.MemberChangeService;
+import com.yeojeong.application.domain.member.application.membernotification.MemberChangeService;
 import com.yeojeong.application.security.config.JwtProvider;
 import com.yeojeong.application.security.config.refreshtoken.application.RefreshTokenService;
 import lombok.RequiredArgsConstructor;

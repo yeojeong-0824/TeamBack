@@ -85,6 +85,13 @@ public class GlobalExceptionHandler {
         ExceptionResponseSender.createExceptionResponse(httpStatus, request, response, message);
     }
 
+    @ExceptionHandler(AuthedException.class)
+    public void handlerAuthException(AuthedException ex, HttpServletRequest request, HttpServletResponse response) {
+        int httpStatus = HttpStatus.FORBIDDEN.value();
+        String message = ex.getMessage();
+        ExceptionResponseSender.createExceptionResponse(httpStatus, request, response, message);
+    }
+
     @ExceptionHandler(Exception.class)
     public void handleException(Exception ex, HttpServletRequest request, HttpServletResponse response){
         int httpStatus = HttpStatus.INTERNAL_SERVER_ERROR.value();

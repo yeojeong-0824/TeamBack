@@ -2,8 +2,7 @@ package com.yeojeong.application.domain.board.comment.domain;
 
 import com.yeojeong.application.domain.board.board.domain.Board;
 import com.yeojeong.application.config.util.BaseTime;
-import com.yeojeong.application.domain.board.comment.presentation.dto.CommentRequest;
-import com.yeojeong.application.domain.member.member.domain.Member;
+import com.yeojeong.application.domain.member.domain.Member;
 import jakarta.persistence.*;
 import lombok.*;
 

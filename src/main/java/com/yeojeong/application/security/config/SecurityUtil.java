@@ -1,6 +1,6 @@
 package com.yeojeong.application.security.config;
 
-import com.yeojeong.application.domain.member.member.presentation.dto.MemberDetails;
+import com.yeojeong.application.domain.member.presentation.dto.MemberDetails;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 

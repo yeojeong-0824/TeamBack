@@ -1,8 +1,7 @@
 package com.yeojeong.application.config.batch;
 
-import com.yeojeong.application.domain.member.email.application.memberemailservice.MemberEmailService;
-import com.yeojeong.application.domain.member.member.domain.Member;
-import com.yeojeong.application.domain.member.member.domain.MemberRepository;
+import com.yeojeong.application.domain.member.domain.Member;
+import com.yeojeong.application.domain.member.domain.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
@@ -37,7 +36,7 @@ public class UserNotificationBatchConfig {
 
     private final MemberRepository memberRepository;
 
-    private final MemberEmailService memberEmailService;
+//    private final MemberEmailService memberEmailService;
 
     private final JobLauncher jobLauncher;
 
@@ -62,7 +61,7 @@ public class UserNotificationBatchConfig {
             List<Member> inactiveMembers = memberRepository.findByLastLoginDateBefore(LocalDate.now().minusDays(1));
             for(Member member:inactiveMembers){
                 // 장기 미접속한 회원들에게 메일 전송
-                memberEmailService.sendNotification(member.getEmail());
+//                memberEmailService.sendNotification(member.getEmail());
             }
             return RepeatStatus.FINISHED;
         };
