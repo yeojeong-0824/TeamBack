@@ -2,8 +2,8 @@ package com.yeojeong.application.security.filter;
 
 import com.auth0.jwt.exceptions.*;
 import com.yeojeong.application.config.exception.response.ExceptionResponseSender;
-import com.yeojeong.application.domain.member.member.presentation.dto.MemberDetails;
-import com.yeojeong.application.domain.member.member.domain.Member;
+import com.yeojeong.application.domain.member.presentation.dto.MemberDetails;
+import com.yeojeong.application.domain.member.domain.Member;
 import com.yeojeong.application.security.config.JwtProvider;
 import com.yeojeong.application.security.config.refreshtoken.application.RefreshTokenService;
 import jakarta.servlet.FilterChain;

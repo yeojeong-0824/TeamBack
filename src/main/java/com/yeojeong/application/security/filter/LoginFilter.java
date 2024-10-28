@@ -1,8 +1,8 @@
 package com.yeojeong.application.security.filter;
 
 import com.yeojeong.application.config.exception.response.ExceptionResponseSender;
-import com.yeojeong.application.domain.member.member.application.membernotification.MemberChangeService;
-import com.yeojeong.application.domain.member.member.presentation.dto.MemberDetails;
+import com.yeojeong.application.domain.member.application.membernotification.MemberChangeService;
+import com.yeojeong.application.domain.member.presentation.dto.MemberDetails;
 import com.yeojeong.application.security.config.JwtProvider;
 import com.yeojeong.application.security.config.refreshtoken.domain.RefreshToken;
 import com.yeojeong.application.security.config.refreshtoken.application.RefreshTokenService;

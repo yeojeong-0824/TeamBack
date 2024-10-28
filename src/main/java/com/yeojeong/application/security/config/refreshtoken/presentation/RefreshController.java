@@ -3,7 +3,7 @@ package com.yeojeong.application.security.config.refreshtoken.presentation;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.yeojeong.application.config.util.customannotation.MethodTimer;
-import com.yeojeong.application.domain.member.member.presentation.dto.MemberDetails;
+import com.yeojeong.application.domain.member.presentation.dto.MemberDetails;
 import com.yeojeong.application.security.config.JwtProvider;
 import com.yeojeong.application.security.config.refreshtoken.application.RefreshTokenService;
 import com.yeojeong.application.security.config.refreshtoken.domain.RefreshToken;

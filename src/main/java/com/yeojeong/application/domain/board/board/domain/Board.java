@@ -1,9 +1,8 @@
 package com.yeojeong.application.domain.board.board.domain;
 
-import com.yeojeong.application.domain.board.board.presentation.dto.BoardRequest;
 import com.yeojeong.application.domain.board.comment.domain.Comment;
 import com.yeojeong.application.config.util.BaseTime;
-import com.yeojeong.application.domain.member.member.domain.Member;
+import com.yeojeong.application.domain.member.domain.Member;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

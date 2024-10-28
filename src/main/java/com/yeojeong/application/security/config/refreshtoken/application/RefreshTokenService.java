@@ -1,7 +1,6 @@
 package com.yeojeong.application.security.config.refreshtoken.application;
 
-import com.yeojeong.application.domain.member.member.presentation.dto.MemberDetails;
-import com.yeojeong.application.domain.member.member.presentation.dto.MemberResponse;
+import com.yeojeong.application.domain.member.presentation.dto.MemberDetails;
 import com.yeojeong.application.security.config.refreshtoken.domain.RefreshToken;
 
 public interface RefreshTokenService {
