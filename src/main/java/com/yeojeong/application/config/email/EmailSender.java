@@ -19,6 +19,8 @@ public class EmailSender {
 
     public Context createContext(List<String> data) {
         Context context = new Context();
+        if(data == null) return context;
+
         for(int i = 0; i < data.size(); i++) {
             context.setVariable("data" + (i + 1), data.get(i));
         }

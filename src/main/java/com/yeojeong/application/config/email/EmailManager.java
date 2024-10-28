@@ -25,4 +25,9 @@ public class EmailManager {
         Context context = emailSender.createContext(List.of(username));
         emailSender.send(context, "아이디 찾기", email, "findUsername");
     }
+
+    public void notification(String email) {
+        Context context = emailSender.createContext(null);
+        emailSender.send(context, "5개월 동안 미접속 알림", email, "notification");
+    }
 }
