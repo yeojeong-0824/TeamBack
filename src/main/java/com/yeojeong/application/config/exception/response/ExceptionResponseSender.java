@@ -9,6 +9,8 @@ import java.io.IOException;
 
 @Slf4j
 public class ExceptionResponseSender {
+    private ExceptionResponseSender() {}
+
     public static void createExceptionResponse(int httpStatus, HttpServletRequest request, HttpServletResponse response, String message) {
         final String path = request.getRequestURI();
         log.error("Path: {}, Status: {}, Exception: {}", path, httpStatus, message);
