@@ -8,8 +8,8 @@ import com.yeojeong.application.domain.board.comment.application.commentservice.
 import com.yeojeong.application.domain.board.comment.domain.Comment;
 import com.yeojeong.application.domain.board.comment.presentation.dto.CommentRequest;
 import com.yeojeong.application.domain.board.comment.presentation.dto.CommentResponse;
-import com.yeojeong.application.domain.member.member.application.memberservice.MemberService;
-import com.yeojeong.application.domain.member.member.domain.Member;
+import com.yeojeong.application.domain.member.application.memberservice.MemberService;
+import com.yeojeong.application.domain.member.domain.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;

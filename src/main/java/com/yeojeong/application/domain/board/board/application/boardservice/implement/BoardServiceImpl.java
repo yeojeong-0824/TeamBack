@@ -7,7 +7,7 @@ import com.yeojeong.application.domain.board.board.domain.Board;
 import com.yeojeong.application.domain.board.board.domain.BoardRepository;
 import com.yeojeong.application.config.exception.NotFoundDataException;
 import com.yeojeong.application.domain.board.comment.domain.Comment;
-import com.yeojeong.application.domain.member.member.domain.Member;
+import com.yeojeong.application.domain.member.domain.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

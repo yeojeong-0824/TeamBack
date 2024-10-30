@@ -1,7 +1,7 @@
 package com.yeojeong.application.domain.board.board.presentation.dto;
 
 import com.yeojeong.application.domain.board.board.domain.Board;
-import com.yeojeong.application.domain.member.member.domain.Member;
+import com.yeojeong.application.domain.member.domain.Member;
 import lombok.Builder;
 
 public class BoardRequest {

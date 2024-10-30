@@ -2,8 +2,9 @@ package com.yeojeong.application.security.config.refreshtoken.presentation;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.yeojeong.application.config.exception.AuthedException;
 import com.yeojeong.application.config.util.customannotation.MethodTimer;
-import com.yeojeong.application.domain.member.member.presentation.dto.MemberDetails;
+import com.yeojeong.application.domain.member.presentation.dto.MemberDetails;
 import com.yeojeong.application.security.config.JwtProvider;
 import com.yeojeong.application.security.config.refreshtoken.application.RefreshTokenService;
 import com.yeojeong.application.security.config.refreshtoken.domain.RefreshToken;
@@ -40,12 +41,13 @@ public class RefreshController {
             }
     )
     public ResponseEntity<Void> refresh(
-            @CookieValue(value = "Refresh") Cookie cookie, HttpServletRequest request, HttpServletResponse response, Authentication authResult
+            HttpServletRequest request, HttpServletResponse response, Authentication authResult
     ){
-        String refreshTokenHeader = cookie.getValue();
+        String refreshTokenHeader = null;
+        Cookie[] cookies = request.getCookies();
 
         // refresh token 이 유효한지 확인 -> 제거
-        RefreshToken savedRefreshToken = refreshTokenService.validRefresh(refreshTokenHeader);
+        RefreshToken savedRefreshToken = refreshTokenService.validRefresh(cookies, refreshTokenHeader);
         refreshTokenService.delete(savedRefreshToken);
 
         MemberDetails member = (MemberDetails) authResult.getPrincipal();
@@ -55,6 +57,7 @@ public class RefreshController {
 
         Cookie refreshCookie = new Cookie(jwtProvider.REFRESH_HEADER_STRING, jwtProvider.TOKEN_PREFIX_REFRESH + refreshToken);
         refreshCookie.setHttpOnly(true);
+        refreshCookie.setPath("/");
         refreshCookie.setMaxAge(jwtProvider.REFRESH_EXPIRATION_TIME / 1000);
 
         String jwtToken = jwtProvider.createJwtToken(member);
@@ -79,7 +82,7 @@ public class RefreshController {
             HttpServletRequest request, HttpServletResponse response
     ){
         String accessToken = request.getHeader(jwtProvider.JWT_HEADER_STRING);
-        if (accessToken == null) return null;//throw new RestApiException(ErrorCode.UNAUTHORIZED_CLIENT);
+        if (accessToken == null) throw new AuthedException("Access Token 이 존재하지 않습니다.");
 
         String token = accessToken.replace(jwtProvider.TOKEN_PREFIX_JWT, "");
 
@@ -87,9 +90,9 @@ public class RefreshController {
         try {
             userCode = JWT.require(Algorithm.HMAC512(jwtProvider.SECRET)).build().verify(token).getClaim("id").asLong();
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false);
+            throw new AuthedException("Access Token 이 유효하지 않습니다.");
         }
 
-        return ResponseEntity.status(HttpStatus.OK).body(true);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 }
