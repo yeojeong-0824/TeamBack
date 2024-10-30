@@ -54,6 +54,8 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
             throw new AuthedException("Refresh Token 쿠키에 존재하지 않습니다.");
         }
 
+        if (refreshTokenHeader == null) throw new AuthedException("Refresh Token 쿠키에 존재하지 않습니다.");
+
         refreshTokenHeader = refreshTokenHeader.replace(jwtProvider.TOKEN_PREFIX_REFRESH, "");
 
         RefreshToken savedRefreshToken = findById(refreshTokenHeader);
