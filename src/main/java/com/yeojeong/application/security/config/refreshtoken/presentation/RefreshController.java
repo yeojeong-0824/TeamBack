@@ -87,7 +87,6 @@ public class RefreshController {
         try {
             userCode = JWT.require(Algorithm.HMAC512(jwtProvider.SECRET)).build().verify(token).getClaim("id").asLong();
         } catch (Exception e) {
-
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false);
         }
 
