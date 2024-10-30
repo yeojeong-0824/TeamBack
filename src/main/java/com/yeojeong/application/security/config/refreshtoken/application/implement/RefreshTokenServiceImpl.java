@@ -1,10 +1,14 @@
 package com.yeojeong.application.security.config.refreshtoken.application.implement;
 
+import com.yeojeong.application.config.exception.AuthedException;
 import com.yeojeong.application.domain.member.presentation.dto.MemberDetails;
 import com.yeojeong.application.security.config.JwtProvider;
 import com.yeojeong.application.security.config.refreshtoken.domain.RefreshToken;
 import com.yeojeong.application.security.config.refreshtoken.domain.RefreshTokenRepository;
 import com.yeojeong.application.security.config.refreshtoken.application.RefreshTokenService;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -28,7 +32,7 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
     @Override
     public RefreshToken findById(String token) {
         Optional<RefreshToken> savedOptionalRefreshToken = refreshTokenRepository.findById(token);
-        if(savedOptionalRefreshToken.isEmpty()) return null;
+        if(savedOptionalRefreshToken.isEmpty()) throw new AuthedException("Refresh Token 내용이 존재하지 않습니다.");
 
         RefreshToken savedRefreshToken = savedOptionalRefreshToken.get();
 
@@ -41,21 +45,19 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
     }
 
     @Override
-    public RefreshToken validRefresh (String refreshTokenHeader) {
-        RefreshToken savedRefreshToken = null;
-        if(refreshTokenHeader != null) {
-            refreshTokenHeader = refreshTokenHeader.replace(jwtProvider.TOKEN_PREFIX_REFRESH, "");
-
-            savedRefreshToken = findById(refreshTokenHeader);
-
-            if(savedRefreshToken == null) {
-                return null;
-//                throw new RestApiException(ErrorCode.REFRESH_TOKEN_NOT_VALID);
+    public RefreshToken validRefresh (Cookie[] cookies, String refreshTokenHeader) {
+        try {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals(jwtProvider.REFRESH_HEADER_STRING)) refreshTokenHeader = cookie.getValue();
             }
-        } else {
-            return null;
-//            throw new RestApiException(ErrorCode.NOT_FOUND_COOKIE_REFRESH);
+        } catch (Exception e) {
+            throw new AuthedException("Refresh Token 쿠키에 존재하지 않습니다.");
         }
+
+        refreshTokenHeader = refreshTokenHeader.replace(jwtProvider.TOKEN_PREFIX_REFRESH, "");
+
+        RefreshToken savedRefreshToken = findById(refreshTokenHeader);
+
         return savedRefreshToken;
     }
 
