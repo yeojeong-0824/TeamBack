@@ -17,6 +17,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -55,15 +56,18 @@ public class RefreshController {
         // refresh token 을 새롭게 생성
         String refreshToken = refreshTokenService.createRefresh(member.getMemberId(), member);
 
-        Cookie refreshCookie = new Cookie(jwtProvider.REFRESH_HEADER_STRING, jwtProvider.TOKEN_PREFIX_REFRESH + refreshToken);
-        refreshCookie.setHttpOnly(true);
-        refreshCookie.setPath("/");
-        refreshCookie.setMaxAge(jwtProvider.REFRESH_EXPIRATION_TIME / 1000);
+        ResponseCookie refreshCookie = ResponseCookie.from(jwtProvider.REFRESH_HEADER_STRING, jwtProvider.TOKEN_PREFIX_REFRESH + refreshToken)
+                .path("/")
+                .sameSite("None")
+                .httpOnly(true)
+                .secure(true)
+                .maxAge(jwtProvider.REFRESH_EXPIRATION_TIME / 1000)
+                .build();
 
         String jwtToken = jwtProvider.createJwtToken(member);
 
         response.addHeader(jwtProvider.JWT_HEADER_STRING, jwtProvider.TOKEN_PREFIX_JWT + jwtToken);
-        response.addCookie(refreshCookie);
+        response.addHeader("Set-Cookie", refreshCookie.toString());
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }

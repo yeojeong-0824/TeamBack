@@ -14,6 +14,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -75,13 +76,17 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         refreshTokenService.save(saveToken);
 
         // Refresh Token - Cookie
-        Cookie refreshCookie = new Cookie(jwtProvider.REFRESH_HEADER_STRING, jwtProvider.TOKEN_PREFIX_REFRESH + refreshToken);
-        refreshCookie.setHttpOnly(true);
-        refreshCookie.setMaxAge(jwtProvider.REFRESH_EXPIRATION_TIME / 1000);
+        ResponseCookie refreshCookie = ResponseCookie.from(jwtProvider.REFRESH_HEADER_STRING, jwtProvider.TOKEN_PREFIX_REFRESH + refreshToken)
+                .path("/")
+                .sameSite("None")
+                .httpOnly(true)
+                .secure(true)
+                .maxAge(jwtProvider.REFRESH_EXPIRATION_TIME / 1000)
+                .build();
 
         // JWT token
         response.addHeader(jwtProvider.JWT_HEADER_STRING, jwtProvider.TOKEN_PREFIX_JWT + jwtToken);
-        response.addCookie(refreshCookie);
+        response.addHeader("Set-Cookie", refreshCookie.toString());
 
         response.setStatus(201);
     }
