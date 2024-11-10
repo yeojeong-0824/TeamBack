@@ -79,4 +79,14 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
 
         return refreshToken;
     }
+
+    @Override
+    public Cookie setRefreshCookie (String refreshToken) {
+        Cookie refreshCookie = new Cookie(jwtProvider.REFRESH_HEADER_STRING, jwtProvider.TOKEN_PREFIX_REFRESH + refreshToken);
+        refreshCookie.setAttribute("SameSite", "None");
+        refreshCookie.setHttpOnly(true);
+        refreshCookie.setPath("/");
+
+        return refreshCookie;
+    }
 }

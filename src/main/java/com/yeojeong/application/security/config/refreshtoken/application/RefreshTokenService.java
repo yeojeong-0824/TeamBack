@@ -12,4 +12,5 @@ public interface RefreshTokenService {
     void delete(RefreshToken token);
     RefreshToken validRefresh(Cookie[] cookies, String token);
     String createRefresh(Long memberId, MemberDetails member);
+    Cookie setRefreshCookie(String refreshToken);
 }

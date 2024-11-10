@@ -6,6 +6,7 @@ import com.yeojeong.application.config.exception.AuthedException;
 import com.yeojeong.application.config.util.customannotation.MethodTimer;
 import com.yeojeong.application.domain.member.presentation.dto.MemberDetails;
 import com.yeojeong.application.security.config.JwtProvider;
+import com.yeojeong.application.security.config.SecurityUtil;
 import com.yeojeong.application.security.config.refreshtoken.application.RefreshTokenService;
 import com.yeojeong.application.security.config.refreshtoken.domain.RefreshToken;
 import io.swagger.v3.oas.annotations.Operation;
@@ -50,15 +51,12 @@ public class RefreshController {
         RefreshToken savedRefreshToken = refreshTokenService.validRefresh(cookies, refreshTokenHeader);
         refreshTokenService.delete(savedRefreshToken);
 
-        MemberDetails member = (MemberDetails) authResult.getPrincipal();
+        MemberDetails member = SecurityUtil.getCurrentMember(authResult);
 
         // refresh token 을 새롭게 생성
         String refreshToken = refreshTokenService.createRefresh(member.getMemberId(), member);
 
-        Cookie refreshCookie = new Cookie(jwtProvider.REFRESH_HEADER_STRING, jwtProvider.TOKEN_PREFIX_REFRESH + refreshToken);
-        refreshCookie.setHttpOnly(true);
-        refreshCookie.setPath("/");
-        refreshCookie.setMaxAge(jwtProvider.REFRESH_EXPIRATION_TIME / 1000);
+        Cookie refreshCookie = refreshTokenService.setRefreshCookie(refreshToken);
 
         String jwtToken = jwtProvider.createJwtToken(member);
 
