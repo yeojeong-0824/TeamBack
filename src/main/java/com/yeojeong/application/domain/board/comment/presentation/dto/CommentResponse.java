@@ -5,28 +5,29 @@ import com.yeojeong.application.domain.board.comment.domain.Comment;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 
+import java.time.LocalDateTime;
+
 public class CommentResponse {
     @Builder
     @Schema(name = "게시글에 작성된 댓글 조회")
     public record FindByBoardId(
-            @Schema(example = "1")
             Long id,
-
-            @Schema(example = "3")
             Integer score,
-
-            @Schema(example = "여기 맛집임")
             String comment,
 
-            MemberInfo member
+            MemberInfo member,
+            TimeInfo time
     ) {
         @Builder
         private record MemberInfo(
-                @Schema(example = "1")
                 Long id,
-
-                @Schema(example = "걸리버")
                 String nickname
+        ){}
+
+        @Builder
+        private record TimeInfo(
+                LocalDateTime createTime,
+                LocalDateTime updateTime
         ){}
 
         public static FindByBoardId toDto(Comment entity) {
@@ -45,24 +46,17 @@ public class CommentResponse {
 
     @Builder
     public record FindById(
-            @Schema(example = "1")
             Long id,
-
-            @Schema(example = "3")
             Integer score,
-
-            @Schema(example = "여기 맛집임")
             String comment,
 
             MemberInfo member,
-            BoardInfo board
+            BoardInfo board,
+            FindByBoardId.TimeInfo time
     ) {
         @Builder
         public record MemberInfo(
-                @Schema(example = "1")
                 Long id,
-
-                @Schema(example = "걸리버")
                 String nickname
         ){}
 
@@ -71,6 +65,12 @@ public class CommentResponse {
                 Long id,
                 String title,
                 Integer score
+        ){}
+
+        @Builder
+        private record TimeInfo(
+                LocalDateTime createTime,
+                LocalDateTime updateTime
         ){}
 
         public static FindById toDto(Comment entity) {
