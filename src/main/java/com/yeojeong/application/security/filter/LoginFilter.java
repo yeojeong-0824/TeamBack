@@ -76,13 +76,8 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         refreshTokenService.save(saveToken);
 
         // Refresh Token - Cookie
-        ResponseCookie refreshCookie = ResponseCookie.from(jwtProvider.REFRESH_HEADER_STRING, jwtProvider.TOKEN_PREFIX_REFRESH + refreshToken)
-                .path("/")
-                .sameSite("None")
-                .httpOnly(true)
-                .secure(true)
-                .maxAge(jwtProvider.REFRESH_EXPIRATION_TIME / 1000)
-                .build();
+        Cookie refreshCookie = refreshTokenService.setRefreshCookie(refreshToken);
+
 
         // JWT token
         response.addHeader(jwtProvider.JWT_HEADER_STRING, jwtProvider.TOKEN_PREFIX_JWT + jwtToken);
