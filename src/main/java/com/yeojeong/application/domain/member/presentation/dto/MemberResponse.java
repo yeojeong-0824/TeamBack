@@ -10,16 +10,9 @@ public class MemberResponse {
     @Builder
     @Schema(name = "유저 정보 호출")
     public record FindById(
-        @Schema(example = "user12")
         String username,
-
-        @Schema(example = "소인국갔다옴")
         String nickname,
-
-        @Schema(example = "example@naver.com")
         String email,
-
-        @Schema(example = "90")
         Integer age
     ) {
         public static FindById toDto(Member entity) {
@@ -35,10 +28,7 @@ public class MemberResponse {
     @Builder
     @Schema(name = "유저가 작성한 게시글 정보 호출")
     public record BoardInfo(
-            @Schema(example = "1")
             Long id,
-
-            @Schema(example = "소인국 갔다온 썰 푼다")
             String title
     ){
         public static BoardInfo toDto(Board board) {
@@ -53,19 +43,12 @@ public class MemberResponse {
     @Schema(name = "유저가 작성한 댓글 정보 호출")
     public record CommentInfo(
             CommentBoardInfo boardInfo,
-
-            @Schema(example = "5")
             Integer score,
-
-            @Schema(example = "소인국 가보니까 진짜 쪼만했음")
             String comment
     ){
         @Builder
         private record CommentBoardInfo(
-                @Schema(example = "1")
                 Long id,
-
-                @Schema(example = "소인국 갔다온 썰 푼다")
                 String title
         ){}
         public static CommentInfo toDto(Comment comment) {

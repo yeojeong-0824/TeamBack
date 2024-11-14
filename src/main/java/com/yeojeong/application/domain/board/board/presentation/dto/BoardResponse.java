@@ -15,11 +15,12 @@ public class BoardResponse {
             String longitude,  // 경도
             String title,
 
-            MemberInfo member,
-
             Integer view,
             Integer avgScore,
-            Integer commentCount
+            Integer commentCount,
+
+            MemberInfo member,
+            TimeInfo time
     ) {
         @Builder
         private record MemberInfo(
@@ -49,6 +50,10 @@ public class BoardResponse {
                             .id(board.getMember().getId())
                             .nickname(board.getMember().getNickname())
                             .build())
+                    .time(TimeInfo.builder()
+                            .createTime(board.getCreateAt())
+                            .updateTime(board.getUpdateAt())
+                            .build())
                     .build();
         }
     }
@@ -68,12 +73,19 @@ public class BoardResponse {
             Integer avgScore,
             Integer commentCount,
 
-            MemberInfo member
+            MemberInfo member,
+            FindAll.TimeInfo time
     ) {
         @Builder
         private record MemberInfo (
                 Long userId,
                 String nickname
+        ){}
+
+        @Builder
+        private record TimeInfo(
+                LocalDateTime createTime,
+                LocalDateTime updateTime
         ){}
 
         public static FindById toDto(Board board) {
@@ -93,6 +105,10 @@ public class BoardResponse {
                     .member(MemberInfo.builder()
                             .userId(board.getMember().getId())
                             .nickname(board.getMember().getNickname())
+                            .build())
+                    .time(FindAll.TimeInfo.builder()
+                            .createTime(board.getCreateAt())
+                            .updateTime(board.getUpdateAt())
                             .build())
                     .build();
         }
