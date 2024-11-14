@@ -1,6 +1,5 @@
 package com.yeojeong.application.domain.board.comment.presentation.dto;
 
-import com.yeojeong.application.domain.board.board.domain.Board;
 import com.yeojeong.application.domain.board.comment.domain.Comment;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
@@ -40,6 +39,10 @@ public class CommentResponse {
                             .id(entity.getMember().getId())
                             .nickname(entity.getMember().getNickname())
                             .build())
+                    .time(TimeInfo.builder()
+                            .createTime(entity.getCreateAt())
+                            .updateTime(entity.getUpdateAt())
+                            .build())
                     .build();
         }
     }
@@ -52,7 +55,7 @@ public class CommentResponse {
 
             MemberInfo member,
             BoardInfo board,
-            FindByBoardId.TimeInfo time
+            TimeInfo time
     ) {
         @Builder
         public record MemberInfo(
@@ -87,27 +90,9 @@ public class CommentResponse {
                             .title(entity.getBoard().getTitle())
                             .score(entity.getBoard().getAvgScore())
                             .build())
-                    .build();
-        }
-    }
-
-    @Builder
-    public record Delete(
-            BoardInfo board
-    ) {
-        @Builder
-        public record BoardInfo(
-                Long id,
-                String title,
-                Integer score
-        ){}
-
-        public static Delete toDto(Board board) {
-            return Delete.builder()
-                    .board(BoardInfo.builder()
-                            .id(board.getId())
-                            .title(board.getTitle())
-                            .score(board.getAvgScore())
+                    .time(TimeInfo.builder()
+                            .createTime(entity.getCreateAt())
+                            .updateTime(entity.getUpdateAt())
                             .build())
                     .build();
         }

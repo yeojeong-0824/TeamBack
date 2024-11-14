@@ -3,6 +3,7 @@ package com.yeojeong.application.domain.board.comment.application.commentfacade.
 import com.yeojeong.application.config.exception.OwnershipException;
 import com.yeojeong.application.domain.board.board.application.boardservice.BoardService;
 import com.yeojeong.application.domain.board.board.domain.Board;
+import com.yeojeong.application.domain.board.board.presentation.dto.BoardResponse;
 import com.yeojeong.application.domain.board.comment.application.commentfacade.CommentFacade;
 import com.yeojeong.application.domain.board.comment.application.commentservice.CommentService;
 import com.yeojeong.application.domain.board.comment.domain.Comment;
@@ -37,7 +38,7 @@ public class CommentFacadeImpl implements CommentFacade {
 
     @Override
     @Transactional
-    public CommentResponse.Delete delete(Long id, Long memberId) {
+    public BoardResponse.FindById delete(Long id, Long memberId) {
         Comment savedEntity = commentService.findById(id);
         checkMember(savedEntity, memberId);
 
@@ -45,7 +46,7 @@ public class CommentFacadeImpl implements CommentFacade {
         commentService.delete(savedEntity);
 
         if(savedEntity.getScore() != 0) boardService.deleteComment(board);
-        return CommentResponse.Delete.toDto(board);
+        return BoardResponse.FindById.toDto(board);
     }
 
     @Override

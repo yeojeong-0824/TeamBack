@@ -74,7 +74,7 @@ public class BoardResponse {
             Integer commentCount,
 
             MemberInfo member,
-            FindAll.TimeInfo time
+            TimeInfo time
     ) {
         @Builder
         private record MemberInfo (
@@ -106,7 +106,7 @@ public class BoardResponse {
                             .userId(board.getMember().getId())
                             .nickname(board.getMember().getNickname())
                             .build())
-                    .time(FindAll.TimeInfo.builder()
+                    .time(TimeInfo.builder()
                             .createTime(board.getCreateAt())
                             .updateTime(board.getUpdateAt())
                             .build())
