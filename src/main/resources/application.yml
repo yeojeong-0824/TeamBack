@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: dev
+    active: local
   web:
     resources:
       add-mappings: false

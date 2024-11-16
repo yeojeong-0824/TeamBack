@@ -1,5 +1,6 @@
 package com.yeojeong.application.domain.board.comment.presentation;
 
+import com.yeojeong.application.domain.board.board.presentation.dto.BoardResponse;
 import com.yeojeong.application.domain.board.comment.application.commentfacade.CommentFacade;
 import com.yeojeong.application.domain.board.comment.presentation.dto.CommentRequest;
 import com.yeojeong.application.config.util.customannotation.MethodTimer;
@@ -71,7 +72,7 @@ public class AuthedCommentController {
                     @ApiResponse(responseCode = "403", description = "권한 없음")
             }
     )
-    public ResponseEntity<CommentResponse.Delete> delete(@PathVariable("id") Long id) {
+    public ResponseEntity<BoardResponse.FindById> delete(@PathVariable("id") Long id) {
 
         Long memberId = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(commentFacade.delete(id, memberId));
