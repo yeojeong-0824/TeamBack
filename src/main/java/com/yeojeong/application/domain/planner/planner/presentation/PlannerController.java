@@ -1,6 +1,7 @@
 package com.yeojeong.application.domain.planner.planner.presentation;
 
 import com.yeojeong.application.config.util.customannotation.MethodTimer;
+import com.yeojeong.application.domain.planner.planner.application.plannerfacade.PlannerFacade;
 import com.yeojeong.application.domain.planner.planner.presentation.dto.PlannerRequest;
 import com.yeojeong.application.domain.planner.planner.presentation.dto.PlannerResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -19,6 +20,9 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/planners")
 @Tag(name = "플래너 API")
 public class PlannerController {
+
+    private final PlannerFacade plannerFacade;
+
     @MethodTimer(method = "플래너 작성")
     @PostMapping
     @Operation(summary = "플래너 작성")

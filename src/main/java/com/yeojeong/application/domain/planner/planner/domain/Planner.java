@@ -21,7 +21,6 @@ public class Planner extends BaseTime {
     @Column
     private String title;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
-    private Member member;
+    @Column
+    private Long firstLocation;
 }
