@@ -45,7 +45,7 @@ public class MemberFacadeImpl implements MemberFacade {
     @Override
     @Transactional
     public void save(MemberRequest.SaveMember dto) {
-        if(!emailAuthService.checkAuthKey(dto.email(), AUTH_CHECK_KEY)) throw new AuthedException("인증이 되지 않은 사용자 입니다.");
+        if(!emailAuthService.checkAuthedKey(dto.email(), AUTH_CHECK_KEY)) throw new AuthedException("인증이 되지 않은 사용자 입니다.");
         emailAuthService.delete(dto.email());
 
         String encodingPassword = passwordEncoder.encode(dto.password());
@@ -138,7 +138,7 @@ public class MemberFacadeImpl implements MemberFacade {
     public void checkDuplicatedByEmail(String email) {
         memberService.checkDuplicatedByEmail(email);
 
-        String authKey = getAuthKey();
+        String authKey = getAuthedKey();
         emailManager.emailAuth(email, authKey);
         emailAuthService.save(EmailAuth.builder()
                 .id(email)
@@ -149,7 +149,7 @@ public class MemberFacadeImpl implements MemberFacade {
 
     @Override
     public void checkAuthCheck(String email, String authKey) {
-        if(!emailAuthService.checkAuthKey(email, authKey)) throw new AuthedException("인증 코드가 올바르지 않습니다.");
+        if(!emailAuthService.checkAuthedKey(email, authKey)) throw new AuthedException("인증 코드가 올바르지 않습니다.");
         emailAuthService.delete(email);
         emailAuthService.save(EmailAuth.builder()
                 .id(email)
@@ -158,7 +158,7 @@ public class MemberFacadeImpl implements MemberFacade {
                 .build());
     }
 
-    private String getAuthKey() {
+    private String getAuthedKey() {
         Random random = new Random();
         random.setSeed(System.currentTimeMillis());
         int rInt = random.nextInt(10000);
