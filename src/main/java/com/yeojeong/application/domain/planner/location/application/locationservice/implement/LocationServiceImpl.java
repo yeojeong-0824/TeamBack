@@ -7,6 +7,8 @@ import com.yeojeong.application.domain.planner.location.domain.LocationRepositor
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class LocationServiceImpl implements LocationService {
@@ -32,5 +34,10 @@ public class LocationServiceImpl implements LocationService {
     @Override
     public void delete(Location entity) {
         locationRepository.delete(entity);
+    }
+
+    @Override
+    public List<Location> findByPlanner(Long plannerId) {
+        return locationRepository.findAllByPlannerId(plannerId);
     }
 }
