@@ -57,7 +57,7 @@ public class AuthedLocationController {
     }
 
     @MethodTimer(method = " 장소 삭제 호출")
-    @PutMapping("/{locationId}")
+    @DeleteMapping("/{locationId}")
     @Operation(summary = "장소를 삭제 합니다.", description = "Planner의 장소를 삭제합니다.")
     @ApiResponses(
             value = {
@@ -65,7 +65,7 @@ public class AuthedLocationController {
                     @ApiResponse(responseCode = "403", description = "권한 없음")
             }
     )
-    public ResponseEntity<Void> put(@PathVariable("locationId") Long plannerId) {
+    public ResponseEntity<Void> delete(@PathVariable("locationId") Long plannerId) {
         return ResponseEntity.noContent().build();
     }
 }
