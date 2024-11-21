@@ -21,8 +21,6 @@ public class Location extends BaseTime {
     @Column
     private int travelTime;
 
-    @Column(nullable = false)
-    private String date;
 
     @Column(nullable = false)
     private int year;
@@ -39,6 +37,7 @@ public class Location extends BaseTime {
     @Column(nullable = false)
     private int minute;
 
+
     @Column(nullable = false)
     private String place;
 
@@ -53,10 +52,16 @@ public class Location extends BaseTime {
     private Planner planner;
 
     public void update(Location entity) {
-        date = entity.getDate();
-        time = entity.getTime();
-        place = entity.getPlace();
-        address = entity.getAddress();
-        memo = entity.getMemo();
+        this.travelTime = entity.getTravelTime();
+        this.year = entity.getYear();
+        this.month = entity.getMonth();
+        this.day = entity.getDay();
+
+        this.hour = entity.getHour();
+        this.minute = entity.getMinute();
+
+        this.place = entity.getPlace();
+        this.address = entity.getAddress();
+        this.memo = entity.getMemo();
     }
 }

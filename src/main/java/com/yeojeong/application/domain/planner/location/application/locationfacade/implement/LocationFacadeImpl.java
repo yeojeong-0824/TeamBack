@@ -34,11 +34,11 @@ public class LocationFacadeImpl implements LocationFacade {
         locationService.delete(savedEntity);
     }
 
-    @Override
-    public Page<LocationResponse.FindByPlannerId> findByPlannerId(Long plannerId, int page) {
-        Page<Location> entityPage = locationService.findByPlannerId(plannerId, page);
-        return entityPage.map(LocationResponse.FindByPlannerId::toDto);
-    }
+//    @Override
+//    public Page<LocationResponse.FindByPlannerId> findByPlannerId(Long plannerId, int page) {
+//        Page<Location> entityPage = locationService.findByPlannerId(plannerId, page);
+//        return entityPage.map(LocationResponse.FindByPlannerId::toDto);
+//    }
 
     @Override
     public LocationResponse.FindById update(Long id, LocationRequest.Put dto) {

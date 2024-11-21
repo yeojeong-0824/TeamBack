@@ -34,7 +34,7 @@ public class AuthedCommentController {
     @Operation(summary = "댓글 등록", description = "게시글에 댓글을 기록합니다.")
     @ApiResponses(
             value = {
-                    @ApiResponse(responseCode = "200", description = "댓글 등록 완료"),
+                    @ApiResponse(responseCode = "201", description = "댓글 등록 완료"),
                     @ApiResponse(responseCode = "403", description = "권한 없음")
             }
     )

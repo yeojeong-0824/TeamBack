@@ -31,7 +31,7 @@ public class AuthedLocationController {
     @Operation(summary = "장소를 작성합니다.", description = "Planner의 장소를 기록합니다.")
     @ApiResponses(
             value = {
-                    @ApiResponse(responseCode = "200", description = "장소 등록 완료"),
+                    @ApiResponse(responseCode = "201", description = "장소 등록 완료"),
                     @ApiResponse(responseCode = "403", description = "권한 없음")
             }
     )
@@ -39,5 +39,33 @@ public class AuthedLocationController {
                                                  @Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
                                                          @Valid @RequestBody LocationRequest.Save dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(null);
+    }
+
+    @MethodTimer(method = " 장소 수정 호출")
+    @PutMapping("/{locationId}")
+    @Operation(summary = "장소를 수정 합니다.", description = "Planner의 장소를 수정합니다.")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "장소 수정 완료"),
+                    @ApiResponse(responseCode = "403", description = "권한 없음")
+            }
+    )
+    public ResponseEntity<LocationResponse.FindById> put(@PathVariable("locationId") Long plannerId,
+                                                          @Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
+                                                          @Valid @RequestBody LocationRequest.Put dto) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(null);
+    }
+
+    @MethodTimer(method = " 장소 삭제 호출")
+    @PutMapping("/{locationId}")
+    @Operation(summary = "장소를 삭제 합니다.", description = "Planner의 장소를 삭제합니다.")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "204", description = "장소 삭제 완료"),
+                    @ApiResponse(responseCode = "403", description = "권한 없음")
+            }
+    )
+    public ResponseEntity<Void> put(@PathVariable("locationId") Long plannerId) {
+        return ResponseEntity.noContent().build();
     }
 }
