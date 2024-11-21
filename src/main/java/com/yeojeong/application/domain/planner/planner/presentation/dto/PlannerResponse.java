@@ -9,15 +9,27 @@ public class PlannerResponse {
     public record FindById(
             Long id,
             String title,
-            String startDate,
-            String endDate
+
+            Integer startYear,
+            Integer startMonth,
+            Integer startDay,
+
+            Integer endYear,
+            Integer endMonth,
+            Integer endDay
     ) {
         public static FindById toDto(Planner planner) {
             return FindById.builder()
                     .id(planner.getId())
                     .title(planner.getTitle())
-                    .startDate(planner.getStartDate())
-                    .endDate(planner.getEndDate())
+
+                    .startYear(planner.getStartYear())
+                    .startMonth(planner.getStartMonth())
+                    .startDay(planner.getStartDay())
+
+                    .endYear(planner.getEndYear())
+                    .endMonth(planner.getEndMonth())
+                    .endDay(planner.getEndDay())
                     .build();
         }
     }

@@ -5,6 +5,8 @@ import com.yeojeong.application.domain.planner.planner.application.plannerfacade
 import com.yeojeong.application.domain.planner.planner.presentation.dto.PlannerRequest;
 import com.yeojeong.application.domain.planner.planner.presentation.dto.PlannerResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -12,15 +14,16 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/planners")
+@RequestMapping("/planners/authed")
 @Tag(name = "플래너 API")
-public class PlannerController {
+public class AuthedPlannerController {
 
     private final PlannerFacade plannerFacade;
 
@@ -29,11 +32,12 @@ public class PlannerController {
     @Operation(summary = "플래너 작성")
     @ApiResponses(
             value = {
-                    @ApiResponse(responseCode = "200", description = "플래너 작성 성공"),
+                    @ApiResponse(responseCode = "201", description = "플래너 작성 성공"),
                     @ApiResponse(responseCode = "400", description = "플래너 작성 실패")
             }
     )
     public ResponseEntity<PlannerResponse.FindById> save(
+            @Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
             @Valid @RequestBody PlannerRequest.Save dto
     ){
         return ResponseEntity.status(HttpStatus.CREATED).body(plannerFacade.save(dto));
@@ -49,6 +53,7 @@ public class PlannerController {
             }
     )
     public ResponseEntity<PlannerResponse.FindById> update(
+            @Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
             @Valid @RequestBody PlannerRequest.Put dto,
             @PathVariable("id") Long id){
         return ResponseEntity.ok(plannerFacade.update(id, dto));
