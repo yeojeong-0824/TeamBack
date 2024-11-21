@@ -72,7 +72,7 @@ public class AuthedLocationController {
     }
 
     @MethodTimer(method = " 장소 조회")
-    @DeleteMapping("/{id}")
+    @GetMapping("/{id}")
     @Operation(summary = "장소를 조회", description = "Planner의 장소를 삭제합니다.")
     @ApiResponses(
             value = {
