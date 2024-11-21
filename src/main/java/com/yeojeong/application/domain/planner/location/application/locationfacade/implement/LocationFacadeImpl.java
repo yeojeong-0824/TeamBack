@@ -8,7 +8,6 @@ import com.yeojeong.application.domain.planner.location.presentation.dto.Locatio
 import com.yeojeong.application.domain.planner.planner.application.plannerservice.PlannerService;
 import com.yeojeong.application.domain.planner.planner.domain.Planner;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -34,14 +33,8 @@ public class LocationFacadeImpl implements LocationFacade {
         locationService.delete(savedEntity);
     }
 
-//    @Override
-//    public Page<LocationResponse.FindByPlannerId> findByPlannerId(Long plannerId, int page) {
-//        Page<Location> entityPage = locationService.findByPlannerId(plannerId, page);
-//        return entityPage.map(LocationResponse.FindByPlannerId::toDto);
-//    }
-
     @Override
-    public LocationResponse.FindById update(Long id, LocationRequest.Put dto) {
+    public LocationResponse.FindById update(LocationRequest.Put dto, Long id) {
         Location savedEntity = locationService.findById(id);
 
         Location entity = LocationRequest.Put.toEntity(dto);

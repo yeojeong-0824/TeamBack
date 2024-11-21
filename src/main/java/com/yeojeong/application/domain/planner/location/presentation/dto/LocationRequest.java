@@ -58,6 +58,8 @@ public class LocationRequest {
                     .place(dto.place())
                     .address(dto.address())
                     .memo(dto.memo())
+
+                    .planner(planner)
                     .build();
         }
     }
