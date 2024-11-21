@@ -7,6 +7,7 @@ import lombok.Builder;
 public class LocationRequest {
     @Builder
     public record Save(
+            Integer travelTime,
             String date,
             String time,
             String place,

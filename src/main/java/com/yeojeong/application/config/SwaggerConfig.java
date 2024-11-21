@@ -34,7 +34,7 @@ public class SwaggerConfig {
 
     @Bean
     public GroupedOpenApi group3() {
-        String[] paths = {"/planners", "/planners/**"};
+        String[] paths = {"/planners", "/planners/**", "/locations", "/locations/**"};
 
         return GroupedOpenApi.builder()
                 .group("플래너 API")
