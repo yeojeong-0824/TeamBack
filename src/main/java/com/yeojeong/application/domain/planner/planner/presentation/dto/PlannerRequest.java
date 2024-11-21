@@ -19,6 +19,7 @@ public class PlannerRequest {
             @Min(1) @Max(31)
             Integer startDay,
 
+            @Min(2024)
             Integer endYear,
             @Min(1) @Max(12)
             Integer endMonth,
