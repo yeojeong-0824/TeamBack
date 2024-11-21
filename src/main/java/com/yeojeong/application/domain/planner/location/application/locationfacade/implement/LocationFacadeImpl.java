@@ -42,4 +42,10 @@ public class LocationFacadeImpl implements LocationFacade {
         Location rtnEntity = locationService.update(entity);
         return LocationResponse.FindById.toDto(rtnEntity);
     }
+
+    @Override
+    public LocationResponse.FindById findById(Long id) {
+        locationService.findById(id);
+        return LocationResponse.FindById.toDto(locationService.findById(id));
+    }
 }

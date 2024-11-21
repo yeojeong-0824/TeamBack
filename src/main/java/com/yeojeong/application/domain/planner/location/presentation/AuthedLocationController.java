@@ -27,7 +27,7 @@ public class AuthedLocationController {
 
     private final LocationFacade locationFacade;
 
-    @MethodTimer(method = " 장소 작성 호출")
+    @MethodTimer(method = " 장소 작성")
     @PostMapping("/{plannerId}")
     @Operation(summary = "장소 작성", description = "Planner의 장소를 기록합니다.")
     @ApiResponses(
@@ -42,7 +42,7 @@ public class AuthedLocationController {
         return ResponseEntity.status(HttpStatus.CREATED).body(locationFacade.save(dto, plannerId));
     }
 
-    @MethodTimer(method = " 장소 수정 호출")
+    @MethodTimer(method = " 장소 수정")
     @PutMapping("/{id}")
     @Operation(summary = "장소 수정", description = "Planner의 장소를 수정합니다.")
     @ApiResponses(
@@ -54,10 +54,10 @@ public class AuthedLocationController {
     public ResponseEntity<LocationResponse.FindById> put(@PathVariable("id") Long id,
                                                           @Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
                                                           @Valid @RequestBody LocationRequest.Put dto) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(locationFacade.update(dto, id));
+        return ResponseEntity.status(HttpStatus.OK).body(locationFacade.update(dto, id));
     }
 
-    @MethodTimer(method = " 장소 삭제 호출")
+    @MethodTimer(method = " 장소 삭제")
     @DeleteMapping("/{id}")
     @Operation(summary = "장소를 삭제", description = "Planner의 장소를 삭제합니다.")
     @ApiResponses(
@@ -69,5 +69,18 @@ public class AuthedLocationController {
     public ResponseEntity<Void> delete(@PathVariable("id") Long id) {
         locationFacade.delete(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @MethodTimer(method = " 장소 조회")
+    @DeleteMapping("/{id}")
+    @Operation(summary = "장소를 조회", description = "Planner의 장소를 삭제합니다.")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "장소 조회 완료"),
+                    @ApiResponse(responseCode = "403", description = "권한 없음")
+            }
+    )
+    public ResponseEntity<LocationResponse.FindById> findById(@PathVariable("id") Long id) {
+        return ResponseEntity.status(HttpStatus.OK).body(locationFacade.findById(id));
     }
 }
