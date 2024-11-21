@@ -20,10 +20,21 @@ public class Planner extends BaseTime {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
+    @Column(nullable = false)
     private String title;
 
-    @Column
-    @ElementCollection(fetch = FetchType.LAZY)
-    private List<Location> locationList;
+    @Column(nullable = false)
+    private String startDate;
+
+    @Column(nullable = false)
+    private String endDate;
+
+    @OneToMany(mappedBy = "planner", fetch = FetchType.LAZY)
+    private List<Location> locations;
+
+    public void update(Planner entity) {
+        title = entity.getTitle();
+        startDate = entity.getStartDate();
+        endDate = entity.getEndDate();
+    }
 }
