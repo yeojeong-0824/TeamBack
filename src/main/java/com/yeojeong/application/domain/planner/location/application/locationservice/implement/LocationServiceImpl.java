@@ -36,11 +36,4 @@ public class LocationServiceImpl implements LocationService {
     public void delete(Location entity) {
         locationRepository.delete(entity);
     }
-
-    @Override
-    public Page<Location> findByPlannerId(Long plannerId, int page) {
-        int pageSize = 10;
-        PageRequest request = PageRequest.of(page - 1, pageSize, Sort.by("id").descending());
-        return locationRepository.findAllByPlannerId(plannerId, request);
-    }
 }

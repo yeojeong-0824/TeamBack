@@ -1,11 +1,9 @@
 package com.yeojeong.application.domain.planner.location.presentation;
 
 import com.yeojeong.application.config.util.customannotation.MethodTimer;
-import com.yeojeong.application.domain.board.comment.presentation.dto.CommentRequest;
-import com.yeojeong.application.domain.board.comment.presentation.dto.CommentResponse;
+import com.yeojeong.application.domain.planner.location.application.locationfacade.LocationFacade;
 import com.yeojeong.application.domain.planner.location.presentation.dto.LocationRequest;
 import com.yeojeong.application.domain.planner.location.presentation.dto.LocationResponse;
-import com.yeojeong.application.security.config.SecurityUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -26,6 +24,9 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/planners/locations/authed")
 @Tag(name = "장소 API")
 public class AuthedLocationController {
+
+    private final LocationFacade locationFacade;
+
     @MethodTimer(method = " 장소 작성 호출")
     @PostMapping("/{plannerId}")
     @Operation(summary = "장소 작성", description = "Planner의 장소를 기록합니다.")
@@ -38,11 +39,11 @@ public class AuthedLocationController {
     public ResponseEntity<LocationResponse.FindById> save(@PathVariable("plannerId") Long plannerId,
                                                          @Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
                                                          @Valid @RequestBody LocationRequest.Save dto) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(null);
+        return ResponseEntity.status(HttpStatus.CREATED).body(locationFacade.save(dto, plannerId));
     }
 
     @MethodTimer(method = " 장소 수정 호출")
-    @PutMapping("/{locationId}")
+    @PutMapping("/{id}")
     @Operation(summary = "장소 수정", description = "Planner의 장소를 수정합니다.")
     @ApiResponses(
             value = {
@@ -50,14 +51,14 @@ public class AuthedLocationController {
                     @ApiResponse(responseCode = "403", description = "권한 없음")
             }
     )
-    public ResponseEntity<LocationResponse.FindById> put(@PathVariable("locationId") Long plannerId,
+    public ResponseEntity<LocationResponse.FindById> put(@PathVariable("id") Long id,
                                                           @Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
                                                           @Valid @RequestBody LocationRequest.Put dto) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(null);
+        return ResponseEntity.status(HttpStatus.CREATED).body(locationFacade.update(dto, id));
     }
 
     @MethodTimer(method = " 장소 삭제 호출")
-    @DeleteMapping("/{locationId}")
+    @DeleteMapping("/{id}")
     @Operation(summary = "장소를 삭제", description = "Planner의 장소를 삭제합니다.")
     @ApiResponses(
             value = {
@@ -65,7 +66,8 @@ public class AuthedLocationController {
                     @ApiResponse(responseCode = "403", description = "권한 없음")
             }
     )
-    public ResponseEntity<Void> delete(@PathVariable("locationId") Long plannerId) {
+    public ResponseEntity<Void> delete(@PathVariable("id") Long id) {
+        locationFacade.delete(id);
         return ResponseEntity.noContent().build();
     }
 }

@@ -8,5 +8,4 @@ public interface LocationService {
     Location findById(Long id);
     Location update(Location entity);
     void delete(Location entity);
-    Page<Location> findByPlannerId(Long plannerId, int page);
 }
