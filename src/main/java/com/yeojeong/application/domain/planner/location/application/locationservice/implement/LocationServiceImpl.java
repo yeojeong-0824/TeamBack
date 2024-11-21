@@ -1,9 +1,13 @@
 package com.yeojeong.application.domain.planner.location.application.locationservice.implement;
 
+import com.yeojeong.application.config.exception.NotFoundDataException;
 import com.yeojeong.application.domain.planner.location.application.locationservice.LocationService;
 import com.yeojeong.application.domain.planner.location.domain.Location;
 import com.yeojeong.application.domain.planner.location.domain.LocationRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -15,5 +19,28 @@ public class LocationServiceImpl implements LocationService {
     @Override
     public Location save(Location entity) {
         return locationRepository.save(entity);
+    }
+
+    @Override
+    public Location findById(Long id) {
+        return locationRepository.findById(id)
+                .orElseThrow(() ->  new NotFoundDataException("해당 location 을 찾을 수 없습니다."));
+    }
+
+    @Override
+    public Location update(Location entity) {
+        return locationRepository.save(entity);
+    }
+
+    @Override
+    public void delete(Location entity) {
+        locationRepository.delete(entity);
+    }
+
+    @Override
+    public Page<Location> findByPlannerId(Long plannerId, int page) {
+        int pageSize = 10;
+        PageRequest request = PageRequest.of(page - 1, pageSize, Sort.by("id").descending());
+        return locationRepository.findAllByPlannerId(plannerId, request);
     }
 }

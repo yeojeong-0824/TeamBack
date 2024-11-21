@@ -19,10 +19,10 @@ public class Location extends BaseTime {
     private Long id;
 
     @Column(nullable = false)
-    private int date;
+    private String date;
 
-    @Column
-    private int time;
+    @Column(nullable = false)
+    private String time;
 
     @Column(nullable = false)
     private String place;
@@ -33,7 +33,15 @@ public class Location extends BaseTime {
     @Column
     private String memo;
 
-    @Column(nullable = false)
-    private Long nextLocation;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "planner_id", nullable = false, foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+    private Planner planner;
 
+    public void update(Location entity) {
+        date = entity.getDate();
+        time = entity.getTime();
+        place = entity.getPlace();
+        address = entity.getAddress();
+        memo = entity.getMemo();
+    }
 }
