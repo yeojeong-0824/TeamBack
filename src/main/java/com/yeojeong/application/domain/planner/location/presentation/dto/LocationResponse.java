@@ -1,10 +1,12 @@
 package com.yeojeong.application.domain.planner.location.presentation.dto;
 
 import com.yeojeong.application.domain.planner.location.domain.Location;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 
 public class LocationResponse {
     @Builder
+    @Schema(name = "장소 조회")
     public record FindById(
             Long id,
             Integer travelTime,
