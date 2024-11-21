@@ -1,5 +1,6 @@
 package com.yeojeong.application.domain.member.domain;
 
+import com.yeojeong.application.config.util.BaseTime;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,7 +12,7 @@ import java.time.LocalDate;
 
 @Entity @Getter
 @Builder @NoArgsConstructor @AllArgsConstructor
-public class Member {
+public class Member extends BaseTime {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

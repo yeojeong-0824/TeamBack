@@ -20,7 +20,7 @@ public class EmailAuthServiceImpl implements EmailAuthService {
         return emailAuthRepository.findById(email).orElseThrow(() -> new AuthedException("해당 이메일 정보를 찾을 수 없습니다."));
     }
 
-    public boolean checkAuthKey(String email, String authKey) {
+    public boolean checkAuthedKey(String email, String authKey) {
         EmailAuth entity = findById(email);
         return entity.getValue().equals(authKey);
     }
