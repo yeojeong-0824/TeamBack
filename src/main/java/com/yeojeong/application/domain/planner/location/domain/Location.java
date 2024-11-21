@@ -18,11 +18,25 @@ public class Location extends BaseTime {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String date;
+    @Column
+    private int travelTime;
+
 
     @Column(nullable = false)
-    private String time;
+    private int year;
+
+    @Column(nullable = false)
+    private int month;
+
+    @Column(nullable = false)
+    private int day;
+
+    @Column(nullable = false)
+    private int hour;
+
+    @Column(nullable = false)
+    private int minute;
+
 
     @Column(nullable = false)
     private String place;
@@ -34,14 +48,20 @@ public class Location extends BaseTime {
     private String memo;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "planner_id", nullable = false, foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+    @JoinColumn(name = "planner_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private Planner planner;
 
     public void update(Location entity) {
-        date = entity.getDate();
-        time = entity.getTime();
-        place = entity.getPlace();
-        address = entity.getAddress();
-        memo = entity.getMemo();
+        this.travelTime = entity.getTravelTime();
+        this.year = entity.getYear();
+        this.month = entity.getMonth();
+        this.day = entity.getDay();
+
+        this.hour = entity.getHour();
+        this.minute = entity.getMinute();
+
+        this.place = entity.getPlace();
+        this.address = entity.getAddress();
+        this.memo = entity.getMemo();
     }
 }

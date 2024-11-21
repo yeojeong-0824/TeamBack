@@ -5,33 +5,17 @@ import lombok.Builder;
 
 public class LocationResponse {
     @Builder
-    public record FindByPlannerId(
-            Long id,
-            String date,
-            String time,
-            String place,
-            String address,
-            String memo,
-            String plannerTitle
-    ) {
-        public static FindByPlannerId toDto(Location entity) {
-            return FindByPlannerId.builder()
-                    .id(entity.getId())
-                    .date(entity.getDate())
-                    .time(entity.getTime())
-                    .place(entity.getPlace())
-                    .address(entity.getAddress())
-                    .memo(entity.getMemo())
-                    .plannerTitle(entity.getPlanner().getTitle())
-                    .build();
-        }
-    }
-
-    @Builder
     public record FindById(
             Long id,
-            String date,
-            String time,
+            Integer travelTime,
+
+            Integer year,
+            Integer month,
+            Integer day,
+
+            Integer hour,
+            Integer minute,
+
             String place,
             String address,
             String memo
@@ -39,8 +23,16 @@ public class LocationResponse {
         public static FindById toDto(Location entity) {
             return FindById.builder()
                     .id(entity.getId())
-                    .date(entity.getDate())
-                    .time(entity.getTime())
+
+                    .travelTime(entity.getTravelTime())
+
+                    .year(entity.getYear())
+                    .month(entity.getMonth())
+                    .day(entity.getDay())
+
+                    .hour(entity.getHour())
+                    .minute(entity.getMinute())
+
                     .place(entity.getPlace())
                     .address(entity.getAddress())
                     .memo(entity.getMemo())
