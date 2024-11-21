@@ -1,6 +1,7 @@
 package com.yeojeong.application.domain.planner.planner.presentation.dto;
 
 import com.yeojeong.application.domain.planner.planner.domain.Planner;
+import jakarta.validation.constraints.*;
 import lombok.Builder;
 
 import java.util.List;
@@ -8,14 +9,20 @@ import java.util.List;
 public class PlannerRequest {
     @Builder
     public record Save(
+            @NotNull @Size(min = 1, max = 30)
             String title,
 
+            @Min(2024)
             Integer startYear,
+            @Min(1) @Max(12)
             Integer startMonth,
+            @Min(1) @Max(31)
             Integer startDay,
 
             Integer endYear,
+            @Min(1) @Max(12)
             Integer endMonth,
+            @Min(1) @Max(31)
             Integer endDay
 
     ) {
@@ -35,15 +42,22 @@ public class PlannerRequest {
     }
 
     public record Put(
-        String title,
+            @NotNull @Size(min = 1, max = 30)
+            String title,
 
-        Integer startYear,
-        Integer startMonth,
-        Integer startDay,
+            @Min(2024)
+            Integer startYear,
+            @Min(1) @Max(12)
+            Integer startMonth,
+            @Min(1) @Max(31)
+            Integer startDay,
 
-        Integer endYear,
-        Integer endMonth,
-        Integer endDay
+            @Min(2024)
+            Integer endYear,
+            @Min(1) @Max(12)
+            Integer endMonth,
+            @Min(1) @Max(31)
+            Integer endDay
     ) {
         public static Planner toEntity(PlannerRequest.Put dto) {
             return Planner.builder()
