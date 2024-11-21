@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,7 +36,7 @@ public class PlannerController {
     public ResponseEntity<PlannerResponse.FindById> save(
             @Valid @RequestBody PlannerRequest.Save dto
     ){
-        return null;
+        return ResponseEntity.status(HttpStatus.CREATED).body(plannerFacade.save(dto));
     }
 
     @MethodTimer(method = "플래너 수정")
@@ -50,7 +51,7 @@ public class PlannerController {
     public ResponseEntity<PlannerResponse.FindById> update(
             @Valid @RequestBody PlannerRequest.Put dto,
             @PathVariable("id") Long id){
-        return null;
+        return ResponseEntity.ok(plannerFacade.update(id, dto));
     }
 
     @MethodTimer(method = "플래너 삭제")
@@ -63,6 +64,20 @@ public class PlannerController {
             }
     )
     public ResponseEntity<Void> delete(@PathVariable("id") Long id){
-        return null;
+        plannerFacade.delete(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @MethodTimer(method = "플래너 호출")
+    @GetMapping("/{id}")
+    @Operation(summary = "플래너 호출")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "204", description = "플래너 삭제 성공"),
+                    @ApiResponse(responseCode = "400", description = "플래너 삭제 실패")
+            }
+    )
+    public ResponseEntity<PlannerResponse.FindById> findById(@PathVariable("id") Long id){
+        return ResponseEntity.ok(plannerFacade.findById(id));
     }
 }
