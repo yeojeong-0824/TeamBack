@@ -8,12 +8,16 @@ public class PlannerResponse {
     @Builder
     public record FindById(
             Long id,
-            String title
+            String title,
+            String startDate,
+            String endDate
     ) {
-        public static PlannerResponse.FindById toDto(Planner planner) {
-            return PlannerResponse.FindById.builder()
+        public static FindById toDto(Planner planner) {
+            return FindById.builder()
                     .id(planner.getId())
                     .title(planner.getTitle())
+                    .startDate(planner.getStartDate())
+                    .endDate(planner.getEndDate())
                     .build();
         }
     }
