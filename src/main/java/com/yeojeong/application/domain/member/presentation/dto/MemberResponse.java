@@ -95,4 +95,9 @@ public class MemberResponse {
                     .build();
         }
     }
+
+    @Builder
+    public record patchKey(
+            String key
+    ) {}
 }
