@@ -13,10 +13,16 @@ public class PlannerResponse {
             Integer startYear,
             Integer startMonth,
             Integer startDay,
+            Integer startHour,
+            Integer startMinute,
 
             Integer endYear,
             Integer endMonth,
-            Integer endDay
+            Integer endDay,
+            Integer endHour,
+            Integer endMinute,
+
+            int locationCount
     ) {
         public static FindById toDto(Planner planner) {
             return FindById.builder()
@@ -26,10 +32,16 @@ public class PlannerResponse {
                     .startYear(planner.getStartYear())
                     .startMonth(planner.getStartMonth())
                     .startDay(planner.getStartDay())
+                    .startHour(planner.getStartHour())
+                    .startMinute(planner.getStartMinute())
 
                     .endYear(planner.getEndYear())
                     .endMonth(planner.getEndMonth())
                     .endDay(planner.getEndDay())
+                    .endHour(planner.getEndHour())
+                    .endMinute(planner.getEndMinute())
+
+                    .locationCount(planner.getLocationCount())
                     .build();
         }
     }
