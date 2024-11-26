@@ -11,6 +11,9 @@ import com.yeojeong.application.domain.planner.planner.domain.Planner;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 public class LocationFacadeImpl implements LocationFacade {
@@ -78,6 +81,14 @@ public class LocationFacadeImpl implements LocationFacade {
     public LocationResponse.FindById findById(Long id) {
         locationService.findById(id);
         return LocationResponse.FindById.toDto(locationService.findById(id));
+    }
+
+    @Override
+    public List<LocationResponse.FindById> findByPlannerId(Long plannerId) {
+        List<Location> locationList = locationService.findByPlannerId(plannerId);
+        return locationList.stream()
+                .map(LocationResponse.FindById::toDto)
+                .collect(Collectors.toList());
     }
 
     public boolean startDateValidation (Planner planner, Location location) {

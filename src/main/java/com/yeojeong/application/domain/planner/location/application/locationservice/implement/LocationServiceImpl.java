@@ -47,7 +47,7 @@ public class LocationServiceImpl implements LocationService {
     }
 
     @Override
-    public List<Location> findByPlanner(Long plannerId) {
+    public List<Location> findByPlannerId(Long plannerId) {
         return locationRepository.findAllByPlannerId(plannerId);
     }
 }

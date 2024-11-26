@@ -11,5 +11,5 @@ public interface LocationService {
     void delete(Location entity);
     boolean existBefore(Integer year, Integer month, Integer day, Integer hour, Integer minute);
     boolean existAfter(Integer year, Integer month, Integer day, Integer hour, Integer minute);
-    List<Location> findByPlanner(Long plannerId);
+    List<Location> findByPlannerId(Long plannerId);
 }
