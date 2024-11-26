@@ -29,7 +29,7 @@ public class AuthedLocationController {
 
     @MethodTimer(method = " 장소 작성")
     @PostMapping("/{plannerId}")
-    @Operation(summary = "장소 작성", description = "Planner의 장소를 기록합니다.")
+    @Operation(summary = "장소 작성", description = "Planner 의 장소를 기록합니다.")
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "201", description = "장소 등록 완료"),

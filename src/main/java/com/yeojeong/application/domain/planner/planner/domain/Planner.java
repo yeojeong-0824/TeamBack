@@ -33,6 +33,12 @@ public class Planner extends BaseTime {
     private int startDay;
 
     @Column(nullable = false)
+    private int startHour;
+
+    @Column(nullable = false)
+    private int startMinute;
+
+    @Column(nullable = false)
     private int endYear;
 
     @Column(nullable = false)
@@ -40,6 +46,12 @@ public class Planner extends BaseTime {
 
     @Column(nullable = false)
     private int endDay;
+
+    @Column(nullable = false)
+    private int endHour;
+
+    @Column(nullable = false)
+    private int endMinute;
 
     @OneToMany(mappedBy = "planner", fetch = FetchType.LAZY)
     private List<Location> locations;
@@ -50,9 +62,13 @@ public class Planner extends BaseTime {
         startYear = entity.getStartYear();
         startMonth = entity.getStartMonth();
         startDay = entity.getStartDay();
+        startHour = entity.getStartHour();
+        startMinute = entity.getStartMinute();
 
         endYear = entity.getEndYear();
         endMonth = entity.getEndMonth();
         endDay = entity.getEndDay();
+        endHour = entity.getEndHour();
+        endMinute = entity.getEndMinute();
     }
 }

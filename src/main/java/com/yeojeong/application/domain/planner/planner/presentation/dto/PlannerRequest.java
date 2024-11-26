@@ -18,13 +18,21 @@ public class PlannerRequest {
             Integer startMonth,
             @Min(1) @Max(31)
             Integer startDay,
+            @Min(0) @Max(23)
+            Integer startHour,
+            @Min(0) @Max(59)
+            Integer startMinute,
 
             @Min(2024)
             Integer endYear,
             @Min(1) @Max(12)
             Integer endMonth,
             @Min(1) @Max(31)
-            Integer endDay
+            Integer endDay,
+            @Min(0) @Max(23)
+            Integer endHour,
+            @Min(0) @Max(59)
+            Integer endMinute
 
     ) {
         public static Planner toEntity(PlannerRequest.Save dto) {
@@ -34,10 +42,14 @@ public class PlannerRequest {
                     .startYear(dto.startYear())
                     .startMonth(dto.startMonth())
                     .startDay(dto.startDay())
+                    .startHour(dto.startHour())
+                    .startMinute(dto.startMinute())
 
                     .endYear(dto.endYear())
                     .endMonth(dto.endMonth())
                     .endDay(dto.endDay())
+                    .endHour(dto.endHour())
+                    .endMinute(dto.endMinute())
                     .build();
         }
     }
@@ -52,13 +64,21 @@ public class PlannerRequest {
             Integer startMonth,
             @Min(1) @Max(31)
             Integer startDay,
+            @Min(0) @Max(23)
+            Integer startHour,
+            @Min(0) @Max(59)
+            Integer startMinute,
 
             @Min(2024)
             Integer endYear,
             @Min(1) @Max(12)
             Integer endMonth,
             @Min(1) @Max(31)
-            Integer endDay
+            Integer endDay,
+            @Min(0) @Max(23)
+            Integer endHour,
+            @Min(0) @Max(59)
+            Integer endMinute
     ) {
         public static Planner toEntity(PlannerRequest.Put dto) {
             return Planner.builder()
@@ -67,10 +87,14 @@ public class PlannerRequest {
                     .startYear(dto.startYear())
                     .startMonth(dto.startMonth())
                     .startDay(dto.startDay())
+                    .startHour(dto.startHour())
+                    .startMinute(dto.startMinute())
 
                     .endYear(dto.endYear())
                     .endMonth(dto.endMonth())
                     .endDay(dto.endDay())
+                    .endHour(dto.endHour())
+                    .endMinute(dto.endMinute())
                     .build();
         }
     }
