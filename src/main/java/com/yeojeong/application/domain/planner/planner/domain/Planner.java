@@ -53,6 +53,9 @@ public class Planner extends BaseTime {
     @Column(nullable = false)
     private int endMinute;
 
+    @Column(nullable = false)
+    private int locationCount;
+
     @OneToMany(mappedBy = "planner", fetch = FetchType.LAZY)
     private List<Location> locations;
 
@@ -70,5 +73,13 @@ public class Planner extends BaseTime {
         endDay = entity.getEndDay();
         endHour = entity.getEndHour();
         endMinute = entity.getEndMinute();
+    }
+
+    public void addLocation(){
+        locationCount += 1;
+    }
+
+    public void deleteLocation() {
+        locationCount -= 1;
     }
 }

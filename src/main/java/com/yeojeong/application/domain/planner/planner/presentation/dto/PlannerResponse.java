@@ -20,7 +20,9 @@ public class PlannerResponse {
             Integer endMonth,
             Integer endDay,
             Integer endHour,
-            Integer endMinute
+            Integer endMinute,
+
+            int locationCount
     ) {
         public static FindById toDto(Planner planner) {
             return FindById.builder()
@@ -38,6 +40,8 @@ public class PlannerResponse {
                     .endDay(planner.getEndDay())
                     .endHour(planner.getEndHour())
                     .endMinute(planner.getEndMinute())
+
+                    .locationCount(planner.getLocationCount())
                     .build();
         }
     }
