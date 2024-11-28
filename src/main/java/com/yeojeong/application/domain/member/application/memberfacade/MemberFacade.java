@@ -7,8 +7,11 @@ import org.springframework.data.domain.Page;
 public interface MemberFacade {
     MemberResponse.FindById findById(Long id);
     void save(MemberRequest.SaveMember dto);
-    void delete(long id, MemberRequest.Delete dto);
+    void delete(long id, MemberRequest.checkPassword dto);
+
     MemberResponse.FindById patch(Long id, MemberRequest.Patch dto);
+    MemberResponse.FindById patchPassword(Long id, MemberRequest.PatchPassword dto);
+    MemberResponse.patchKey checkPassword(Long id, String password);
 
     Page<MemberResponse.BoardInfo> findBoardById(long id, int page);
     Page<MemberResponse.CommentInfo> findCommentById(long id, int page);

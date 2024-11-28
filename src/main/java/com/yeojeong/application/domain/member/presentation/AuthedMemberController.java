@@ -87,12 +87,29 @@ public class AuthedMemberController {
             }
     )
     public ResponseEntity<Void> deleteByUserId(@Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
-                                                 @Valid @RequestBody MemberRequest.Delete dto) {
+                                                 @Valid @RequestBody MemberRequest.checkPassword dto) {
 
         Long id = SecurityUtil.getCurrentMemberId();
         memberFacade.delete(id, dto);
 
         return ResponseEntity.noContent().build();
+    }
+
+    @MethodTimer(method = "비밀번호 확인")
+    @PostMapping("/checkPassword")
+    @Operation(summary = "비밀번호 확인", description = "회원 비밀번호를 확인합니다.")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "204", description = "비밀번호 확인 완료"),
+                    @ApiResponse(responseCode = "400", description = "유저를 찾지 못함"),
+                    @ApiResponse(responseCode = "403", description = "비밀번호가 일치하지 않음"),
+            }
+    )
+    public ResponseEntity<MemberResponse.patchKey> checkPassword(@Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
+                                              @Valid @RequestBody MemberRequest.checkPassword dto) {
+
+        Long id = SecurityUtil.getCurrentMemberId();
+        return ResponseEntity.ok(memberFacade.checkPassword(id, dto.password()));
     }
 
     @MethodTimer(method = "회원 정보 수정 호출")
@@ -106,9 +123,26 @@ public class AuthedMemberController {
             }
     )
     public ResponseEntity<MemberResponse.FindById> patchMember(@Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
-                                                                 @Valid @RequestBody MemberRequest.Patch dto) {
+                                                               @Valid @RequestBody MemberRequest.Patch dto) {
 
         Long id = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(memberFacade.patch(id, dto));
+    }
+
+    @MethodTimer(method = "회원 비밀번호 수정 호출")
+    @PatchMapping("/password")
+    @Operation(summary = "유저 비밀번호 정보 수정", description = "회원 비밀번호 정보를 수정합니다")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "수정 완료"),
+                    @ApiResponse(responseCode = "400", description = "유저를 찾지 못함"),
+                    @ApiResponse(responseCode = "403", description = "권한 없음"),
+            }
+    )
+    public ResponseEntity<MemberResponse.FindById> patchPasswordMember(@Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
+                                                                       @Valid @RequestBody MemberRequest.PatchPassword dto) {
+
+        Long id = SecurityUtil.getCurrentMemberId();
+        return ResponseEntity.ok(memberFacade.patchPassword(id, dto));
     }
 }

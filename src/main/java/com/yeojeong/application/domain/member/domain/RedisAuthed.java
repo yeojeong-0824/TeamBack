@@ -11,8 +11,8 @@ import org.springframework.data.redis.core.TimeToLive;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@RedisHash("emailAuthed")
-public class EmailAuth {
+@RedisHash("redisAuthed")
+public class RedisAuthed {
     private String id;
     private String value;
     @TimeToLive
