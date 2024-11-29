@@ -4,9 +4,9 @@ import com.yeojeong.application.domain.planner.planner.presentation.dto.PlannerR
 import com.yeojeong.application.domain.planner.planner.presentation.dto.PlannerResponse;
 
 public interface PlannerFacade {
-    PlannerResponse.FindById save(PlannerRequest.Save dto);
-    PlannerResponse.FindById update(Long id, PlannerRequest.Put dto);
-    void delete(Long id);
-    PlannerResponse.FindById findById(Long id);
+    PlannerResponse.FindById save(PlannerRequest.Save dto, Long memberId);
+    PlannerResponse.FindById update(Long id, PlannerRequest.Put dto, Long memberId);
+    void delete(Long id, Long memberId);
+    PlannerResponse.FindById findById(Long id, Long memberId);
 
 }
