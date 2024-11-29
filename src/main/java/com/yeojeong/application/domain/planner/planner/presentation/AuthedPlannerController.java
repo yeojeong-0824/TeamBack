@@ -4,6 +4,7 @@ import com.yeojeong.application.config.util.customannotation.MethodTimer;
 import com.yeojeong.application.domain.planner.planner.application.plannerfacade.PlannerFacade;
 import com.yeojeong.application.domain.planner.planner.presentation.dto.PlannerRequest;
 import com.yeojeong.application.domain.planner.planner.presentation.dto.PlannerResponse;
+import com.yeojeong.application.security.config.SecurityUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -40,7 +41,8 @@ public class AuthedPlannerController {
             @Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
             @Valid @RequestBody PlannerRequest.Save dto
     ){
-        return ResponseEntity.status(HttpStatus.CREATED).body(plannerFacade.save(dto));
+        Long memberId = SecurityUtil.getCurrentMemberId();
+        return ResponseEntity.status(HttpStatus.CREATED).body(plannerFacade.save(dto, memberId));
     }
 
     @MethodTimer(method = "플래너 수정")
@@ -56,7 +58,8 @@ public class AuthedPlannerController {
             @Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
             @Valid @RequestBody PlannerRequest.Put dto,
             @PathVariable("id") Long id){
-        return ResponseEntity.ok(plannerFacade.update(id, dto));
+        Long memberId = SecurityUtil.getCurrentMemberId();
+        return ResponseEntity.ok(plannerFacade.update(id, dto, memberId));
     }
 
     @MethodTimer(method = "플래너 삭제")
@@ -69,7 +72,8 @@ public class AuthedPlannerController {
             }
     )
     public ResponseEntity<Void> delete(@PathVariable("id") Long id){
-        plannerFacade.delete(id);
+        Long memberId = SecurityUtil.getCurrentMemberId();
+        plannerFacade.delete(id, memberId);
         return ResponseEntity.noContent().build();
     }
 
@@ -83,6 +87,7 @@ public class AuthedPlannerController {
             }
     )
     public ResponseEntity<PlannerResponse.FindById> findById(@PathVariable("id") Long id){
-        return ResponseEntity.ok(plannerFacade.findById(id));
+        Long memberId = SecurityUtil.getCurrentMemberId();
+        return ResponseEntity.ok(plannerFacade.findById(id, memberId));
     }
 }

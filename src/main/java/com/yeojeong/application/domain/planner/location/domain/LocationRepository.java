@@ -32,4 +32,6 @@ public interface LocationRepository extends JpaRepository<Location, Long> {
                         @Param("day") int day,
                         @Param("hour") int hour,
                         @Param("minute") int minute);
+
+    void deleteByPlannerId(Long plannerId);
 }

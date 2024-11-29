@@ -32,8 +32,7 @@ public class FindBoardController {
                     @ApiResponse(responseCode = "404", description = "존재하는 게시글 없음")
             }
     )
-    public ResponseEntity<BoardResponse.FindById> findById(@PathVariable("id") Long id){
-        Long memberId = SecurityUtil.getCurrentMemberId();
+    public ResponseEntity<BoardResponse.FindById> findById(@PathVariable("id") Long id) {
         return ResponseEntity.ok(boardFacade.findById(id));
     }
 

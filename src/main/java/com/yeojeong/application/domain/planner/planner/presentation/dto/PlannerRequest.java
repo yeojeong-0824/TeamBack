@@ -1,5 +1,6 @@
 package com.yeojeong.application.domain.planner.planner.presentation.dto;
 
+import com.yeojeong.application.domain.member.domain.Member;
 import com.yeojeong.application.domain.planner.planner.domain.Planner;
 import jakarta.validation.constraints.*;
 import lombok.Builder;
@@ -35,7 +36,7 @@ public class PlannerRequest {
             Integer endMinute
 
     ) {
-        public static Planner toEntity(PlannerRequest.Save dto) {
+        public static Planner toEntity(PlannerRequest.Save dto, Member member) {
             return Planner.builder()
                     .title(dto.title())
 
@@ -50,6 +51,8 @@ public class PlannerRequest {
                     .endDay(dto.endDay())
                     .endHour(dto.endHour())
                     .endMinute(dto.endMinute())
+
+                    .member(member)
                     .build();
         }
     }

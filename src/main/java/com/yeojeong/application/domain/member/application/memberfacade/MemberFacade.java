@@ -15,6 +15,7 @@ public interface MemberFacade {
 
     Page<MemberResponse.BoardInfo> findBoardById(long id, int page);
     Page<MemberResponse.CommentInfo> findCommentById(long id, int page);
+    Page<MemberResponse.PlannerInfo> findPlannerById(long id, int page);
 
     void findPassword(String username, String email);
     void findUsernameByEmail(String email);

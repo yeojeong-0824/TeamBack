@@ -10,6 +10,7 @@ import com.yeojeong.application.domain.planner.planner.application.plannerservic
 import com.yeojeong.application.domain.planner.planner.domain.Planner;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,6 +23,7 @@ public class LocationFacadeImpl implements LocationFacade {
     private final LocationService locationService;
 
     @Override
+    @Transactional
     public LocationResponse.FindById save(LocationRequest.Save dto, Long plannerId) {
         Planner planner = plannerService.findById(plannerId);
 
@@ -47,6 +49,7 @@ public class LocationFacadeImpl implements LocationFacade {
     }
 
     @Override
+    @Transactional
     public void delete(Long id) {
         Location savedEntity = locationService.findById(id);
         Planner planner = plannerService.findById(savedEntity.getPlanner().getId());
@@ -59,6 +62,7 @@ public class LocationFacadeImpl implements LocationFacade {
     }
 
     @Override
+    @Transactional
     public LocationResponse.FindById update(LocationRequest.Put dto, Long id) {
         Location savedEntity = locationService.findById(id);
         Location entity = LocationRequest.Put.toEntity(dto);
