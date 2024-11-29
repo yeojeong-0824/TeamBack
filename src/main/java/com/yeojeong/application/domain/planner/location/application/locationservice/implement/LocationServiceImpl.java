@@ -37,6 +37,11 @@ public class LocationServiceImpl implements LocationService {
     }
 
     @Override
+    public void deleteByPlannerId(Long plannerId) {
+        locationRepository.deleteByPlannerId(plannerId);
+    }
+
+    @Override
     public boolean existBefore(Integer year, Integer month, Integer day, Integer hour, Integer minute) {
         return locationRepository.existsBefore(year, month, day, hour, minute);
     }

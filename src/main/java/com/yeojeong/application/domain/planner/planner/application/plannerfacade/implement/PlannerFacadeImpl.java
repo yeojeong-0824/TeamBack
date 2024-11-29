@@ -6,6 +6,7 @@ import com.yeojeong.application.domain.member.application.memberservice.MemberSe
 import com.yeojeong.application.domain.member.domain.Member;
 import com.yeojeong.application.domain.planner.location.application.locationservice.LocationService;
 import com.yeojeong.application.domain.planner.location.domain.Location;
+import com.yeojeong.application.domain.planner.location.presentation.dto.LocationResponse;
 import com.yeojeong.application.domain.planner.planner.application.plannerfacade.PlannerFacade;
 import com.yeojeong.application.domain.planner.planner.application.plannerservice.PlannerService;
 import com.yeojeong.application.domain.planner.planner.domain.Planner;
@@ -14,7 +15,9 @@ import com.yeojeong.application.domain.planner.planner.presentation.dto.PlannerR
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -26,15 +29,17 @@ public class PlannerFacadeImpl implements PlannerFacade {
     private final LocationService locationService;
 
     @Override
+    @Transactional
     public PlannerResponse.FindById save(PlannerRequest.Save dto, Long memberId) {
         Member member = memberService.findById(memberId);
         Planner entity = PlannerRequest.Save.toEntity(dto, member);
         Planner savedEntity = plannerService.save(entity);
 
-        return PlannerResponse.FindById.toDto(savedEntity);
+        return PlannerResponse.FindById.toDto(savedEntity, null);
     }
 
     @Override
+    @Transactional
     public PlannerResponse.FindById update(Long id, PlannerRequest.Put dto, Long memberId) {
         Planner savedEntity = plannerService.findById(id);
         checkMember(savedEntity, memberId);
@@ -50,13 +55,19 @@ public class PlannerFacadeImpl implements PlannerFacade {
         savedEntity.update(entity);
 
         Planner rtnEntity = plannerService.update(savedEntity);
-        return PlannerResponse.FindById.toDto(rtnEntity);
+
+        List<Location> locationList = locationService.findByPlannerId(id);
+        List<LocationResponse.FindById> locationFindByIdList = locationList.stream().map(LocationResponse.FindById::toDto).toList();
+
+        return PlannerResponse.FindById.toDto(rtnEntity, locationFindByIdList);
     }
 
     @Override
+    @Transactional
     public void delete(Long id, Long memberId) {
         Planner savedEntity = plannerService.findById(id);
         checkMember(savedEntity, memberId);
+        locationService.deleteByPlannerId(id);
 
         plannerService.delete(savedEntity);
     }
@@ -65,7 +76,10 @@ public class PlannerFacadeImpl implements PlannerFacade {
     public PlannerResponse.FindById findById(Long id, Long memberId) {
         Planner savedEntity = plannerService.findById(id);
         checkMember(savedEntity, memberId);
-        return PlannerResponse.FindById.toDto(savedEntity);
+        List<Location> locationList = locationService.findByPlannerId(id);
+        List<LocationResponse.FindById> locationFindByIdList = locationList.stream().map(LocationResponse.FindById::toDto).toList();
+
+        return PlannerResponse.FindById.toDto(savedEntity, locationFindByIdList);
     }
 
     private void checkMember(Planner planner, Long memberId) {

@@ -1,7 +1,11 @@
 package com.yeojeong.application.domain.planner.planner.presentation.dto;
 
+import com.yeojeong.application.domain.planner.location.domain.Location;
+import com.yeojeong.application.domain.planner.location.presentation.dto.LocationResponse;
 import com.yeojeong.application.domain.planner.planner.domain.Planner;
 import lombok.Builder;
+
+import java.util.List;
 
 public class PlannerResponse {
 
@@ -22,9 +26,10 @@ public class PlannerResponse {
             Integer endHour,
             Integer endMinute,
 
-            int locationCount
+            int locationCount,
+            List<LocationResponse.FindById> locationInfo
     ) {
-        public static FindById toDto(Planner planner) {
+        public static FindById toDto(Planner planner, List<LocationResponse.FindById> locationInfo) {
             return FindById.builder()
                     .id(planner.getId())
                     .title(planner.getTitle())
@@ -42,6 +47,7 @@ public class PlannerResponse {
                     .endMinute(planner.getEndMinute())
 
                     .locationCount(planner.getLocationCount())
+                    .locationInfo(locationInfo)
                     .build();
         }
     }

@@ -76,6 +76,22 @@ public class AuthedMemberController {
         return ResponseEntity.ok(memberFacade.findCommentById(id, page));
     }
 
+    @MethodTimer(method = "해당 회원이 작성한 플레너 호출")
+    @GetMapping("/planners")
+    @Operation(summary = "해당 회원의 플레너 확인", description = "해당 회원이 작성한 플레너의 정보를 받아옵니다.")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "조회 완료"),
+                    @ApiResponse(responseCode = "400", description = "유저를 찾지 못함"),
+                    @ApiResponse(responseCode = "403", description = "권한 없음"),
+            }
+    )
+    public ResponseEntity<Page<MemberResponse.CommentInfo>> findPlannerById(@RequestParam(required = false, defaultValue = "1", value = "page") int page) {
+
+        Long id = SecurityUtil.getCurrentMemberId();
+        return ResponseEntity.ok(memberFacade.findCommentById(id, page));
+    }
+
     @MethodTimer(method = "회원 탈퇴 호출")
     @DeleteMapping
     @Operation(summary = "유저 탈퇴", description = "회원 탈퇴를 진행합니다.")
