@@ -14,7 +14,7 @@ public class SecurityUtil {
         if (authentication != null && authentication.getPrincipal() instanceof MemberDetails) {
             return ((MemberDetails) authentication.getPrincipal()).getMemberId();
         }
-        return null;
+        throw new AuthedException("인증되지 않은 사용자 입니다.");
     }
 
     public static MemberDetails getCurrentMember(Authentication authResult) {

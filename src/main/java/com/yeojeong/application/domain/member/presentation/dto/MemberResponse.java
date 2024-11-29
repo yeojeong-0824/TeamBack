@@ -117,11 +117,10 @@ public class MemberResponse {
             Integer endHour,
             Integer endMinute,
 
-            int locationCount,
-            List<LocationResponse.FindById> locationInfo
+            int locationCount
     ) {
-        public static PlannerResponse.FindById toDto(Planner planner, List<LocationResponse.FindById> locationInfo) {
-            return PlannerResponse.FindById.builder()
+        public static PlannerInfo toDto(Planner planner) {
+            return PlannerInfo.builder()
                     .id(planner.getId())
                     .title(planner.getTitle())
 
@@ -138,7 +137,6 @@ public class MemberResponse {
                     .endMinute(planner.getEndMinute())
 
                     .locationCount(planner.getLocationCount())
-                    .locationInfo(locationInfo)
                     .build();
         }
     }

@@ -15,6 +15,8 @@ import com.yeojeong.application.domain.member.domain.RedisAuthed;
 import com.yeojeong.application.domain.member.domain.Member;
 import com.yeojeong.application.domain.member.presentation.dto.MemberRequest;
 import com.yeojeong.application.domain.member.presentation.dto.MemberResponse;
+import com.yeojeong.application.domain.planner.planner.application.plannerservice.PlannerService;
+import com.yeojeong.application.domain.planner.planner.domain.Planner;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -33,6 +35,7 @@ public class MemberFacadeImpl implements MemberFacade {
     private final MemberService memberService;
     private final BoardService boardService;
     private final CommentService commentService;
+    private final PlannerService plannerService;
 
     private final EmailManager emailManager;
     private final PasswordEncoder passwordEncoder;
@@ -123,6 +126,12 @@ public class MemberFacadeImpl implements MemberFacade {
     public Page<MemberResponse.CommentInfo> findCommentById(long id, int page) {
         Page<Comment> savedCommentPage = commentService.findByMemberId(id, page);
         return savedCommentPage.map(MemberResponse.CommentInfo::toDto);
+    }
+
+    @Override
+    public Page<MemberResponse.PlannerInfo> findPlannerById(long id, int page) {
+        Page<Planner> savedPlannerPage = plannerService.findByMemberId(id, page);
+        return savedPlannerPage.map(MemberResponse.PlannerInfo::toDto);
     }
 
 

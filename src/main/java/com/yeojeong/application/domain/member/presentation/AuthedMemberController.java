@@ -86,10 +86,10 @@ public class AuthedMemberController {
                     @ApiResponse(responseCode = "403", description = "권한 없음"),
             }
     )
-    public ResponseEntity<Page<MemberResponse.CommentInfo>> findPlannerById(@RequestParam(required = false, defaultValue = "1", value = "page") int page) {
+    public ResponseEntity<Page<MemberResponse.PlannerInfo>> findPlannerById(@RequestParam(required = false, defaultValue = "1", value = "page") int page) {
 
         Long id = SecurityUtil.getCurrentMemberId();
-        return ResponseEntity.ok(memberFacade.findCommentById(id, page));
+        return ResponseEntity.ok(memberFacade.findPlannerById(id, page));
     }
 
     @MethodTimer(method = "회원 탈퇴 호출")

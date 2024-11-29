@@ -39,7 +39,7 @@ public class PlannerServiceImpl implements PlannerService {
     }
 
     @Override
-    public Page<Planner> findByMember(Long memberId, int page) {
+    public Page<Planner> findByMemberId(Long memberId, int page) {
         PageRequest pageRequest = PageRequest.of(page - 1, 10, Sort.by("id").descending());
         return plannerRepository.findAllByMemberId(memberId, pageRequest);
     }
