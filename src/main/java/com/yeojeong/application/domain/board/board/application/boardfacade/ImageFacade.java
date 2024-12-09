@@ -29,7 +29,7 @@ public class ImageFacade {
             File dest = new File(serverSavePath);
             image.transferTo(dest);
         } catch (IOException e) {
-            throw new RuntimeException("파일을 저장하지 못했습니다.");
+            throw new RuntimeException(e);
         }
 
         return serverFileName;
