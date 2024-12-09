@@ -1,7 +1,6 @@
 package com.yeojeong.application.domain.planner.planner.application.plannerfacade.implement;
 
 import com.yeojeong.application.config.exception.OwnershipException;
-import com.yeojeong.application.config.exception.RequestDataException;
 import com.yeojeong.application.domain.member.application.memberservice.MemberService;
 import com.yeojeong.application.domain.member.domain.Member;
 import com.yeojeong.application.domain.planner.location.application.locationservice.LocationService;
@@ -44,15 +43,7 @@ public class PlannerFacadeImpl implements PlannerFacade {
         Planner savedEntity = plannerService.findById(id);
         checkMember(savedEntity, memberId);
 
-        if (locationService.existBefore(dto.startYear(), dto.startMonth(), dto.startDay(), dto.startHour(), dto.startMinute())){
-            throw new RequestDataException("시작 날짜 변경 : Planner 와 관련된 Location 정보가 존재합니다.");
-        }
-        if (locationService.existAfter(dto.endYear(), dto.endMonth(), dto.endDay(), dto.endHour(), dto.endMinute())){
-            throw new RequestDataException("끝나는 날짜 변경 : Planner 와 관련된 Location 정보가 존재합니다.");
-        }
-
-        Planner entity = PlannerRequest.Put.toEntity(dto);
-        savedEntity.update(entity);
+        savedEntity.update(dto);
 
         Planner rtnEntity = plannerService.update(savedEntity);
 
