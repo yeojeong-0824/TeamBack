@@ -44,7 +44,7 @@ public class SecurityFilter {
 
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/members/authed/**").authenticated()
-//                        .requestMatchers("/boards/authed/**").authenticated()
+                        .requestMatchers("/boards/authed/**").authenticated()
                         .requestMatchers("/boards/comments/authed/**").authenticated()
                         .anyRequest().permitAll());
 
