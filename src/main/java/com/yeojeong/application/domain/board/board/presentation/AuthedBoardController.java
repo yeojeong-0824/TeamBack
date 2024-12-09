@@ -1,6 +1,7 @@
 package com.yeojeong.application.domain.board.board.presentation;
 
 import com.yeojeong.application.domain.board.board.application.boardfacade.BoardFacade;
+import com.yeojeong.application.domain.board.board.application.boardfacade.ImageFacade;
 import com.yeojeong.application.domain.board.board.presentation.dto.BoardResponse;
 import com.yeojeong.application.domain.board.board.presentation.dto.BoardRequest;
 import com.yeojeong.application.config.util.customannotation.MethodTimer;
@@ -10,11 +11,13 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -24,6 +27,7 @@ import org.springframework.web.bind.annotation.*;
 public class AuthedBoardController {
 
     private final BoardFacade boardFacade;
+    private final ImageFacade imageFacade;
 
     @MethodTimer(method = "게시글 작성")
     @PostMapping
@@ -74,5 +78,10 @@ public class AuthedBoardController {
         Long memberId = SecurityUtil.getCurrentMemberId();
         boardFacade.delete(id, memberId);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/images")
+    public ResponseEntity<String> images(@RequestPart(value = "image", required = false) @NonNull MultipartFile image) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(imageFacade.saveImage(image));
     }
 }

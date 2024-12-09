@@ -5,6 +5,7 @@ import com.yeojeong.application.config.exception.response.ExceptionResponseSende
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.tomcat.util.http.fileupload.impl.InvalidContentTypeException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
 import java.text.MessageFormat;
@@ -66,7 +68,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(RequestDataException.class)
     public void handlerRequestDataException(RequestDataException ex, HttpServletRequest request, HttpServletResponse response) {
-        int httpStatus = HttpStatus.NOT_FOUND.value();
+        int httpStatus = HttpStatus.BAD_REQUEST.value();
         String message = ex.getMessage();
         ExceptionResponseSender.createExceptionResponse(httpStatus, request, response, message);
     }
@@ -89,6 +91,20 @@ public class GlobalExceptionHandler {
     public void handlerAuthException(AuthedException ex, HttpServletRequest request, HttpServletResponse response) {
         int httpStatus = HttpStatus.FORBIDDEN.value();
         String message = ex.getMessage();
+        ExceptionResponseSender.createExceptionResponse(httpStatus, request, response, message);
+    }
+
+    @ExceptionHandler(InvalidContentTypeException.class)
+    public void handlerInvalidContentTypeException(InvalidContentTypeException ex, HttpServletRequest request, HttpServletResponse response) {
+        int httpStatus = HttpStatus.BAD_REQUEST.value();
+        String message = "데이터 형식이 잘못되었습니다.";
+        ExceptionResponseSender.createExceptionResponse(httpStatus, request, response, message);
+    }
+
+    @ExceptionHandler(MaxUploadSizeExceededException.class)
+    public void handlerMaxUploadSizeExceededException(MaxUploadSizeExceededException ex, HttpServletRequest request, HttpServletResponse response) {
+        int httpStatus = HttpStatus.PAYLOAD_TOO_LARGE.value();
+        String message = "파일 크기가 너무 큽니다.";
         ExceptionResponseSender.createExceptionResponse(httpStatus, request, response, message);
     }
 
