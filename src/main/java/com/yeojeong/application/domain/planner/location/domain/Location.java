@@ -1,12 +1,16 @@
 package com.yeojeong.application.domain.planner.location.domain;
 
 import com.yeojeong.application.config.util.BaseTime;
+import com.yeojeong.application.domain.planner.location.presentation.dto.LocationRequest;
 import com.yeojeong.application.domain.planner.planner.domain.Planner;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Entity
 @Builder
@@ -18,25 +22,17 @@ public class Location extends BaseTime {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
+    private Long unixTime;
+
     @Column
     private int travelTime;
 
+    @Column
+    private String transportation;
 
-    @Column(nullable = false)
-    private int year;
-
-    @Column(nullable = false)
-    private int month;
-
-    @Column(nullable = false)
-    private int day;
-
-    @Column(nullable = false)
-    private int hour;
-
-    @Column(nullable = false)
-    private int minute;
-
+    @Column
+    private String transportationNote;
 
     @Column(nullable = false)
     private String place;
@@ -45,23 +41,28 @@ public class Location extends BaseTime {
     private String address;
 
     @Column
+    private String phoneNumber;
+
+    @Column
     private String memo;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "planner_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private Planner planner;
 
-    public void update(Location entity) {
-        this.travelTime = entity.getTravelTime();
-        this.year = entity.getYear();
-        this.month = entity.getMonth();
-        this.day = entity.getDay();
+    public void update(LocationRequest.Put dto) {
+        LocalDateTime localDateTime = LocalDateTime.of(dto.year(), dto.month(), dto.day(), dto.hour(), dto.minute());
+        this.unixTime = Timestamp.valueOf(localDateTime).getTime();
 
-        this.hour = entity.getHour();
-        this.minute = entity.getMinute();
+        this.travelTime = dto.travelTime();
+        this.transportation = dto.transportation();
+        this.transportationNote = dto.transportationNote();
 
-        this.place = entity.getPlace();
-        this.address = entity.getAddress();
-        this.memo = entity.getMemo();
+        this.place = dto.place();
+        this.address = dto.address();
+        this.phoneNumber = dto.phoneNumber();
+        this.memo = dto.memo();
     }
+
+
 }

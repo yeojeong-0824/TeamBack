@@ -3,14 +3,11 @@ package com.yeojeong.application.domain.member.presentation.dto;
 import com.yeojeong.application.domain.board.board.domain.Board;
 import com.yeojeong.application.domain.board.comment.domain.Comment;
 import com.yeojeong.application.domain.member.domain.Member;
-import com.yeojeong.application.domain.planner.location.presentation.dto.LocationResponse;
 import com.yeojeong.application.domain.planner.planner.domain.Planner;
-import com.yeojeong.application.domain.planner.planner.presentation.dto.PlannerResponse;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 public class MemberResponse {
     @Builder
@@ -104,18 +101,8 @@ public class MemberResponse {
     public record PlannerInfo(
             Long id,
             String title,
-
-            Integer startYear,
-            Integer startMonth,
-            Integer startDay,
-            Integer startHour,
-            Integer startMinute,
-
-            Integer endYear,
-            Integer endMonth,
-            Integer endDay,
-            Integer endHour,
-            Integer endMinute,
+            String subTitle,
+            int personnel,
 
             int locationCount
     ) {
@@ -123,19 +110,8 @@ public class MemberResponse {
             return PlannerInfo.builder()
                     .id(planner.getId())
                     .title(planner.getTitle())
-
-                    .startYear(planner.getStartYear())
-                    .startMonth(planner.getStartMonth())
-                    .startDay(planner.getStartDay())
-                    .startHour(planner.getStartHour())
-                    .startMinute(planner.getStartMinute())
-
-                    .endYear(planner.getEndYear())
-                    .endMonth(planner.getEndMonth())
-                    .endDay(planner.getEndDay())
-                    .endHour(planner.getEndHour())
-                    .endMinute(planner.getEndMinute())
-
+                    .subTitle(planner.getSubTitle())
+                    .personnel(planner.getPersonnel())
                     .locationCount(planner.getLocationCount())
                     .build();
         }

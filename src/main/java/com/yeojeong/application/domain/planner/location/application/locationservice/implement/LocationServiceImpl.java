@@ -42,17 +42,7 @@ public class LocationServiceImpl implements LocationService {
     }
 
     @Override
-    public boolean existBefore(Integer year, Integer month, Integer day, Integer hour, Integer minute) {
-        return locationRepository.existsBefore(year, month, day, hour, minute);
-    }
-
-    @Override
-    public boolean existAfter(Integer year, Integer month, Integer day, Integer hour, Integer minute) {
-        return locationRepository.existsAfter(year, month, day, hour, minute);
-    }
-
-    @Override
     public List<Location> findByPlannerId(Long plannerId) {
-        return locationRepository.findAllByPlannerId(plannerId);
+        return locationRepository.findAllByPlannerIdOrderByUnixTime(plannerId);
     }
 }

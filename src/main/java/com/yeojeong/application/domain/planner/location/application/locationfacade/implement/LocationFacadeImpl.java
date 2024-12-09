@@ -29,13 +29,6 @@ public class LocationFacadeImpl implements LocationFacade {
 
         Location entity = LocationRequest.Save.toEntity(dto, planner);
 
-        if (startDateValidation(planner, entity)){
-            throw new RequestDataException("Planner (시작 날짜) 에 해당하지 않는 날짜입니다.");
-        }
-        if (endDateValidation(planner, entity)) {
-            throw new RequestDataException("Planner (끝 날짜) 에 해당하지 않는 날짜입니다.");
-        }
-
         Location savedEntity = locationService.save(entity);
 
         if (planner.getLocationCount() >= 15) {
@@ -65,19 +58,10 @@ public class LocationFacadeImpl implements LocationFacade {
     @Transactional
     public LocationResponse.FindById update(LocationRequest.Put dto, Long id) {
         Location savedEntity = locationService.findById(id);
-        Location entity = LocationRequest.Put.toEntity(dto);
 
-        Planner planner = savedEntity.getPlanner();
+        savedEntity.update(dto);
 
-        if (startDateValidation(planner, entity)){
-            throw new RequestDataException("Planner (시작 날짜) 에 해당하지 않는 날짜입니다.");
-        }
-        if (endDateValidation(planner, entity)) {
-            throw new RequestDataException("Planner (끝 날짜) 에 해당하지 않는 날짜입니다.");
-        }
-
-        savedEntity.update(entity);
-        Location rtnEntity = locationService.update(entity);
+        Location rtnEntity = locationService.update(savedEntity);
         return LocationResponse.FindById.toDto(rtnEntity);
     }
 
@@ -93,33 +77,5 @@ public class LocationFacadeImpl implements LocationFacade {
         return locationList.stream()
                 .map(LocationResponse.FindById::toDto)
                 .collect(Collectors.toList());
-    }
-
-    public boolean startDateValidation (Planner planner, Location location) {
-        if (location.getYear() < planner.getStartYear()){
-            return true;
-        } else if (location.getYear() == planner.getStartYear() && location.getMonth() < planner.getStartMonth()) {
-            return true;
-        } else if (location.getYear() == planner.getStartYear() && location.getMonth() == planner.getStartMonth() && location.getDay() < planner.getStartDay()) {
-            return true;
-        } else if (location.getYear() == planner.getStartYear() && location.getMonth() == planner.getStartMonth() && location.getDay() == planner.getStartDay() && location.getHour() < planner.getStartHour()) {
-            return true;
-        } else if (location.getYear() == planner.getStartYear() && location.getMonth() == planner.getStartMonth() && location.getDay() == planner.getStartDay() && location.getHour() == planner.getStartHour() && location.getMinute() < planner.getStartMinute()) {
-            return true;
-        } return false;
-    }
-
-    public boolean endDateValidation (Planner planner, Location location) {
-        if (location.getYear() > planner.getEndYear()){
-            return true;
-        } else if (location.getYear() == planner.getEndYear() && location.getMonth() > planner.getEndMonth()) {
-            return true;
-        } else if (location.getYear() == planner.getEndYear() && location.getMonth() == planner.getEndMonth() && location.getDay() > planner.getEndDay()) {
-            return true;
-        } else if (location.getYear() == planner.getEndYear() && location.getMonth() == planner.getEndMonth() && location.getDay() == planner.getEndDay() && location.getHour() > planner.getEndHour()) {
-            return true;
-        } else if (location.getYear() == planner.getEndYear() && location.getMonth() == planner.getEndMonth() && location.getDay() == planner.getEndDay() && location.getHour() == planner.getEndHour() && location.getMinute() > planner.getEndMinute()) {
-            return true;
-        } return false;
     }
 }
