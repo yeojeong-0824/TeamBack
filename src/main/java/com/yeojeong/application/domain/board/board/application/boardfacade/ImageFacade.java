@@ -32,7 +32,7 @@ public class ImageFacade {
             throw new RuntimeException(e);
         }
 
-        return serverSavePath;
+        return serverFileName;
     }
 
     private boolean checkExtension(MultipartFile file) {
