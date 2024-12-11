@@ -53,8 +53,15 @@ public class MemberResponse {
             Integer avgScore,
             Integer commentCount,
 
+            MemberInfo member,
             TimeInfo time
     ){
+        @Builder
+        private record MemberInfo(
+                Long id,
+                String nickname
+        ){}
+
         @Builder
         private record TimeInfo(
                 LocalDateTime createTime,
@@ -73,6 +80,10 @@ public class MemberResponse {
                     .view(board.getView())
                     .avgScore(board.getAvgScore())
                     .commentCount(board.getCommentCount())
+                    .member(MemberInfo.builder()
+                            .id(board.getMember().getId())
+                            .nickname(board.getMember().getNickname())
+                            .build())
                     .time(TimeInfo.builder()
                             .createTime(board.getCreateAt())
                             .updateTime(board.getUpdateAt())
@@ -95,8 +106,15 @@ public class MemberResponse {
             Integer avgScore,
             Integer commentCount,
 
+            MemberInfo member,
             TimeInfo time
     ){
+        @Builder
+        private record MemberInfo(
+                Long id,
+                String nickname
+        ){}
+
         @Builder
         private record TimeInfo(
                 LocalDateTime createTime,
@@ -116,6 +134,11 @@ public class MemberResponse {
                     .view(board.getView())
                     .avgScore(board.getAvgScore())
                     .commentCount(board.getCommentCount())
+
+                    .member(MemberInfo.builder()
+                            .id(board.getMember().getId())
+                            .nickname(board.getMember().getNickname())
+                            .build())
                     .time(TimeInfo.builder()
                             .createTime(board.getCreateAt())
                             .updateTime(board.getUpdateAt())
