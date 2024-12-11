@@ -43,7 +43,6 @@ public class AuthedBoardController {
             @Valid @RequestBody BoardRequest.Save dto
     ){
         Long memberId = SecurityUtil.getCurrentMemberId();
-
         return ResponseEntity.status(HttpStatus.CREATED).body(boardFacade.save(dto, memberId));
     }
 

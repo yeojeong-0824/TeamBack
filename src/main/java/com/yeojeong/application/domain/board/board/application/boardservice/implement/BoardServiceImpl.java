@@ -27,7 +27,7 @@ public class BoardServiceImpl implements BoardService {
     private final AutocompleteService autocompleteService;
 
     @Override
-    public Board save(Board entity, Member member) {
+    public Board save(Board entity) {
         return boardRepository.save(entity);
     }
 
