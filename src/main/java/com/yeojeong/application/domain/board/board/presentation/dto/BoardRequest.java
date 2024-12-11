@@ -2,18 +2,32 @@ package com.yeojeong.application.domain.board.board.presentation.dto;
 
 import com.yeojeong.application.domain.board.board.domain.Board;
 import com.yeojeong.application.domain.member.domain.Member;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 
 public class BoardRequest {
 
     @Builder
     public record Save(
-            String locationName,
-            String formattedAddress,
-            String latitude,  // 위도
-            String longitude,  // 경도
+            @NotBlank// 도
             String title,
-            String body
+
+            @NotBlank
+            String body,
+
+            @NotBlank
+            String locationName,
+
+            @NotBlank
+            String formattedAddress,
+
+            @NotBlank
+            String latitude,
+
+            @NotBlank
+            String longitude,
+
+            Long plannerId
     ) {
         public static Board toEntity(Save dto, Member member) {
             return Board.builder()
@@ -25,19 +39,34 @@ public class BoardRequest {
                     .body(dto.body())
                     .view(0)
                     .commentCount(0)
-                    .member(member)
                     .avgScore(0)
+
+                    .member(member)
+                    .plannerId(dto.plannerId())
                     .build();
         }
     }
 
     public record Put(
-            String locationName,
-            String formattedAddress,
-            String latitude,  // 위도
-            String longitude,  // 경도
+            @NotBlank
             String title,
-            String body
+
+            @NotBlank
+            String body,
+
+            @NotBlank
+            String locationName,
+
+            @NotBlank
+            String formattedAddress,
+
+            @NotBlank
+            String latitude,
+
+            @NotBlank
+            String longitude,
+
+            Long plannerId
     ) {
         public static Board toEntity(Put dto) {
             return Board.builder()
@@ -47,6 +76,8 @@ public class BoardRequest {
                     .longitude(dto.longitude())
                     .title(dto.title())
                     .body(dto.body())
+
+                    .plannerId(dto.plannerId())
                     .build();
         }
     }

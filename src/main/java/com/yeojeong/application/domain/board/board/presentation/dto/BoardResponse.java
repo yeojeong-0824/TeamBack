@@ -74,6 +74,7 @@ public class BoardResponse {
             Integer commentCount,
 
             MemberInfo member,
+            Long planner,
             TimeInfo time
     ) {
         @Builder
@@ -102,10 +103,14 @@ public class BoardResponse {
                     .view(board.getView())
                     .avgScore(board.getAvgScore())
                     .commentCount(board.getCommentCount())
+
                     .member(MemberInfo.builder()
                             .userId(board.getMember().getId())
                             .nickname(board.getMember().getNickname())
                             .build())
+
+                    .planner(board.getPlannerId())
+
                     .time(TimeInfo.builder()
                             .createTime(board.getCreateAt())
                             .updateTime(board.getUpdateAt())

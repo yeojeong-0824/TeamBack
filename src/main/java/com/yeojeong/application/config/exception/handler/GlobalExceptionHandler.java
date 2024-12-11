@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.http.fileupload.impl.InvalidContentTypeException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -18,6 +19,7 @@ import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
 import java.text.MessageFormat;
+import java.time.DateTimeException;
 import java.util.List;
 
 @Slf4j
@@ -105,6 +107,20 @@ public class GlobalExceptionHandler {
     public void handlerMaxUploadSizeExceededException(MaxUploadSizeExceededException ex, HttpServletRequest request, HttpServletResponse response) {
         int httpStatus = HttpStatus.PAYLOAD_TOO_LARGE.value();
         String message = "파일 크기가 너무 큽니다.";
+        ExceptionResponseSender.createExceptionResponse(httpStatus, request, response, message);
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public void handlerHttpMessageNotReadableException(HttpMessageNotReadableException ex, HttpServletRequest request, HttpServletResponse response) {
+        int httpStatus = HttpStatus.BAD_REQUEST.value();
+        String message = ex.getMessage();
+        ExceptionResponseSender.createExceptionResponse(httpStatus, request, response, message);
+    }
+
+    @ExceptionHandler(DateTimeException.class)
+    public void handlerDateTimeException(DateTimeException ex, HttpServletRequest request, HttpServletResponse response) {
+        int httpStatus = HttpStatus.BAD_REQUEST.value();
+        String message = ex.getMessage();
         ExceptionResponseSender.createExceptionResponse(httpStatus, request, response, message);
     }
 

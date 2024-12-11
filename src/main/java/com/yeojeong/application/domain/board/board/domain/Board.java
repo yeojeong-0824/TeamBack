@@ -3,6 +3,7 @@ package com.yeojeong.application.domain.board.board.domain;
 import com.yeojeong.application.domain.board.comment.domain.Comment;
 import com.yeojeong.application.config.util.BaseTime;
 import com.yeojeong.application.domain.member.domain.Member;
+import com.yeojeong.application.domain.planner.planner.domain.Planner;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -52,6 +53,9 @@ public class Board extends BaseTime {
 
     @OneToMany(mappedBy = "board", fetch = FetchType.LAZY)
     private List<Comment> comments;
+
+    @Column()
+    private Long plannerId;
 
     @Column(nullable = false)
     private Integer avgScore;
