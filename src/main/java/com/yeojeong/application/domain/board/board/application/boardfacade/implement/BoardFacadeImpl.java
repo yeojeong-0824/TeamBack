@@ -9,6 +9,8 @@ import com.yeojeong.application.domain.board.board.presentation.dto.BoardRequest
 import com.yeojeong.application.domain.board.board.presentation.dto.BoardResponse;
 import com.yeojeong.application.domain.member.application.memberservice.MemberService;
 import com.yeojeong.application.domain.member.domain.Member;
+import com.yeojeong.application.domain.planner.planner.application.plannerservice.PlannerService;
+import com.yeojeong.application.domain.planner.planner.domain.Planner;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
@@ -20,13 +22,16 @@ public class BoardFacadeImpl implements BoardFacade {
 
     private final BoardService boardService;
     private final MemberService memberService;
+    private final PlannerService plannerService;
 
     @Override
     @Transactional
     public BoardResponse.FindById save(BoardRequest.Save dto, Long memberId) {
         Member member = memberService.findById(memberId);
+        if(!(dto.plannerId() == null)) plannerService.findById(dto.plannerId());
+
         Board entity = BoardRequest.Save.toEntity(dto, member);
-        Board savedEntity = boardService.save(entity, member);
+        Board savedEntity = boardService.save(entity);
 
         return BoardResponse.FindById.toDto(savedEntity);
     }
@@ -36,6 +41,7 @@ public class BoardFacadeImpl implements BoardFacade {
     public BoardResponse.FindById update(Long id, Long memberId, BoardRequest.Put dto) {
         Board savedEntity = boardService.findById(id);
         checkMember(savedEntity, memberId);
+        if(!(dto.plannerId() == null)) plannerService.findById(dto.plannerId());
 
         Board entity = BoardRequest.Put.toEntity(dto);
         savedEntity.update(entity);

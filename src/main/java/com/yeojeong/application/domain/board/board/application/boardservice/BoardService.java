@@ -5,7 +5,7 @@ import com.yeojeong.application.domain.member.domain.Member;
 import org.springframework.data.domain.Page;
 
 public interface BoardService {
-    Board save(Board entity, Member member);
+    Board save(Board entity);
     Board update(Board entity);
     Board findById(Long id);
     Page<Board> findByMember(Long memberId, int page);
