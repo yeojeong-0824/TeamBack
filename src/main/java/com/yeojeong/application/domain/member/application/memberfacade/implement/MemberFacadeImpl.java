@@ -72,12 +72,12 @@ public class MemberFacadeImpl implements MemberFacade {
 
     @Override
     @Transactional
-    public MemberResponse.FindById patch(Long id, MemberRequest.Patch dto) {
+    public MemberResponse.FindById patch(Long id, MemberRequest.Put dto) {
         Member savedEntity = memberService.findById(id);
         if(!redisAuthedService.checkKey(savedEntity.getUsername(), dto.key())) throw new AuthedException("인증이 되지 않은 사용자 입니다.");
         redisAuthedService.delete(dto.key());
 
-        Member entity = MemberRequest.Patch.toEntity(dto);
+        Member entity = MemberRequest.Put.toEntity(dto);
         savedEntity.patchMember(entity);
         Member rtnEntity = memberService.patch(savedEntity);
 

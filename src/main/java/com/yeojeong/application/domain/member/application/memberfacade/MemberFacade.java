@@ -9,7 +9,7 @@ public interface MemberFacade {
     void save(MemberRequest.SaveMember dto);
     void delete(long id, MemberRequest.checkPassword dto);
 
-    MemberResponse.FindById patch(Long id, MemberRequest.Patch dto);
+    MemberResponse.FindById patch(Long id, MemberRequest.Put dto);
     MemberResponse.FindById patchPassword(Long id, MemberRequest.PatchPassword dto);
     MemberResponse.patchKey checkPassword(Long id, String password);
 
