@@ -66,10 +66,8 @@ public class MemberFacadeImpl implements MemberFacade {
     @Transactional
     public void delete(Long id, MemberRequest.checkPassword dto) {
         Member savedEntity = memberService.findById(id);
-
-        String savedPassword = savedEntity.getPassword();
-        String takenPassword = dto.password();
-        if(!passwordEncoder.matches(takenPassword, savedPassword)) throw new RequestDataException("비밀번호가 일치하지 않습니다.");
+        if(!redisAuthedService.checkKey(savedEntity.getUsername(), dto.key())) throw new AuthedException("인증이 되지 않은 사용자 입니다.");
+        redisAuthedService.delete(dto.key());
 
         memberService.delete(savedEntity);
     }
