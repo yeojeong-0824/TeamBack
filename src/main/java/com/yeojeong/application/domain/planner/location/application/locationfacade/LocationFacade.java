@@ -6,9 +6,9 @@ import com.yeojeong.application.domain.planner.location.presentation.dto.Locatio
 import java.util.List;
 
 public interface LocationFacade {
-    LocationResponse.FindById save(LocationRequest.Save dto, Long plannerId);
-    void delete(Long id);
-    LocationResponse.FindById update(LocationRequest.Put dto, Long id);
-    LocationResponse.FindById findById(Long id);
-    List<LocationResponse.FindById> findByPlannerId(Long plannerId);
+    LocationResponse.FindById save(LocationRequest.Save dto, Long plannerId, Long memberId);
+    void delete(Long id, Long memberId);
+    LocationResponse.FindById update(LocationRequest.Put dto, Long id, Long memberId);
+    LocationResponse.FindById findById(Long id, Long memberId);
+    List<LocationResponse.FindById> findByPlannerId(Long plannerId, Long memberId);
 }

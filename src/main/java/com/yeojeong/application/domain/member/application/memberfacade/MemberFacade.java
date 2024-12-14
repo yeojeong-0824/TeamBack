@@ -4,18 +4,21 @@ import com.yeojeong.application.domain.member.presentation.dto.MemberRequest;
 import com.yeojeong.application.domain.member.presentation.dto.MemberResponse;
 import org.springframework.data.domain.Page;
 
+import java.util.List;
+
 public interface MemberFacade {
     MemberResponse.FindById findById(Long id);
     void save(MemberRequest.SaveMember dto);
-    void delete(long id, MemberRequest.checkPassword dto);
+    void delete(Long id, MemberRequest.checkPassword dto);
 
     MemberResponse.FindById patch(Long id, MemberRequest.Put dto);
     MemberResponse.FindById patchPassword(Long id, MemberRequest.PatchPassword dto);
     MemberResponse.patchKey checkPassword(Long id, String password);
 
-    Page<MemberResponse.BoardInfo> findBoardById(long id, int page);
-    Page<MemberResponse.CommentInfo> findCommentById(long id, int page);
-    Page<MemberResponse.PlannerInfo> findPlannerById(long id, int page);
+    Page<MemberResponse.BoardInfo> findBoardById(Long id, int page);
+    Page<MemberResponse.CommentInfo> findCommentById(Long id, int page);
+    Page<MemberResponse.PlannerInfo> findPlannerById(Long id, int page);
+    List<MemberResponse.LocationInfo> findLocationByDate(Long memberId, Long start, Long end);
 
     void findPassword(String username, String email);
     void findUsernameByEmail(String email);

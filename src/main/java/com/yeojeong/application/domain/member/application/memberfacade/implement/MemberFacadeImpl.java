@@ -15,6 +15,8 @@ import com.yeojeong.application.domain.member.domain.RedisAuthed;
 import com.yeojeong.application.domain.member.domain.Member;
 import com.yeojeong.application.domain.member.presentation.dto.MemberRequest;
 import com.yeojeong.application.domain.member.presentation.dto.MemberResponse;
+import com.yeojeong.application.domain.planner.location.application.locationservice.LocationService;
+import com.yeojeong.application.domain.planner.location.domain.Location;
 import com.yeojeong.application.domain.planner.planner.application.plannerservice.PlannerService;
 import com.yeojeong.application.domain.planner.planner.domain.Planner;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +25,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
@@ -36,6 +39,7 @@ public class MemberFacadeImpl implements MemberFacade {
     private final BoardService boardService;
     private final CommentService commentService;
     private final PlannerService plannerService;
+    private final LocationService locationService;
 
     private final EmailManager emailManager;
     private final PasswordEncoder passwordEncoder;
@@ -60,7 +64,7 @@ public class MemberFacadeImpl implements MemberFacade {
 
     @Override
     @Transactional
-    public void delete(long id, MemberRequest.checkPassword dto) {
+    public void delete(Long id, MemberRequest.checkPassword dto) {
         Member savedEntity = memberService.findById(id);
 
         String savedPassword = savedEntity.getPassword();
@@ -117,21 +121,26 @@ public class MemberFacadeImpl implements MemberFacade {
     }
 
     @Override
-    public Page<MemberResponse.BoardInfo> findBoardById(long id, int page) {
+    public Page<MemberResponse.BoardInfo> findBoardById(Long id, int page) {
         Page<Board> savedBoardPage = boardService.findByMember(id, page);
         return savedBoardPage.map(MemberResponse.BoardInfo::toDto);
     }
 
     @Override
-    public Page<MemberResponse.CommentInfo> findCommentById(long id, int page) {
+    public Page<MemberResponse.CommentInfo> findCommentById(Long id, int page) {
         Page<Comment> savedCommentPage = commentService.findByMemberId(id, page);
         return savedCommentPage.map(MemberResponse.CommentInfo::toDto);
     }
 
     @Override
-    public Page<MemberResponse.PlannerInfo> findPlannerById(long id, int page) {
+    public Page<MemberResponse.PlannerInfo> findPlannerById(Long id, int page) {
         Page<Planner> savedPlannerPage = plannerService.findByMemberId(id, page);
         return savedPlannerPage.map(MemberResponse.PlannerInfo::toDto);
+    }
+
+    public List<MemberResponse.LocationInfo> findLocationByDate(Long id, Long start, Long end) {
+        List<Location> savedLocationList = locationService.findByMemberAndDate(id, start, end);
+        return savedLocationList.stream().map(MemberResponse.LocationInfo::toDto).toList();
     }
 
 

@@ -42,7 +42,12 @@ public class LocationServiceImpl implements LocationService {
     }
 
     @Override
-    public List<Location> findByPlannerId(Long plannerId) {
-        return locationRepository.findAllByPlannerIdOrderByUnixTime(plannerId);
+    public List<Location> findByMemberAndDate(Long memberId, Long start, Long end) {
+        return locationRepository.findByMemberAndDate(memberId, start, end);
+    }
+
+    @Override
+    public List<Location> findByPlannerId(Long plannerId, Long memberId) {
+        return locationRepository.findByMemberAndPlanner(memberId, plannerId);
     }
 }

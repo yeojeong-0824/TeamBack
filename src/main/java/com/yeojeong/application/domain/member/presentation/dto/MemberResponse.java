@@ -4,6 +4,7 @@ import com.yeojeong.application.domain.board.board.domain.Board;
 import com.yeojeong.application.domain.board.board.presentation.dto.BoardResponse;
 import com.yeojeong.application.domain.board.comment.domain.Comment;
 import com.yeojeong.application.domain.member.domain.Member;
+import com.yeojeong.application.domain.planner.location.domain.Location;
 import com.yeojeong.application.domain.planner.planner.domain.Planner;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
@@ -171,4 +172,29 @@ public class MemberResponse {
     public record patchKey(
             String key
     ) {}
+
+    @Builder
+    public record LocationInfo(
+            Long id,
+            Integer travelTime,
+            Long unixTime,
+            String place,
+            String address,
+            String memo,
+            Long plannerId
+    ) {
+        public static LocationInfo toDto(Location location) {
+            return LocationInfo.builder()
+                    .id(location.getId())
+
+                    .travelTime(location.getTravelTime())
+                    .unixTime(location.getUnixTime())
+
+                    .place(location.getPlace())
+                    .address(location.getAddress())
+                    .memo(location.getMemo())
+                    .plannerId(location.getPlanner().getId())
+                    .build();
+        }
+    }
 }

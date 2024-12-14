@@ -20,7 +20,6 @@ import java.util.List;
 import java.util.Objects;
 
 @Service
-@Slf4j
 @RequiredArgsConstructor
 public class PlannerFacadeImpl implements PlannerFacade {
     private final MemberService memberService;
@@ -42,12 +41,12 @@ public class PlannerFacadeImpl implements PlannerFacade {
     public PlannerResponse.FindById update(Long id, PlannerRequest.Put dto, Long memberId) {
         Planner savedEntity = plannerService.findById(id);
         checkMember(savedEntity, memberId);
+        Planner entity = PlannerRequest.Put.toEntity(dto);
 
-        savedEntity.update(dto);
-
+        savedEntity.update(entity);
         Planner rtnEntity = plannerService.update(savedEntity);
 
-        List<Location> locationList = locationService.findByPlannerId(id);
+        List<Location> locationList = locationService.findByPlannerId(id, memberId);
         List<LocationResponse.FindById> locationFindByIdList = locationList.stream().map(LocationResponse.FindById::toDto).toList();
 
         return PlannerResponse.FindById.toDto(rtnEntity, locationFindByIdList);
@@ -67,7 +66,7 @@ public class PlannerFacadeImpl implements PlannerFacade {
     public PlannerResponse.FindById findById(Long id, Long memberId) {
         Planner savedEntity = plannerService.findById(id);
         checkMember(savedEntity, memberId);
-        List<Location> locationList = locationService.findByPlannerId(id);
+        List<Location> locationList = locationService.findByPlannerId(id, memberId);
         List<LocationResponse.FindById> locationFindByIdList = locationList.stream().map(LocationResponse.FindById::toDto).toList();
 
         return PlannerResponse.FindById.toDto(savedEntity, locationFindByIdList);

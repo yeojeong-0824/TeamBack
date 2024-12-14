@@ -82,8 +82,8 @@ public class AuthedPlannerController {
     @Operation(summary = "플래너 호출")
     @ApiResponses(
             value = {
-                    @ApiResponse(responseCode = "204", description = "플래너 삭제 성공"),
-                    @ApiResponse(responseCode = "400", description = "플래너 삭제 실패")
+                    @ApiResponse(responseCode = "200", description = "플래너 호출 성공"),
+                    @ApiResponse(responseCode = "400", description = "플래너 호출 실패")
             }
     )
     public ResponseEntity<PlannerResponse.FindById> findById(@PathVariable("id") Long id){
