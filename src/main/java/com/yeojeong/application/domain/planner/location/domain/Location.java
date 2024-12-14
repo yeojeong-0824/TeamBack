@@ -51,8 +51,7 @@ public class Location extends BaseTime {
     private Planner planner;
 
     public void update(LocationRequest.Put dto) {
-        LocalDateTime localDateTime = LocalDateTime.of(dto.year(), dto.month(), dto.day(), dto.hour(), dto.minute());
-        this.unixTime = Timestamp.valueOf(localDateTime).getTime();
+        this.unixTime = dto.unixTime();
 
         this.travelTime = dto.travelTime();
         this.transportation = dto.transportation();

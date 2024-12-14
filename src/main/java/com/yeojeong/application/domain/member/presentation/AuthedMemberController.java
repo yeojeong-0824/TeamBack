@@ -129,7 +129,7 @@ public class AuthedMemberController {
     }
 
     @MethodTimer(method = "회원 정보 수정 호출")
-    @PatchMapping
+    @PutMapping
     @Operation(summary = "유저 정보 수정", description = "회원 정보를 수정합니다")
     @ApiResponses(
             value = {
@@ -138,8 +138,8 @@ public class AuthedMemberController {
                     @ApiResponse(responseCode = "403", description = "권한 없음"),
             }
     )
-    public ResponseEntity<MemberResponse.FindById> patchMember(@Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
-                                                               @Valid @RequestBody MemberRequest.Patch dto) {
+    public ResponseEntity<MemberResponse.FindById> putMember(@Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
+                                                               @Valid @RequestBody MemberRequest.Put dto) {
 
         Long id = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(memberFacade.patch(id, dto));

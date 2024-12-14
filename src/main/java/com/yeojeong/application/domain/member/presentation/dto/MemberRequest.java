@@ -20,7 +20,7 @@ public class MemberRequest {
     ){}
 
     @Schema(name = "유저 정보 수정")
-    public record Patch(
+    public record Put(
             @NotBlank
             String key,
 
@@ -32,7 +32,7 @@ public class MemberRequest {
             @Schema(example = "90", nullable = true)
             Integer age
     ) {
-        public static Member toEntity(Patch dto) {
+        public static Member toEntity(Put dto) {
             return Member.builder()
                     .nickname(dto.nickname)
                     .age(dto.age)
