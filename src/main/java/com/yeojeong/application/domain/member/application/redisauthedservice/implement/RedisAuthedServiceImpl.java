@@ -16,16 +16,16 @@ public class RedisAuthedServiceImpl implements RedisAuthedService {
         redisAuthedRepository.save(redisAuthed);
     }
 
-    public RedisAuthed findById(String email) {
-        return redisAuthedRepository.findById(email).orElseThrow(() -> new AuthedException("정보를 찾을 수 없습니다."));
+    public RedisAuthed findById(String id) {
+        return redisAuthedRepository.findById(id).orElseThrow(() -> new AuthedException("정보를 찾을 수 없습니다."));
     }
 
-    public boolean checkKey(String email, String authKey) {
-        RedisAuthed entity = findById(email);
+    public boolean checkKey(String id, String authKey) {
+        RedisAuthed entity = findById(id);
         return entity.getValue().equals(authKey);
     }
 
-    public void delete(String email) {
-        redisAuthedRepository.deleteById(email);
+    public void delete(String id) {
+        redisAuthedRepository.deleteById(id);
     }
 }

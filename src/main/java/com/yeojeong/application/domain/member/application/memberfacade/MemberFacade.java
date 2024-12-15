@@ -9,11 +9,11 @@ import java.util.List;
 public interface MemberFacade {
     MemberResponse.FindById findById(Long id);
     void save(MemberRequest.SaveMember dto);
-    void delete(Long id, MemberRequest.Delete dto);
+    void delete(Long id);
 
     MemberResponse.FindById patch(Long id, MemberRequest.Put dto);
     MemberResponse.FindById patchPassword(Long id, MemberRequest.PatchPassword dto);
-    MemberResponse.patchKey checkPassword(Long id, String password);
+    void checkPassword(Long id, String password);
 
     Page<MemberResponse.BoardInfo> findBoardById(Long id, int page);
     Page<MemberResponse.CommentInfo> findCommentById(Long id, int page);
