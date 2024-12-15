@@ -65,7 +65,7 @@ public class MemberFacadeImpl implements MemberFacade {
     @Transactional
     public void delete(Long id, MemberRequest.Delete dto) {
         Member savedEntity = memberService.findById(id);
-        if(!redisAuthedService.checkKey(savedEntity.getUsername(), dto.key())) throw new AuthedException("인증이 되지 않은 사용자 입니다.");
+        if(!redisAuthedService.checkKey(savedEntity.getUsername(), AUTH_CHECK_KEY)) throw new AuthedException("인증이 되지 않은 사용자 입니다.");
         redisAuthedService.delete(dto.key());
 
         memberService.delete(savedEntity);
@@ -75,7 +75,7 @@ public class MemberFacadeImpl implements MemberFacade {
     @Transactional
     public MemberResponse.FindById patch(Long id, MemberRequest.Put dto) {
         Member savedEntity = memberService.findById(id);
-        if(!redisAuthedService.checkKey(savedEntity.getUsername(), dto.key())) throw new AuthedException("인증이 되지 않은 사용자 입니다.");
+        if(!redisAuthedService.checkKey(savedEntity.getUsername(), AUTH_CHECK_KEY)) throw new AuthedException("인증이 되지 않은 사용자 입니다.");
         redisAuthedService.delete(dto.key());
 
         Member entity = MemberRequest.Put.toEntity(dto);
@@ -91,7 +91,7 @@ public class MemberFacadeImpl implements MemberFacade {
         if(!dto.password().equals(dto.checkPassword())) throw new AuthedException("비밀번호가 일치하지 않습니다.");
 
         Member savedEntity = memberService.findById(id);
-        if(!redisAuthedService.checkKey(savedEntity.getUsername(), dto.key())) throw new AuthedException("인증이 되지 않은 사용자 입니다.");
+        if(!redisAuthedService.checkKey(savedEntity.getUsername(), AUTH_CHECK_KEY)) throw new AuthedException("인증이 되지 않은 사용자 입니다.");
         redisAuthedService.delete(dto.key());
 
         savedEntity.patchPassword(passwordEncoder.encode(dto.password()));
@@ -104,16 +104,16 @@ public class MemberFacadeImpl implements MemberFacade {
     public MemberResponse.patchKey checkPassword(Long id, String password) {
         Member savedEntity = memberService.findById(id);
         if(!passwordEncoder.matches(password, savedEntity.getPassword())) throw new AuthedException("비밀번호가 일치하지 않습니다.");
-        String key = UUID.randomUUID().toString();
+//        String key = UUID.randomUUID().toString();
 
         redisAuthedService.save(RedisAuthed.builder()
                 .id(savedEntity.getUsername())
-                .value(key)
+                .value(AUTH_CHECK_KEY)
                 .ttl(AUTH_TIME)
                 .build());
 
         return MemberResponse.patchKey.builder()
-                .key(key)
+                .key("test")
                 .build();
     }
 
