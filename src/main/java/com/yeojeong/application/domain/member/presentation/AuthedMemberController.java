@@ -119,11 +119,10 @@ public class AuthedMemberController {
                     @ApiResponse(responseCode = "403", description = "권한 없음"),
             }
     )
-    public ResponseEntity<Void> deleteByUserId(@Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
-                                                 @Valid @RequestBody MemberRequest.Delete dto) {
+    public ResponseEntity<Void> deleteByUserId() {
 
         Long id = SecurityUtil.getCurrentMemberId();
-        memberFacade.delete(id, dto);
+        memberFacade.delete(id);
 
         return ResponseEntity.noContent().build();
     }
@@ -138,11 +137,12 @@ public class AuthedMemberController {
                     @ApiResponse(responseCode = "403", description = "비밀번호가 일치하지 않음"),
             }
     )
-    public ResponseEntity<MemberResponse.patchKey> checkPassword(@Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
+    public ResponseEntity<Void> checkPassword(@Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
                                               @Valid @RequestBody MemberRequest.CheckPassword dto) {
 
         Long id = SecurityUtil.getCurrentMemberId();
-        return ResponseEntity.ok(memberFacade.checkPassword(id, dto.password()));
+        memberFacade.checkPassword(id, dto.password());
+        return ResponseEntity.noContent().build();
     }
 
     @MethodTimer(method = "회원 정보 수정 호출")
