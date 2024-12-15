@@ -1,6 +1,7 @@
 package com.yeojeong.application.domain.planner.location.domain;
 
 import com.yeojeong.application.config.util.BaseTime;
+import com.yeojeong.application.domain.member.domain.Member;
 import com.yeojeong.application.domain.planner.location.presentation.dto.LocationRequest;
 import com.yeojeong.application.domain.planner.planner.domain.Planner;
 import jakarta.persistence.*;
@@ -50,17 +51,21 @@ public class Location extends BaseTime {
     @JoinColumn(name = "planner_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private Planner planner;
 
-    public void update(LocationRequest.Put dto) {
-        this.unixTime = dto.unixTime();
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id", nullable = false, foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+    private Member member;
 
-        this.travelTime = dto.travelTime();
-        this.transportation = dto.transportation();
-        this.transportationNote = dto.transportationNote();
+    public void update(Location updateEntity) {
+        this.unixTime = updateEntity.getUnixTime();
 
-        this.place = dto.place();
-        this.address = dto.address();
-        this.phoneNumber = dto.phoneNumber();
-        this.memo = dto.memo();
+        this.travelTime = updateEntity.getTravelTime();
+        this.transportation = updateEntity.getTransportation();
+        this.transportationNote = updateEntity.getTransportationNote();
+
+        this.place = updateEntity.getPlace();
+        this.address = updateEntity.getAddress();
+        this.phoneNumber = updateEntity.getPhoneNumber();
+        this.memo = updateEntity.getMemo();
     }
 
 

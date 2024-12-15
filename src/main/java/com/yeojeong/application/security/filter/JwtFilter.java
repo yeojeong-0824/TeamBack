@@ -5,7 +5,6 @@ import com.yeojeong.application.config.exception.response.ExceptionResponseSende
 import com.yeojeong.application.domain.member.presentation.dto.MemberDetails;
 import com.yeojeong.application.domain.member.domain.Member;
 import com.yeojeong.application.security.config.JwtProvider;
-import com.yeojeong.application.security.config.refreshtoken.application.RefreshTokenService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -25,20 +24,19 @@ import java.io.IOException;
 public class JwtFilter extends OncePerRequestFilter {
 
     private final JwtProvider jwtProvider;
-    private final RefreshTokenService refreshTokenService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
-        String jwtTokenHeader = request.getHeader(jwtProvider.JWT_HEADER_STRING);
+        String jwtTokenHeader = request.getHeader(JwtProvider.JWT_HEADER_STRING);
 
         if(jwtTokenHeader == null) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        jwtTokenHeader = jwtTokenHeader.replace(jwtProvider.TOKEN_PREFIX_JWT, "");
+        jwtTokenHeader = jwtTokenHeader.replace(JwtProvider.TOKEN_PREFIX_JWT, "");
 
         try {
             Member jwtTokenMember = jwtProvider.decodeToken(jwtTokenHeader, jwtProvider.SECRET);

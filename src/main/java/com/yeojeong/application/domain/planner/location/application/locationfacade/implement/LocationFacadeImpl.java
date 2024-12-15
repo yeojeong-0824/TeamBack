@@ -1,6 +1,10 @@
 package com.yeojeong.application.domain.planner.location.application.locationfacade.implement;
 
+import com.yeojeong.application.config.exception.OwnershipException;
 import com.yeojeong.application.config.exception.RequestDataException;
+import com.yeojeong.application.domain.board.board.domain.Board;
+import com.yeojeong.application.domain.member.application.memberservice.MemberService;
+import com.yeojeong.application.domain.member.domain.Member;
 import com.yeojeong.application.domain.planner.location.application.locationfacade.LocationFacade;
 import com.yeojeong.application.domain.planner.location.application.locationservice.LocationService;
 import com.yeojeong.application.domain.planner.location.domain.Location;
@@ -19,21 +23,19 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class LocationFacadeImpl implements LocationFacade {
 
+    private final MemberService memberService;
     private final PlannerService plannerService;
     private final LocationService locationService;
 
     @Override
     @Transactional
-    public LocationResponse.FindById save(LocationRequest.Save dto, Long plannerId) {
+    public LocationResponse.FindById save(LocationRequest.Save dto, Long plannerId, Long memberId) {
+        Member member = memberService.findById(memberId);
         Planner planner = plannerService.findById(plannerId);
+        if (planner.getLocationCount() >= 15) throw new RequestDataException("Location 은 15개까지 생성 가능합니다.");
 
-        Location entity = LocationRequest.Save.toEntity(dto, planner);
-
+        Location entity = LocationRequest.Save.toEntity(dto, planner, member);
         Location savedEntity = locationService.save(entity);
-
-        if (planner.getLocationCount() >= 15) {
-            throw new RequestDataException("Location 은 15개까지 생성 가능합니다.");
-        }
 
         planner.addLocation();
         plannerService.save(planner);
@@ -43,39 +45,48 @@ public class LocationFacadeImpl implements LocationFacade {
 
     @Override
     @Transactional
-    public void delete(Long id) {
+    public void delete(Long id, Long memberId) {
         Location savedEntity = locationService.findById(id);
-        Planner planner = plannerService.findById(savedEntity.getPlanner().getId());
+        checkMember(savedEntity, memberId);
 
+        Planner planner = plannerService.findById(savedEntity.getPlanner().getId());
         locationService.delete(savedEntity);
 
         planner.deleteLocation();
         plannerService.save(planner);
-
     }
 
     @Override
     @Transactional
-    public LocationResponse.FindById update(LocationRequest.Put dto, Long id) {
+    public LocationResponse.FindById update(LocationRequest.Put dto, Long id, Long memberId) {
         Location savedEntity = locationService.findById(id);
+        checkMember(savedEntity, memberId);
 
-        savedEntity.update(dto);
+        Location entity = LocationRequest.Put.toEntity(dto);
+        savedEntity.update(entity);
 
         Location rtnEntity = locationService.update(savedEntity);
         return LocationResponse.FindById.toDto(rtnEntity);
     }
 
     @Override
-    public LocationResponse.FindById findById(Long id) {
-        locationService.findById(id);
-        return LocationResponse.FindById.toDto(locationService.findById(id));
+    public LocationResponse.FindById findById(Long id, Long memberId) {
+        Location saveEntity = locationService.findById(id);
+        checkMember(saveEntity, memberId);
+
+        return LocationResponse.FindById.toDto(saveEntity);
     }
 
     @Override
-    public List<LocationResponse.FindById> findByPlannerId(Long plannerId) {
-        List<Location> locationList = locationService.findByPlannerId(plannerId);
+    public List<LocationResponse.FindById> findByPlannerId(Long plannerId, Long memberId) {
+        List<Location> locationList = locationService.findByPlannerId(plannerId, memberId);
+
         return locationList.stream()
                 .map(LocationResponse.FindById::toDto)
                 .collect(Collectors.toList());
+    }
+
+    private void checkMember(Location location, Long memberId) {
+        if (!memberId.equals(location.getMember().getId())) throw new OwnershipException("게시글을 작성한 사용자가 아닙니다.");
     }
 }

@@ -58,7 +58,18 @@ public class MemberRequest {
             String password
     ) {}
 
-    public record checkPassword(
+    public record Delete(
+            @NotBlank
+            String key
+    ) {}
+
+    public record CheckPassword(
+            @NotBlank @Size(min = 8, max = 30)
+            @Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*[0-9])\\S+$", // 비밀번호 정규식
+                    message = "비밀번호는 영문(대,소문자)과 숫자가 적어도 1개 이상씩 포함되어야 합니다")
+            @Schema(example = "1q2w3e4r")
+            String checkPassword,
+
             @NotBlank @Size(min = 8, max = 30)
             @Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*[0-9])\\S+$", // 비밀번호 정규식
                     message = "비밀번호는 영문(대,소문자)과 숫자가 적어도 1개 이상씩 포함되어야 합니다")

@@ -15,9 +15,12 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -92,6 +95,20 @@ public class AuthedMemberController {
         return ResponseEntity.ok(memberFacade.findPlannerById(id, page));
     }
 
+    @MethodTimer(method = "날짜 범위에 작성된 장소 조회")
+    @GetMapping("/locations")
+    @Operation(summary = "날짜 범위에 대한 장소를 조회", description = "날찌 범위에 작성된 장소를 모두 조회합니다.")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "날짜 범위에 대한 장소 조회 완료"),
+                    @ApiResponse(responseCode = "403", description = "권한 없음")
+            }
+    )
+    public ResponseEntity<List<MemberResponse.LocationInfo>> findLocationByDate(@RequestParam("start") Long start, @RequestParam("end") Long end) {
+        Long memberId = SecurityUtil.getCurrentMemberId();
+        return ResponseEntity.status(HttpStatus.OK).body(memberFacade.findLocationByDate(memberId, start, end));
+    }
+
     @MethodTimer(method = "회원 탈퇴 호출")
     @DeleteMapping
     @Operation(summary = "유저 탈퇴", description = "회원 탈퇴를 진행합니다.")
@@ -103,7 +120,7 @@ public class AuthedMemberController {
             }
     )
     public ResponseEntity<Void> deleteByUserId(@Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
-                                                 @Valid @RequestBody MemberRequest.checkPassword dto) {
+                                                 @Valid @RequestBody MemberRequest.Delete dto) {
 
         Long id = SecurityUtil.getCurrentMemberId();
         memberFacade.delete(id, dto);
@@ -122,7 +139,7 @@ public class AuthedMemberController {
             }
     )
     public ResponseEntity<MemberResponse.patchKey> checkPassword(@Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
-                                              @Valid @RequestBody MemberRequest.checkPassword dto) {
+                                              @Valid @RequestBody MemberRequest.CheckPassword dto) {
 
         Long id = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(memberFacade.checkPassword(id, dto.password()));

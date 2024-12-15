@@ -41,10 +41,10 @@ public class Planner extends BaseTime {
     @JoinColumn(name = "member_id", nullable = false, foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private Member member;
 
-    public void update(PlannerRequest.Put dto) {
-        title = dto.title();
-        personnel = dto.personnel();
-        subTitle = dto.subTitle();
+    public void update(Planner updateEntity) {
+        title = updateEntity.getTitle();
+        personnel = updateEntity.getPersonnel();
+        subTitle = updateEntity.getSubTitle();
     }
 
     public void addLocation(){
