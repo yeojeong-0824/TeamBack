@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 @RestController
-@RequestMapping("/token")
+@RequestMapping("/tokens")
 @Slf4j
 @RequiredArgsConstructor
 public class RefreshController {

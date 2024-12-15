@@ -9,7 +9,7 @@ import java.util.List;
 public interface MemberFacade {
     MemberResponse.FindById findById(Long id);
     void save(MemberRequest.SaveMember dto);
-    void delete(Long id, MemberRequest.checkPassword dto);
+    void delete(Long id, MemberRequest.Delete dto);
 
     MemberResponse.FindById patch(Long id, MemberRequest.Put dto);
     MemberResponse.FindById patchPassword(Long id, MemberRequest.PatchPassword dto);

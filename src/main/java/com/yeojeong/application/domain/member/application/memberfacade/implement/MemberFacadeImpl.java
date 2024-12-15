@@ -2,7 +2,6 @@ package com.yeojeong.application.domain.member.application.memberfacade.implemen
 
 import com.yeojeong.application.config.exception.AuthedException;
 import com.yeojeong.application.config.exception.NotFoundDataException;
-import com.yeojeong.application.config.exception.RequestDataException;
 import com.yeojeong.application.domain.board.board.application.boardservice.BoardService;
 import com.yeojeong.application.domain.board.board.domain.Board;
 import com.yeojeong.application.domain.board.comment.application.commentservice.CommentService;
@@ -64,7 +63,7 @@ public class MemberFacadeImpl implements MemberFacade {
 
     @Override
     @Transactional
-    public void delete(Long id, MemberRequest.checkPassword dto) {
+    public void delete(Long id, MemberRequest.Delete dto) {
         Member savedEntity = memberService.findById(id);
         if(!redisAuthedService.checkKey(savedEntity.getUsername(), dto.key())) throw new AuthedException("인증이 되지 않은 사용자 입니다.");
         redisAuthedService.delete(dto.key());

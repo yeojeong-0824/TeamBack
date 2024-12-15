@@ -120,7 +120,7 @@ public class AuthedMemberController {
             }
     )
     public ResponseEntity<Void> deleteByUserId(@Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
-                                                 @Valid @RequestBody MemberRequest.checkPassword dto) {
+                                                 @Valid @RequestBody MemberRequest.Delete dto) {
 
         Long id = SecurityUtil.getCurrentMemberId();
         memberFacade.delete(id, dto);
@@ -139,7 +139,7 @@ public class AuthedMemberController {
             }
     )
     public ResponseEntity<MemberResponse.patchKey> checkPassword(@Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
-                                              @Valid @RequestBody MemberRequest.checkPassword dto) {
+                                              @Valid @RequestBody MemberRequest.CheckPassword dto) {
 
         Long id = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(memberFacade.checkPassword(id, dto.password()));
