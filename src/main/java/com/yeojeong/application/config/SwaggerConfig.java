@@ -44,7 +44,7 @@ public class SwaggerConfig {
 
     @Bean
     public GroupedOpenApi group4() {
-        String[] paths = {"/token", "/token/**"};
+        String[] paths = {"/tokens", "/tokens/**"};
 
         return GroupedOpenApi.builder()
                 .group("토큰 API")
