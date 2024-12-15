@@ -37,7 +37,7 @@ public class SecurityFilter {
                 .sessionManagement(auth -> auth.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
                 .addFilterAt(new LoginFilter(authenticationManager, jwtProvider, refreshTokenService, memberChangeService), UsernamePasswordAuthenticationFilter.class)
-                .addFilterAfter(new JwtFilter(jwtProvider, refreshTokenService), LoginFilter.class)
+                .addFilterAfter(new JwtFilter(jwtProvider), LoginFilter.class)
 
                 .exceptionHandling(auth -> auth
                         .accessDeniedHandler(new CustomAccessDeniedHandler()))
@@ -46,6 +46,7 @@ public class SecurityFilter {
                         .requestMatchers("/members/authed/**").authenticated()
                         .requestMatchers("/boards/authed/**").authenticated()
                         .requestMatchers("/boards/comments/authed/**").authenticated()
+                        .requestMatchers("/tokens/access").authenticated()
                         .anyRequest().permitAll());
 
         return http.build();

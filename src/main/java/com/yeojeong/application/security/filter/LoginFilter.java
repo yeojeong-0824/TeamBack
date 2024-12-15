@@ -4,8 +4,8 @@ import com.yeojeong.application.config.exception.response.ExceptionResponseSende
 import com.yeojeong.application.domain.member.application.membernotification.MemberChangeService;
 import com.yeojeong.application.domain.member.presentation.dto.MemberDetails;
 import com.yeojeong.application.security.config.JwtProvider;
-import com.yeojeong.application.security.config.refreshtoken.domain.RefreshToken;
 import com.yeojeong.application.security.config.refreshtoken.application.RefreshTokenService;
+import com.yeojeong.application.security.config.refreshtoken.application.implement.RefreshTokenFacadeImpl;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
@@ -14,7 +14,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -58,32 +57,18 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     protected void successfulAuthentication(HttpServletRequest request,
                                             HttpServletResponse response,
                                             FilterChain chain,
-                                            Authentication authResult) throws IOException, ServletException {
+                                            Authentication authResult) {
         MemberDetails member = (MemberDetails) authResult.getPrincipal();
         memberChangeService.loginSuccessAndLastLoginDateChange(member.getMemberId());
 
-        long loginTime = System.currentTimeMillis();
-
         String jwtToken = jwtProvider.createJwtToken(member);
-        String refreshToken = jwtProvider.createRefreshToken(member, loginTime);
+        String refreshToken = RefreshTokenFacadeImpl.createRefreshToken(refreshTokenService, member);
+        Cookie refreshCookie = RefreshTokenFacadeImpl.createRefreshCookie(refreshToken);
 
-        RefreshToken saveToken = RefreshToken.builder()
-                .id(refreshToken)
-                .expirationTime(loginTime + jwtProvider.REFRESH_EXPIRATION_TIME)
-                .ttl(jwtProvider.REFRESH_EXPIRATION_TIME / 1000)
-                .build();
+        response.addHeader(JwtProvider.JWT_HEADER_STRING, JwtProvider.TOKEN_PREFIX_JWT + jwtToken);
+        response.addCookie(refreshCookie);
 
-        refreshTokenService.save(saveToken);
-
-        // Refresh Token - Cookie
-        Cookie refreshCookie = refreshTokenService.setRefreshCookie(refreshToken);
-
-
-        // JWT token
-        response.addHeader(jwtProvider.JWT_HEADER_STRING, jwtProvider.TOKEN_PREFIX_JWT + jwtToken);
-        response.addHeader("Set-Cookie", refreshCookie.toString());
-
-        response.setStatus(201);
+        response.setStatus(HttpStatus.CREATED.value());
     }
 
     @Override

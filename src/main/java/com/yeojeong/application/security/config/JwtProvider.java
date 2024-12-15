@@ -18,18 +18,14 @@ public class JwtProvider {
     public String SECRET;
 
     //JWT Token는 1시간의 유효기간을 가짐
-    public final int JWT_EXPIRATION_TIME = 60 * 60 * 1000;
+    static public final int JWT_EXPIRATION_TIME = 60 * 60 * 1000;
 
     //Refresh Token는 하루의 유효기간을 가짐
-    public final int REFRESH_EXPIRATION_TIME = 24 * 60 * 60 * 1000;
+    static public final int REFRESH_EXPIRATION_TIME = 24 * 60 * 60 * 1000;
+    static public final String REFRESH_HEADER_STRING = "Refresh";
 
-    //JWT Token의 재발급은 10번으로 제한
-    public final String TOKEN_PREFIX_JWT = "Bearer ";
-
-    // cookie 에서는 빈칸이 되지 않아서 빈칸을 삭제
-    public final String TOKEN_PREFIX_REFRESH = "Bearer.";
-    public final String JWT_HEADER_STRING = "Authorization";
-    public final String REFRESH_HEADER_STRING = "Refresh";
+    static public final String TOKEN_PREFIX_JWT = "Bearer ";
+    static public final String JWT_HEADER_STRING = "Authorization";
 
     public String createJwtToken(MemberDetails member) {
 
@@ -43,7 +39,7 @@ public class JwtProvider {
 
     }
 
-    public String createRefreshToken(MemberDetails member, long createTime) {
+    static public String createRefreshToken(MemberDetails member, String createTime) {
 
         String role = member.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList().get(0);
 
@@ -51,7 +47,7 @@ public class JwtProvider {
                 .withExpiresAt(new Date(System.currentTimeMillis() + REFRESH_EXPIRATION_TIME))
                 .withClaim("id", member.getMemberId())
                 .withClaim("role", role)
-                .sign(Algorithm.HMAC512(String.valueOf(createTime + REFRESH_EXPIRATION_TIME)));
+                .sign(Algorithm.HMAC512(createTime));
 
     }
 
