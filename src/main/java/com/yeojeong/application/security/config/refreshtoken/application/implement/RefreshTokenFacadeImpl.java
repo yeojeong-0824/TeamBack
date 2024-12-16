@@ -52,7 +52,7 @@ public class RefreshTokenFacadeImpl implements RefreshTokenFacade {
 
     static public Cookie createRefreshCookie(String refreshToken) {
         Cookie refreshCookie = new Cookie(JwtProvider.REFRESH_HEADER_STRING, refreshToken);
-        refreshCookie.setAttribute("SameSite", "None");
+//        refreshCookie.setAttribute("SameSite", "None");
         refreshCookie.setHttpOnly(true);
         refreshCookie.setPath("/");
         refreshCookie.setSecure(true);

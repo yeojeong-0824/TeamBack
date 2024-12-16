@@ -21,7 +21,7 @@ public class RedisAuthedServiceImpl implements RedisAuthedService {
     }
 
     public boolean checkKey(String id, String authKey) {
-        RedisAuthed entity = findById(id);
+        RedisAuthed entity = redisAuthedRepository.findById(id).orElseThrow(() -> new AuthedException("정보를 찾을 수 없습니다."));
         return entity.getValue().equals(authKey);
     }
 
