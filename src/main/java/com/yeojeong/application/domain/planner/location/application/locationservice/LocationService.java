@@ -10,6 +10,8 @@ public interface LocationService {
     Location update(Location entity);
     void delete(Location entity);
     List<Location> findByPlannerId(Long plannerId, Long memberId);
-    void deleteByPlannerId(Long plannerId);
     List<Location> findByMemberAndDate(Long id, Long start, Long end);
+
+    void deleteByPlannerId(Long plannerId);
+    void deleteByMemberId(Long memberId);
 }

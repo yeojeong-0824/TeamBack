@@ -14,4 +14,6 @@ public interface LocationRepository extends JpaRepository<Location, Long> {
 
     @Query("SELECT l FROM Location l WHERE l.member.id = :memberId AND l.unixTime BETWEEN :start AND :end ORDER BY l.unixTime")
     List<Location> findByMemberAndDate(@Param("memberId") Long memberId, @Param("start") Long start, @Param("end") Long end);
+
+    void deleteByMemberId(Long memberId);
 }

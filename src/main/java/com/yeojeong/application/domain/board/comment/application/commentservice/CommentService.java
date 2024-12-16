@@ -12,4 +12,6 @@ public interface CommentService {
     Page<Comment> findByMemberId(Long memberId, int page);
     Comment update(Comment entity);
     void delete(Comment entity);
+
+    void deleteByMemberId(Long memberId);
 }

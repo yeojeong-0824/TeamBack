@@ -14,4 +14,6 @@ public interface BoardService {
     void createComment(Board board);
     void deleteComment(Board board);
     void updateComment(Board board);
+
+    void deleteByMemberId(Long memberId);
 }

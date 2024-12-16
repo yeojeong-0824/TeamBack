@@ -8,6 +8,8 @@ public interface PlannerService {
     Planner save(Planner entity);
     Planner update(Planner entity);
     Planner findById(Long id);
-    void delete(Planner entity);
     Page<Planner> findByMemberId(Long memberId, int page);
+
+    void delete(Planner entity);
+    void deleteByMemberId(Long memberId);
 }
