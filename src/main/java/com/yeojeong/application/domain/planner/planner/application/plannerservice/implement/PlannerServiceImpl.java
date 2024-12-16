@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -18,11 +19,13 @@ public class PlannerServiceImpl implements PlannerService {
     private final PlannerRepository plannerRepository;
 
     @Override
+    @Transactional
     public Planner save(Planner entity) {
         return plannerRepository.save(entity);
     }
 
     @Override
+    @Transactional
     public Planner update(Planner entity) {
         return plannerRepository.save(entity);
     }
@@ -34,6 +37,7 @@ public class PlannerServiceImpl implements PlannerService {
     }
 
     @Override
+    @Transactional
     public void delete(Planner entity) {
         plannerRepository.delete(entity);
     }
@@ -42,5 +46,11 @@ public class PlannerServiceImpl implements PlannerService {
     public Page<Planner> findByMemberId(Long memberId, int page) {
         PageRequest pageRequest = PageRequest.of(page - 1, 10, Sort.by("id").descending());
         return plannerRepository.findAllByMemberId(memberId, pageRequest);
+    }
+
+    @Override
+    @Transactional
+    public void deleteByMemberId(Long memberId) {
+        plannerRepository.deleteByMemberId(memberId);
     }
 }

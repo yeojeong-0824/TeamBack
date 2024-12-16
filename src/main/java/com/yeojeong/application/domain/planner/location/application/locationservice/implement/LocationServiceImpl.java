@@ -6,6 +6,7 @@ import com.yeojeong.application.domain.planner.location.domain.Location;
 import com.yeojeong.application.domain.planner.location.domain.LocationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -16,6 +17,7 @@ public class LocationServiceImpl implements LocationService {
     private final LocationRepository locationRepository;
 
     @Override
+    @Transactional
     public Location save(Location entity) {
         return locationRepository.save(entity);
     }
@@ -27,16 +29,19 @@ public class LocationServiceImpl implements LocationService {
     }
 
     @Override
+    @Transactional
     public Location update(Location entity) {
         return locationRepository.save(entity);
     }
 
     @Override
+    @Transactional
     public void delete(Location entity) {
         locationRepository.delete(entity);
     }
 
     @Override
+    @Transactional
     public void deleteByPlannerId(Long plannerId) {
         locationRepository.deleteByPlannerId(plannerId);
     }
@@ -49,5 +54,11 @@ public class LocationServiceImpl implements LocationService {
     @Override
     public List<Location> findByPlannerId(Long plannerId, Long memberId) {
         return locationRepository.findByMemberAndPlanner(memberId, plannerId);
+    }
+
+    @Override
+    @Transactional
+    public void deleteByMemberId(Long memberId) {
+        locationRepository.deleteByMemberId(memberId);
     }
 }

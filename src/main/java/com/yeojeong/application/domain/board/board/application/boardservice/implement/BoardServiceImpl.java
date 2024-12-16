@@ -107,6 +107,12 @@ public class BoardServiceImpl implements BoardService {
         boardRepository.save(board);
     }
 
+    @Override
+    @Transactional
+    public void deleteByMemberId(Long memberId) {
+        boardRepository.deleteByMemberId(memberId);
+    }
+
     private int getAvgScore(Board board) {
         int commentCount = board.getCommentCount();
         if(commentCount == 0) return 0;

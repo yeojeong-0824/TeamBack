@@ -68,6 +68,11 @@ public class MemberFacadeImpl implements MemberFacade {
         if(!redisAuthedService.checkKey(savedEntity.getUsername(), AUTH_CHECK_KEY)) throw new AuthedException("인증이 되지 않은 사용자 입니다.");
         redisAuthedService.delete(savedEntity.getUsername());
 
+        commentService.deleteByMemberId(id);
+        boardService.deleteByMemberId(id);
+        locationService.deleteByMemberId(id);
+        plannerService.deleteByMemberId(id);
+
         memberService.delete(savedEntity);
     }
 

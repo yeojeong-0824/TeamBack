@@ -17,4 +17,6 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
     Page<Board> findByFormattedAddressOrLocationNameContaining(@Param("keyword") String keyword, Pageable pageable);
     Page<Board> findByTitleIn(List<String> titles, Pageable pageable);
     Page<Board> findAllByMemberId(Long memberId, Pageable pageable);
+
+    void deleteByMemberId(Long memberId);
 }

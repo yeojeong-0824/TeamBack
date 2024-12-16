@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -23,11 +24,13 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
+    @Transactional
     public Comment save(Comment entity) {
         return commentRepository.save(entity);
     }
 
     @Override
+    @Transactional
     public void delete(Comment entity) {
         commentRepository.delete(entity);
     }
@@ -48,5 +51,11 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public Comment update(Comment entity) {
         return commentRepository.save(entity);
+    }
+
+    @Override
+    @Transactional
+    public void deleteByMemberId(Long memberId) {
+        commentRepository.deleteByMemberId(memberId);
     }
 }
