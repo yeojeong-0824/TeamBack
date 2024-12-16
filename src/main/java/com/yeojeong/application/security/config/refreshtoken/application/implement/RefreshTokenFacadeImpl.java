@@ -55,8 +55,9 @@ public class RefreshTokenFacadeImpl implements RefreshTokenFacade {
         refreshCookie.setAttribute("SameSite", "None");
         refreshCookie.setHttpOnly(true);
         refreshCookie.setPath("/");
-
+        refreshCookie.setSecure(true);
         return refreshCookie;
+
     }
 
     static public String getRefreshTokenByCookie(Cookie[] cookies) {
