@@ -1,10 +1,11 @@
 package com.yeojeong.application.domain.board.comment.presentation.dto;
 
+import com.yeojeong.application.domain.board.board.presentation.dto.BoardResponse;
 import com.yeojeong.application.domain.board.comment.domain.Comment;
+import com.yeojeong.application.domain.member.presentation.dto.MemberResponse;
+import com.yeojeong.application.domain.utildto.UtilResponse;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
-
-import java.time.LocalDateTime;
 
 public class CommentResponse {
     @Builder
@@ -14,34 +15,19 @@ public class CommentResponse {
             Integer score,
             String comment,
 
-            MemberInfo member,
-            TimeInfo time
+            MemberResponse.MemberInfo member,
+            UtilResponse.TimeInfo time
     ) {
-        @Builder
-        private record MemberInfo(
-                Long id,
-                String nickname
-        ){}
-
-        @Builder
-        private record TimeInfo(
-                LocalDateTime createTime,
-                LocalDateTime updateTime
-        ){}
-
-        public static FindByBoardId toDto(Comment entity) {
+        public static FindByBoardId toDto(Comment comment) {
 
             return FindByBoardId.builder()
-                    .id(entity.getId())
-                    .score(entity.getScore())
-                    .comment(entity.getComment())
-                    .member(MemberInfo.builder()
-                            .id(entity.getMember().getId())
-                            .nickname(entity.getMember().getNickname())
-                            .build())
-                    .time(TimeInfo.builder()
-                            .createTime(entity.getCreateAt())
-                            .updateTime(entity.getUpdateAt())
+                    .id(comment.getId())
+                    .score(comment.getScore())
+                    .comment(comment.getComment())
+                    .member(MemberResponse.MemberInfo.toDto(comment.getMember()))
+                    .time(UtilResponse.TimeInfo.builder()
+                            .createTime(comment.getCreateAt())
+                            .updateTime(comment.getUpdateAt())
                             .build())
                     .build();
         }
@@ -53,46 +39,20 @@ public class CommentResponse {
             Integer score,
             String comment,
 
-            MemberInfo member,
-            BoardInfo board,
-            TimeInfo time
+            MemberResponse.MemberInfo member,
+            BoardResponse.BoardInfo board,
+            UtilResponse.TimeInfo time
     ) {
-        @Builder
-        public record MemberInfo(
-                Long id,
-                String nickname
-        ){}
-
-        @Builder
-        public record BoardInfo(
-                Long id,
-                String title,
-                Integer score
-        ){}
-
-        @Builder
-        private record TimeInfo(
-                LocalDateTime createTime,
-                LocalDateTime updateTime
-        ){}
-
-        public static FindById toDto(Comment entity) {
+        public static FindById toDto(Comment comment) {
             return FindById.builder()
-                    .id(entity.getId())
-                    .score(entity.getScore())
-                    .comment(entity.getComment())
-                    .member(MemberInfo.builder()
-                            .id(entity.getMember().getId())
-                            .nickname(entity.getMember().getNickname())
-                            .build())
-                    .board(BoardInfo.builder()
-                            .id(entity.getBoard().getId())
-                            .title(entity.getBoard().getTitle())
-                            .score(entity.getBoard().getAvgScore())
-                            .build())
-                    .time(TimeInfo.builder()
-                            .createTime(entity.getCreateAt())
-                            .updateTime(entity.getUpdateAt())
+                    .id(comment.getId())
+                    .score(comment.getScore())
+                    .comment(comment.getComment())
+                    .member(MemberResponse.MemberInfo.toDto(comment.getMember()))
+                    .board(BoardResponse.BoardInfo.toDto(comment.getBoard()))
+                    .time(UtilResponse.TimeInfo.builder()
+                            .createTime(comment.getCreateAt())
+                            .updateTime(comment.getUpdateAt())
                             .build())
                     .build();
         }

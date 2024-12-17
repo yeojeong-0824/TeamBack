@@ -3,16 +3,32 @@ package com.yeojeong.application.domain.member.presentation.dto;
 import com.yeojeong.application.domain.board.board.domain.Board;
 import com.yeojeong.application.domain.board.board.presentation.dto.BoardResponse;
 import com.yeojeong.application.domain.board.comment.domain.Comment;
-import com.yeojeong.application.domain.board.comment.presentation.dto.CommentResponse;
 import com.yeojeong.application.domain.member.domain.Member;
 import com.yeojeong.application.domain.planner.location.domain.Location;
 import com.yeojeong.application.domain.planner.planner.domain.Planner;
+import com.yeojeong.application.domain.utildto.UtilResponse;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
-import java.time.LocalDateTime;
 
 public class MemberResponse {
+    @Builder
+    public record MemberInfo(
+            String username,
+            String nickname,
+            String email,
+            Integer age
+    ) {
+        public static MemberInfo toDto(Member member) {
+            return MemberInfo.builder()
+                    .username(member.getUsername())
+                    .nickname(member.getNickname())
+                    .email(member.getEmail())
+                    .age(member.getAge())
+                    .build();
+        }
+    }
+
     @Builder
     @Schema(name = "유저 정보 호출")
     public record FindById(
@@ -20,20 +36,15 @@ public class MemberResponse {
         String nickname,
         String email,
         Integer age,
-        TimeInfo time
+        UtilResponse.TimeInfo time
     ) {
-        @Builder
-        private record TimeInfo(
-                LocalDateTime createTime,
-                LocalDateTime updateTime
-        ) {}
         public static FindById toDto(Member entity) {
             return FindById.builder()
                     .username(entity.getUsername())
                     .nickname(entity.getNickname())
                     .email(entity.getEmail())
                     .age(entity.getAge())
-                    .time(TimeInfo.builder()
+                    .time(UtilResponse.TimeInfo.builder()
                             .createTime(entity.getCreateAt())
                             .updateTime(entity.getUpdateAt())
                             .build())
@@ -55,21 +66,9 @@ public class MemberResponse {
             Integer avgScore,
             Integer commentCount,
 
-            MemberInfo member,
-            TimeInfo time
+            MemberResponse.MemberInfo member,
+            UtilResponse.TimeInfo time
     ){
-        @Builder
-        private record MemberInfo(
-                Long id,
-                String nickname
-        ){}
-
-        @Builder
-        private record TimeInfo(
-                LocalDateTime createTime,
-                LocalDateTime updateTime
-        ){}
-
         public static BoardInfo toDto(Board board) {
             return BoardInfo.builder()
                     .id(board.getId())
@@ -82,11 +81,8 @@ public class MemberResponse {
                     .view(board.getView())
                     .avgScore(board.getAvgScore())
                     .commentCount(board.getCommentCount())
-                    .member(MemberInfo.builder()
-                            .id(board.getMember().getId())
-                            .nickname(board.getMember().getNickname())
-                            .build())
-                    .time(TimeInfo.builder()
+                    .member(MemberResponse.MemberInfo.toDto(board.getMember()))
+                    .time(UtilResponse.TimeInfo.builder()
                             .createTime(board.getCreateAt())
                             .updateTime(board.getUpdateAt())
                             .build())
@@ -101,40 +97,18 @@ public class MemberResponse {
             Integer score,
             String comment,
 
-            MemberInfo member,
-            BoardInfo board,
-            TimeInfo time
+            MemberResponse.MemberInfo member,
+            BoardResponse.BoardInfo board,
+            UtilResponse.TimeInfo time
     ){
-        @Builder
-        private record MemberInfo(
-                Long id,
-                String nickname
-        ){}
-
-        @Builder
-        private record TimeInfo(
-                LocalDateTime createTime,
-                LocalDateTime updateTime
-        ) {}
-
-        @Builder
-        private record BoardInfo(
-                Long id
-        ) {}
-
         public static CommentInfo toDto(Comment comment) {
             return CommentInfo.builder()
                     .id(comment.getId())
                     .score(comment.getScore())
                     .comment(comment.getComment())
-                    .board(BoardInfo.builder()
-                            .id(comment.getBoard().getId())
-                            .build())
-                    .member(MemberInfo.builder()
-                            .id(comment.getMember().getId())
-                            .nickname(comment.getMember().getNickname())
-                            .build())
-                    .time(TimeInfo.builder()
+                    .board(BoardResponse.BoardInfo.toDto(comment.getBoard()))
+                    .member(MemberResponse.MemberInfo.toDto(comment.getMember()))
+                    .time(UtilResponse.TimeInfo.builder()
                             .createTime(comment.getCreateAt())
                             .updateTime(comment.getUpdateAt())
                             .build())
@@ -148,7 +122,6 @@ public class MemberResponse {
             String title,
             String subTitle,
             int personnel,
-
             int locationCount
     ) {
         public static PlannerInfo toDto(Planner planner) {
@@ -161,11 +134,6 @@ public class MemberResponse {
                     .build();
         }
     }
-
-    @Builder
-    public record patchKey(
-            String key
-    ) {}
 
     @Builder
     public record LocationInfo(

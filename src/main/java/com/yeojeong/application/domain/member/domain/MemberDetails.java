@@ -1,6 +1,5 @@
-package com.yeojeong.application.domain.member.presentation.dto;
+package com.yeojeong.application.domain.member.domain;
 
-import com.yeojeong.application.domain.member.domain.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

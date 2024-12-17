@@ -1,6 +1,7 @@
 package com.yeojeong.application.domain.planner.location.presentation.dto;
 
 import com.yeojeong.application.domain.planner.location.domain.Location;
+import com.yeojeong.application.domain.utildto.UtilResponse;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 
@@ -14,19 +15,26 @@ public class LocationResponse {
             String place,
             String address,
             String memo,
-            Long plannerId
+            Long plannerId,
+
+            UtilResponse.TimeInfo time
     ) {
-        public static FindById toDto(Location entity) {
+        public static FindById toDto(Location location) {
             return FindById.builder()
-                    .id(entity.getId())
+                    .id(location.getId())
 
-                    .travelTime(entity.getTravelTime())
-                    .unixTime(entity.getUnixTime())
+                    .travelTime(location.getTravelTime())
+                    .unixTime(location.getUnixTime())
 
-                    .place(entity.getPlace())
-                    .address(entity.getAddress())
-                    .memo(entity.getMemo())
-                    .plannerId(entity.getPlanner().getId())
+                    .place(location.getPlace())
+                    .address(location.getAddress())
+                    .memo(location.getMemo())
+                    .plannerId(location.getPlanner().getId())
+
+                    .time(UtilResponse.TimeInfo.builder()
+                            .createTime(location.getCreateAt())
+                            .updateTime(location.getUpdateAt())
+                            .build())
                     .build();
         }
     }

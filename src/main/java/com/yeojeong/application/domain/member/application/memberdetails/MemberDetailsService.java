@@ -2,7 +2,7 @@ package com.yeojeong.application.domain.member.application.memberdetails;
 
 import com.yeojeong.application.domain.member.application.memberservice.MemberService;
 import com.yeojeong.application.domain.member.domain.Member;
-import com.yeojeong.application.domain.member.presentation.dto.MemberDetails;
+import com.yeojeong.application.domain.member.domain.MemberDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

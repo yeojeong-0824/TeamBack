@@ -1,7 +1,7 @@
 package com.yeojeong.application.security.config.refreshtoken.presentation;
 
 import com.yeojeong.application.config.util.customannotation.MethodTimer;
-import com.yeojeong.application.domain.member.presentation.dto.MemberDetails;
+import com.yeojeong.application.domain.member.domain.MemberDetails;
 import com.yeojeong.application.security.config.JwtProvider;
 import com.yeojeong.application.security.config.refreshtoken.application.refreshtokenfacade.RefreshTokenFacade;
 import io.swagger.v3.oas.annotations.Operation;
@@ -14,7 +14,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 
