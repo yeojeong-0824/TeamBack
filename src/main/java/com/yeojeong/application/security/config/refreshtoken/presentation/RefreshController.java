@@ -26,6 +26,29 @@ public class RefreshController {
 
     private final RefreshTokenFacade refreshTokenFacade;
 
+    @MethodTimer(method = "리프레시 토큰 삭제")
+    @Operation(summary = "리프레시 토큰 삭제")
+    @DeleteMapping("/refresh")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "204", description = "refresh token 삭제 성공"),
+                    @ApiResponse(responseCode = "400", description = "refresh token 삭제 실패"),
+                    @ApiResponse(responseCode = "403", description = "권한 없음"),
+            }
+    )
+    public ResponseEntity<Void> refreshDelete(
+            HttpServletRequest request, HttpServletResponse response
+    ){
+        Cookie[] cookies = request.getCookies();
+        refreshTokenFacade.remoteRefreshToken(cookies);
+        Cookie cookie = new Cookie(JwtProvider.REFRESH_HEADER_STRING, null);
+        cookie.setPath("/");
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
+
+        return ResponseEntity.noContent().build();
+    }
+
     @MethodTimer(method = "리프레시 토큰 재발급")
     @Operation(summary = "리프레시 토큰 재발급")
     @GetMapping("/refresh")
@@ -37,16 +60,16 @@ public class RefreshController {
             }
     )
     public ResponseEntity<Void> refresh(
-            HttpServletRequest request, HttpServletResponse response, Authentication authResult
+            HttpServletRequest request, HttpServletResponse response
     ){
         Cookie[] cookies = request.getCookies();
 
         MemberDetails memberDetails = refreshTokenFacade.getMemberDetailsByRefreshToken(cookies);
         Cookie refreshCookie = refreshTokenFacade.createNewRefreshTokenCookie(memberDetails);
+        response.addCookie(refreshCookie);
 
         String jwtToken = refreshTokenFacade.createNewJwtToken(memberDetails);
         response.addHeader(JwtProvider.JWT_HEADER_STRING, JwtProvider.TOKEN_PREFIX_JWT + jwtToken);
-        response.addCookie(refreshCookie);
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
