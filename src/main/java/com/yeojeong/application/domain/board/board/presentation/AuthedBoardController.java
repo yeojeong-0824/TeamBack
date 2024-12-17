@@ -1,7 +1,7 @@
 package com.yeojeong.application.domain.board.board.presentation;
 
 import com.yeojeong.application.domain.board.board.application.boardfacade.BoardFacade;
-import com.yeojeong.application.domain.board.board.application.boardfacade.ImageFacade;
+import com.yeojeong.application.domain.board.board.application.imagefacade.ImageFacade;
 import com.yeojeong.application.domain.board.board.presentation.dto.BoardResponse;
 import com.yeojeong.application.domain.board.board.presentation.dto.BoardRequest;
 import com.yeojeong.application.config.util.customannotation.MethodTimer;

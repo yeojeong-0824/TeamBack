@@ -1,23 +1,23 @@
-package com.yeojeong.application.domain.board.board.application.boardfacade;
+package com.yeojeong.application.domain.board.board.application.imagefacade.implement;
 
 import com.yeojeong.application.config.exception.RequestDataException;
+import com.yeojeong.application.domain.board.board.application.imagefacade.ImageFacade;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
-import java.util.logging.Logger;
-
 @Service
-public class ImageFacade {
-    private static final Logger logger = Logger.getLogger(ImageFacade.class.getName());
-    String[] checkExtensionArr = {"jpg", "jpeg", "png", "gif"};
+public class ImageFacadeImpl implements ImageFacade {
+    private final String[] checkExtensionArr = {"jpg"};
 
     @Value("${filePath}")
     private String PATH;
 
+    @Override
     public String saveImage(MultipartFile image) {
         if (!checkExtension(image)) throw new RequestDataException("파일의 형식이 잘못되었습니다.");
 
