@@ -3,7 +3,7 @@ package com.yeojeong.application.security.config.refreshtoken.presentation;
 import com.yeojeong.application.config.util.customannotation.MethodTimer;
 import com.yeojeong.application.domain.member.presentation.dto.MemberDetails;
 import com.yeojeong.application.security.config.JwtProvider;
-import com.yeojeong.application.security.config.refreshtoken.application.RefreshTokenFacade;
+import com.yeojeong.application.security.config.refreshtoken.application.refreshtokenfacade.RefreshTokenFacade;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;

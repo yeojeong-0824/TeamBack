@@ -4,8 +4,8 @@ import com.yeojeong.application.config.exception.response.ExceptionResponseSende
 import com.yeojeong.application.domain.member.application.membernotification.MemberChangeService;
 import com.yeojeong.application.domain.member.presentation.dto.MemberDetails;
 import com.yeojeong.application.security.config.JwtProvider;
-import com.yeojeong.application.security.config.refreshtoken.application.RefreshTokenService;
-import com.yeojeong.application.security.config.refreshtoken.application.implement.RefreshTokenFacadeImpl;
+import com.yeojeong.application.security.config.refreshtoken.application.refreshtokenservice.RefreshTokenService;
+import com.yeojeong.application.security.config.refreshtoken.application.refreshtokenfacade.implement.RefreshTokenFacadeImpl;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
@@ -27,7 +27,6 @@ import java.io.IOException;
 public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
     private final AuthenticationManager authenticationManager;
-    private final JwtProvider jwtProvider;
     private final RefreshTokenService refreshTokenService;
     private final MemberChangeService memberChangeService;
 
@@ -61,7 +60,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         MemberDetails member = (MemberDetails) authResult.getPrincipal();
         memberChangeService.loginSuccessAndLastLoginDateChange(member.getMemberId());
 
-        String jwtToken = jwtProvider.createJwtToken(member);
+        String jwtToken = JwtProvider.createJwtToken(member);
         String refreshToken = RefreshTokenFacadeImpl.createRefreshToken(refreshTokenService, member);
         Cookie refreshCookie = RefreshTokenFacadeImpl.createRefreshCookie(refreshToken);
 

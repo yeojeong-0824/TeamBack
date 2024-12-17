@@ -2,8 +2,9 @@ package com.yeojeong.application.security.filter;
 
 import com.yeojeong.application.domain.member.application.membernotification.MemberChangeService;
 import com.yeojeong.application.security.config.JwtProvider;
-import com.yeojeong.application.security.config.refreshtoken.application.RefreshTokenService;
+import com.yeojeong.application.security.config.refreshtoken.application.refreshtokenservice.RefreshTokenService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -23,9 +24,13 @@ import java.util.List;
 public class SecurityFilter {
 
     private final AuthenticationManager authenticationManager;
-    private final JwtProvider jwtProvider;
     private final RefreshTokenService refreshTokenService;
     private final MemberChangeService memberChangeService;
+
+    @Value("${JWTKey}")
+    public void setAppName(String key) {
+        JwtProvider.SECRET = key;
+    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -36,8 +41,8 @@ public class SecurityFilter {
                 .cors(auth -> auth.configurationSource(corsConfigurationSource()))
                 .sessionManagement(auth -> auth.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
-                .addFilterAt(new LoginFilter(authenticationManager, jwtProvider, refreshTokenService, memberChangeService), UsernamePasswordAuthenticationFilter.class)
-                .addFilterAfter(new JwtFilter(jwtProvider), LoginFilter.class)
+                .addFilterAt(new LoginFilter(authenticationManager, refreshTokenService, memberChangeService), UsernamePasswordAuthenticationFilter.class)
+                .addFilterAfter(new JwtFilter(), LoginFilter.class)
 
                 .exceptionHandling(auth -> auth
                         .accessDeniedHandler(new CustomAccessDeniedHandler()))
@@ -60,7 +65,7 @@ public class SecurityFilter {
         config.addAllowedMethod(CorsConfiguration.ALL);
         config.addAllowedHeader(CorsConfiguration.ALL);
 
-        config.setExposedHeaders(List.of(jwtProvider.REFRESH_HEADER_STRING, jwtProvider.JWT_HEADER_STRING));
+        config.setExposedHeaders(List.of(JwtProvider.REFRESH_HEADER_STRING, JwtProvider.JWT_HEADER_STRING));
         config.setMaxAge(3600L);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

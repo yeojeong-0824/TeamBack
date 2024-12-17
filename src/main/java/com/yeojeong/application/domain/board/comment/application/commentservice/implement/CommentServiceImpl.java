@@ -58,4 +58,10 @@ public class CommentServiceImpl implements CommentService {
     public void deleteByMemberId(Long memberId) {
         commentRepository.deleteByMemberId(memberId);
     }
+
+    @Override
+    @Transactional
+    public void deleteByBoardId(Long boardId) {
+        commentRepository.deleteByBoardId(boardId);
+    }
 }

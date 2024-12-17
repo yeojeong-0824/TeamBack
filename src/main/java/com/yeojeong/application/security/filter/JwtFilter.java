@@ -23,8 +23,6 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class JwtFilter extends OncePerRequestFilter {
 
-    private final JwtProvider jwtProvider;
-
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
@@ -39,7 +37,7 @@ public class JwtFilter extends OncePerRequestFilter {
         jwtTokenHeader = jwtTokenHeader.replace(JwtProvider.TOKEN_PREFIX_JWT, "");
 
         try {
-            Member jwtTokenMember = jwtProvider.decodeToken(jwtTokenHeader, jwtProvider.SECRET);
+            Member jwtTokenMember = JwtProvider.decodeToken(jwtTokenHeader, JwtProvider.SECRET);
             MemberDetails jwtTokenMemberDetails = new MemberDetails(jwtTokenMember);
             Authentication authentication =
                     new UsernamePasswordAuthenticationToken(jwtTokenMemberDetails, null, jwtTokenMemberDetails.getAuthorities());

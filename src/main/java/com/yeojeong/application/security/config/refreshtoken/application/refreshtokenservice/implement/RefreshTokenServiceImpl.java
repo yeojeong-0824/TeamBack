@@ -1,9 +1,9 @@
-package com.yeojeong.application.security.config.refreshtoken.application.implement;
+package com.yeojeong.application.security.config.refreshtoken.application.refreshtokenservice.implement;
 
 import com.yeojeong.application.config.exception.AuthedException;
 import com.yeojeong.application.security.config.refreshtoken.domain.RefreshToken;
 import com.yeojeong.application.security.config.refreshtoken.domain.RefreshTokenRepository;
-import com.yeojeong.application.security.config.refreshtoken.application.RefreshTokenService;
+import com.yeojeong.application.security.config.refreshtoken.application.refreshtokenservice.RefreshTokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

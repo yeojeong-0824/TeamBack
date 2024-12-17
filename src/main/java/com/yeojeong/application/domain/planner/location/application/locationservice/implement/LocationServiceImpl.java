@@ -41,12 +41,6 @@ public class LocationServiceImpl implements LocationService {
     }
 
     @Override
-    @Transactional
-    public void deleteByPlannerId(Long plannerId) {
-        locationRepository.deleteByPlannerId(plannerId);
-    }
-
-    @Override
     public List<Location> findByMemberAndDate(Long memberId, Long start, Long end) {
         return locationRepository.findByMemberAndDate(memberId, start, end);
     }
@@ -60,5 +54,11 @@ public class LocationServiceImpl implements LocationService {
     @Transactional
     public void deleteByMemberId(Long memberId) {
         locationRepository.deleteByMemberId(memberId);
+    }
+
+    @Override
+    @Transactional
+    public void deleteByPlannerId(Long plannerId) {
+        locationRepository.deleteByPlannerId(plannerId);
     }
 }

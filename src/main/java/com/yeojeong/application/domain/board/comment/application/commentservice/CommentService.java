@@ -14,4 +14,5 @@ public interface CommentService {
     void delete(Comment entity);
 
     void deleteByMemberId(Long memberId);
+    void deleteByBoardId(Long boardId);
 }
