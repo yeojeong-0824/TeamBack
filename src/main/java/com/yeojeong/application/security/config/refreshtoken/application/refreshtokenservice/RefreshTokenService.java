@@ -1,4 +1,4 @@
-package com.yeojeong.application.security.config.refreshtoken.application;
+package com.yeojeong.application.security.config.refreshtoken.application.refreshtokenservice;
 
 import com.yeojeong.application.security.config.refreshtoken.domain.RefreshToken;
 

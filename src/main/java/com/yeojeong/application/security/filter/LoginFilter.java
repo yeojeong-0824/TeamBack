@@ -4,8 +4,8 @@ import com.yeojeong.application.config.exception.response.ExceptionResponseSende
 import com.yeojeong.application.domain.member.application.membernotification.MemberChangeService;
 import com.yeojeong.application.domain.member.presentation.dto.MemberDetails;
 import com.yeojeong.application.security.config.JwtProvider;
-import com.yeojeong.application.security.config.refreshtoken.application.RefreshTokenService;
-import com.yeojeong.application.security.config.refreshtoken.application.implement.RefreshTokenFacadeImpl;
+import com.yeojeong.application.security.config.refreshtoken.application.refreshtokenservice.RefreshTokenService;
+import com.yeojeong.application.security.config.refreshtoken.application.refreshtokenfacade.implement.RefreshTokenFacadeImpl;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;

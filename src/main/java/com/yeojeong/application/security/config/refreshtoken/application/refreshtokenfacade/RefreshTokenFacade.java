@@ -1,4 +1,4 @@
-package com.yeojeong.application.security.config.refreshtoken.application;
+package com.yeojeong.application.security.config.refreshtoken.application.refreshtokenfacade;
 
 
 import com.yeojeong.application.domain.member.presentation.dto.MemberDetails;

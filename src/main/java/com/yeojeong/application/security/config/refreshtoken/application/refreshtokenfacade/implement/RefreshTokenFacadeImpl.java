@@ -1,11 +1,11 @@
-package com.yeojeong.application.security.config.refreshtoken.application.implement;
+package com.yeojeong.application.security.config.refreshtoken.application.refreshtokenfacade.implement;
 
 import com.yeojeong.application.config.exception.AuthedException;
 import com.yeojeong.application.domain.member.domain.Member;
 import com.yeojeong.application.domain.member.presentation.dto.MemberDetails;
 import com.yeojeong.application.security.config.JwtProvider;
-import com.yeojeong.application.security.config.refreshtoken.application.RefreshTokenFacade;
-import com.yeojeong.application.security.config.refreshtoken.application.RefreshTokenService;
+import com.yeojeong.application.security.config.refreshtoken.application.refreshtokenfacade.RefreshTokenFacade;
+import com.yeojeong.application.security.config.refreshtoken.application.refreshtokenservice.RefreshTokenService;
 import com.yeojeong.application.security.config.refreshtoken.domain.RefreshToken;
 import jakarta.servlet.http.Cookie;
 import lombok.RequiredArgsConstructor;
@@ -56,7 +56,7 @@ public class RefreshTokenFacadeImpl implements RefreshTokenFacade {
         return refreshCookie;
     }
 
-    public String getRefreshTokenByCookie(Cookie[] cookies) {
+    private String getRefreshTokenByCookie(Cookie[] cookies) {
         for (Cookie cookie : cookies) {
             if (cookie.getName().equals(JwtProvider.REFRESH_HEADER_STRING))
                 return cookie.getValue();
