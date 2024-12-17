@@ -16,14 +16,13 @@ import org.springframework.stereotype.Service;
 public class RefreshTokenFacadeImpl implements RefreshTokenFacade {
 
     private final RefreshTokenService refreshTokenService;
-    private final JwtProvider jwtProvider;
 
     public MemberDetails getMemberDetailsByRefreshToken(Cookie[] cookies) {
-        String refreshToken = RefreshTokenFacadeImpl.getRefreshTokenByCookie(cookies);
+        String refreshToken = getRefreshTokenByCookie(cookies);
         RefreshToken refreshTokenEntity = refreshTokenService.findById(refreshToken);
         refreshTokenService.delete(refreshTokenEntity);
 
-        Member member = jwtProvider.decodeToken(refreshToken, refreshTokenEntity.getKey());
+        Member member = JwtProvider.decodeToken(refreshToken, refreshTokenEntity.getKey());
         return new MemberDetails(member);
     }
 
@@ -33,7 +32,7 @@ public class RefreshTokenFacadeImpl implements RefreshTokenFacade {
     }
 
     public String createNewJwtToken(MemberDetails memberDetails) {
-        return jwtProvider.createJwtToken(memberDetails);
+        return JwtProvider.createJwtToken(memberDetails);
     }
 
     static public String createRefreshToken(RefreshTokenService refreshTokenService, MemberDetails member) {
@@ -57,7 +56,7 @@ public class RefreshTokenFacadeImpl implements RefreshTokenFacade {
         return refreshCookie;
     }
 
-    static public String getRefreshTokenByCookie(Cookie[] cookies) {
+    public String getRefreshTokenByCookie(Cookie[] cookies) {
         for (Cookie cookie : cookies) {
             if (cookie.getName().equals(JwtProvider.REFRESH_HEADER_STRING))
                 return cookie.getValue();

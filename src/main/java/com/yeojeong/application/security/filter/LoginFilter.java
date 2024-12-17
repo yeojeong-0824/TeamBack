@@ -27,7 +27,6 @@ import java.io.IOException;
 public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
     private final AuthenticationManager authenticationManager;
-    private final JwtProvider jwtProvider;
     private final RefreshTokenService refreshTokenService;
     private final MemberChangeService memberChangeService;
 
@@ -61,7 +60,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         MemberDetails member = (MemberDetails) authResult.getPrincipal();
         memberChangeService.loginSuccessAndLastLoginDateChange(member.getMemberId());
 
-        String jwtToken = jwtProvider.createJwtToken(member);
+        String jwtToken = JwtProvider.createJwtToken(member);
         String refreshToken = RefreshTokenFacadeImpl.createRefreshToken(refreshTokenService, member);
         Cookie refreshCookie = RefreshTokenFacadeImpl.createRefreshCookie(refreshToken);
 
