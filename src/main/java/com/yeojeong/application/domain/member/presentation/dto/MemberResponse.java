@@ -3,6 +3,7 @@ package com.yeojeong.application.domain.member.presentation.dto;
 import com.yeojeong.application.domain.board.board.domain.Board;
 import com.yeojeong.application.domain.board.board.presentation.dto.BoardResponse;
 import com.yeojeong.application.domain.board.comment.domain.Comment;
+import com.yeojeong.application.domain.board.comment.presentation.dto.CommentResponse;
 import com.yeojeong.application.domain.member.domain.Member;
 import com.yeojeong.application.domain.planner.location.domain.Location;
 import com.yeojeong.application.domain.planner.planner.domain.Planner;
@@ -97,17 +98,11 @@ public class MemberResponse {
     @Schema(name = "유저가 작성한 댓글 정보 호출")
     public record CommentInfo(
             Long id,
-            String locationName,
-            String formattedAddress,
-            String latitude,  // 위도
-            String longitude,  // 경도
-            String title,
-
-            Integer view,
-            Integer avgScore,
-            Integer commentCount,
+            Integer score,
+            String comment,
 
             MemberInfo member,
+            BoardInfo board,
             TimeInfo time
     ){
         @Builder
@@ -122,27 +117,26 @@ public class MemberResponse {
                 LocalDateTime updateTime
         ) {}
 
+        @Builder
+        private record BoardInfo(
+                Long id
+        ) {}
+
         public static CommentInfo toDto(Comment comment) {
-            Board board = comment.getBoard();
             return CommentInfo.builder()
-                    .id(board.getId())
-                    .locationName(board.getLocationName())
-                    .formattedAddress(board.getFormattedAddress())
-                    .latitude(board.getLatitude())
-                    .longitude(board.getLongitude())
-                    .title(board.getTitle())
-
-                    .view(board.getView())
-                    .avgScore(board.getAvgScore())
-                    .commentCount(board.getCommentCount())
-
+                    .id(comment.getId())
+                    .score(comment.getScore())
+                    .comment(comment.getComment())
+                    .board(BoardInfo.builder()
+                            .id(comment.getBoard().getId())
+                            .build())
                     .member(MemberInfo.builder()
-                            .id(board.getMember().getId())
-                            .nickname(board.getMember().getNickname())
+                            .id(comment.getMember().getId())
+                            .nickname(comment.getMember().getNickname())
                             .build())
                     .time(TimeInfo.builder()
-                            .createTime(board.getCreateAt())
-                            .updateTime(board.getUpdateAt())
+                            .createTime(comment.getCreateAt())
+                            .updateTime(comment.getUpdateAt())
                             .build())
                     .build();
         }
