@@ -1,7 +1,7 @@
 package com.yeojeong.application.security.config.refreshtoken.application.refreshtokenfacade;
 
 
-import com.yeojeong.application.domain.member.presentation.dto.MemberDetails;
+import com.yeojeong.application.domain.member.domain.MemberDetails;
 import jakarta.servlet.http.Cookie;
 
 public interface RefreshTokenFacade {

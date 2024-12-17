@@ -1,7 +1,7 @@
 package com.yeojeong.application.security.config;
 
 import com.yeojeong.application.config.exception.AuthedException;
-import com.yeojeong.application.domain.member.presentation.dto.MemberDetails;
+import com.yeojeong.application.domain.member.domain.MemberDetails;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
