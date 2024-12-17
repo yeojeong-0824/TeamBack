@@ -14,20 +14,21 @@ import java.util.Date;
 @Configuration
 public class JwtProvider {
 
-    @Value("${JWTKey}")
-    public String SECRET;
+    static public String SECRET;
 
-    //JWT Token는 1시간의 유효기간을 가짐
     static public final int JWT_EXPIRATION_TIME = 60 * 60 * 1000;
-
-    //Refresh Token는 하루의 유효기간을 가짐
     static public final int REFRESH_EXPIRATION_TIME = 24 * 60 * 60 * 1000;
-    static public final String REFRESH_HEADER_STRING = "Refresh";
 
+    static public final String REFRESH_HEADER_STRING = "Refresh";
     static public final String TOKEN_PREFIX_JWT = "Bearer ";
     static public final String JWT_HEADER_STRING = "Authorization";
 
-    public String createJwtToken(MemberDetails member) {
+    @Value("${JWTKey}")
+    public void setAppName(String key) {
+        JwtProvider.SECRET = key;
+    }
+
+    static public String createJwtToken(MemberDetails member) {
 
         String role = member.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList().get(0);
 
@@ -51,7 +52,7 @@ public class JwtProvider {
 
     }
 
-    public Member decodeToken(String token, String key) {
+    static public Member decodeToken(String token, String key) {
         DecodedJWT decodedJWT = JWT.require(Algorithm.HMAC512(key))
                 .build()
                 .verify(token);
