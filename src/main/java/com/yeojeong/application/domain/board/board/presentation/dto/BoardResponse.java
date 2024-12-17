@@ -23,7 +23,8 @@ public class BoardResponse {
             Integer avgScore,
             Integer commentCount,
 
-            MemberResponse.MemberInfo memberInfo
+            MemberResponse.MemberInfo memberInfo,
+            UtilResponse.TimeInfo time
     ) {
         public static BoardInfo toDto(Board board) {
             return BoardInfo.builder()
@@ -41,6 +42,10 @@ public class BoardResponse {
                     .commentCount(board.getCommentCount())
 
                     .memberInfo(MemberResponse.MemberInfo.toDto(board.getMember()))
+                    .time(UtilResponse.TimeInfo.builder()
+                            .createTime(board.getCreateAt())
+                            .updateTime(board.getUpdateAt())
+                            .build())
                     .build();
         }
     }
