@@ -32,7 +32,9 @@ public class CommentFacadeImpl implements CommentFacade {
         Comment entity = CommentRequest.Save.toEntity(dto, board, member);
         Comment savedEntity = commentService.save(entity);
 
-        boardService.createComment(board);
+        board.commentCountUp();
+        if(dto.score() != 0) boardService.updateComment(board);
+
         return CommentResponse.FindById.toDto(savedEntity);
     }
 
@@ -43,9 +45,10 @@ public class CommentFacadeImpl implements CommentFacade {
         checkMember(savedEntity, memberId);
 
         Board board = savedEntity.getBoard();
-        commentService.delete(savedEntity);
+        board.commentCountDown();
+        if(savedEntity.getScore() != 0) boardService.updateComment(board);
 
-        if(savedEntity.getScore() != 0) boardService.deleteComment(board);
+        commentService.delete(savedEntity);
         return BoardResponse.FindById.toDto(board);
     }
 
