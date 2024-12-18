@@ -1,14 +1,14 @@
 spring:
   data:
     redis:
-      host: localhost
+      host: redis
       port: 6379
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/website
     username: root
-    password: ${password}
+    password: 1234
 
   jpa:
     open-in-view: true
@@ -24,3 +24,21 @@ autocomplete:
   suffix: "_suffix"
   key: "autocomplete"
   score-key: "autocomplete:score"
+
+logging:
+  level:
+    org:
+      springframework:
+        r2bc: DEBUG
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus
+    prometheus:
+      enabled: true
+  prometheus:
+    metrics:
+      export:
+        enabled: true
