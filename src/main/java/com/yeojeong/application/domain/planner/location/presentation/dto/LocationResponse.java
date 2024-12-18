@@ -31,10 +31,7 @@ public class LocationResponse {
                     .memo(location.getMemo())
                     .plannerId(location.getPlanner().getId())
 
-                    .time(UtilResponse.TimeInfo.builder()
-                            .createTime(location.getCreateAt())
-                            .updateTime(location.getUpdateAt())
-                            .build())
+                    .time(UtilResponse.TimeInfo.toDto(location))
                     .build();
         }
     }
