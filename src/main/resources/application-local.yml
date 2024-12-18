@@ -17,7 +17,7 @@ spring:
     show-sql: false
 
 JWTKey: DevKey12
-EmailPassword: uagpjpblfgzpklch
+EmailPassword: ${emailPassword}
 
 autocomplete:
   limit: 10
