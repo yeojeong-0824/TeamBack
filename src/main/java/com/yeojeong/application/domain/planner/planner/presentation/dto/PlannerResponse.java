@@ -29,10 +29,7 @@ public class PlannerResponse {
 
                     .locationCount(planner.getLocationCount())
                     .locationInfo(locationInfo)
-                    .time(UtilResponse.TimeInfo.builder()
-                            .createTime(planner.getCreateAt())
-                            .updateTime(planner.getUpdateAt())
-                            .build())
+                    .time(UtilResponse.TimeInfo.toDto(planner))
                     .build();
         }
     }

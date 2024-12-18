@@ -42,10 +42,7 @@ public class BoardResponse {
                     .commentCount(board.getCommentCount())
 
                     .memberInfo(MemberResponse.MemberInfo.toDto(board.getMember()))
-                    .time(UtilResponse.TimeInfo.builder()
-                            .createTime(board.getCreateAt())
-                            .updateTime(board.getUpdateAt())
-                            .build())
+                    .time(UtilResponse.TimeInfo.toDto(board))
                     .build();
         }
     }
@@ -79,10 +76,7 @@ public class BoardResponse {
                     .avgScore(board.getAvgScore())
                     .commentCount(board.getCommentCount())
                     .member(MemberResponse.MemberInfo.toDto(board.getMember()))
-                    .time(UtilResponse.TimeInfo.builder()
-                            .createTime(board.getCreateAt())
-                            .updateTime(board.getUpdateAt())
-                            .build())
+                    .time(UtilResponse.TimeInfo.toDto(board))
                     .build();
         }
     }
@@ -124,10 +118,7 @@ public class BoardResponse {
                     .member(MemberResponse.MemberInfo.toDto(board.getMember()))
                     .planner(board.getPlannerId())
 
-                    .time(UtilResponse.TimeInfo.builder()
-                            .createTime(board.getCreateAt())
-                            .updateTime(board.getUpdateAt())
-                            .build())
+                    .time(UtilResponse.TimeInfo.toDto(board))
                     .build();
         }
     }

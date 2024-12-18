@@ -38,16 +38,13 @@ public class MemberResponse {
         Integer age,
         UtilResponse.TimeInfo time
     ) {
-        public static FindById toDto(Member entity) {
+        public static FindById toDto(Member member) {
             return FindById.builder()
-                    .username(entity.getUsername())
-                    .nickname(entity.getNickname())
-                    .email(entity.getEmail())
-                    .age(entity.getAge())
-                    .time(UtilResponse.TimeInfo.builder()
-                            .createTime(entity.getCreateAt())
-                            .updateTime(entity.getUpdateAt())
-                            .build())
+                    .username(member.getUsername())
+                    .nickname(member.getNickname())
+                    .email(member.getEmail())
+                    .age(member.getAge())
+                    .time(UtilResponse.TimeInfo.toDto(member))
                     .build();
         }
     }
@@ -82,10 +79,7 @@ public class MemberResponse {
                     .avgScore(board.getAvgScore())
                     .commentCount(board.getCommentCount())
                     .member(MemberResponse.MemberInfo.toDto(board.getMember()))
-                    .time(UtilResponse.TimeInfo.builder()
-                            .createTime(board.getCreateAt())
-                            .updateTime(board.getUpdateAt())
-                            .build())
+                    .time(UtilResponse.TimeInfo.toDto(board))
                     .build();
         }
     }
@@ -108,10 +102,7 @@ public class MemberResponse {
                     .comment(comment.getComment())
                     .board(BoardResponse.BoardInfo.toDto(comment.getBoard()))
                     .member(MemberResponse.MemberInfo.toDto(comment.getMember()))
-                    .time(UtilResponse.TimeInfo.builder()
-                            .createTime(comment.getCreateAt())
-                            .updateTime(comment.getUpdateAt())
-                            .build())
+                    .time(UtilResponse.TimeInfo.toDto(comment))
                     .build();
         }
     }

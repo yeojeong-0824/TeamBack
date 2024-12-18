@@ -25,10 +25,7 @@ public class CommentResponse {
                     .score(comment.getScore())
                     .comment(comment.getComment())
                     .member(MemberResponse.MemberInfo.toDto(comment.getMember()))
-                    .time(UtilResponse.TimeInfo.builder()
-                            .createTime(comment.getCreateAt())
-                            .updateTime(comment.getUpdateAt())
-                            .build())
+                    .time(UtilResponse.TimeInfo.toDto(comment))
                     .build();
         }
     }
@@ -50,10 +47,7 @@ public class CommentResponse {
                     .comment(comment.getComment())
                     .member(MemberResponse.MemberInfo.toDto(comment.getMember()))
                     .board(BoardResponse.BoardInfo.toDto(comment.getBoard()))
-                    .time(UtilResponse.TimeInfo.builder()
-                            .createTime(comment.getCreateAt())
-                            .updateTime(comment.getUpdateAt())
-                            .build())
+                    .time(UtilResponse.TimeInfo.toDto(comment))
                     .build();
         }
     }
