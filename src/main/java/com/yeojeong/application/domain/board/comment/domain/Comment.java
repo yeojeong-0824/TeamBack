@@ -6,12 +6,14 @@ import com.yeojeong.application.domain.member.domain.Member;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.io.Serializable;
+
 @Entity
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-public class Comment extends BaseTime {
+public class Comment extends BaseTime implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

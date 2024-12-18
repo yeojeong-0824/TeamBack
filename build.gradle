@@ -33,7 +33,6 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'com.auth0:java-jwt:4.4.0'
 	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-mail', version: '3.0.5'
-	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 
@@ -58,4 +57,8 @@ dependencies {
 
 tasks.named('test') {
 	useJUnitPlatform()
+}
+
+tasks.withType(JavaCompile) {
+	options.compilerArgs += '-parameters'
 }

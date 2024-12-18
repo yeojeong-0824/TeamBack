@@ -1,6 +1,21 @@
 spring:
-  profiles:
-    active: local
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/website
+    username: root
+    password: 1234
+
+  jpa:
+    open-in-view: true
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+
   web:
     resources:
       add-mappings: false
@@ -9,4 +24,32 @@ spring:
       max-file-size: 2MB
       max-request-size: 2MB
 
+
 filePath: yj
+JWTKey: DevKey12
+EmailPassword: ${emailPassword}
+
+autocomplete:
+  limit: 10
+  suffix: "_suffix"
+  key: "autocomplete"
+  score-key: "autocomplete:score"
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus
+    prometheus:
+      enabled: true
+  prometheus:
+    metrics:
+      export:
+        enabled: true
+
+
+logging:
+  level:
+    org:
+      springframework:
+        r2bc: DEBUG

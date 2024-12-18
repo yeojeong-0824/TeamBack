@@ -7,12 +7,13 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
 
 @Entity @Getter
 @Builder @NoArgsConstructor @AllArgsConstructor
-public class Member extends BaseTime {
+public class Member extends BaseTime implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

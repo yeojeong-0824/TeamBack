@@ -8,7 +8,9 @@ import com.yeojeong.application.domain.board.board.domain.BoardRepository;
 import com.yeojeong.application.config.exception.NotFoundDataException;
 import com.yeojeong.application.domain.board.comment.domain.Comment;
 import com.yeojeong.application.domain.member.domain.Member;
+import io.micrometer.core.aop.CountedAspect;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -20,7 +22,6 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 public class BoardServiceImpl implements BoardService {
 
     private final BoardRepository boardRepository;
@@ -42,6 +43,7 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
+    @Cacheable(value = "boards", key = "#id", condition="#id != null")
     public Board findById(Long id) {
         return boardRepository.findById(id)
                 .orElseThrow(() -> new NotFoundDataException("해당 게시글을 찾을 수 없습니다."));
