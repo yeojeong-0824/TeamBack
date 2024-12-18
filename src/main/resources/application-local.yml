@@ -8,7 +8,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/website
     username: root
-    password: ${password}
+    password: 1234
 
   jpa:
     open-in-view: true
@@ -17,7 +17,7 @@ spring:
     show-sql: false
 
 JWTKey: DevKey12
-EmailPassword: ${emailPassword}
+EmailPassword: uagpjpblfgzpklch
 
 autocomplete:
   limit: 10
