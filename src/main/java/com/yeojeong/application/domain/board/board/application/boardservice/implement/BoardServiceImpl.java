@@ -89,18 +89,6 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public void createComment(Board board) {
-        board.commentCountUp();
-        updateComment(board);
-    }
-
-    @Override
-    public void deleteComment(Board board) {
-        board.commentCountDown();
-        updateComment(board);
-    }
-
-    @Override
     @Transactional
     public void updateComment(Board board) {
         board.avgScorePatch(getAvgScore(board));
