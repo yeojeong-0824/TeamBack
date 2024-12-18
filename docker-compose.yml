@@ -1,48 +1,35 @@
 version: '3.8'
 
 services:
-  redis:
-    image: redis:latest
-    container_name: redis
-    ports:
-      - "6379:6379"
-    restart: always
-    networks:
-      - app-network
-
   app:
-    container_name: yj-app
+    container_name: app
     build:
       context: .
       dockerfile: Dockerfile
-    restart: always
-    ports:
-      - "8080:8080"
     depends_on:
-      - yj-mysql
+      - mysql
       - redis
     networks:
-      - app-network
+      - network
 
-  prometheus:
-    image: prom/prometheus:latest
-    volumes:
-      - ./src/main/resources/prometheus.yml:/etc/prometheus/prometheus.yml
-    ports:
-      - "9090:9090"
+  redis:
+    image: redis
+    container_name: yjredis
     networks:
-      - app-network
+      - network
 
-  grafana:
-    image: grafana/grafana:latest
-    ports:
-      - "3001:3000"
-    networks:
-      - app-network
-    depends_on:
-      - prometheus
+  mysql:
+    image: mysql
+    container_name: yjmysql
     environment:
-      - GF_SECURITY_ADMIN_PASSWORD=1234
+      MYSQL_ROOT_PASSWORD: 1234  # 적절한 비밀번호 설정
+      MYSQL_DATABASE: website
+    volumes:
+      - db_data:/var/lib/mysql
+      - db_log:/var/log/mysql
+      - db_cnf:/etc/mysql/my.cnf
+    networks:
+      - network
 
 volumes:
   db_data: {}
@@ -50,5 +37,5 @@ volumes:
   db_cnf: {}
 
 networks:
-  app-network:
+  network:
     driver: bridge
