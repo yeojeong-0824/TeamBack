@@ -32,7 +32,7 @@ public class CommentFacadeImpl implements CommentFacade {
         Comment entity = CommentRequest.Save.toEntity(dto, board, member);
         Comment savedEntity = commentService.save(entity);
 
-        if(dto.score() != 0) boardService.createComment(board);
+        boardService.createComment(board);
         return CommentResponse.FindById.toDto(savedEntity);
     }
 
