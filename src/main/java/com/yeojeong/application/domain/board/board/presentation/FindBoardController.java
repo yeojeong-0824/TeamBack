@@ -33,6 +33,7 @@ public class FindBoardController {
             }
     )
     public ResponseEntity<BoardResponse.FindById> findById(@PathVariable("id") Long id) {
+        log.info("게시글 호출");
         return ResponseEntity.ok(boardFacade.findById(id));
     }
 
@@ -50,6 +51,7 @@ public class FindBoardController {
             @RequestParam(value = "searchKeyword") String searchKeyword,
             @RequestParam(value = "sortKeyword") String sortKeyword,
             @RequestParam(required = false, defaultValue = "1", value = "page") int page){
+        log.info("모든 게시글 호출");
         return ResponseEntity.ok(boardFacade.findAll(searchKeyword, keyword, sortKeyword, page));
     }
 }
