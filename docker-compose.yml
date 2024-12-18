@@ -34,10 +34,6 @@ services:
       context: .
       dockerfile: Dockerfile
     restart: always
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://yj-mysql:3306/website
-      SPRING_DATASOURCE_USERNAME: user
-      SPRING_DATASOURCE_PASSWORD: 1234
     ports:
       - "8080:8080"
     depends_on:
