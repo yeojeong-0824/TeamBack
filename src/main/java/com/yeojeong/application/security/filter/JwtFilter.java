@@ -55,7 +55,7 @@ public class JwtFilter extends OncePerRequestFilter {
             ExceptionResponseSender.createExceptionResponse(HttpStatus.FORBIDDEN.value(), request, response, "알고리즘이 일치하지 않습니다.");
             return;
         } catch (Exception ex) {
-            ExceptionResponseSender.createExceptionResponse(HttpStatus.UNAUTHORIZED.value(), request, response, ex.getMessage());
+            ExceptionResponseSender.createExceptionResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), request, response, ex.getMessage());
             return;
         }
 
