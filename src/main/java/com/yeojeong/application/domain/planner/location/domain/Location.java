@@ -27,7 +27,7 @@ public class Location extends BaseTime {
     private Long unixTime;
 
     @Column
-    private int travelTime;
+    private Integer travelTime;
 
     @Column
     private String transportation;
