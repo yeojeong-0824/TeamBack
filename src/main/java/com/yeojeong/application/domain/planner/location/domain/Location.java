@@ -28,7 +28,7 @@ public class Location extends BaseTime implements Serializable {
     private Long unixTime;
 
     @Column
-    private int travelTime;
+    private Integer travelTime;
 
     @Column
     private String transportation;

@@ -42,19 +42,23 @@ public class JwtFilter extends OncePerRequestFilter {
             Authentication authentication =
                     new UsernamePasswordAuthenticationToken(jwtTokenMemberDetails, null, jwtTokenMemberDetails.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authentication);
+        } catch (TokenExpiredException ex) {
+            ExceptionResponseSender.createExceptionResponse(HttpStatus.UNAUTHORIZED.value(), request, response, "토큰이 만료되었습니다.");
+            return;
         } catch (JWTDecodeException ex) {
-            ExceptionResponseSender.createExceptionResponse(HttpStatus.UNAUTHORIZED.value(), request, response, "잘못된 토큰입니다.");
+            ExceptionResponseSender.createExceptionResponse(HttpStatus.BAD_REQUEST.value(), request, response, "잘못된 토큰입니다.");
             return;
         } catch (SignatureVerificationException ex) {
-            ExceptionResponseSender.createExceptionResponse(HttpStatus.UNAUTHORIZED.value(), request, response, "서명 검증에 실패했습니다.");
+            ExceptionResponseSender.createExceptionResponse(HttpStatus.FORBIDDEN.value(), request, response, "서명 검증에 실패했습니다.");
             return;
         } catch (AlgorithmMismatchException ex) {
-            ExceptionResponseSender.createExceptionResponse(HttpStatus.UNAUTHORIZED.value(), request, response, "알고리즘이 일치하지 않습니다.");
+            ExceptionResponseSender.createExceptionResponse(HttpStatus.FORBIDDEN.value(), request, response, "알고리즘이 일치하지 않습니다.");
             return;
         } catch (Exception ex) {
             ExceptionResponseSender.createExceptionResponse(HttpStatus.UNAUTHORIZED.value(), request, response, ex.getMessage());
             return;
         }
+
 
         filterChain.doFilter(request, response);
     }

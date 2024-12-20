@@ -10,10 +10,16 @@ public class LocationResponse {
     @Schema(name = "장소 조회")
     public record FindById(
             Long id,
-            Integer travelTime,
             Long unixTime,
+            Integer travelTime,
+
+            String transportation,
+            String transportationNote,
+
             String place,
             String address,
+            String phoneNumber,
+
             String memo,
             Long plannerId,
 
@@ -23,11 +29,16 @@ public class LocationResponse {
             return FindById.builder()
                     .id(location.getId())
 
-                    .travelTime(location.getTravelTime())
                     .unixTime(location.getUnixTime())
+                    .travelTime(location.getTravelTime())
+
+                    .transportation(location.getTransportation())
+                    .transportationNote(location.getTransportationNote())
 
                     .place(location.getPlace())
                     .address(location.getAddress())
+                    .phoneNumber(location.getPhoneNumber())
+
                     .memo(location.getMemo())
                     .plannerId(location.getPlanner().getId())
 
