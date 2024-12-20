@@ -17,13 +17,13 @@ public class BoardResponse {
             String longitude,  // 경도
 
             String title,
-            String body,  // Body 변수명을 소문자로 변경
+            String body,
 
             Integer view,
             Integer avgScore,
             Integer commentCount,
 
-            MemberResponse.MemberInfo memberInfo,
+            MemberResponse.MemberInfo member,
             UtilResponse.TimeInfo time
     ) {
         public static BoardInfo toDto(Board board) {
@@ -41,7 +41,7 @@ public class BoardResponse {
                     .avgScore(board.getAvgScore())
                     .commentCount(board.getCommentCount())
 
-                    .memberInfo(MemberResponse.MemberInfo.toDto(board.getMember()))
+                    .member(MemberResponse.MemberInfo.toDto(board.getMember()))
                     .time(UtilResponse.TimeInfo.toDto(board))
                     .build();
         }
