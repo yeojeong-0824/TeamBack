@@ -29,7 +29,7 @@ public class JwtFilter extends OncePerRequestFilter {
                                     FilterChain filterChain) throws ServletException, IOException {
         String jwtTokenHeader = request.getHeader(JwtProvider.JWT_HEADER_STRING);
 
-        if(jwtTokenHeader == null) {
+        if(jwtTokenHeader == null || jwtTokenHeader.isEmpty()) {
             filterChain.doFilter(request, response);
             return;
         }
