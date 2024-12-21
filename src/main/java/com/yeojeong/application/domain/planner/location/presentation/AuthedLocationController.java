@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Slf4j
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/planners/locations/authed")
@@ -76,33 +75,5 @@ public class AuthedLocationController {
         Long memberId = SecurityUtil.getCurrentMemberId();
         locationFacade.delete(id, memberId);
         return ResponseEntity.noContent().build();
-    }
-
-    @MethodTimer(method = " 장소 조회")
-    @GetMapping("/{id}")
-    @Operation(summary = "장소를 조회", description = "Planner의 장소를 조회합니다.")
-    @ApiResponses(
-            value = {
-                    @ApiResponse(responseCode = "200", description = "장소 조회 완료"),
-                    @ApiResponse(responseCode = "403", description = "권한 없음")
-            }
-    )
-    public ResponseEntity<LocationResponse.FindById> findById(@PathVariable("id") Long id) {
-        Long memberId = SecurityUtil.getCurrentMemberId();
-        return ResponseEntity.status(HttpStatus.OK).body(locationFacade.findById(id, memberId));
-    }
-
-    @MethodTimer(method = "플래너에 작성된 장소 조회")
-    @GetMapping("/planners/{plannerId}")
-    @Operation(summary = "플래너에 대한 장소를 조회", description = "Planner의 장소를 모두 조회합니다.")
-    @ApiResponses(
-            value = {
-                    @ApiResponse(responseCode = "200", description = "플래너에 대한 장소 조회 완료"),
-                    @ApiResponse(responseCode = "403", description = "권한 없음")
-            }
-    )
-    public ResponseEntity<List<LocationResponse.FindById>> findByPlannerId (@PathVariable("plannerId") Long plannerId) {
-        Long memberId = SecurityUtil.getCurrentMemberId();
-        return ResponseEntity.status(HttpStatus.OK).body(locationFacade.findByPlannerId(plannerId, memberId));
     }
 }

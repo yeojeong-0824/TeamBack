@@ -46,7 +46,7 @@ public class PlannerFacadeImpl implements PlannerFacade {
         savedEntity.update(entity);
         Planner rtnEntity = plannerService.update(savedEntity);
 
-        List<Location> locationList = locationService.findByPlannerId(id, memberId);
+        List<Location> locationList = locationService.findByPlannerId(id);
         List<LocationResponse.FindById> locationFindByIdList = locationList.stream().map(LocationResponse.FindById::toDto).toList();
 
         return PlannerResponse.FindById.toDto(rtnEntity, locationFindByIdList);
@@ -63,10 +63,9 @@ public class PlannerFacadeImpl implements PlannerFacade {
     }
 
     @Override
-    public PlannerResponse.FindById findById(Long id, Long memberId) {
+    public PlannerResponse.FindById findById(Long id) {
         Planner savedEntity = plannerService.findById(id);
-        checkMember(savedEntity, memberId);
-        List<Location> locationList = locationService.findByPlannerId(id, memberId);
+        List<Location> locationList = locationService.findByPlannerId(id);
         List<LocationResponse.FindById> locationFindByIdList = locationList.stream().map(LocationResponse.FindById::toDto).toList();
 
         return PlannerResponse.FindById.toDto(savedEntity, locationFindByIdList);
