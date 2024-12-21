@@ -70,16 +70,14 @@ public class LocationFacadeImpl implements LocationFacade {
     }
 
     @Override
-    public LocationResponse.FindById findById(Long id, Long memberId) {
+    public LocationResponse.FindById findById(Long id) {
         Location saveEntity = locationService.findById(id);
-        checkMember(saveEntity, memberId);
-
         return LocationResponse.FindById.toDto(saveEntity);
     }
 
     @Override
-    public List<LocationResponse.FindById> findByPlannerId(Long plannerId, Long memberId) {
-        List<Location> locationList = locationService.findByPlannerId(plannerId, memberId);
+    public List<LocationResponse.FindById> findByPlannerId(Long plannerId) {
+        List<Location> locationList = locationService.findByPlannerId(plannerId);
 
         return locationList.stream()
                 .map(LocationResponse.FindById::toDto)

@@ -13,13 +13,11 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@Slf4j
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/planners/authed")
@@ -75,19 +73,5 @@ public class AuthedPlannerController {
         Long memberId = SecurityUtil.getCurrentMemberId();
         plannerFacade.delete(id, memberId);
         return ResponseEntity.noContent().build();
-    }
-
-    @MethodTimer(method = "플래너 호출")
-    @GetMapping("/{id}")
-    @Operation(summary = "플래너 호출")
-    @ApiResponses(
-            value = {
-                    @ApiResponse(responseCode = "200", description = "플래너 호출 성공"),
-                    @ApiResponse(responseCode = "400", description = "플래너 호출 실패")
-            }
-    )
-    public ResponseEntity<PlannerResponse.FindById> findById(@PathVariable("id") Long id){
-        Long memberId = SecurityUtil.getCurrentMemberId();
-        return ResponseEntity.ok(plannerFacade.findById(id, memberId));
     }
 }
