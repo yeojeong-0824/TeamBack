@@ -5,13 +5,16 @@ import com.yeojeong.application.config.exception.response.ExceptionResponseSende
 import com.yeojeong.application.domain.member.domain.MemberDetails;
 import com.yeojeong.application.domain.member.domain.Member;
 import com.yeojeong.application.security.config.JwtProvider;
+import com.yeojeong.application.security.config.refreshtoken.application.refreshtokenfacade.RefreshTokenFacade;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -22,6 +25,8 @@ import java.io.IOException;
 @Slf4j
 @RequiredArgsConstructor
 public class JwtFilter extends OncePerRequestFilter {
+
+    private final RefreshTokenFacade refreshTokenFacade;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
@@ -48,7 +53,15 @@ public class JwtFilter extends OncePerRequestFilter {
                     new UsernamePasswordAuthenticationToken(jwtTokenMemberDetails, null, jwtTokenMemberDetails.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authentication);
         } catch (TokenExpiredException ex) {
-            ExceptionResponseSender.createExceptionResponse(HttpStatus.UNAUTHORIZED.value(), request, response, "토큰이 만료되었습니다.");
+            Cookie[] cookies = request.getCookies();
+
+            MemberDetails memberDetails = refreshTokenFacade.getMemberDetailsByRefreshToken(cookies);
+            Cookie refreshCookie = refreshTokenFacade.createNewRefreshTokenCookie(memberDetails);
+            response.addCookie(refreshCookie);
+
+            String jwtToken = refreshTokenFacade.createNewJwtToken(memberDetails);
+            response.addHeader(JwtProvider.JWT_HEADER_STRING, JwtProvider.TOKEN_PREFIX_JWT + jwtToken);
+
             return;
         } catch (JWTDecodeException ex) {
             ExceptionResponseSender.createExceptionResponse(HttpStatus.BAD_REQUEST.value(), request, response, "잘못된 토큰입니다.");

@@ -2,7 +2,9 @@ package com.yeojeong.application.security.filter;
 
 import com.yeojeong.application.domain.member.application.membernotification.MemberChangeService;
 import com.yeojeong.application.security.config.JwtProvider;
+import com.yeojeong.application.security.config.refreshtoken.application.refreshtokenfacade.RefreshTokenFacade;
 import com.yeojeong.application.security.config.refreshtoken.application.refreshtokenservice.RefreshTokenService;
+import com.yeojeong.application.security.config.refreshtoken.domain.RefreshTokenRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -26,6 +28,7 @@ public class SecurityFilter {
     private final AuthenticationManager authenticationManager;
     private final RefreshTokenService refreshTokenService;
     private final MemberChangeService memberChangeService;
+    private final RefreshTokenFacade refreshTokenFacade;
 
     @Value("${JWTKey}")
     public void setAppName(String key) {
@@ -42,7 +45,7 @@ public class SecurityFilter {
                 .sessionManagement(auth -> auth.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
                 .addFilterAt(new LoginFilter(authenticationManager, refreshTokenService, memberChangeService), UsernamePasswordAuthenticationFilter.class)
-                .addFilterAfter(new JwtFilter(), LoginFilter.class)
+                .addFilterAfter(new JwtFilter(refreshTokenFacade), LoginFilter.class)
 
                 .exceptionHandling(auth -> auth
                         .accessDeniedHandler(new CustomAccessDeniedHandler()))
