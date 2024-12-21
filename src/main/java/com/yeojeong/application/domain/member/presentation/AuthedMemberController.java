@@ -57,7 +57,7 @@ public class AuthedMemberController {
                     @ApiResponse(responseCode = "403", description = "권한 없음"),
             }
     )
-    public ResponseEntity<Page<MemberResponse.BoardInfo>> findBoardById(@RequestParam(required = false, defaultValue = "1", value = "page") int page) {
+    public ResponseEntity<Page<MemberResponse.MemberBoardInfo>> findBoardById(@RequestParam(required = false, defaultValue = "1", value = "page") int page) {
 
         Long id = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(memberFacade.findBoardById(id, page));
@@ -73,7 +73,7 @@ public class AuthedMemberController {
                     @ApiResponse(responseCode = "403", description = "권한 없음"),
             }
     )
-    public ResponseEntity<Page<MemberResponse.CommentInfo>> findBoardScoreById(@RequestParam(required = false, defaultValue = "1", value = "page") int page) {
+    public ResponseEntity<Page<MemberResponse.MemberCommentInfo>> findBoardScoreById(@RequestParam(required = false, defaultValue = "1", value = "page") int page) {
 
         Long id = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(memberFacade.findCommentById(id, page));
@@ -89,7 +89,7 @@ public class AuthedMemberController {
                     @ApiResponse(responseCode = "403", description = "권한 없음"),
             }
     )
-    public ResponseEntity<Page<MemberResponse.PlannerInfo>> findPlannerById(@RequestParam(required = false, defaultValue = "1", value = "page") int page) {
+    public ResponseEntity<Page<MemberResponse.MemberPlannerInfo>> findPlannerById(@RequestParam(required = false, defaultValue = "1", value = "page") int page) {
 
         Long id = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(memberFacade.findPlannerById(id, page));
@@ -104,7 +104,7 @@ public class AuthedMemberController {
                     @ApiResponse(responseCode = "403", description = "권한 없음")
             }
     )
-    public ResponseEntity<List<MemberResponse.LocationInfo>> findLocationByDate(@RequestParam("start") Long start, @RequestParam("end") Long end) {
+    public ResponseEntity<List<MemberResponse.MemberLocationInfo>> findLocationByDate(@RequestParam("start") Long start, @RequestParam("end") Long end) {
         Long memberId = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.status(HttpStatus.OK).body(memberFacade.findLocationByDate(memberId, start, end));
     }

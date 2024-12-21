@@ -58,7 +58,7 @@ public class BoardServiceImpl implements BoardService {
     // 조건에 따른 게시글 검색, 정렬
     @Override
     public Page<Board> findAll(String searchKeyword, String keyword, String sortKeyword, int page) {
-        int pageSize = 10;
+        final int pageSize = 10;
         // 생성 날짜
         PageRequest request = PageRequest.of(page - 1, pageSize, Sort.by("id").descending());
 

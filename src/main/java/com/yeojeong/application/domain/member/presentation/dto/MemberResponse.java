@@ -3,12 +3,17 @@ package com.yeojeong.application.domain.member.presentation.dto;
 import com.yeojeong.application.domain.board.board.domain.Board;
 import com.yeojeong.application.domain.board.board.presentation.dto.BoardResponse;
 import com.yeojeong.application.domain.board.comment.domain.Comment;
+import com.yeojeong.application.domain.board.comment.presentation.dto.CommentResponse;
 import com.yeojeong.application.domain.member.domain.Member;
 import com.yeojeong.application.domain.planner.location.domain.Location;
 import com.yeojeong.application.domain.planner.planner.domain.Planner;
+import com.yeojeong.application.domain.planner.planner.presentation.dto.PlannerResponse;
 import com.yeojeong.application.domain.utildto.UtilResponse;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class MemberResponse {
@@ -51,7 +56,7 @@ public class MemberResponse {
 
     @Builder
     @Schema(name = "유저가 작성한 게시글 정보 호출")
-    public record BoardInfo(
+    public record MemberBoardInfo(
             Long id,
             String locationName,
             String formattedAddress,
@@ -66,8 +71,8 @@ public class MemberResponse {
             MemberResponse.MemberInfo member,
             UtilResponse.TimeInfo time
     ){
-        public static BoardInfo toDto(Board board) {
-            return BoardInfo.builder()
+        public static MemberBoardInfo toDto(Board board) {
+            return MemberBoardInfo.builder()
                     .id(board.getId())
                     .locationName(board.getLocationName())
                     .formattedAddress(board.getFormattedAddress())
@@ -86,37 +91,35 @@ public class MemberResponse {
 
     @Builder
     @Schema(name = "유저가 작성한 댓글 정보 호출")
-    public record CommentInfo(
-            Long id,
-            Integer score,
-            String comment,
-
-            MemberResponse.MemberInfo member,
+    public record MemberCommentInfo(
             BoardResponse.BoardInfo board,
-            UtilResponse.TimeInfo time
+            List<CommentResponse.CommentInfo> commentList
     ){
-        public static CommentInfo toDto(Comment comment) {
-            return CommentInfo.builder()
-                    .id(comment.getId())
-                    .score(comment.getScore())
-                    .comment(comment.getComment())
+        public static MemberCommentInfo createMemberCommentInfo(Comment comment) {
+            List<CommentResponse.CommentInfo> commentDataList = new ArrayList<>();
+            commentDataList.add(CommentResponse.CommentInfo.toDto(comment));
+
+            return MemberCommentInfo.builder()
                     .board(BoardResponse.BoardInfo.toDto(comment.getBoard()))
-                    .member(MemberResponse.MemberInfo.toDto(comment.getMember()))
-                    .time(UtilResponse.TimeInfo.toDto(comment))
+                    .commentList(commentDataList)
                     .build();
+        }
+
+        public void appendComment(Comment comment) {
+            this.commentList.add(CommentResponse.CommentInfo.toDto(comment));
         }
     }
 
     @Builder
-    public record PlannerInfo(
+    public record MemberPlannerInfo(
             Long id,
             String title,
             String subTitle,
             int personnel,
             int locationCount
     ) {
-        public static PlannerInfo toDto(Planner planner) {
-            return PlannerInfo.builder()
+        public static MemberPlannerInfo toDto(Planner planner) {
+            return MemberPlannerInfo.builder()
                     .id(planner.getId())
                     .title(planner.getTitle())
                     .subTitle(planner.getSubTitle())
@@ -127,26 +130,12 @@ public class MemberResponse {
     }
 
     @Builder
-    public record LocationInfo(
-            Long id,
-            Integer travelTime,
-            Long unixTime,
-            String place,
-            String address,
-            String memo,
-            Long plannerId
+    public record MemberLocationInfo(
+            PlannerResponse.PlannerInfo planner
     ) {
-        public static LocationInfo toDto(Location location) {
-            return LocationInfo.builder()
-                    .id(location.getId())
-
-                    .travelTime(location.getTravelTime())
-                    .unixTime(location.getUnixTime())
-
-                    .place(location.getPlace())
-                    .address(location.getAddress())
-                    .memo(location.getMemo())
-                    .plannerId(location.getPlanner().getId())
+        public static MemberLocationInfo toDto(Location location) {
+            return MemberLocationInfo.builder()
+                    .planner(PlannerResponse.PlannerInfo.toDto(location.getPlanner()))
                     .build();
         }
     }

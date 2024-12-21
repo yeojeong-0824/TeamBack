@@ -10,6 +10,30 @@ import java.util.List;
 public class PlannerResponse {
 
     @Builder
+    public record PlannerInfo(
+            Long id,
+            String title,
+            int personnel,
+            String subTitle,
+            int locationCount,
+
+            List<LocationResponse.LocationInfo> location,
+            UtilResponse.TimeInfo time
+    ) {
+        public static PlannerInfo toDto(Planner planner) {
+            return PlannerInfo.builder()
+                    .id(planner.getId())
+                    .title(planner.getTitle())
+                    .personnel(planner.getPersonnel())
+                    .subTitle(planner.getSubTitle())
+
+                    .locationCount(planner.getLocationCount())
+                    .location(planner.getLocations().stream().map(LocationResponse.LocationInfo::toDto).toList())
+                    .time(UtilResponse.TimeInfo.toDto(planner))
+                    .build();
+        }
+    }
+    @Builder
     public record FindById(
             Long id,
             String title,
@@ -17,10 +41,10 @@ public class PlannerResponse {
             String subTitle,
             int locationCount,
 
-            List<LocationResponse.FindById> locationInfo,
+            List<LocationResponse.LocationInfo> location,
             UtilResponse.TimeInfo time
     ) {
-        public static FindById toDto(Planner planner, List<LocationResponse.FindById> locationInfo) {
+        public static FindById toDto(Planner planner) {
             return FindById.builder()
                     .id(planner.getId())
                     .title(planner.getTitle())
@@ -28,7 +52,7 @@ public class PlannerResponse {
                     .subTitle(planner.getSubTitle())
 
                     .locationCount(planner.getLocationCount())
-                    .locationInfo(locationInfo)
+                    .location(planner.getLocations().stream().map(LocationResponse.LocationInfo::toDto).toList())
                     .time(UtilResponse.TimeInfo.toDto(planner))
                     .build();
         }

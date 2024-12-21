@@ -9,6 +9,26 @@ import lombok.Builder;
 
 public class CommentResponse {
     @Builder
+    public record CommentInfo(
+            Long id,
+            Integer score,
+            String comment,
+
+            MemberResponse.MemberInfo member,
+            UtilResponse.TimeInfo time
+    ) {
+        public static CommentInfo toDto(Comment comment) {
+            return CommentInfo.builder()
+                    .id(comment.getId())
+                    .score(comment.getScore())
+                    .comment(comment.getComment())
+                    .member(MemberResponse.MemberInfo.toDto(comment.getMember()))
+                    .time(UtilResponse.TimeInfo.toDto(comment))
+                    .build();
+        }
+    }
+
+    @Builder
     @Schema(name = "게시글에 작성된 댓글 조회")
     public record FindByBoardId(
             Long id,
