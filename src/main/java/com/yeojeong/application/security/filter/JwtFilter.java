@@ -29,12 +29,17 @@ public class JwtFilter extends OncePerRequestFilter {
                                     FilterChain filterChain) throws ServletException, IOException {
         String jwtTokenHeader = request.getHeader(JwtProvider.JWT_HEADER_STRING);
 
-        if(jwtTokenHeader == null || jwtTokenHeader.isEmpty()) {
+        if(jwtTokenHeader == null) {
             filterChain.doFilter(request, response);
             return;
         }
 
         jwtTokenHeader = jwtTokenHeader.replace(JwtProvider.TOKEN_PREFIX_JWT, "");
+
+        if(jwtTokenHeader.isEmpty() || jwtTokenHeader.equals("null")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
 
         try {
             Member jwtTokenMember = JwtProvider.decodeToken(jwtTokenHeader, JwtProvider.SECRET);
