@@ -15,10 +15,10 @@ public interface MemberFacade {
     MemberResponse.FindById patchPassword(Long id, MemberRequest.PatchPassword dto);
     void checkPassword(Long id, String password);
 
-    Page<MemberResponse.BoardInfo> findBoardById(Long id, int page);
-    Page<MemberResponse.CommentInfo> findCommentById(Long id, int page);
-    Page<MemberResponse.PlannerInfo> findPlannerById(Long id, int page);
-    List<MemberResponse.LocationInfo> findLocationByDate(Long memberId, Long start, Long end);
+    Page<MemberResponse.MemberBoardInfo> findBoardById(Long id, int page);
+    Page<MemberResponse.MemberCommentInfo> findCommentById(Long id, int page);
+    Page<MemberResponse.MemberPlannerInfo> findPlannerById(Long id, int page);
+    List<MemberResponse.MemberLocationInfo> findLocationByDate(Long memberId, Long start, Long end);
 
     void findPassword(String username, String email);
     void findUsernameByEmail(String email);

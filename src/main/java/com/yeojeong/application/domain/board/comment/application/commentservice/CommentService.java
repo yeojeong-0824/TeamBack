@@ -5,11 +5,13 @@ import com.yeojeong.application.domain.board.comment.presentation.dto.CommentReq
 import com.yeojeong.application.domain.board.comment.presentation.dto.CommentResponse;
 import org.springframework.data.domain.Page;
 
+import java.util.List;
+
 public interface CommentService {
     Comment findById(Long id);
     Comment save(Comment entity);
     Page<Comment> findByBoardId(Long boardId, int page);
-    Page<Comment> findByMemberId(Long memberId, int page);
+    List<Comment> findByMemberId(Long memberId);
     Comment update(Comment entity);
     void delete(Comment entity);
 

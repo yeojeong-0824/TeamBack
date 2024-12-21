@@ -33,7 +33,7 @@ public class PlannerFacadeImpl implements PlannerFacade {
         Planner entity = PlannerRequest.Save.toEntity(dto, member);
         Planner savedEntity = plannerService.save(entity);
 
-        return PlannerResponse.FindById.toDto(savedEntity, null);
+        return PlannerResponse.FindById.toDto(savedEntity);
     }
 
     @Override
@@ -45,11 +45,7 @@ public class PlannerFacadeImpl implements PlannerFacade {
 
         savedEntity.update(entity);
         Planner rtnEntity = plannerService.update(savedEntity);
-
-        List<Location> locationList = locationService.findByPlannerId(id);
-        List<LocationResponse.FindById> locationFindByIdList = locationList.stream().map(LocationResponse.FindById::toDto).toList();
-
-        return PlannerResponse.FindById.toDto(rtnEntity, locationFindByIdList);
+        return PlannerResponse.FindById.toDto(rtnEntity);
     }
 
     @Override
@@ -65,10 +61,7 @@ public class PlannerFacadeImpl implements PlannerFacade {
     @Override
     public PlannerResponse.FindById findById(Long id) {
         Planner savedEntity = plannerService.findById(id);
-        List<Location> locationList = locationService.findByPlannerId(id);
-        List<LocationResponse.FindById> locationFindByIdList = locationList.stream().map(LocationResponse.FindById::toDto).toList();
-
-        return PlannerResponse.FindById.toDto(savedEntity, locationFindByIdList);
+        return PlannerResponse.FindById.toDto(savedEntity);
     }
 
     private void checkMember(Planner planner, Long memberId) {
