@@ -45,7 +45,6 @@ public class PlannerFacadeImpl implements PlannerFacade {
 
         savedEntity.update(entity);
         Planner rtnEntity = plannerService.update(savedEntity);
-
         return PlannerResponse.FindById.toDto(rtnEntity);
     }
 

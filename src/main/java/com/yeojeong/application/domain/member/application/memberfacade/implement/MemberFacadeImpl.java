@@ -20,13 +20,14 @@ import com.yeojeong.application.domain.planner.planner.application.plannerservic
 import com.yeojeong.application.domain.planner.planner.domain.Planner;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -118,26 +119,68 @@ public class MemberFacadeImpl implements MemberFacade {
     }
 
     @Override
-    public Page<MemberResponse.BoardInfo> findBoardById(Long id, int page) {
+    public Page<MemberResponse.MemberBoardInfo> findBoardById(Long id, int page) {
         Page<Board> savedBoardPage = boardService.findByMember(id, page);
-        return savedBoardPage.map(MemberResponse.BoardInfo::toDto);
+        return savedBoardPage.map(MemberResponse.MemberBoardInfo::toDto);
     }
 
     @Override
-    public Page<MemberResponse.CommentInfo> findCommentById(Long id, int page) {
-        Page<Comment> savedCommentPage = commentService.findByMemberId(id, page);
-        return savedCommentPage.map(MemberResponse.CommentInfo::toDto);
+    public Page<MemberResponse.MemberCommentInfo> findCommentById(Long id, int page) {
+        final int pageSize = 10;
+
+        List<Comment> savedCommentList = commentService.findByMemberId(id);
+
+        Map<Long, MemberResponse.MemberCommentInfo> duplicatedBoardEntries = new HashMap<>();
+        for(Comment target : savedCommentList) {
+            if(duplicatedBoardEntries.containsKey(target.getBoard().getId())) {
+                MemberResponse.MemberCommentInfo data = duplicatedBoardEntries.get(target.getBoard().getId());
+                data.appendComment(target);
+                continue;
+            }
+
+            MemberResponse.MemberCommentInfo data = MemberResponse.MemberCommentInfo.createMemberCommentInfo(target);
+            duplicatedBoardEntries.put(target.getBoard().getId(), data);
+        }
+
+        List<MemberResponse.MemberCommentInfo> rtnList = new ArrayList<>(duplicatedBoardEntries.values());
+
+        if (page < 0) {
+            throw new IllegalArgumentException("Page number must be 0 or greater");
+        }
+
+        int totalSize = rtnList.size();
+        int totalPages = (int) Math.ceil((double) totalSize / pageSize);
+
+        if (page >= totalPages) {
+            page = totalPages - 1;  // 마지막 페이지로 설정
+        }
+
+        Pageable pageable = PageRequest.of(page, pageSize);
+        int start = (int) pageable.getOffset();
+        int end = Math.min((start + pageable.getPageSize()), rtnList.size());
+
+        List<MemberResponse.MemberCommentInfo> pageContent = new ArrayList<>(rtnList.subList(start, end));
+        return new PageImpl<>(pageContent, pageable, totalSize);
     }
 
     @Override
-    public Page<MemberResponse.PlannerInfo> findPlannerById(Long id, int page) {
+    public Page<MemberResponse.MemberPlannerInfo> findPlannerById(Long id, int page) {
         Page<Planner> savedPlannerPage = plannerService.findByMemberId(id, page);
-        return savedPlannerPage.map(MemberResponse.PlannerInfo::toDto);
+        return savedPlannerPage.map(MemberResponse.MemberPlannerInfo::toDto);
     }
 
-    public List<MemberResponse.LocationInfo> findLocationByDate(Long id, Long start, Long end) {
+    public List<MemberResponse.MemberLocationInfo> findLocationByDate(Long id, Long start, Long end) {
         List<Location> savedLocationList = locationService.findByMemberAndDate(id, start, end);
-        return savedLocationList.stream().map(MemberResponse.LocationInfo::toDto).toList();
+
+        Map<Long, Boolean> duplicatedPlannerEntries = new HashMap<>();
+        List<MemberResponse.MemberLocationInfo> rtnList = new ArrayList<>();
+        for(Location target : savedLocationList) {
+            if(duplicatedPlannerEntries.containsKey(target.getPlanner().getId())) continue;
+            duplicatedPlannerEntries.put(target.getPlanner().getId(), true);
+            rtnList.add(MemberResponse.MemberLocationInfo.toDto(target));
+        }
+
+        return rtnList;
     }
 
 

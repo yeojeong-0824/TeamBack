@@ -20,7 +20,7 @@ public class PlannerResponse {
             List<LocationResponse.LocationInfo> location,
             UtilResponse.TimeInfo time
     ) {
-        public static FindById toDto(Planner planner) {
+        public static FindById toDto(Planner planner, List<LocationResponse.FindById> locationInfo) {
             return FindById.builder()
                     .id(planner.getId())
                     .title(planner.getTitle())
