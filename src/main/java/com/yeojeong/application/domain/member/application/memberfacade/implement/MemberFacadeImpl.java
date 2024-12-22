@@ -129,6 +129,7 @@ public class MemberFacadeImpl implements MemberFacade {
         final int pageSize = 10;
 
         List<Comment> savedCommentList = commentService.findByMemberId(id);
+        if(savedCommentList.isEmpty()) return new PageImpl<>(new ArrayList<>());
 
         Map<Long, MemberResponse.MemberCommentInfo> duplicatedBoardEntries = new HashMap<>();
         for(Comment target : savedCommentList) {
