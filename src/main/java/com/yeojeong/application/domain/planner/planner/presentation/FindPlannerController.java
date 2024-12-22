@@ -1,9 +1,7 @@
 package com.yeojeong.application.domain.planner.planner.presentation;
 
-import com.yeojeong.application.config.util.customannotation.MethodTimer;
 import com.yeojeong.application.domain.planner.planner.application.plannerfacade.PlannerFacade;
 import com.yeojeong.application.domain.planner.planner.presentation.dto.PlannerResponse;
-import com.yeojeong.application.security.config.SecurityUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -23,7 +21,6 @@ public class FindPlannerController {
 
     private final PlannerFacade plannerFacade;
 
-    @MethodTimer(method = "플래너 호출")
     @GetMapping("/{id}")
     @Operation(summary = "플래너 호출")
     @ApiResponses(

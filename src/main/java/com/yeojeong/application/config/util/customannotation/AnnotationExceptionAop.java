@@ -3,15 +3,20 @@ package com.yeojeong.application.config.util.customannotation;
 import com.yeojeong.application.config.redis.RedisMutex;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.springframework.context.expression.MethodBasedEvaluationContext;
+import org.springframework.core.DefaultParameterNameDiscoverer;
+import org.springframework.expression.ExpressionParser;
+import org.springframework.expression.ParseException;
+import org.springframework.expression.spel.standard.SpelExpressionParser;
+import org.springframework.expression.spel.support.StandardEvaluationContext;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StopWatch;
 
-import java.util.concurrent.locks.ReentrantLock;
-
+import java.util.Objects;
 
 @Slf4j
 @Aspect
@@ -21,44 +26,22 @@ public class AnnotationExceptionAop {
 
     private final RedisMutex redisMutex;
 
-    @Around("@annotation(MethodTimer)")
-    public Object methodTimer(ProceedingJoinPoint joinPoint) throws Throwable {
-        StopWatch stopWatch = new StopWatch();
+    private static final ExpressionParser expressionParser = new SpelExpressionParser();
+    private static final DefaultParameterNameDiscoverer parameterNameDiscoverer = new DefaultParameterNameDiscoverer();
 
-        stopWatch.start();
-        Object result = joinPoint.proceed();
-        stopWatch.stop();
-
-        long totalTimeMillis = stopWatch.getTotalTimeMillis();
-
-        MethodSignature signature = (MethodSignature) joinPoint.getSignature();
-        MethodTimer requiredPermission = signature.getMethod().getAnnotation(MethodTimer.class);
-        String method = requiredPermission.method();
-
-        log.info("{}, 실행 시간: {} ms", method, totalTimeMillis);
-        return result;
-    }
-
-    @Around("@annotation(com.yeojeong.application.config.util.customannotation.RedisLocker)")
+    @Around("@annotation(RedisLocker)")
     public Object locker(ProceedingJoinPoint joinPoint) throws Throwable {
         RedisLocker redisLocker = ((MethodSignature) joinPoint.getSignature())
                 .getMethod()
                 .getAnnotation(RedisLocker.class);
 
-        Object[] args = joinPoint.getArgs();
+        String methodKey = redisLocker.key();
+        String methodValue = parseSpEL(joinPoint, redisLocker.value());
 
-        Long id = null;
-        for(Object arg : args) {
-            if(arg instanceof Long) {
-                id = (Long) arg;
-                break;
-            }
-        }
-
-        String key = redisLocker.key() + id;
+        String key = methodKey + ":" + methodValue;
         long timeout = redisLocker.timeout();
 
-        if(redisMutex.lock(key, timeout)){
+        if (redisMutex.lock(key, timeout)) {
             try {
                 return joinPoint.proceed();
             } finally {
@@ -67,6 +50,18 @@ public class AnnotationExceptionAop {
         } else {
             log.info("lock 획득 실패");
         }
+
         return null;
     }
+
+    private String parseSpEL(JoinPoint joinPoint, String spEL) {
+        MethodSignature signature = (MethodSignature) joinPoint.getSignature();
+        StandardEvaluationContext context = new MethodBasedEvaluationContext(null, signature.getMethod(), joinPoint.getArgs(), parameterNameDiscoverer);
+        try {
+            return expressionParser.parseExpression(spEL).getValue(context, String.class);
+        } catch (Exception e) {
+            return spEL;
+        }
+    }
 }
+

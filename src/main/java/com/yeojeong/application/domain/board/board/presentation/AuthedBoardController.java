@@ -4,7 +4,6 @@ import com.yeojeong.application.domain.board.board.application.boardfacade.Board
 import com.yeojeong.application.domain.board.board.application.imagefacade.ImageFacade;
 import com.yeojeong.application.domain.board.board.presentation.dto.BoardResponse;
 import com.yeojeong.application.domain.board.board.presentation.dto.BoardRequest;
-import com.yeojeong.application.config.util.customannotation.MethodTimer;
 import com.yeojeong.application.security.config.SecurityUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -29,7 +28,6 @@ public class AuthedBoardController {
     private final BoardFacade boardFacade;
     private final ImageFacade imageFacade;
 
-    @MethodTimer(method = "게시글 작성")
     @PostMapping
     @Operation(summary = "게시글 작성")
     @ApiResponses(
@@ -46,7 +44,6 @@ public class AuthedBoardController {
         return ResponseEntity.status(HttpStatus.CREATED).body(boardFacade.save(dto, memberId));
     }
 
-    @MethodTimer(method = "게시글 수정")
     @PutMapping("/{id}")
     @Operation(summary = "게시글 수정")
     @ApiResponses(
@@ -63,7 +60,6 @@ public class AuthedBoardController {
         return ResponseEntity.ok(boardFacade.update(id, memberId, dto));
     }
 
-    @MethodTimer(method = "게시글 삭제")
     @DeleteMapping("/{id}")
     @Operation(summary = "게시글 삭제")
     @ApiResponses(

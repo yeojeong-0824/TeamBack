@@ -1,6 +1,5 @@
 package com.yeojeong.application.domain.member.presentation;
 
-import com.yeojeong.application.config.util.customannotation.MethodTimer;
 import com.yeojeong.application.domain.member.application.memberfacade.MemberFacade;
 import com.yeojeong.application.domain.member.presentation.dto.MemberRequest;
 import io.swagger.v3.oas.annotations.Operation;
@@ -27,7 +26,6 @@ public class FindMemberController {
 
     private final MemberFacade memberFacade;
 
-    @MethodTimer(method = "새로운 비밀번호 발급 호출")
     @PatchMapping("/passwords")
     @Operation(summary = "새로운 비밀번호 발급", description = "새로운 비밀번호를 발급합니다. 새로운 비밀번호는 해당 아이디의 이메일로 발송됩니다.")
     @ApiResponses(
@@ -43,7 +41,6 @@ public class FindMemberController {
     }
 
 
-    @MethodTimer(method = "아이디 찾기 호출")
     @GetMapping("/usernames/{email}")
     @Operation(summary = "아이디 찾기", description = "해당 이메일로 회원가입이 된 아이디가 존재한다면, 해당 이메일로 아이디를 발송합니다.")
     @ApiResponses(

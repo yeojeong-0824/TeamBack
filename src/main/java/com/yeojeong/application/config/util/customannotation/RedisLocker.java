@@ -9,5 +9,6 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface RedisLocker {
     String key();
+    String value() default "";
     long timeout() default 30L;
 }

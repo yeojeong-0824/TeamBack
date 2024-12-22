@@ -13,6 +13,7 @@ import com.yeojeong.application.domain.member.domain.Member;
 import com.yeojeong.application.domain.planner.planner.application.plannerservice.PlannerService;
 import com.yeojeong.application.domain.planner.planner.domain.Planner;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -65,7 +66,7 @@ public class BoardFacadeImpl implements BoardFacade {
 
     @Override
     @Transactional
-    @RedisLocker(key = "findById")
+    @RedisLocker(key = "findById", value = "#id")
     public BoardResponse.FindById findById(Long id) {
         Board savedEntity = boardService.findById(id);
         savedEntity.addViewCount();
