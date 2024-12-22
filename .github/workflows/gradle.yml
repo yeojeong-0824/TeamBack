@@ -67,5 +67,5 @@ jobs:
             sudo docker pull ${{secrets.DOCKERHUB_USERNAME}}/back
             sudo docker stop back
             sudo docker container rm back
-            sudo docker run -dit -p 8080:8080 --name back --network db_server -v /home/ubuntu/files:/app/files ${{secrets.DOCKERHUB_USERNAME}}/back
+            sudo docker run -dit -p 8080:8080 --name back --network monitoring_server --network db_server -v /home/ubuntu/files:/app/files ${{secrets.DOCKERHUB_USERNAME}}/back
             sudo docker image prune -f
