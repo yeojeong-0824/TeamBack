@@ -17,10 +17,10 @@ public class PlannerResponse {
             String subTitle,
             int locationCount,
 
-            List<LocationResponse.FindById> locationInfo,
+            List<LocationResponse.LocationInfo> location,
             UtilResponse.TimeInfo time
     ) {
-        public static FindById toDto(Planner planner, List<LocationResponse.FindById> locationInfo) {
+        public static FindById toDto(Planner planner) {
             return FindById.builder()
                     .id(planner.getId())
                     .title(planner.getTitle())
@@ -28,7 +28,7 @@ public class PlannerResponse {
                     .subTitle(planner.getSubTitle())
 
                     .locationCount(planner.getLocationCount())
-                    .locationInfo(locationInfo)
+                    .location(planner.getLocations() == null ? null : planner.getLocations().stream().map(LocationResponse.LocationInfo::toDto).toList())
                     .time(UtilResponse.TimeInfo.toDto(planner))
                     .build();
         }
