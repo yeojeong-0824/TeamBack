@@ -1,9 +1,7 @@
 package com.yeojeong.application.domain.planner.location.presentation;
 
-import com.yeojeong.application.config.util.customannotation.MethodTimer;
 import com.yeojeong.application.domain.planner.location.application.locationfacade.LocationFacade;
 import com.yeojeong.application.domain.planner.location.presentation.dto.LocationResponse;
-import com.yeojeong.application.security.config.SecurityUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -26,7 +24,6 @@ public class FindLocationController {
 
     private final LocationFacade locationFacade;
 
-    @MethodTimer(method = "플래너에 작성된 장소 조회")
     @GetMapping("/planners/{plannerId}")
     @Operation(summary = "플래너에 대한 장소를 조회", description = "Planner의 장소를 모두 조회합니다.")
     @ApiResponses(

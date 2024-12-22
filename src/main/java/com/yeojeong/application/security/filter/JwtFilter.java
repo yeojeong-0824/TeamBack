@@ -1,6 +1,7 @@
 package com.yeojeong.application.security.filter;
 
 import com.auth0.jwt.exceptions.*;
+import com.yeojeong.application.config.exception.AuthedException;
 import com.yeojeong.application.config.exception.response.ExceptionResponseSender;
 import com.yeojeong.application.domain.member.domain.MemberDetails;
 import com.yeojeong.application.domain.member.domain.Member;
@@ -17,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -53,16 +55,22 @@ public class JwtFilter extends OncePerRequestFilter {
                     new UsernamePasswordAuthenticationToken(jwtTokenMemberDetails, null, jwtTokenMemberDetails.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authentication);
         } catch (TokenExpiredException ex) {
-            Cookie[] cookies = request.getCookies();
+            try {
+                Cookie[] cookies = request.getCookies();
 
-            MemberDetails memberDetails = refreshTokenFacade.getMemberDetailsByRefreshToken(cookies);
-            Cookie refreshCookie = refreshTokenFacade.createNewRefreshTokenCookie(memberDetails);
-            response.addCookie(refreshCookie);
+                MemberDetails memberDetails = refreshTokenFacade.getMemberDetailsByRefreshToken(cookies);
+                Cookie refreshCookie = refreshTokenFacade.createNewRefreshTokenCookie(memberDetails);
+                response.addCookie(refreshCookie);
 
-            String jwtToken = refreshTokenFacade.createNewJwtToken(memberDetails);
-            response.addHeader(JwtProvider.JWT_HEADER_STRING, JwtProvider.TOKEN_PREFIX_JWT + jwtToken);
-
-            return;
+                String jwtToken = refreshTokenFacade.createNewJwtToken(memberDetails);
+                response.addHeader(JwtProvider.JWT_HEADER_STRING, JwtProvider.TOKEN_PREFIX_JWT + jwtToken);
+            } catch(AuthedException e) {
+                ExceptionResponseSender.createExceptionResponse(HttpStatus.FORBIDDEN.value(), request, response, e.getMessage());
+                return;
+            } catch (RuntimeException e) {
+                ExceptionResponseSender.createExceptionResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), request, response, ex.getMessage());
+                return;
+            }
         } catch (JWTDecodeException ex) {
             ExceptionResponseSender.createExceptionResponse(HttpStatus.BAD_REQUEST.value(), request, response, "잘못된 토큰입니다.");
             return;

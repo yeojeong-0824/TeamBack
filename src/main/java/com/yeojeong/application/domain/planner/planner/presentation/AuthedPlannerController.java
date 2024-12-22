@@ -1,6 +1,5 @@
 package com.yeojeong.application.domain.planner.planner.presentation;
 
-import com.yeojeong.application.config.util.customannotation.MethodTimer;
 import com.yeojeong.application.domain.planner.planner.application.plannerfacade.PlannerFacade;
 import com.yeojeong.application.domain.planner.planner.presentation.dto.PlannerRequest;
 import com.yeojeong.application.domain.planner.planner.presentation.dto.PlannerResponse;
@@ -26,7 +25,6 @@ public class AuthedPlannerController {
 
     private final PlannerFacade plannerFacade;
 
-    @MethodTimer(method = "플래너 작성")
     @PostMapping
     @Operation(summary = "플래너 작성")
     @ApiResponses(
@@ -43,7 +41,6 @@ public class AuthedPlannerController {
         return ResponseEntity.status(HttpStatus.CREATED).body(plannerFacade.save(dto, memberId));
     }
 
-    @MethodTimer(method = "플래너 수정")
     @PutMapping("/{id}")
     @Operation(summary = "플래너 수정")
     @ApiResponses(
@@ -60,7 +57,6 @@ public class AuthedPlannerController {
         return ResponseEntity.ok(plannerFacade.update(id, dto, memberId));
     }
 
-    @MethodTimer(method = "플래너 삭제")
     @DeleteMapping("/{id}")
     @Operation(summary = "플래너 삭제")
     @ApiResponses(

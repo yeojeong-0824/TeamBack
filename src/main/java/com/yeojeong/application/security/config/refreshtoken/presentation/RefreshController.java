@@ -1,6 +1,5 @@
 package com.yeojeong.application.security.config.refreshtoken.presentation;
 
-import com.yeojeong.application.config.util.customannotation.MethodTimer;
 import com.yeojeong.application.domain.member.domain.MemberDetails;
 import com.yeojeong.application.security.config.JwtProvider;
 import com.yeojeong.application.security.config.refreshtoken.application.refreshtokenfacade.RefreshTokenFacade;
@@ -25,7 +24,6 @@ public class RefreshController {
 
     private final RefreshTokenFacade refreshTokenFacade;
 
-    @MethodTimer(method = "리프레시 토큰 삭제")
     @Operation(summary = "리프레시 토큰 삭제")
     @DeleteMapping("/refresh")
     @ApiResponses(
@@ -48,7 +46,6 @@ public class RefreshController {
         return ResponseEntity.noContent().build();
     }
 
-    @MethodTimer(method = "리프레시 토큰 재발급")
     @Operation(summary = "리프레시 토큰 재발급")
     @GetMapping("/refresh")
     @ApiResponses(
@@ -73,7 +70,6 @@ public class RefreshController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @MethodTimer(method = "액세스 토큰 유효성 검사")
     @Operation(summary = "액세스 토큰 유효성 검사")
     @GetMapping("/access")
     @ApiResponses(

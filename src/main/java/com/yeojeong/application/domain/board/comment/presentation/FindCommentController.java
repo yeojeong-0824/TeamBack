@@ -2,7 +2,6 @@ package com.yeojeong.application.domain.board.comment.presentation;
 
 import com.yeojeong.application.domain.board.comment.application.commentfacade.CommentFacade;
 import com.yeojeong.application.domain.board.comment.presentation.dto.CommentResponse;
-import com.yeojeong.application.config.util.customannotation.MethodTimer;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -22,7 +21,6 @@ public class FindCommentController {
 
     private final CommentFacade commentFacade;
 
-    @MethodTimer(method = "게시글에 작성된 댓글 호출")
     @GetMapping("/{boardId}")
     @Operation(summary = "게시글에 작성된 댓글 호출", description = "게시글에 댓글 불러옵니다.")
     @ApiResponses(

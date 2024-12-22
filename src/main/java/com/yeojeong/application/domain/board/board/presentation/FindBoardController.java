@@ -2,8 +2,6 @@ package com.yeojeong.application.domain.board.board.presentation;
 
 import com.yeojeong.application.domain.board.board.application.boardfacade.BoardFacade;
 import com.yeojeong.application.domain.board.board.presentation.dto.BoardResponse;
-import com.yeojeong.application.config.util.customannotation.MethodTimer;
-import com.yeojeong.application.security.config.SecurityUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -23,7 +21,6 @@ public class FindBoardController {
 
     private final BoardFacade boardFacade;
 
-    @MethodTimer(method = "게시글 호출")
     @GetMapping("/{id}")
     @Operation(summary = "게시글 호출")
     @ApiResponses(
@@ -37,7 +34,6 @@ public class FindBoardController {
         return ResponseEntity.ok(boardFacade.findById(id));
     }
 
-    @MethodTimer(method = "조건에 따른 게시글 호출")
     @GetMapping
     @Operation(summary = "조건에 따른 게시글 검색, 정렬")
     @ApiResponses(

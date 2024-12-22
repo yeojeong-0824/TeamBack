@@ -1,6 +1,5 @@
 package com.yeojeong.application.domain.member.presentation;
 
-import com.yeojeong.application.config.util.customannotation.MethodTimer;
 import com.yeojeong.application.domain.member.application.memberfacade.MemberFacade;
 import com.yeojeong.application.domain.member.presentation.dto.MemberResponse;
 import com.yeojeong.application.security.config.SecurityUtil;
@@ -31,7 +30,6 @@ public class AuthedMemberController {
 
     private final MemberFacade memberFacade;
 
-    @MethodTimer(method = "회원 정보 호출")
     @GetMapping
     @Operation(summary = "회원 정보 확인", description = "간단한 회원 정보를 받아옵니다.")
     @ApiResponses(
@@ -47,7 +45,6 @@ public class AuthedMemberController {
         return ResponseEntity.ok(memberFacade.findById(id));
     }
 
-    @MethodTimer(method = "해당 회원이 작성한 게시글 호출")
     @GetMapping("/boards")
     @Operation(summary = "해당 회원의 작성 게시글 확인", description = "해당 회원이 작성한 게시글의 정보를 받아옵니다.")
     @ApiResponses(
@@ -63,7 +60,6 @@ public class AuthedMemberController {
         return ResponseEntity.ok(memberFacade.findBoardById(id, page));
     }
 
-    @MethodTimer(method = "해당 회원이 작성한 댓글 호출")
     @GetMapping("/comments")
     @Operation(summary = "해당 회원의 작성 댓글 목록 확인", description = "해당 회원이 작성한 댓글의 정보를 받아옵니다.")
     @ApiResponses(
@@ -79,7 +75,6 @@ public class AuthedMemberController {
         return ResponseEntity.ok(memberFacade.findCommentById(id, page));
     }
 
-    @MethodTimer(method = "해당 회원이 작성한 플레너 호출")
     @GetMapping("/planners")
     @Operation(summary = "해당 회원의 플레너 확인", description = "해당 회원이 작성한 플레너의 정보를 받아옵니다.")
     @ApiResponses(
@@ -95,7 +90,6 @@ public class AuthedMemberController {
         return ResponseEntity.ok(memberFacade.findPlannerById(id, page));
     }
 
-    @MethodTimer(method = "날짜 범위에 작성된 장소 조회")
     @GetMapping("/locations")
     @Operation(summary = "날짜 범위에 대한 장소를 조회", description = "날찌 범위에 작성된 장소를 모두 조회합니다.")
     @ApiResponses(
@@ -109,7 +103,6 @@ public class AuthedMemberController {
         return ResponseEntity.status(HttpStatus.OK).body(memberFacade.findLocationByDate(memberId, start, end));
     }
 
-    @MethodTimer(method = "회원 탈퇴 호출")
     @DeleteMapping
     @Operation(summary = "유저 탈퇴", description = "회원 탈퇴를 진행합니다.")
     @ApiResponses(
@@ -127,7 +120,6 @@ public class AuthedMemberController {
         return ResponseEntity.noContent().build();
     }
 
-    @MethodTimer(method = "비밀번호 확인")
     @PostMapping("/checkPassword")
     @Operation(summary = "비밀번호 확인", description = "회원 비밀번호를 확인합니다.")
     @ApiResponses(
@@ -145,7 +137,6 @@ public class AuthedMemberController {
         return ResponseEntity.noContent().build();
     }
 
-    @MethodTimer(method = "회원 정보 수정 호출")
     @PutMapping
     @Operation(summary = "유저 정보 수정", description = "회원 정보를 수정합니다")
     @ApiResponses(
@@ -162,7 +153,6 @@ public class AuthedMemberController {
         return ResponseEntity.ok(memberFacade.patch(id, dto));
     }
 
-    @MethodTimer(method = "회원 비밀번호 수정 호출")
     @PatchMapping("/password")
     @Operation(summary = "유저 비밀번호 정보 수정", description = "회원 비밀번호 정보를 수정합니다")
     @ApiResponses(

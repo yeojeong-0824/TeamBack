@@ -1,6 +1,5 @@
 package com.yeojeong.application.domain.planner.location.presentation;
 
-import com.yeojeong.application.config.util.customannotation.MethodTimer;
 import com.yeojeong.application.domain.planner.location.application.locationfacade.LocationFacade;
 import com.yeojeong.application.domain.planner.location.presentation.dto.LocationRequest;
 import com.yeojeong.application.domain.planner.location.presentation.dto.LocationResponse;
@@ -13,13 +12,10 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
@@ -30,7 +26,6 @@ public class AuthedLocationController {
     private final LocationFacade locationFacade;
 
 
-    @MethodTimer(method = " 장소 작성")
     @PostMapping("/{plannerId}")
     @Operation(summary = "장소 작성", description = "Planner 의 장소를 기록합니다.")
     @ApiResponses(
@@ -46,7 +41,6 @@ public class AuthedLocationController {
         return ResponseEntity.status(HttpStatus.CREATED).body(locationFacade.save(dto, plannerId, memberId));
     }
 
-    @MethodTimer(method = " 장소 수정")
     @PutMapping("/{id}")
     @Operation(summary = "장소 수정", description = "Planner의 장소를 수정합니다.")
     @ApiResponses(
@@ -62,7 +56,6 @@ public class AuthedLocationController {
         return ResponseEntity.status(HttpStatus.OK).body(locationFacade.update(dto, id, memberId));
     }
 
-    @MethodTimer(method = " 장소 삭제")
     @DeleteMapping("/{id}")
     @Operation(summary = "장소를 삭제", description = "Planner의 장소를 삭제합니다.")
     @ApiResponses(

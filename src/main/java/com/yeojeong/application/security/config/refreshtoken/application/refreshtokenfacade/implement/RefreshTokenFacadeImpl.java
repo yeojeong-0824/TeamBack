@@ -70,6 +70,7 @@ public class RefreshTokenFacadeImpl implements RefreshTokenFacade {
     }
 
     private String getRefreshTokenByCookie(Cookie[] cookies) {
+        if(cookies == null) throw new AuthedException("Refresh token이 존재하지 않습니다.");
         for (Cookie cookie : cookies) {
             if (cookie.getName().equals(JwtProvider.REFRESH_HEADER_STRING))
                 return cookie.getValue();
