@@ -1,9 +1,14 @@
 package com.yeojeong.application.config.exception.response;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.yeojeong.application.config.exception.handler.GlobalExceptionHandler;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import java.io.IOException;
 

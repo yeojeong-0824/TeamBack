@@ -1,18 +1,21 @@
 package com.yeojeong.application.domain.planner.location.presentation;
 
 import com.yeojeong.application.domain.planner.location.application.locationfacade.LocationFacade;
+import com.yeojeong.application.domain.planner.location.presentation.dto.LocationRequest;
 import com.yeojeong.application.domain.planner.location.presentation.dto.LocationResponse;
+import com.yeojeong.application.security.config.SecurityUtil;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -24,15 +27,14 @@ public class FindLocationController {
 
     private final LocationFacade locationFacade;
 
-    @GetMapping("/planners/{plannerId}")
-    @Operation(summary = "플래너에 대한 장소를 조회", description = "Planner의 장소를 모두 조회합니다.")
+    @GetMapping("/{id}")
+    @Operation(summary = "장소 수정", description = "Location의 장소를 수정합니다.")
     @ApiResponses(
             value = {
-                    @ApiResponse(responseCode = "200", description = "플래너에 대한 장소 조회 완료"),
-                    @ApiResponse(responseCode = "403", description = "권한 없음")
+                    @ApiResponse(responseCode = "200", description = "장소 조회 완료")
             }
     )
-    public ResponseEntity<List<LocationResponse.FindById>> findByPlannerId (@PathVariable("plannerId") Long plannerId) {
-        return ResponseEntity.status(HttpStatus.OK).body(locationFacade.findByPlannerId(plannerId));
+    public ResponseEntity<LocationResponse.FindById> put(@PathVariable("id") Long id) {
+        return ResponseEntity.status(HttpStatus.OK).body(locationFacade.findById(id));
     }
 }
