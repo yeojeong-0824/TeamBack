@@ -28,7 +28,7 @@ public class FindLocationController {
     private final LocationFacade locationFacade;
 
     @GetMapping("/{id}")
-    @Operation(summary = "장소 수정", description = "Location의 장소를 수정합니다.")
+    @Operation(summary = "장소 호출", description = "Location의 장소를 호출합니다.")
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "장소 조회 완료")

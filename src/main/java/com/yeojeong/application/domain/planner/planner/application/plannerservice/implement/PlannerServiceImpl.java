@@ -19,13 +19,11 @@ public class PlannerServiceImpl implements PlannerService {
     private final PlannerRepository plannerRepository;
 
     @Override
-    @Transactional
     public Planner save(Planner entity) {
         return plannerRepository.save(entity);
     }
 
     @Override
-    @Transactional
     public Planner update(Planner entity) {
         return plannerRepository.save(entity);
     }
@@ -37,7 +35,6 @@ public class PlannerServiceImpl implements PlannerService {
     }
 
     @Override
-    @Transactional
     public void delete(Planner entity) {
         plannerRepository.delete(entity);
     }
@@ -49,7 +46,6 @@ public class PlannerServiceImpl implements PlannerService {
     }
 
     @Override
-    @Transactional
     public void deleteByMemberId(Long memberId) {
         plannerRepository.deleteByMemberId(memberId);
     }
