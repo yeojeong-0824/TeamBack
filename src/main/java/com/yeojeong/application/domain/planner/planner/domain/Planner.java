@@ -38,7 +38,7 @@ public class Planner extends BaseTime implements Serializable {
     @OneToMany(mappedBy = "planner", fetch = FetchType.LAZY)
     private List<Location> locations;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "member_id", nullable = false, foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private Member member;
 

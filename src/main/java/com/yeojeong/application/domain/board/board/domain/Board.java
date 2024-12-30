@@ -48,7 +48,7 @@ public class Board extends BaseTime implements Serializable {
     @Column(nullable = false)
     private Integer view;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "member_id", nullable = false, foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private Member member;
 
