@@ -67,11 +67,11 @@ public class CommentFacadeImpl implements CommentFacade {
         checkMember(savedEntity, memberId);
 
         Comment entity = CommentRequest.Put.toEntity(dto);
-        if(dto.score() != 0) savedEntity.update(entity);
+        savedEntity.update(entity);
         Comment rtnEntity = commentService.update(savedEntity);
 
         Board board = rtnEntity.getBoard();
-        boardService.updateComment(board);
+        if(dto.score() != 0) boardService.updateComment(board);
         boardService.update(board);
 
         return CommentResponse.FindById.toDto(rtnEntity);
