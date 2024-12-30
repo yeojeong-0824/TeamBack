@@ -48,7 +48,7 @@ public class Location extends BaseTime implements Serializable {
     @Column
     private String memo;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "planner_id", nullable = false, foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private Planner planner;
 
