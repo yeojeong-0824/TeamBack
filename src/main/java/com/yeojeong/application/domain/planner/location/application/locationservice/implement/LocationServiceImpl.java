@@ -17,7 +17,6 @@ public class LocationServiceImpl implements LocationService {
     private final LocationRepository locationRepository;
 
     @Override
-    @Transactional
     public Location save(Location entity) {
         return locationRepository.save(entity);
     }
@@ -29,13 +28,11 @@ public class LocationServiceImpl implements LocationService {
     }
 
     @Override
-    @Transactional
     public Location update(Location entity) {
         return locationRepository.save(entity);
     }
 
     @Override
-    @Transactional
     public void delete(Location entity) {
         locationRepository.delete(entity);
     }
@@ -51,13 +48,11 @@ public class LocationServiceImpl implements LocationService {
     }
 
     @Override
-    @Transactional
     public void deleteByMemberId(Long memberId) {
         locationRepository.deleteByMemberId(memberId);
     }
 
     @Override
-    @Transactional
     public void deleteByPlannerId(Long plannerId) {
         locationRepository.deleteByPlannerId(plannerId);
     }

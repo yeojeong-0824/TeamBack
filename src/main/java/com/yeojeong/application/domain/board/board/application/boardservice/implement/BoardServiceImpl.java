@@ -91,14 +91,12 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    @Transactional
     public void updateComment(Board board) {
         board.avgScorePatch(getAvgScore(board));
         boardRepository.save(board);
     }
 
     @Override
-    @Transactional
     public void deleteByMemberId(Long memberId) {
         boardRepository.deleteByMemberId(memberId);
     }

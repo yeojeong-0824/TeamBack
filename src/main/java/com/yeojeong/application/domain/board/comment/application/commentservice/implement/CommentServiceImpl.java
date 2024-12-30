@@ -26,13 +26,11 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    @Transactional
     public Comment save(Comment entity) {
         return commentRepository.save(entity);
     }
 
     @Override
-    @Transactional
     public void delete(Comment entity) {
         commentRepository.delete(entity);
     }
@@ -61,7 +59,6 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    @Transactional
     public void deleteByBoardId(Long boardId) {
         commentRepository.deleteByBoardId(boardId);
     }
