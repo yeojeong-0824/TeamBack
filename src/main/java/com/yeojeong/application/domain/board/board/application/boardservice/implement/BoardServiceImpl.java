@@ -117,7 +117,7 @@ public class BoardServiceImpl implements BoardService {
             size++;
             sum += score;
         }
-
+        if(size == 0) return 0;
         return (sum * 100) / size;
     }
 }
