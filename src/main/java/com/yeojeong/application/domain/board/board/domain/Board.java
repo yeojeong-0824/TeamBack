@@ -52,7 +52,7 @@ public class Board extends BaseTime implements Serializable {
     @JoinColumn(name = "member_id", nullable = false, foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private Member member;
 
-    @OneToMany(mappedBy = "board", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "board", fetch = FetchType.EAGER)
     private List<Comment> comments;
 
     @Column()
