@@ -93,7 +93,6 @@ public class BoardServiceImpl implements BoardService {
     @Override
     public void updateComment(Board board) {
         board.avgScorePatch(getAvgScore(board));
-        boardRepository.save(board);
     }
 
     @Override
