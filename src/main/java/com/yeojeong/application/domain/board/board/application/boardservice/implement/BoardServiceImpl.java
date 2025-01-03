@@ -7,15 +7,12 @@ import com.yeojeong.application.domain.board.board.domain.Board;
 import com.yeojeong.application.domain.board.board.domain.BoardRepository;
 import com.yeojeong.application.config.exception.NotFoundDataException;
 import com.yeojeong.application.domain.board.comment.domain.Comment;
-import com.yeojeong.application.domain.member.domain.Member;
-import io.micrometer.core.aop.CountedAspect;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -91,8 +88,23 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
+    public void createComment(Board board) {
+        board.commentCountUp();
+        board.avgScorePatch(getAvgScore(board));
+        boardRepository.save(board);
+    }
+
+    @Override
+    public void deleteComment(Board board) {
+        board.commentCountDown();
+        board.avgScorePatch(getAvgScore(board));
+        boardRepository.save(board);
+    }
+
+    @Override
     public void updateComment(Board board) {
         board.avgScorePatch(getAvgScore(board));
+        boardRepository.save(board);
     }
 
     @Override
