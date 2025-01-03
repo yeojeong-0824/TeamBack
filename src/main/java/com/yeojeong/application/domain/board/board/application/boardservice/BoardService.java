@@ -11,9 +11,7 @@ public interface BoardService {
     Page<Board> findAll(String searchKeyword, String keyword, String sortKeyword, int page);
     void delete(Board entity);
 
-    void createComment(Board board);
-    void deleteComment(Board board);
-    void updateComment(Board board);
+    void updateCommentInfo(Board board);
 
     void deleteByMemberId(Long memberId);
 }

@@ -40,7 +40,7 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    @Cacheable(value = "boards", key = "#id", condition="#id != null")
+//    @Cacheable(value = "boards", key = "#id", condition="#id != null")
     public Board findById(Long id) {
         return boardRepository.findById(id)
                 .orElseThrow(() -> new NotFoundDataException("해당 게시글을 찾을 수 없습니다."));
@@ -88,22 +88,10 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public void createComment(Board board) {
-        board.commentCountUp();
-        board.avgScorePatch(getAvgScore(board));
-        boardRepository.save(board);
-    }
-
-    @Override
-    public void deleteComment(Board board) {
-        board.commentCountDown();
-        board.avgScorePatch(getAvgScore(board));
-        boardRepository.save(board);
-    }
-
-    @Override
-    public void updateComment(Board board) {
-        board.avgScorePatch(getAvgScore(board));
+    public void updateCommentInfo(Board board) {
+        board.updateCommentCount(board.getCommentCount());
+        int avgScore = getAvgScore(board.getCommentCount(), board.getComments());
+        board.avgScorePatch(avgScore);
         boardRepository.save(board);
     }
 
@@ -112,11 +100,8 @@ public class BoardServiceImpl implements BoardService {
         boardRepository.deleteByMemberId(memberId);
     }
 
-    private int getAvgScore(Board board) {
-        int commentCount = board.getCommentCount();
+    private int getAvgScore(int commentCount, List<Comment> commentList) {
         if(commentCount == 0) return 0;
-
-        List<Comment> commentList = board.getComments();
 
         int size = 0;
         int sum = 0;
