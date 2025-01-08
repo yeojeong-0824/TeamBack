@@ -8,6 +8,7 @@ import com.yeojeong.application.security.config.SecurityUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.NonNull;
@@ -29,7 +30,7 @@ public class AuthedBoardController {
     private final ImageFacade imageFacade;
 
     @PostMapping
-    @Operation(summary = "게시글 작성")
+    @Operation(summary = "게시글 작성", security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "201", description = "게시글 작성 성공"),
@@ -45,7 +46,7 @@ public class AuthedBoardController {
     }
 
     @PutMapping("/{id}")
-    @Operation(summary = "게시글 수정")
+    @Operation(summary = "게시글 수정", security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "게시글 수정 성공"),
@@ -61,7 +62,7 @@ public class AuthedBoardController {
     }
 
     @DeleteMapping("/{id}")
-    @Operation(summary = "게시글 삭제")
+    @Operation(summary = "게시글 삭제", security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "204", description = "게시글 삭제 성공"),
@@ -76,6 +77,14 @@ public class AuthedBoardController {
     }
 
     @PostMapping("/images")
+    @Operation(summary = "이미지 저장", security = @SecurityRequirement(name = "bearerAuth"))
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "201", description = "이미지 저장 성공"),
+                    @ApiResponse(responseCode = "400", description = "게시글 저장 실패"),
+                    @ApiResponse(responseCode = "403", description = "권한 없음"),
+            }
+    )
     public ResponseEntity<String> images(@RequestPart(value = "image", required = false) @NonNull MultipartFile image) {
         return ResponseEntity.status(HttpStatus.CREATED).body(imageFacade.saveImage(image));
     }

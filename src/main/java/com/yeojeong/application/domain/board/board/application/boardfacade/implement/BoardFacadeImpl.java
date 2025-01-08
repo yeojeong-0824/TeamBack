@@ -32,7 +32,7 @@ public class BoardFacadeImpl implements BoardFacade {
     @Transactional
     public BoardResponse.FindById save(BoardRequest.Save dto, Long memberId) {
         Member member = memberService.findById(memberId);
-        if(!(dto.plannerId() == null)) plannerService.findById(dto.plannerId());
+        if(dto.plannerId() != 0L) plannerService.findById(dto.plannerId());
 
         Board entity = BoardRequest.Save.toEntity(dto, member);
         Board savedEntity = boardService.save(entity);
@@ -45,7 +45,7 @@ public class BoardFacadeImpl implements BoardFacade {
     public BoardResponse.FindById update(Long id, Long memberId, BoardRequest.Put dto) {
         Board savedEntity = boardService.findById(id);
         checkMember(savedEntity, memberId);
-        if(!(dto.plannerId() == null)) plannerService.findById(dto.plannerId());
+        if(dto.plannerId() != 0L) plannerService.findById(dto.plannerId());
 
         Board entity = BoardRequest.Put.toEntity(dto);
         savedEntity.update(entity);

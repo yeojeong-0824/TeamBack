@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +27,7 @@ public class AuthedPlannerController {
     private final PlannerFacade plannerFacade;
 
     @PostMapping
-    @Operation(summary = "플래너 작성")
+    @Operation(summary = "플래너 작성", security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "201", description = "성공"),
@@ -44,7 +45,7 @@ public class AuthedPlannerController {
     }
 
     @PutMapping("/{id}")
-    @Operation(summary = "플래너 수정")
+    @Operation(summary = "플래너 수정", security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "플래너 수정 성공"),
@@ -62,7 +63,7 @@ public class AuthedPlannerController {
     }
 
     @DeleteMapping("/{id}")
-    @Operation(summary = "플래너 삭제")
+    @Operation(summary = "플래너 삭제", security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "204", description = "플래너 삭제 성공"),

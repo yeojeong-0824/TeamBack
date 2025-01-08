@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +28,7 @@ public class AuthedLocationController {
 
 
     @PostMapping("/{plannerId}")
-    @Operation(summary = "장소 작성", description = "Planner 의 장소를 기록합니다.")
+    @Operation(summary = "장소 작성", security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "201", description = "장소 등록 완료"),
@@ -42,7 +43,7 @@ public class AuthedLocationController {
     }
 
     @PutMapping("/{id}")
-    @Operation(summary = "장소 수정", description = "Planner의 장소를 수정합니다.")
+    @Operation(summary = "장소 수정", security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "장소 수정 완료"),
@@ -57,7 +58,7 @@ public class AuthedLocationController {
     }
 
     @DeleteMapping("/{id}")
-    @Operation(summary = "장소를 삭제", description = "Planner의 장소를 삭제합니다.")
+    @Operation(summary = "장소를 삭제", security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "204", description = "장소 삭제 완료"),
