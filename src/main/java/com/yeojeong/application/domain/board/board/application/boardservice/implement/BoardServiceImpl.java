@@ -89,8 +89,9 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     public void updateCommentInfo(Board board) {
-        board.updateCommentCount(board.getCommentCount());
-        int avgScore = getAvgScore(board.getCommentCount(), board.getComments());
+        int commentSize = board.getComments().size();
+        board.updateCommentCount(commentSize);
+        int avgScore = getAvgScore(commentSize, board.getComments());
         board.avgScorePatch(avgScore);
         boardRepository.save(board);
     }
