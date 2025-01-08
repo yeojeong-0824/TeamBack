@@ -96,6 +96,13 @@ public class GlobalExceptionHandler {
         ExceptionResponseSender.createExceptionResponse(httpStatus, request, response, message);
     }
 
+    @ExceptionHandler(OwnershipException.class)
+    public void handlerOwnershipException(OwnershipException ex, HttpServletRequest request, HttpServletResponse response) {
+        int httpStatus = HttpStatus.FORBIDDEN.value();
+        String message = ex.getMessage();
+        ExceptionResponseSender.createExceptionResponse(httpStatus, request, response, message);
+    }
+
     @ExceptionHandler(InvalidContentTypeException.class)
     public void handlerInvalidContentTypeException(InvalidContentTypeException ex, HttpServletRequest request, HttpServletResponse response) {
         int httpStatus = HttpStatus.BAD_REQUEST.value();

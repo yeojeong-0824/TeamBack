@@ -81,10 +81,6 @@ public class Board extends BaseTime implements Serializable {
         this.commentCount = commentCount;
     }
 
-    public void commentCountUp(){this.commentCount += 1;}
-
-    public void commentCountDown(){this.commentCount -= 1;}
-
     public void avgScorePatch(int avgScore) {
         this.avgScore = avgScore;
     }
