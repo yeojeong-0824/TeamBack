@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +32,7 @@ public class AuthedMemberController {
     private final MemberFacade memberFacade;
 
     @GetMapping
-    @Operation(summary = "회원 정보 확인", description = "간단한 회원 정보를 받아옵니다.")
+    @Operation(summary = "회원 정보 확인", security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "조회 완료"),
@@ -46,7 +47,7 @@ public class AuthedMemberController {
     }
 
     @GetMapping("/boards")
-    @Operation(summary = "해당 회원의 작성 게시글 확인", description = "해당 회원이 작성한 게시글의 정보를 받아옵니다.")
+    @Operation(summary = "해당 회원의 작성 게시글 확인", security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "조회 완료"),
@@ -61,7 +62,7 @@ public class AuthedMemberController {
     }
 
     @GetMapping("/comments")
-    @Operation(summary = "해당 회원의 작성 댓글 목록 확인", description = "해당 회원이 작성한 댓글의 정보를 받아옵니다.")
+    @Operation(summary = "해당 회원의 작성 댓글 목록 확인", security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "조회 완료"),
@@ -76,7 +77,7 @@ public class AuthedMemberController {
     }
 
     @GetMapping("/planners")
-    @Operation(summary = "해당 회원의 플레너 확인", description = "해당 회원이 작성한 플레너의 정보를 받아옵니다.")
+    @Operation(summary = "해당 회원의 플레너 확인", security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "조회 완료"),
@@ -91,7 +92,7 @@ public class AuthedMemberController {
     }
 
     @GetMapping("/locations")
-    @Operation(summary = "날짜 범위에 대한 장소를 조회", description = "날찌 범위에 작성된 장소를 모두 조회합니다.")
+    @Operation(summary = "날짜 범위에 대한 장소를 조회", security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "날짜 범위에 대한 장소 조회 완료"),
@@ -104,7 +105,7 @@ public class AuthedMemberController {
     }
 
     @DeleteMapping
-    @Operation(summary = "유저 탈퇴", description = "회원 탈퇴를 진행합니다.")
+    @Operation(summary = "유저 탈퇴", security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "204", description = "유저 탈퇴"),
@@ -121,7 +122,7 @@ public class AuthedMemberController {
     }
 
     @PostMapping("/checkPassword")
-    @Operation(summary = "비밀번호 확인", description = "회원 비밀번호를 확인합니다.")
+    @Operation(summary = "비밀번호 확인", security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "204", description = "비밀번호 확인 완료"),
@@ -138,7 +139,7 @@ public class AuthedMemberController {
     }
 
     @PutMapping
-    @Operation(summary = "유저 정보 수정", description = "회원 정보를 수정합니다")
+    @Operation(summary = "유저 정보 수정", security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "수정 완료"),
@@ -154,7 +155,7 @@ public class AuthedMemberController {
     }
 
     @PatchMapping("/password")
-    @Operation(summary = "유저 비밀번호 정보 수정", description = "회원 비밀번호 정보를 수정합니다")
+    @Operation(summary = "유저 비밀번호 정보 수정", security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "수정 완료"),

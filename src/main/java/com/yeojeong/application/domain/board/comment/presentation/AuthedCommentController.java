@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -29,10 +30,11 @@ public class AuthedCommentController {
     private final CommentFacade commentFacade;
 
     @PostMapping("/{boardId}")
-    @Operation(summary = "댓글 등록", description = "게시글에 댓글을 기록합니다.")
+    @Operation(summary = "댓글 등록", security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "201", description = "댓글 등록 완료"),
+                    @ApiResponse(responseCode = "400", description = "게시글 수정 실패"),
                     @ApiResponse(responseCode = "403", description = "권한 없음")
             }
     )
@@ -45,7 +47,7 @@ public class AuthedCommentController {
     }
 
     @PutMapping("/{id}")
-    @Operation(summary = "댓글 수정", description = "게시글 댓글을 수정합니다")
+    @Operation(summary = "댓글 수정", security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "댓글 수정 완료"),
@@ -61,7 +63,7 @@ public class AuthedCommentController {
     }
 
     @DeleteMapping("/{id}")
-    @Operation(summary = "댓글 삭제", description = "게시글 댓글을 삭제합니다.")
+    @Operation(summary = "댓글 삭제", security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "댓글 삭제 완료"),
