@@ -43,7 +43,6 @@ public class CommentFacadeImpl implements CommentFacade {
         checkMember(savedEntity, memberId);
 
         Board board = savedEntity.getBoard();
-        board.commentCountDown();
         boardService.updateCommentInfo(board);
 
         commentService.delete(savedEntity);
@@ -73,6 +72,6 @@ public class CommentFacadeImpl implements CommentFacade {
     }
 
     private void checkMember(Comment comment, Long memberId) {
-        if(memberId.equals(comment.getMember().getId())) throw new OwnershipException("댓글을 작성한 회원이 아닙니다.");
+        if(!memberId.equals(comment.getMember().getId())) throw new OwnershipException("댓글을 작성한 회원이 아닙니다.");
     }
 }
