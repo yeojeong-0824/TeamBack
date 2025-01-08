@@ -32,11 +32,16 @@ public class BoardFacadeImpl implements BoardFacade {
     @Transactional
     public BoardResponse.FindById save(BoardRequest.Save dto, Long memberId) {
         Member member = memberService.findById(memberId);
-        if(dto.plannerId() != 0L) plannerService.findById(dto.plannerId());
 
         Board entity = BoardRequest.Save.toEntity(dto, member);
-        Board savedEntity = boardService.save(entity);
 
+        if(dto.plannerId() != 0L) {
+            Planner planner = plannerService.findById(dto.plannerId());
+            checkMemberPlanner(planner, memberId);
+        }
+        entity.updatePlanner(dto.plannerId());
+
+        Board savedEntity = boardService.save(entity);
         return BoardResponse.FindById.toDto(savedEntity);
     }
 
@@ -45,10 +50,15 @@ public class BoardFacadeImpl implements BoardFacade {
     public BoardResponse.FindById update(Long id, Long memberId, BoardRequest.Put dto) {
         Board savedEntity = boardService.findById(id);
         checkMember(savedEntity, memberId);
-        if(dto.plannerId() != 0L) plannerService.findById(dto.plannerId());
 
         Board entity = BoardRequest.Put.toEntity(dto);
         savedEntity.update(entity);
+
+        if(dto.plannerId() != 0L) {
+            Planner planner = plannerService.findById(dto.plannerId());
+            checkMemberPlanner(planner, memberId);
+        }
+        savedEntity.updatePlanner(dto.plannerId());
 
         Board rtnEntity = boardService.update(savedEntity);
         return BoardResponse.FindById.toDto(rtnEntity);
@@ -82,5 +92,9 @@ public class BoardFacadeImpl implements BoardFacade {
 
     private void checkMember(Board board, Long memberId) {
         if (!memberId.equals(board.getMember().getId())) throw new OwnershipException("게시글을 작성한 사용자가 아닙니다.");
+    }
+
+    private void checkMemberPlanner(Planner planner, Long memberId) {
+        if (!memberId.equals(planner.getMember().getId())) throw new OwnershipException("플레너를 작성한 사용자가 아닙니다.");
     }
 }

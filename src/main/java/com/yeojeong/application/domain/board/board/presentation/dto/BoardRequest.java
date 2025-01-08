@@ -37,12 +37,12 @@ public class BoardRequest {
                     .longitude(dto.longitude())
                     .title(dto.title())
                     .body(dto.body())
+
                     .view(0)
                     .commentCount(0)
                     .avgScore(0)
 
                     .member(member)
-                    .plannerId(dto.plannerId())
                     .build();
         }
     }
@@ -76,8 +76,6 @@ public class BoardRequest {
                     .longitude(dto.longitude())
                     .title(dto.title())
                     .body(dto.body())
-
-                    .plannerId(dto.plannerId())
                     .build();
         }
     }

@@ -45,7 +45,6 @@ public class Board extends BaseTime implements Serializable {
     @Column(nullable = false, length = 50000)
     private String body;
 
-    @Column(nullable = false)
     private Integer view;
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -55,13 +54,8 @@ public class Board extends BaseTime implements Serializable {
     @OneToMany(mappedBy = "board", fetch = FetchType.EAGER)
     private List<Comment> comments;
 
-    @Column()
     private Long plannerId;
-
-    @Column(nullable = false)
     private Integer avgScore;
-
-    @Column(nullable = false)
     private Integer commentCount;
 
     public void update(Board updateEntity){
@@ -73,16 +67,16 @@ public class Board extends BaseTime implements Serializable {
         this.body = updateEntity.getBody();
     }
 
+    public void updatePlanner(Long plannerId) {
+        this.plannerId = plannerId;
+    }
+
     public void addViewCount() {
         this.view++;
     }
 
-    public void updateCommentCount(int commentCount) {
+    public void updateComment(int commentCount, int avgScore) {
         this.commentCount = commentCount;
-    }
-
-    public void avgScorePatch(int avgScore) {
         this.avgScore = avgScore;
     }
-
 }
