@@ -7,6 +7,8 @@ import com.yeojeong.application.domain.member.domain.RedisAuthedRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class RedisAuthedServiceImpl implements RedisAuthedService {
@@ -21,7 +23,9 @@ public class RedisAuthedServiceImpl implements RedisAuthedService {
     }
 
     public boolean checkKey(String id, String authKey) {
-        RedisAuthed entity = redisAuthedRepository.findById(id).orElseThrow(() -> new AuthedException("정보를 찾을 수 없습니다."));
+        Optional<RedisAuthed> optionalEntity = redisAuthedRepository.findById(id);
+        if(optionalEntity.isEmpty()) return false;
+        RedisAuthed entity = optionalEntity.get();
         return entity.getValue().equals(authKey);
     }
 

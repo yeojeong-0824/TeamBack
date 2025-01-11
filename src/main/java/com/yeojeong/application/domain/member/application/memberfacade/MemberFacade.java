@@ -11,8 +11,8 @@ public interface MemberFacade {
     void save(MemberRequest.SaveMember dto);
     void delete(Long id);
 
-    MemberResponse.FindById patch(Long id, MemberRequest.Put dto);
-    MemberResponse.FindById patchPassword(Long id, MemberRequest.PatchPassword dto);
+    void update(Long id, MemberRequest.Put dto);
+    void updatePassword(Long id, MemberRequest.PatchPassword dto);
     void checkPassword(Long id, String password);
 
     Page<MemberResponse.MemberBoardInfo> findBoardById(Long id, int page);

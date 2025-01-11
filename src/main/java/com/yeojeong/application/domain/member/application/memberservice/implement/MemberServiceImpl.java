@@ -62,7 +62,13 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public Member patch(Member entity) {
-        return memberRepository.save(entity);
+    public void update(Member entity, Member updateEntity) {
+        entity.updateMember(updateEntity);
+        memberRepository.save(entity);
+    }
+
+    public void updatePassword(Member entity, String password) {
+        entity.updatePassword(password);
+        memberRepository.save(entity);
     }
 }

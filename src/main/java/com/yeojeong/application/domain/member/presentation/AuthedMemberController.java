@@ -147,11 +147,12 @@ public class AuthedMemberController {
                     @ApiResponse(responseCode = "403", description = "권한 없음"),
             }
     )
-    public ResponseEntity<MemberResponse.FindById> putMember(@Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
+    public ResponseEntity<Void> update(@Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
                                                                @Valid @RequestBody MemberRequest.Put dto) {
 
         Long id = SecurityUtil.getCurrentMemberId();
-        return ResponseEntity.ok(memberFacade.patch(id, dto));
+        memberFacade.update(id, dto);
+        return ResponseEntity.ok().build();
     }
 
     @PatchMapping("/password")
@@ -163,10 +164,11 @@ public class AuthedMemberController {
                     @ApiResponse(responseCode = "403", description = "권한 없음"),
             }
     )
-    public ResponseEntity<MemberResponse.FindById> patchPasswordMember(@Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
+    public ResponseEntity<Void> updatePassword(@Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
                                                                        @Valid @RequestBody MemberRequest.PatchPassword dto) {
 
         Long id = SecurityUtil.getCurrentMemberId();
-        return ResponseEntity.ok(memberFacade.patchPassword(id, dto));
+        memberFacade.updatePassword(id, dto);
+        return ResponseEntity.ok().build();
     }
 }

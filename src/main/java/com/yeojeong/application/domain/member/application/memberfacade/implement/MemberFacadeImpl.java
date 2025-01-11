@@ -79,31 +79,49 @@ public class MemberFacadeImpl implements MemberFacade {
 
     @Override
     @Transactional
-    public MemberResponse.FindById patch(Long id, MemberRequest.Put dto) {
+    public void update(Long id, MemberRequest.Put dto) {
         Member savedEntity = memberService.findById(id);
-        if(!redisAuthedService.checkKey(savedEntity.getUsername(), AUTH_CHECK_KEY)) throw new AuthedException("인증이 되지 않은 사용자 입니다.");
+        if(!redisAuthedService.checkKey(savedEntity.getUsername(), AUTH_CHECK_KEY)) throw new AuthedException("사전 인증이 되지 않은 사용자 입니다.");
         redisAuthedService.delete(savedEntity.getUsername());
 
-        Member entity = MemberRequest.Put.toEntity(dto);
-        savedEntity.patchMember(entity);
-        Member rtnEntity = memberService.patch(savedEntity);
-
-        return MemberResponse.FindById.toDto(rtnEntity);
+        Member updateEntity = MemberRequest.Put.toEntity(dto);
+        memberService.update(savedEntity, updateEntity);
     }
 
     @Override
     @Transactional
-    public MemberResponse.FindById patchPassword(Long id, MemberRequest.PatchPassword dto) {
+    public void updatePassword(Long id, MemberRequest.PatchPassword dto) {
         if(!dto.password().equals(dto.checkPassword())) throw new AuthedException("비밀번호가 일치하지 않습니다.");
 
         Member savedEntity = memberService.findById(id);
-        if(!redisAuthedService.checkKey(savedEntity.getUsername(), AUTH_CHECK_KEY)) throw new AuthedException("인증이 되지 않은 사용자 입니다.");
+        if(!redisAuthedService.checkKey(savedEntity.getUsername(), AUTH_CHECK_KEY)) throw new AuthedException("사전 인증이 되지 않은 사용자 입니다.");
         redisAuthedService.delete(savedEntity.getUsername());
 
-        savedEntity.patchPassword(passwordEncoder.encode(dto.password()));
-        Member rtnEntity = memberService.patch(savedEntity);
+        memberService.updatePassword(savedEntity, passwordEncoder.encode(dto.password()));
+    }
 
-        return MemberResponse.FindById.toDto(rtnEntity);
+    @Override
+    @Transactional
+    public void findPassword(String username, String email) {
+        Member savedEntity = memberService.findByUsername(username);
+        if(!savedEntity.getEmail().equals(email)) throw new NotFoundDataException("입력 값이 일치하지 않습니다.");
+
+        String newPassword = createNewPassword();
+        emailManager.findPassword(email, newPassword);
+
+        savedEntity.updatePassword(passwordEncoder.encode(newPassword));
+        memberService.updatePassword(savedEntity, passwordEncoder.encode(newPassword));
+    }
+
+    private String createNewPassword() {
+        String password = "";
+        for(int i = 0; i < 4; i++) {
+            password += (char) ((int) (Math.random() * 26) + 97);
+        }
+        for(int i = 0; i < 4; i++) {
+            password += (int) (Math.random() * 10);
+        }
+        return password;
     }
 
     @Override
@@ -153,7 +171,7 @@ public class MemberFacadeImpl implements MemberFacade {
         int totalPages = (int) Math.ceil((double) totalSize / pageSize);
 
         if (page >= totalPages) {
-            page = totalPages - 1;  // 마지막 페이지로 설정
+            page = totalPages - 1;
         }
 
         Pageable pageable = PageRequest.of(page, pageSize);
@@ -182,31 +200,6 @@ public class MemberFacadeImpl implements MemberFacade {
         }
 
         return rtnList;
-    }
-
-
-    @Override
-    @Transactional
-    public void findPassword(String username, String email) {
-        Member savedEntity = memberService.findByUsername(username);
-        if(!savedEntity.getEmail().equals(email)) throw new NotFoundDataException("입력 값이 일치하지 않습니다.");
-
-        String newPassword = createNewPassword();
-        emailManager.findPassword(email, newPassword);
-
-        savedEntity.patchPassword(passwordEncoder.encode(newPassword));
-        memberService.patch(savedEntity);
-    }
-
-    private String createNewPassword() {
-        String password = "";
-        for(int i = 0; i < 4; i++) {
-            password += (char) ((int) (Math.random() * 26) + 97);
-        }
-        for(int i = 0; i < 4; i++) {
-            password += (int) (Math.random() * 10);
-        }
-        return password;
     }
 
     @Override
