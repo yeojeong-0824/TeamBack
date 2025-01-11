@@ -25,7 +25,7 @@ public class MemberRequest {
             @Schema(example = "소인국갔다옴")
             String nickname,
 
-            @Max(120)
+            @Min(0) @Max(120)
             @Schema(example = "90", nullable = true)
             Integer age
     ) {
