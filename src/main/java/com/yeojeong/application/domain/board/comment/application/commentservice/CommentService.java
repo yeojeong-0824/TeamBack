@@ -12,7 +12,7 @@ public interface CommentService {
     Comment save(Comment entity);
     Page<Comment> findByBoardId(Long boardId, int page);
     List<Comment> findByMemberId(Long memberId);
-    Comment update(Comment entity);
+    Comment update(Comment entity, Comment updateEntity);
     void delete(Comment entity);
 
     void deleteByMemberId(Long memberId);
