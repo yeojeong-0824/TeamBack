@@ -24,7 +24,8 @@ public class PlannerServiceImpl implements PlannerService {
     }
 
     @Override
-    public Planner update(Planner entity) {
+    public Planner update(Planner entity, Planner updateEntity) {
+        entity.update(updateEntity);
         return plannerRepository.save(entity);
     }
 

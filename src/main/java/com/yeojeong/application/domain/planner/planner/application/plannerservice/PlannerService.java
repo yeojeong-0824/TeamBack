@@ -6,7 +6,7 @@ import org.springframework.data.domain.Page;
 
 public interface PlannerService {
     Planner save(Planner entity);
-    Planner update(Planner entity);
+    Planner update(Planner entity, Planner updateEntity);
     Planner findById(Long id);
     Page<Planner> findByMemberId(Long memberId, int page);
 
