@@ -28,7 +28,8 @@ public class LocationServiceImpl implements LocationService {
     }
 
     @Override
-    public Location update(Location entity) {
+    public Location update(Location entity, Location updateEntity) {
+        entity.update(updateEntity);
         return locationRepository.save(entity);
     }
 
