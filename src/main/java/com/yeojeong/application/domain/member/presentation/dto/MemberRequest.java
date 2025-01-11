@@ -21,11 +21,11 @@ public class MemberRequest {
 
     @Schema(name = "유저 정보 수정")
     public record Put(
-            @Size(min = 1, max = 10)
+            @Size(max = 10)
             @Schema(example = "소인국갔다옴")
             String nickname,
 
-            @Min(1) @Max(120)
+            @Min(0) @Max(120)
             @Schema(example = "90", nullable = true)
             Integer age
     ) {
