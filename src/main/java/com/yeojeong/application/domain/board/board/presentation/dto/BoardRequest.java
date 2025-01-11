@@ -76,6 +76,7 @@ public class BoardRequest {
                     .longitude(dto.longitude())
                     .title(dto.title())
                     .body(dto.body())
+                    .plannerId(dto.plannerId())
                     .build();
         }
     }

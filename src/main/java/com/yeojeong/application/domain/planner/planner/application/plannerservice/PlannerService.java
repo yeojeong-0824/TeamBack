@@ -6,9 +6,11 @@ import org.springframework.data.domain.Page;
 
 public interface PlannerService {
     Planner save(Planner entity);
-    Planner update(Planner entity);
+    Planner update(Planner entity, Planner updateEntity);
     Planner findById(Long id);
     Page<Planner> findByMemberId(Long memberId, int page);
+    void addLocation(Planner entity);
+    void deleteLocation(Planner entity);
 
     void delete(Planner entity);
     void deleteByMemberId(Long memberId);

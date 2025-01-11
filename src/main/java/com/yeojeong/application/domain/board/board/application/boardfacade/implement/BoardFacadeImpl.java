@@ -32,14 +32,12 @@ public class BoardFacadeImpl implements BoardFacade {
     @Transactional
     public BoardResponse.FindById save(BoardRequest.Save dto, Long memberId) {
         Member member = memberService.findById(memberId);
-
         Board entity = BoardRequest.Save.toEntity(dto, member);
 
         if(dto.plannerId() != 0L) {
             Planner planner = plannerService.findById(dto.plannerId());
             checkMemberPlanner(planner, memberId);
         }
-        entity.updatePlanner(dto.plannerId());
 
         Board savedEntity = boardService.save(entity);
         return BoardResponse.FindById.toDto(savedEntity);
@@ -51,16 +49,13 @@ public class BoardFacadeImpl implements BoardFacade {
         Board savedEntity = boardService.findById(id);
         checkMember(savedEntity, memberId);
 
-        Board entity = BoardRequest.Put.toEntity(dto);
-        savedEntity.update(entity);
-
         if(dto.plannerId() != 0L) {
             Planner planner = plannerService.findById(dto.plannerId());
             checkMemberPlanner(planner, memberId);
         }
-        savedEntity.updatePlanner(dto.plannerId());
+        Board updateEntity = BoardRequest.Put.toEntity(dto);
+        Board rtnEntity = boardService.update(savedEntity, updateEntity);
 
-        Board rtnEntity = boardService.update(savedEntity);
         return BoardResponse.FindById.toDto(rtnEntity);
     }
 
@@ -76,12 +71,9 @@ public class BoardFacadeImpl implements BoardFacade {
 
     @Override
     @Transactional
-    @RedisLocker(key = "findById", value = "#id")
     public BoardResponse.FindById findById(Long id) {
         Board savedEntity = boardService.findById(id);
-        savedEntity.addViewCount();
-        Board rtnEntity = boardService.update(savedEntity);
-        return BoardResponse.FindById.toDto(rtnEntity);
+        return BoardResponse.FindById.toDto(savedEntity);
     }
 
     @Override

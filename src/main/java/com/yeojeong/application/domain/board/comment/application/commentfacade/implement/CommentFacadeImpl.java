@@ -61,9 +61,8 @@ public class CommentFacadeImpl implements CommentFacade {
         Comment savedEntity = commentService.findById(id);
         checkMember(savedEntity, memberId);
 
-        Comment entity = CommentRequest.Put.toEntity(dto);
-        savedEntity.update(entity);
-        Comment rtnEntity = commentService.update(savedEntity);
+        Comment updateEntity = CommentRequest.Put.toEntity(dto);
+        Comment rtnEntity = commentService.update(savedEntity, updateEntity);
 
         Board board = rtnEntity.getBoard();
         boardService.updateCommentInfo(board);

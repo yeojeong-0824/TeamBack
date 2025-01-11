@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 public class MemberChangeService {
 
     private final MemberService memberService;
+
     public void loginSuccessAndLastLoginDateChange(Long id) {
         Member member = memberService.findById(id);
         member.changeLastLoginDate();

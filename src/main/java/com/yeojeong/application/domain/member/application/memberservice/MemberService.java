@@ -14,5 +14,6 @@ public interface MemberService {
     void checkDuplicatedByUsername(String takenUsername);
     void checkDuplicatedByNickname(String takenNickname);
 
-    Member patch(Member entity);
+    void update(Member entity, Member updateEntity);
+    void updatePassword(Member entity, String password);
 }

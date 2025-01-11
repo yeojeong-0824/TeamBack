@@ -39,11 +39,11 @@ public class Member extends BaseTime implements Serializable {
     @Column(nullable = false)
     private LocalDate lastLoginDate;
 
-    public void patchPassword(String password) {
+    public void updatePassword(String password) {
         this.password = password;
     }
 
-    public void patchMember(Member entity) {
+    public void updateMember(Member entity) {
         if(entity.getNickname() != null) this.nickname = entity.getNickname();
         if(entity.getAge() != null) this.age = entity.getAge();
     }

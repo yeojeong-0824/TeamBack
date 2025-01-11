@@ -2,6 +2,7 @@ package com.yeojeong.application.domain.planner.planner.application.plannerservi
 
 import com.yeojeong.application.config.exception.NotFoundDataException;
 import com.yeojeong.application.domain.board.board.domain.Board;
+import com.yeojeong.application.domain.planner.location.domain.Location;
 import com.yeojeong.application.domain.planner.planner.application.plannerservice.PlannerService;
 import com.yeojeong.application.domain.planner.planner.domain.Planner;
 import com.yeojeong.application.domain.planner.planner.domain.PlannerRepository;
@@ -24,7 +25,8 @@ public class PlannerServiceImpl implements PlannerService {
     }
 
     @Override
-    public Planner update(Planner entity) {
+    public Planner update(Planner entity, Planner updateEntity) {
+        entity.update(updateEntity);
         return plannerRepository.save(entity);
     }
 
@@ -35,14 +37,26 @@ public class PlannerServiceImpl implements PlannerService {
     }
 
     @Override
-    public void delete(Planner entity) {
-        plannerRepository.delete(entity);
-    }
-
-    @Override
     public Page<Planner> findByMemberId(Long memberId, int page) {
         PageRequest pageRequest = PageRequest.of(page - 1, 10, Sort.by("id").descending());
         return plannerRepository.findAllByMemberId(memberId, pageRequest);
+    }
+
+    @Override
+    public void addLocation(Planner entity) {
+        entity.addLocation();
+        plannerRepository.save(entity);
+    }
+
+    @Override
+    public void deleteLocation(Planner entity) {
+        entity.deleteLocation();
+        plannerRepository.save(entity);
+    }
+
+    @Override
+    public void delete(Planner entity) {
+        plannerRepository.delete(entity);
     }
 
     @Override

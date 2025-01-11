@@ -41,10 +41,10 @@ public class PlannerFacadeImpl implements PlannerFacade {
     public PlannerResponse.FindById update(Long id, PlannerRequest.Put dto, Long memberId) {
         Planner savedEntity = plannerService.findById(id);
         checkMember(savedEntity, memberId);
-        Planner entity = PlannerRequest.Put.toEntity(dto);
 
-        savedEntity.update(entity);
-        Planner rtnEntity = plannerService.update(savedEntity);
+        Planner updateEntity = PlannerRequest.Put.toEntity(dto);
+        Planner rtnEntity = plannerService.update(savedEntity, updateEntity);
+
         return PlannerResponse.FindById.toDto(rtnEntity);
     }
 
