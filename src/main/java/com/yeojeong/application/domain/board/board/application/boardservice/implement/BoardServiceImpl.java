@@ -2,11 +2,13 @@ package com.yeojeong.application.domain.board.board.application.boardservice.imp
 
 import com.yeojeong.application.autocomplate.application.AutocompleteService;
 import com.yeojeong.application.autocomplate.presentation.dto.AutocompleteResponse;
+import com.yeojeong.application.config.util.customannotation.RedisLocker;
 import com.yeojeong.application.domain.board.board.application.boardservice.BoardService;
 import com.yeojeong.application.domain.board.board.domain.Board;
 import com.yeojeong.application.domain.board.board.domain.BoardRepository;
 import com.yeojeong.application.config.exception.NotFoundDataException;
 import com.yeojeong.application.domain.board.comment.domain.Comment;
+import com.yeojeong.application.domain.planner.planner.domain.Planner;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
@@ -30,7 +32,8 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public Board update(Board entity) {
+    public Board update(Board entity, Board updateEntity) {
+        entity.update(updateEntity);
         return boardRepository.save(entity);
     }
 
@@ -40,10 +43,13 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
+    @RedisLocker(key = "findById", value = "#id")
 //    @Cacheable(value = "boards", key = "#id", condition="#id != null")
     public Board findById(Long id) {
-        return boardRepository.findById(id)
+        Board entity = boardRepository.findById(id)
                 .orElseThrow(() -> new NotFoundDataException("해당 게시글을 찾을 수 없습니다."));
+        entity.addViewCount();
+        return boardRepository.save(entity);
     }
 
     @Override
@@ -56,7 +62,6 @@ public class BoardServiceImpl implements BoardService {
     @Override
     public Page<Board> findAll(String searchKeyword, String keyword, String sortKeyword, int page) {
         final int pageSize = 10;
-        // 생성 날짜
         PageRequest request = PageRequest.of(page - 1, pageSize, Sort.by("id").descending());
 
         if (sortKeyword != null) {
@@ -69,13 +74,10 @@ public class BoardServiceImpl implements BoardService {
 
         Page<Board> boardList;
         if (searchKeyword.equals("content")) {
-            // 제목과 내용에 검색어와 일치하는 게시글 검색
             boardList = boardRepository.findByTitleOrBodyContaining(keyword, request);
         } else if (searchKeyword.equals("location")) {
-            // 주소와 가게 이름이 검색어와 일치하는 게시글 검색
             boardList = boardRepository.findByFormattedAddressOrLocationNameContaining(keyword, request);
         } else if (searchKeyword.equals("title")) {
-            // 자동완성 기능을 통해 제목 검색
             List<String> autocompleteTitles = autocompleteService.getAutocomplete(keyword).list().stream()
                     .map(AutocompleteResponse.Data::value)
                     .collect(Collectors.toList());

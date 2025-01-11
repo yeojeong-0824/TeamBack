@@ -65,6 +65,7 @@ public class Board extends BaseTime implements Serializable {
         this.longitude = updateEntity.getLongitude();
         this.title = updateEntity.getTitle();
         this.body = updateEntity.getBody();
+        this.plannerId = updateEntity.getPlannerId();
     }
 
     public void updatePlanner(Long plannerId) {
