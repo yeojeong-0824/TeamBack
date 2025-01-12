@@ -83,10 +83,12 @@ public class BoardFacadeImpl implements BoardFacade {
     }
 
     private void checkMember(Board board, Long memberId) {
-        if (!memberId.equals(board.getMember().getId())) throw new OwnershipException("게시글을 작성한 사용자가 아닙니다.");
+        if (!memberId.equals(board.getMember().getId()))
+            throw new OwnershipException("게시글을 작성한 사용자가 아닙니다.");
     }
 
     private void checkMemberPlanner(Planner planner, Long memberId) {
-        if (!memberId.equals(planner.getMember().getId())) throw new OwnershipException("플레너를 작성한 사용자가 아닙니다.");
+        if (!memberId.equals(planner.getMember().getId()))
+            throw new OwnershipException("플레너를 작성한 사용자가 아닙니다.");
     }
 }

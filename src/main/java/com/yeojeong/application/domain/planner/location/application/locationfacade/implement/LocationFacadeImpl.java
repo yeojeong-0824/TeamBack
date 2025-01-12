@@ -32,7 +32,9 @@ public class LocationFacadeImpl implements LocationFacade {
     public LocationResponse.FindById save(LocationRequest.Save dto, Long plannerId, Long memberId) {
         Member member = memberService.findById(memberId);
         Planner planner = plannerService.findById(plannerId);
-        if (planner.getLocationCount() >= 15) throw new RequestDataException("Location 은 15개까지 생성 가능합니다.");
+
+        if (planner.getLocationCount() >= 15)
+            throw new RequestDataException("Location 은 15개까지 생성 가능합니다.");
 
         Location entity = LocationRequest.Save.toEntity(dto, planner, member);
         Location savedEntity = locationService.save(entity);
@@ -80,6 +82,7 @@ public class LocationFacadeImpl implements LocationFacade {
     }
 
     private void checkMember(Location location, Long memberId) {
-        if (!memberId.equals(location.getMember().getId())) throw new OwnershipException("게시글을 작성한 사용자가 아닙니다.");
+        if (!memberId.equals(location.getMember().getId()))
+            throw new OwnershipException("게시글을 작성한 사용자가 아닙니다.");
     }
 }

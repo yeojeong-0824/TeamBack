@@ -44,8 +44,12 @@ public class Member extends BaseTime implements Serializable {
     }
 
     public void updateMember(Member entity) {
-        if(entity.getNickname() != null && !entity.getNickname().isEmpty()) this.nickname = entity.getNickname();
-        if(entity.getAge() != null && entity.getAge() > 0) this.age = entity.getAge();
+        if(entity.getNickname() != null && !entity.getNickname().isEmpty()) {
+            this.nickname = entity.getNickname();
+        }
+        if(entity.getAge() != null && entity.getAge() > 0) {
+            this.age = entity.getAge();
+        }
     }
     public void changeLastLoginDate() {
         this.lastLoginDate = LocalDate.now();
