@@ -82,10 +82,13 @@ public class MemberFacadeImpl implements MemberFacade {
     public void update(Long id, MemberRequest.Put dto) {
         Member savedEntity = memberService.findById(id);
         if(!redisAuthedService.checkKey(savedEntity.getUsername(), AUTH_CHECK_KEY)) throw new AuthedException("사전 인증이 되지 않은 사용자 입니다.");
-        redisAuthedService.delete(savedEntity.getUsername());
+
+        if(!savedEntity.getNickname().equals(dto.nickname()))
+            memberService.checkDuplicatedByNickname(dto.nickname());
 
         Member updateEntity = MemberRequest.Put.toEntity(dto);
         memberService.update(savedEntity, updateEntity);
+        redisAuthedService.delete(savedEntity.getUsername());
     }
 
     @Override
@@ -94,17 +97,19 @@ public class MemberFacadeImpl implements MemberFacade {
         if(!dto.password().equals(dto.checkPassword())) throw new AuthedException("비밀번호가 일치하지 않습니다.");
 
         Member savedEntity = memberService.findById(id);
-        if(!redisAuthedService.checkKey(savedEntity.getUsername(), AUTH_CHECK_KEY)) throw new AuthedException("사전 인증이 되지 않은 사용자 입니다.");
-        redisAuthedService.delete(savedEntity.getUsername());
+        if(!redisAuthedService.checkKey(savedEntity.getUsername(), AUTH_CHECK_KEY))
+            throw new AuthedException("사전 인증이 되지 않은 사용자 입니다.");
 
         memberService.updatePassword(savedEntity, passwordEncoder.encode(dto.password()));
+        redisAuthedService.delete(savedEntity.getUsername());
     }
 
     @Override
     @Transactional
     public void findPassword(String username, String email) {
         Member savedEntity = memberService.findByUsername(username);
-        if(!savedEntity.getEmail().equals(email)) throw new NotFoundDataException("입력 값이 일치하지 않습니다.");
+        if(!savedEntity.getEmail().equals(email))
+            throw new NotFoundDataException("입력 값이 일치하지 않습니다.");
 
         String newPassword = createNewPassword();
         emailManager.findPassword(email, newPassword);
@@ -127,7 +132,8 @@ public class MemberFacadeImpl implements MemberFacade {
     @Override
     public void checkPassword(Long id, String password) {
         Member savedEntity = memberService.findById(id);
-        if(!passwordEncoder.matches(password, savedEntity.getPassword())) throw new AuthedException("비밀번호가 일치하지 않습니다.");
+        if(!passwordEncoder.matches(password, savedEntity.getPassword()))
+            throw new AuthedException("비밀번호가 일치하지 않습니다.");
 
         redisAuthedService.save(RedisAuthed.builder()
                 .id(savedEntity.getUsername())
@@ -232,7 +238,9 @@ public class MemberFacadeImpl implements MemberFacade {
 
     @Override
     public void checkAuthCheck(String email, String authKey) {
-        if(!redisAuthedService.checkKey(email, authKey)) throw new AuthedException("인증 코드가 올바르지 않습니다.");
+        if(!redisAuthedService.checkKey(email, authKey))
+            throw new AuthedException("인증 코드가 올바르지 않습니다.");
+
         redisAuthedService.delete(email);
         redisAuthedService.save(RedisAuthed.builder()
                 .id(email)
