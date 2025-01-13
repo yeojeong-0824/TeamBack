@@ -45,8 +45,6 @@ public class Board extends BaseTime implements Serializable {
     @Column(nullable = false, length = 50000)
     private String body;
 
-    private Integer view;
-
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "member_id", nullable = false, foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private Member member;
@@ -54,9 +52,17 @@ public class Board extends BaseTime implements Serializable {
     @OneToMany(mappedBy = "board", fetch = FetchType.EAGER)
     private List<Comment> comments;
 
-    private Long plannerId;
-    private Integer avgScore;
-    private Integer commentCount;
+    @Builder.Default
+    private Integer view = 0;
+
+    @Builder.Default
+    private Long plannerId = 0L;
+
+    @Builder.Default
+    private Integer avgScore = 0;
+
+    @Builder.Default
+    private Integer commentCount = 0;
 
     public void update(Board updateEntity){
         this.locationName = updateEntity.getLocationName();
@@ -66,10 +72,6 @@ public class Board extends BaseTime implements Serializable {
         this.title = updateEntity.getTitle();
         this.body = updateEntity.getBody();
         this.plannerId = updateEntity.getPlannerId();
-    }
-
-    public void updatePlanner(Long plannerId) {
-        this.plannerId = plannerId;
     }
 
     public void addViewCount() {

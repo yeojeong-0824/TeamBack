@@ -9,8 +9,7 @@ public interface PlannerService {
     Planner update(Planner entity, Planner updateEntity);
     Planner findById(Long id);
     Page<Planner> findByMemberId(Long memberId, int page);
-    void addLocation(Planner entity);
-    void deleteLocation(Planner entity);
+    void updateLocation(Planner entity);
 
     void delete(Planner entity);
     void deleteByMemberId(Long memberId);

@@ -38,10 +38,6 @@ public class BoardRequest {
                     .title(dto.title())
                     .body(dto.body())
 
-                    .view(0)
-                    .commentCount(0)
-                    .avgScore(0)
-
                     .member(member)
                     .build();
         }

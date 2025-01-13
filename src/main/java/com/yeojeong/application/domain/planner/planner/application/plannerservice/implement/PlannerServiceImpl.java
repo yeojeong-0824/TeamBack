@@ -43,14 +43,8 @@ public class PlannerServiceImpl implements PlannerService {
     }
 
     @Override
-    public void addLocation(Planner entity) {
-        entity.addLocation();
-        plannerRepository.save(entity);
-    }
-
-    @Override
-    public void deleteLocation(Planner entity) {
-        entity.deleteLocation();
+    public void updateLocation(Planner entity) {
+        entity.updateLocation();
         plannerRepository.save(entity);
     }
 
