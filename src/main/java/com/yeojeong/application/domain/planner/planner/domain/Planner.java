@@ -32,8 +32,8 @@ public class Planner extends BaseTime implements Serializable {
     @Column
     private String subTitle;
 
-    @Column(nullable = false)
-    private int locationCount;
+    @Builder.Default
+    private int locationCount = 0;
 
     @OneToMany(mappedBy = "planner", fetch = FetchType.EAGER)
     private List<Location> locations;
@@ -48,11 +48,7 @@ public class Planner extends BaseTime implements Serializable {
         subTitle = updateEntity.getSubTitle();
     }
 
-    public void addLocation(){
-        locationCount += 1;
-    }
-
-    public void deleteLocation() {
-        locationCount -= 1;
+    public void updateLocation(){
+        locationCount = this.getLocations().size();
     }
 }

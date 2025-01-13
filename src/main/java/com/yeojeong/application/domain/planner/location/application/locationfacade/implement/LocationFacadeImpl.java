@@ -38,7 +38,7 @@ public class LocationFacadeImpl implements LocationFacade {
 
         Location entity = LocationRequest.Save.toEntity(dto, planner, member);
         Location savedEntity = locationService.save(entity);
-        plannerService.addLocation(planner);
+        plannerService.updateLocation(planner);
 
         return LocationResponse.FindById.toDto(savedEntity);
     }
@@ -51,7 +51,7 @@ public class LocationFacadeImpl implements LocationFacade {
 
         Planner planner = plannerService.findById(savedEntity.getPlanner().getId());
         locationService.delete(savedEntity);
-        plannerService.deleteLocation(planner);
+        plannerService.updateLocation(planner);
     }
 
     @Override
