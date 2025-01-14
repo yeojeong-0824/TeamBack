@@ -13,13 +13,13 @@
 여행을 일정에 있어 좋았던 점과 불편했던 점을 공유하여 **여행 계획을 세우는 불편함을 줄여줍니다**.
 
 
-## 사용 기술
-<img src="https://github.com/user-attachments/assets/f965f8b7-843b-45f4-89e2-339e42af386d"> 
+## Infra
+![img](infra.png)
 
-### 아키텍처
+## Software architecture
 <img src="https://github.com/user-attachments/assets/1a984f5e-d593-45c3-a631-7432e528bef7"> 
 
-## 팀소개
+## 팀 소개
 **PR:** 건우
 **BE:** 은이
 **BE:** 성빈
