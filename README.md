@@ -19,7 +19,7 @@
 ### 아키텍처
 <img src="https://github.com/user-attachments/assets/1a984f5e-d593-45c3-a631-7432e528bef7"> 
 
-## 팀소개
+## 팀 소개
 **PR:** 건우
 **BE:** 은이
 **BE:** 성빈
