@@ -14,7 +14,7 @@
 
 
 ## Infra
-![img](infra.png)
+![img](infra1.png)
 
 ## Software architecture
 <img src="https://github.com/user-attachments/assets/1a984f5e-d593-45c3-a631-7432e528bef7"> 
