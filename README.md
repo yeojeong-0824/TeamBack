@@ -26,6 +26,8 @@
 **FE:** 형준
 
 ## 추가 자료
-**ERD:** https://www.erdcloud.com/d/CPr5YqB2vcheaeNCZ
+**URL:** http://54.180.153.67
 
 **Swagger:** http://54.180.153.67:8080/swagger-ui/index.html
+
+**ERD:** https://www.erdcloud.com/d/CPr5YqB2vcheaeNCZ
