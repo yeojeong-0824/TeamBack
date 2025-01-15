@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -50,7 +51,8 @@ public class Board extends BaseTime implements Serializable {
     private Member member;
 
     @OneToMany(mappedBy = "board", fetch = FetchType.EAGER)
-    private List<Comment> comments;
+    @Builder.Default
+    private List<Comment> comments = new ArrayList<>();
 
     @Builder.Default
     private Integer view = 0;
