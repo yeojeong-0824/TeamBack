@@ -53,6 +53,7 @@ public class BoardFacadeImpl implements BoardFacade {
             Planner planner = plannerService.findById(dto.plannerId());
             checkMemberPlanner(planner, memberId);
         }
+
         Board updateEntity = BoardRequest.Put.toEntity(dto);
         Board rtnEntity = boardService.update(savedEntity, updateEntity);
 

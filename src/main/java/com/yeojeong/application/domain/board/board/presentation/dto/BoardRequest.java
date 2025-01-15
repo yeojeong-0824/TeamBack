@@ -3,6 +3,7 @@ package com.yeojeong.application.domain.board.board.presentation.dto;
 import com.yeojeong.application.domain.board.board.domain.Board;
 import com.yeojeong.application.domain.member.domain.Member;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 
 public class BoardRequest {
@@ -27,6 +28,7 @@ public class BoardRequest {
             @NotBlank
             String longitude,
 
+            @NotNull
             Long plannerId
     ) {
         public static Board toEntity(Save dto, Member member) {
@@ -62,6 +64,7 @@ public class BoardRequest {
             @NotBlank
             String longitude,
 
+            @NotNull
             Long plannerId
     ) {
         public static Board toEntity(Put dto) {
