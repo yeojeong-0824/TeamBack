@@ -25,14 +25,12 @@ public class CommentFacadeImpl implements CommentFacade {
 
     @Override
     @Transactional
-    public CommentResponse.FindById save(CommentRequest.Save dto, Long boardId, Long memberId) {
+    public void save(CommentRequest.Save dto, Long boardId, Long memberId) {
         Board board = boardService.findById(boardId);
         Member member = memberService.findById(memberId);
 
         Comment entity = CommentRequest.Save.toEntity(dto, board, member);
-        Comment savedEntity = commentService.save(entity);
-
-        return CommentResponse.FindById.toDto(savedEntity);
+        commentService.save(entity);
     }
 
     @Override
@@ -52,14 +50,12 @@ public class CommentFacadeImpl implements CommentFacade {
 
     @Override
     @Transactional
-    public CommentResponse.FindById update(Long id, Long memberId, CommentRequest.Put dto) {
+    public void update(Long id, Long memberId, CommentRequest.Put dto) {
         Comment savedEntity = commentService.findById(id);
         checkMember(savedEntity, memberId);
 
         Comment updateEntity = CommentRequest.Put.toEntity(dto);
-        Comment rtnEntity = commentService.update(savedEntity, updateEntity);
-
-        return CommentResponse.FindById.toDto(rtnEntity);
+        commentService.update(savedEntity, updateEntity);
     }
 
     private void checkMember(Comment comment, Long memberId) {

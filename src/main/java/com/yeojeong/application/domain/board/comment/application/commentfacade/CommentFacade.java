@@ -5,8 +5,8 @@ import com.yeojeong.application.domain.board.comment.presentation.dto.CommentRes
 import org.springframework.data.domain.Page;
 
 public interface CommentFacade {
-    CommentResponse.FindById save(CommentRequest.Save dto, Long boardId, Long memberId);
+    void save(CommentRequest.Save dto, Long boardId, Long memberId);
     void delete(Long id, Long memberId);
     Page<CommentResponse.FindByBoardId> findByBoardId(Long boardId, int page);
-    CommentResponse.FindById update(Long id, Long memberId, CommentRequest.Put dto);
+    void update(Long id, Long memberId, CommentRequest.Put dto);
 }

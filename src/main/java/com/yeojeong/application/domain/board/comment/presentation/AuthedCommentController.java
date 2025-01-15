@@ -38,12 +38,13 @@ public class AuthedCommentController {
                     @ApiResponse(responseCode = "403", description = "권한 없음")
             }
     )
-    public ResponseEntity<CommentResponse.FindById> save(@PathVariable("boardId") Long boardId,
+    public ResponseEntity<Void> save(@PathVariable("boardId") Long boardId,
                                                          @Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
                                                             @Valid @RequestBody CommentRequest.Save dto) {
 
         Long memberId = SecurityUtil.getCurrentMemberId();
-        return ResponseEntity.status(HttpStatus.CREATED).body(commentFacade.save(dto, boardId, memberId));
+        commentFacade.save(dto, boardId, memberId);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @PutMapping("/{id}")
@@ -54,12 +55,13 @@ public class AuthedCommentController {
                     @ApiResponse(responseCode = "403", description = "권한 없음")
             }
     )
-    public ResponseEntity<CommentResponse.FindById> path(@PathVariable("id") Long id,
+    public ResponseEntity<Void> path(@PathVariable("id") Long id,
                                                          @Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
                                                             @Valid @RequestBody CommentRequest.Put dto) {
 
         Long memberId = SecurityUtil.getCurrentMemberId();
-        return ResponseEntity.ok(commentFacade.update(id, memberId, dto));
+        commentFacade.update(id, memberId, dto);
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{id}")
