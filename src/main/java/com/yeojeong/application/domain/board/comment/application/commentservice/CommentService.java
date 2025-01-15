@@ -9,10 +9,10 @@ import java.util.List;
 
 public interface CommentService {
     Comment findById(Long id);
-    Comment save(Comment entity);
+    void save(Comment entity);
     Page<Comment> findByBoardId(Long boardId, int page);
     List<Comment> findByMemberId(Long memberId);
-    Comment update(Comment entity, Comment updateEntity);
+    void update(Comment entity, Comment updateEntity);
     void delete(Comment entity);
 
     void deleteByMemberId(Long memberId);

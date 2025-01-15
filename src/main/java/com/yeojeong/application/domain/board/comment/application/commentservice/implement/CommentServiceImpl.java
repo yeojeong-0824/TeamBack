@@ -26,8 +26,8 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public Comment save(Comment entity) {
-        return commentRepository.save(entity);
+    public void save(Comment entity) {
+        commentRepository.save(entity);
     }
 
     @Override
@@ -48,9 +48,9 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public Comment update(Comment entity, Comment updateEntity) {
+    public void update(Comment entity, Comment updateEntity) {
         entity.update(updateEntity);
-        return commentRepository.save(entity);
+        commentRepository.save(entity);
     }
 
     @Override
