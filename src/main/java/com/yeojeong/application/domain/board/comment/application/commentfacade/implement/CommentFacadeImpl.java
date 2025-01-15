@@ -31,22 +31,17 @@ public class CommentFacadeImpl implements CommentFacade {
 
         Comment entity = CommentRequest.Save.toEntity(dto, board, member);
         Comment savedEntity = commentService.save(entity);
-        boardService.updateCommentInfo(board);
 
         return CommentResponse.FindById.toDto(savedEntity);
     }
 
     @Override
     @Transactional
-    public BoardResponse.FindById delete(Long id, Long memberId) {
+    public void delete(Long id, Long memberId) {
         Comment savedEntity = commentService.findById(id);
         checkMember(savedEntity, memberId);
 
-        Board board = savedEntity.getBoard();
-        boardService.updateCommentInfo(board);
-
         commentService.delete(savedEntity);
-        return BoardResponse.FindById.toDto(board);
     }
 
     @Override
@@ -63,9 +58,6 @@ public class CommentFacadeImpl implements CommentFacade {
 
         Comment updateEntity = CommentRequest.Put.toEntity(dto);
         Comment rtnEntity = commentService.update(savedEntity, updateEntity);
-
-        Board board = rtnEntity.getBoard();
-        boardService.updateCommentInfo(board);
 
         return CommentResponse.FindById.toDto(rtnEntity);
     }

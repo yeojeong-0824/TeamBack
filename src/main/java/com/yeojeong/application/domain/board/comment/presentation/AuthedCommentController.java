@@ -70,9 +70,10 @@ public class AuthedCommentController {
                     @ApiResponse(responseCode = "403", description = "권한 없음")
             }
     )
-    public ResponseEntity<BoardResponse.FindById> delete(@PathVariable("id") Long id) {
+    public ResponseEntity<Void> delete(@PathVariable("id") Long id) {
 
         Long memberId = SecurityUtil.getCurrentMemberId();
-        return ResponseEntity.ok(commentFacade.delete(id, memberId));
+        commentFacade.delete(id, memberId);
+        return ResponseEntity.noContent().build();
     }
 }

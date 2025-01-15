@@ -90,32 +90,7 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public void updateCommentInfo(Board board) {
-        int commentSize = board.getComments().size();
-        int avgScore = getAvgScore(commentSize, board.getComments());
-        board.updateComment(commentSize, avgScore);
-        boardRepository.save(board);
-    }
-
-    @Override
     public void deleteByMemberId(Long memberId) {
         boardRepository.deleteByMemberId(memberId);
-    }
-
-    private int getAvgScore(int commentCount, List<Comment> commentList) {
-        if(commentCount == 0) return 0;
-
-        int size = 0;
-        int sum = 0;
-
-        for(Comment comment : commentList) {
-            int score = comment.getScore();
-            if(comment.getScore() == 0) continue;
-
-            size++;
-            sum += score;
-        }
-        if(size == 0) return 0;
-        return (sum * 100) / size;
     }
 }
