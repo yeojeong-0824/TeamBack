@@ -25,28 +25,21 @@ public class CommentFacadeImpl implements CommentFacade {
 
     @Override
     @Transactional
-    public CommentResponse.FindById save(CommentRequest.Save dto, Long boardId, Long memberId) {
+    public void save(CommentRequest.Save dto, Long boardId, Long memberId) {
         Board board = boardService.findById(boardId);
         Member member = memberService.findById(memberId);
 
         Comment entity = CommentRequest.Save.toEntity(dto, board, member);
-        Comment savedEntity = commentService.save(entity);
-        boardService.updateCommentInfo(board);
-
-        return CommentResponse.FindById.toDto(savedEntity);
+        commentService.save(entity);
     }
 
     @Override
     @Transactional
-    public BoardResponse.FindById delete(Long id, Long memberId) {
+    public void delete(Long id, Long memberId) {
         Comment savedEntity = commentService.findById(id);
         checkMember(savedEntity, memberId);
 
-        Board board = savedEntity.getBoard();
-        boardService.updateCommentInfo(board);
-
         commentService.delete(savedEntity);
-        return BoardResponse.FindById.toDto(board);
     }
 
     @Override
@@ -57,17 +50,12 @@ public class CommentFacadeImpl implements CommentFacade {
 
     @Override
     @Transactional
-    public CommentResponse.FindById update(Long id, Long memberId, CommentRequest.Put dto) {
+    public void update(Long id, Long memberId, CommentRequest.Put dto) {
         Comment savedEntity = commentService.findById(id);
         checkMember(savedEntity, memberId);
 
         Comment updateEntity = CommentRequest.Put.toEntity(dto);
-        Comment rtnEntity = commentService.update(savedEntity, updateEntity);
-
-        Board board = rtnEntity.getBoard();
-        boardService.updateCommentInfo(board);
-
-        return CommentResponse.FindById.toDto(rtnEntity);
+        commentService.update(savedEntity, updateEntity);
     }
 
     private void checkMember(Comment comment, Long memberId) {

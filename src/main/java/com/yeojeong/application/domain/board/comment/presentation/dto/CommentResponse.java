@@ -49,27 +49,4 @@ public class CommentResponse {
                     .build();
         }
     }
-
-    @Builder
-    public record FindById(
-            Long id,
-            Integer score,
-            String comment,
-
-            MemberResponse.MemberInfo member,
-            BoardResponse.BoardInfo board,
-            UtilResponse.TimeInfo time
-    ) {
-        public static FindById toDto(Comment comment) {
-            return FindById.builder()
-                    .id(comment.getId())
-                    .score(comment.getScore())
-                    .comment(comment.getComment())
-                    .member(MemberResponse.MemberInfo.toDto(comment.getMember()))
-                    .board(BoardResponse.BoardInfo.toDto(comment.getBoard()))
-                    .time(UtilResponse.TimeInfo.toDto(comment))
-                    .build();
-        }
-    }
-
 }

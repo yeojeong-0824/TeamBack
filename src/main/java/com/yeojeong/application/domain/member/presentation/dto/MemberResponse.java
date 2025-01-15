@@ -81,8 +81,8 @@ public class MemberResponse {
                     .title(board.getTitle())
 
                     .view(board.getView())
-                    .avgScore(board.getAvgScore())
-                    .commentCount(board.getCommentCount())
+                    .avgScore(BoardResponse.getAvgScore(board.getComments()))
+                    .commentCount(board.getComments().size())
                     .member(MemberResponse.MemberInfo.toDto(board.getMember()))
                     .time(UtilResponse.TimeInfo.toDto(board))
                     .build();
