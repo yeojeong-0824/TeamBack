@@ -66,6 +66,7 @@ public class RefreshTokenFacadeImpl implements RefreshTokenFacade {
         Cookie cookie = new Cookie(JwtProvider.REFRESH_HEADER_STRING, refreshToken);
         cookie.setHttpOnly(true);
         cookie.setPath("/");
+        cookie.setMaxAge(JwtProvider.JWT_EXPIRATION_TIME / 1000);
         return cookie;
     }
 
