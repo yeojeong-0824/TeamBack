@@ -26,9 +26,8 @@ import java.util.List;
 public class SecurityFilter {
 
     private final AuthenticationManager authenticationManager;
-    private final RefreshTokenService refreshTokenService;
-    private final MemberChangeService memberChangeService;
     private final RefreshTokenFacade refreshTokenFacade;
+    private final MemberChangeService memberChangeService;
 
     @Value("${JWTKey}")
     public void setAppName(String key) {
@@ -44,7 +43,7 @@ public class SecurityFilter {
                 .cors(auth -> auth.configurationSource(corsConfigurationSource()))
                 .sessionManagement(auth -> auth.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
-                .addFilterAt(new LoginFilter(authenticationManager, refreshTokenService, memberChangeService), UsernamePasswordAuthenticationFilter.class)
+                .addFilterAt(new LoginFilter(authenticationManager, refreshTokenFacade, memberChangeService), UsernamePasswordAuthenticationFilter.class)
                 .addFilterAfter(new JwtFilter(refreshTokenFacade), LoginFilter.class)
 
                 .exceptionHandling(auth -> auth

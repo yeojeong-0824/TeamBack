@@ -39,19 +39,9 @@ public class RefreshTokenFacadeImpl implements RefreshTokenFacade {
 
     @Override
     public Cookie createNewRefreshTokenCookie(MemberDetails memberDetails) {
-        String newRefreshToken = RefreshTokenFacadeImpl.createRefreshToken(refreshTokenService, memberDetails);
-        return RefreshTokenFacadeImpl.createRefreshCookie(newRefreshToken);
-    }
-
-    @Override
-    public String createNewJwtToken(MemberDetails memberDetails) {
-        return JwtProvider.createJwtToken(memberDetails);
-    }
-
-    static public String createRefreshToken(RefreshTokenService refreshTokenService, MemberDetails member) {
         String loginTime = Long.toString(System.currentTimeMillis());
 
-        String refreshToken = JwtProvider.createRefreshToken(member, loginTime);
+        String refreshToken = JwtProvider.createRefreshToken(memberDetails, loginTime);
         RefreshToken saveToken = RefreshToken.builder()
                 .id(refreshToken)
                 .key(loginTime)
@@ -59,15 +49,18 @@ public class RefreshTokenFacadeImpl implements RefreshTokenFacade {
                 .build();
 
         refreshTokenService.save(saveToken);
-        return refreshToken;
-    }
 
-    static public Cookie createRefreshCookie(String refreshToken) {
         Cookie cookie = new Cookie(JwtProvider.REFRESH_HEADER_STRING, refreshToken);
         cookie.setHttpOnly(true);
         cookie.setPath("/");
-        cookie.setMaxAge(JwtProvider.JWT_EXPIRATION_TIME / 1000);
+        cookie.setMaxAge(JwtProvider.REFRESH_EXPIRATION_TIME / 1000);
+
         return cookie;
+    }
+
+    @Override
+    public String createNewJwtToken(MemberDetails memberDetails) {
+        return JwtProvider.createJwtToken(memberDetails);
     }
 
     private String getRefreshTokenByCookie(Cookie[] cookies) {
