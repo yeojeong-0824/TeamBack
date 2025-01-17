@@ -46,30 +46,6 @@ public class RefreshController {
         return ResponseEntity.noContent().build();
     }
 
-    @Operation(summary = "리프레시 토큰 재발급")
-    @GetMapping("/refresh")
-    @ApiResponses(
-            value = {
-                    @ApiResponse(responseCode = "200", description = "refresh token 발급 성공"),
-                    @ApiResponse(responseCode = "400", description = "refresh token 발급 실패"),
-                    @ApiResponse(responseCode = "403", description = "권한 없음"),
-            }
-    )
-    public ResponseEntity<Void> refresh(
-            HttpServletRequest request, HttpServletResponse response
-    ){
-        Cookie[] cookies = request.getCookies();
-
-        MemberDetails memberDetails = refreshTokenFacade.getMemberDetailsByRefreshToken(cookies);
-        Cookie refreshCookie = refreshTokenFacade.createNewRefreshTokenCookie(memberDetails);
-        response.addCookie(refreshCookie);
-
-        String jwtToken = refreshTokenFacade.createNewJwtToken(memberDetails);
-        response.addHeader(JwtProvider.JWT_HEADER_STRING, JwtProvider.TOKEN_PREFIX_JWT + jwtToken);
-
-        return ResponseEntity.status(HttpStatus.CREATED).build();
-    }
-
     @Operation(summary = "액세스 토큰 유효성 검사")
     @GetMapping("/access")
     @ApiResponses(
