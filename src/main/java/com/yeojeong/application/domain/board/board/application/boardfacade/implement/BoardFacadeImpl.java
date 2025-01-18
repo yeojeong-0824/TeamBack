@@ -7,6 +7,7 @@ import com.yeojeong.application.domain.board.board.application.boardservice.Boar
 import com.yeojeong.application.domain.board.board.domain.Board;
 import com.yeojeong.application.domain.board.board.presentation.dto.BoardRequest;
 import com.yeojeong.application.domain.board.board.presentation.dto.BoardResponse;
+import com.yeojeong.application.domain.board.board.presentation.dto.SortType;
 import com.yeojeong.application.domain.board.comment.application.commentservice.CommentService;
 import com.yeojeong.application.domain.member.application.memberservice.MemberService;
 import com.yeojeong.application.domain.member.domain.Member;
@@ -78,8 +79,8 @@ public class BoardFacadeImpl implements BoardFacade {
     }
 
     @Override
-    public Page<BoardResponse.FindAll> findAll(String searchKeyword, String keyword, String sortKeyword, int page) {
-        Page<Board> savedEntityPage = boardService.findAll(searchKeyword, keyword, sortKeyword, page);
+    public Page<BoardResponse.FindAll> findAll(String searchKeyword, String keyword, SortType sortType, int page) {
+        Page<Board> savedEntityPage = boardService.findAll(searchKeyword, keyword, sortType, page);
         return savedEntityPage.map(BoardResponse.FindAll::toDto);
     }
 

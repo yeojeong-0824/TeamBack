@@ -2,6 +2,7 @@ package com.yeojeong.application.domain.board.board.presentation;
 
 import com.yeojeong.application.domain.board.board.application.boardfacade.BoardFacade;
 import com.yeojeong.application.domain.board.board.presentation.dto.BoardResponse;
+import com.yeojeong.application.domain.board.board.presentation.dto.SortType;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -43,8 +44,9 @@ public class FindBoardController {
     public ResponseEntity<Page<BoardResponse.FindAll>> findAll(
             @RequestParam(value = "keyword") String keyword,
             @RequestParam(value = "searchKeyword") String searchKeyword,
-            @RequestParam(value = "sortKeyword") String sortKeyword,
+            @RequestParam(value = "sortKeyword", defaultValue = "latest") SortType sortType,
             @RequestParam(required = false, defaultValue = "1", value = "page") int page){
-        return ResponseEntity.ok(boardFacade.findAll(searchKeyword, keyword, sortKeyword, page));
+        System.out.println(sortType);
+        return ResponseEntity.ok(boardFacade.findAll(searchKeyword, keyword, sortType, page));
     }
 }

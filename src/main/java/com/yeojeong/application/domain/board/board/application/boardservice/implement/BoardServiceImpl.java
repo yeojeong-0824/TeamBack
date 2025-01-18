@@ -2,11 +2,13 @@ package com.yeojeong.application.domain.board.board.application.boardservice.imp
 
 import com.yeojeong.application.autocomplate.application.AutocompleteService;
 import com.yeojeong.application.autocomplate.presentation.dto.AutocompleteResponse;
+import com.yeojeong.application.config.exception.RequestDataException;
 import com.yeojeong.application.config.util.customannotation.RedisLocker;
 import com.yeojeong.application.domain.board.board.application.boardservice.BoardService;
 import com.yeojeong.application.domain.board.board.domain.Board;
 import com.yeojeong.application.domain.board.board.domain.BoardRepository;
 import com.yeojeong.application.config.exception.NotFoundDataException;
+import com.yeojeong.application.domain.board.board.presentation.dto.SortType;
 import com.yeojeong.application.domain.board.comment.domain.Comment;
 import com.yeojeong.application.domain.planner.planner.domain.Planner;
 import lombok.RequiredArgsConstructor;
@@ -60,17 +62,9 @@ public class BoardServiceImpl implements BoardService {
 
     // 조건에 따른 게시글 검색, 정렬
     @Override
-    public Page<Board> findAll(String searchKeyword, String keyword, String sortKeyword, int page) {
-        final int pageSize = 10;
-        PageRequest request = PageRequest.of(page - 1, pageSize, Sort.by("id").descending());
-
-        if (sortKeyword != null) {
-            request = switch (sortKeyword) {
-                case "score" -> PageRequest.of(page - 1, pageSize, Sort.by("avgScore").descending());
-                case "comment" -> PageRequest.of(page - 1, pageSize, Sort.by("commentCount").descending());
-                default -> request;
-            };
-        }
+    public Page<Board> findAll(String searchKeyword, String keyword, SortType sortType, int page) {
+        PageRequest request = createPageRequest(sortType, page);
+        if(request == null) throw new RequestDataException("정렬 값이 잘못되었습니다.");
 
         Page<Board> boardList;
         if (searchKeyword.equals("content")) {
@@ -87,6 +81,21 @@ public class BoardServiceImpl implements BoardService {
         }
 
         return boardList;
+    }
+
+    private PageRequest createPageRequest(SortType sortType, int page) {
+        final int pageSize = 10;
+
+        if(sortType == SortType.latest)
+            return PageRequest.of(page - 1, pageSize, Sort.by("id").descending());
+
+        if(sortType == SortType.score)
+            return PageRequest.of(page - 1, pageSize, Sort.by("avgScore").descending());
+
+        if(sortType == SortType.comment)
+            return PageRequest.of(page - 1, pageSize, Sort.by("commentCount").descending());
+
+        return null;
     }
 
     @Override
