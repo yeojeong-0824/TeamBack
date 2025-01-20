@@ -27,7 +27,7 @@ public class AuthedLocationController {
     private final LocationFacade locationFacade;
 
 
-    @PostMapping("/{plannerId}")
+    @PostMapping(value = "/{plannerId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "장소 작성", security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses(
             value = {
@@ -36,13 +36,12 @@ public class AuthedLocationController {
             }
     )
     public ResponseEntity<LocationResponse.FindById> save(@PathVariable("plannerId") Long plannerId,
-                                                         @Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
-                                                         @Valid @RequestBody LocationRequest.Save dto) {
+                                                          @Valid @RequestBody LocationRequest.Save dto) {
         Long memberId = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.status(HttpStatus.CREATED).body(locationFacade.save(dto, plannerId, memberId));
     }
 
-    @PutMapping("/{id}")
+    @PutMapping(value ="/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "장소 수정", security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses(
             value = {
@@ -51,8 +50,7 @@ public class AuthedLocationController {
             }
     )
     public ResponseEntity<LocationResponse.FindById> put(@PathVariable("id") Long id,
-                                                          @Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
-                                                          @Valid @RequestBody LocationRequest.Put dto) {
+                                                         @Valid @RequestBody LocationRequest.Put dto) {
         Long memberId = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.status(HttpStatus.OK).body(locationFacade.update(dto, id, memberId));
     }

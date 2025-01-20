@@ -1,4 +1,4 @@
-package com.yeojeong.application.config;
+package com.yeojeong.application.config.doc;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Info;

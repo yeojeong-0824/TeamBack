@@ -31,7 +31,7 @@ public class AuthedMemberController {
 
     private final MemberFacade memberFacade;
 
-    @GetMapping
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "회원 정보 확인", security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses(
             value = {
@@ -46,7 +46,7 @@ public class AuthedMemberController {
         return ResponseEntity.ok(memberFacade.findById(id));
     }
 
-    @GetMapping("/boards")
+    @GetMapping(value = "/boards", produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "해당 회원의 작성 게시글 확인", security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses(
             value = {
@@ -55,13 +55,15 @@ public class AuthedMemberController {
                     @ApiResponse(responseCode = "403", description = "권한 없음"),
             }
     )
-    public ResponseEntity<Page<MemberResponse.MemberBoardInfo>> findBoardById(@RequestParam(required = false, defaultValue = "1", value = "page") int page) {
+    public ResponseEntity<Page<MemberResponse.MemberBoardInfo>> findBoardById(
+            @RequestParam(required = false, defaultValue = "1", value = "page") int page
+    ) {
 
         Long id = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(memberFacade.findBoardById(id, page));
     }
 
-    @GetMapping("/comments")
+    @GetMapping(value = "/comments", produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "해당 회원의 작성 댓글 목록 확인", security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses(
             value = {
@@ -70,13 +72,15 @@ public class AuthedMemberController {
                     @ApiResponse(responseCode = "403", description = "권한 없음"),
             }
     )
-    public ResponseEntity<Page<MemberResponse.MemberCommentInfo>> findBoardScoreById(@RequestParam(required = false, defaultValue = "1", value = "page") int page) {
+    public ResponseEntity<Page<MemberResponse.MemberCommentInfo>> findBoardScoreById(
+            @RequestParam(required = false, defaultValue = "1", value = "page") int page
+    ) {
 
         Long id = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(memberFacade.findCommentById(id, page));
     }
 
-    @GetMapping("/planners")
+    @GetMapping(value = "/planners", produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "해당 회원의 플레너 확인", security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses(
             value = {
@@ -85,13 +89,14 @@ public class AuthedMemberController {
                     @ApiResponse(responseCode = "403", description = "권한 없음"),
             }
     )
-    public ResponseEntity<Page<MemberResponse.MemberPlannerInfo>> findPlannerById(@RequestParam(required = false, defaultValue = "1", value = "page") int page) {
-
+    public ResponseEntity<Page<MemberResponse.MemberPlannerInfo>> findPlannerById(
+            @RequestParam(required = false, defaultValue = "1", value = "page") int page
+    ) {
         Long id = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(memberFacade.findPlannerById(id, page));
     }
 
-    @GetMapping("/locations")
+    @GetMapping(value = "/locations", produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "날짜 범위에 대한 장소를 조회", security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses(
             value = {
@@ -99,7 +104,9 @@ public class AuthedMemberController {
                     @ApiResponse(responseCode = "403", description = "권한 없음")
             }
     )
-    public ResponseEntity<List<MemberResponse.MemberLocationInfo>> findLocationByDate(@RequestParam("start") Long start, @RequestParam("end") Long end) {
+    public ResponseEntity<List<MemberResponse.MemberLocationInfo>> findLocationByDate(
+            @RequestParam("start") Long start, @RequestParam("end"
+    ) Long end) {
         Long memberId = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.status(HttpStatus.OK).body(memberFacade.findLocationByDate(memberId, start, end));
     }
@@ -121,7 +128,7 @@ public class AuthedMemberController {
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping("/checkPassword")
+    @PostMapping(value = "/checkPassword", consumes = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "비밀번호 확인", security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses(
             value = {
@@ -130,15 +137,14 @@ public class AuthedMemberController {
                     @ApiResponse(responseCode = "403", description = "비밀번호가 일치하지 않음"),
             }
     )
-    public ResponseEntity<Void> checkPassword(@Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
-                                              @Valid @RequestBody MemberRequest.CheckPassword dto) {
+    public ResponseEntity<Void> checkPassword(@Valid @RequestBody MemberRequest.CheckPassword dto) {
 
         Long id = SecurityUtil.getCurrentMemberId();
         memberFacade.checkPassword(id, dto.password());
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping
+    @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "유저 정보 수정", security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses(
             value = {
@@ -147,15 +153,14 @@ public class AuthedMemberController {
                     @ApiResponse(responseCode = "403", description = "권한 없음"),
             }
     )
-    public ResponseEntity<Void> update(@Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
-                                                               @Valid @RequestBody MemberRequest.Put dto) {
+    public ResponseEntity<Void> update(@Valid @RequestBody MemberRequest.Put dto) {
 
         Long id = SecurityUtil.getCurrentMemberId();
         memberFacade.update(id, dto);
         return ResponseEntity.ok().build();
     }
 
-    @PatchMapping("/password")
+    @PatchMapping(value = "/password", consumes = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "유저 비밀번호 정보 수정", security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses(
             value = {
@@ -164,8 +169,7 @@ public class AuthedMemberController {
                     @ApiResponse(responseCode = "403", description = "권한 없음"),
             }
     )
-    public ResponseEntity<Void> updatePassword(@Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
-                                                                       @Valid @RequestBody MemberRequest.PatchPassword dto) {
+    public ResponseEntity<Void> updatePassword(@Valid @RequestBody MemberRequest.PatchPassword dto) {
 
         Long id = SecurityUtil.getCurrentMemberId();
         memberFacade.updatePassword(id, dto);

@@ -26,7 +26,7 @@ public class AuthedPlannerController {
 
     private final PlannerFacade plannerFacade;
 
-    @PostMapping
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "플래너 작성", security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses(
             value = {
@@ -36,15 +36,12 @@ public class AuthedPlannerController {
                     @ApiResponse(responseCode = "500", description = "서버 오류")
             }
     )
-    public ResponseEntity<PlannerResponse.FindById> save(
-            @Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
-            @Valid @RequestBody PlannerRequest.Save dto
-    ){
+    public ResponseEntity<PlannerResponse.FindById> save(@Valid @RequestBody PlannerRequest.Save dto){
         Long memberId = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.status(HttpStatus.CREATED).body(plannerFacade.save(dto, memberId));
     }
 
-    @PutMapping("/{id}")
+    @PutMapping(value ="/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "플래너 수정", security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses(
             value = {
@@ -54,10 +51,7 @@ public class AuthedPlannerController {
                     @ApiResponse(responseCode = "403", description = "서버 오류")
             }
     )
-    public ResponseEntity<PlannerResponse.FindById> update(
-            @Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
-            @Valid @RequestBody PlannerRequest.Put dto,
-            @PathVariable("id") Long id){
+    public ResponseEntity<PlannerResponse.FindById> update(@Valid @RequestBody PlannerRequest.Put dto, @PathVariable("id") Long id){
         Long memberId = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(plannerFacade.update(id, dto, memberId));
     }

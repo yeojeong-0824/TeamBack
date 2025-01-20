@@ -30,7 +30,7 @@ public class JoinMemberController {
 
     private final MemberFacade memberFacade;
 
-    @PostMapping
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "회원가입", description = "회원을 생성합니다.")
     @ApiResponses(
         value = {
@@ -39,8 +39,7 @@ public class JoinMemberController {
                 @ApiResponse(responseCode = "401", description = "인증되지 않은 이메일")
         }
     )
-    public ResponseEntity<Void> save(@Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
-                                       @Valid @RequestBody MemberRequest.SaveMember dto) {
+    public ResponseEntity<Void> save(@Valid @RequestBody MemberRequest.SaveMember dto) {
         memberFacade.save(dto);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
@@ -86,15 +85,14 @@ public class JoinMemberController {
                     @ApiResponse(responseCode = "409", description = "이메일이 중복 중복됨")
             }
     )
-    public ResponseEntity<Void> authedByEmail(@Size(min = 1, max = 50) @Schema(example = "example@naver.com")
-                                                @Email @PathVariable("email") String email) {
+    public ResponseEntity<Void> authedByEmail(@Size(min = 1, max = 50) @Email @PathVariable("email") String email) {
 
         memberFacade.checkDuplicatedByEmail(email);
         return ResponseEntity.ok().build();
     }
 
 
-    @PostMapping("/emailAuthed/{email}")
+    @PostMapping(value = "/emailAuthed/{email}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "이메일 인증코드 확인", description = "이메일 인증을 시도합니다. 이메일 인증 이메일이 발송되지 않았으면 이메일 인증 실패를 하게 됩니다.")
     @ApiResponses(
             value = {
@@ -102,11 +100,8 @@ public class JoinMemberController {
                     @ApiResponse(responseCode = "401", description = "이메일 인증 실패")
             }
     )
-    public ResponseEntity<Void> authedCheckByEmail(@Size(min = 1, max = 50) @Schema(example = "example@naver.com")
-                                                     @Email @PathVariable("email") String email,
-
-                                                     @Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
-                                                     @RequestBody MemberRequest.EmailAuthedKey dto) {
+    public ResponseEntity<Void> authedCheckByEmail(@Size(min = 1, max = 50) @Email @PathVariable("email") String email,
+                                                   @RequestBody MemberRequest.EmailAuthedKey dto) {
         memberFacade.checkAuthCheck(email, dto.key());
         return ResponseEntity.ok().build();
     }

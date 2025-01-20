@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,7 +22,7 @@ public class FindCommentController {
 
     private final CommentFacade commentFacade;
 
-    @GetMapping("/{boardId}")
+    @GetMapping(value = "/{boardId}", produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "게시글에 작성된 댓글 호출", description = "게시글에 댓글 불러옵니다.")
     @ApiResponses(
             value = {

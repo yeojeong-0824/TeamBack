@@ -15,7 +15,7 @@ public class JwtProvider {
 
     static public String SECRET;
 
-    static public final int JWT_EXPIRATION_TIME = 60 * 1000;
+    static public final int JWT_EXPIRATION_TIME = 15 * 60 * 60 * 1000;
     static public final int REFRESH_EXPIRATION_TIME = 15 * 24 * 60 * 60 * 1000;
 
     static public final String REFRESH_HEADER_STRING = "Refresh";

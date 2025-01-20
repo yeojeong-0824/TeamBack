@@ -27,7 +27,7 @@ public class FindLocationController {
 
     private final LocationFacade locationFacade;
 
-    @GetMapping("/{id}")
+    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "장소 호출", description = "Location의 장소를 호출합니다.")
     @ApiResponses(
             value = {
