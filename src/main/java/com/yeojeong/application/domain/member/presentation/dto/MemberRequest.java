@@ -11,10 +11,9 @@ public class MemberRequest {
 
     @Schema(name = "비밀번호 찾기")
     public record FindPassword(
-            @Size(min = 5, max = 30) @Schema(example = "user12")
+            @Size(min = 5, max = 30)
             String username,
 
-            @Schema(example = "example@naver.com")
             @Size(min = 1, max = 50) @Email
             String email
     ){}
@@ -22,11 +21,11 @@ public class MemberRequest {
     @Schema(name = "유저 정보 수정")
     public record Put(
             @Size(max = 10)
-            @Schema(example = "소인국갔다옴")
+            @Schema(nullable = true)
             String nickname,
 
             @Min(0) @Max(120)
-            @Schema(example = "90", nullable = true)
+            @Schema(nullable = true)
             Integer age
     ) {
         public static Member toEntity(Put dto) {
@@ -59,7 +58,7 @@ public class MemberRequest {
 
     @Schema(name = "이메일 인증 코드")
     public record EmailAuthedKey (
-            @NotBlank @Schema(example = "1234")
+            @NotBlank
             @Pattern(regexp = "^\\d{4}$", message = "인증 코드는 4자리 숫자입니다.")
             String key
     ){}
@@ -68,27 +67,22 @@ public class MemberRequest {
     @Schema(name = "유저 회원가입 정보 입력")
     public record SaveMember(
         @NotBlank @Size(min = 5, max = 30)
-        @Schema(example = "user12") // 들어갈 데이터 예시
         String username,
 
         @NotBlank @Size(min = 1, max = 10)
-        @Schema(example = "소인국갔다옴")
         String nickname,
 
         @NotBlank @Size(min = 1, max = 50)
-        @Email(message = "유효한 이메일이 아닙니다.")
-        @Schema(example = "example@naver.com")
+        @Size(min = 1, max = 50) @Email
         String email,
 
         @NotBlank @Size(min = 8, max = 30)
         @Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*[0-9])\\S+$", // 비밀번호 정규식
                 message = "비밀번호는 영문(대,소문자)과 숫자가 적어도 1개 이상씩 포함되어야 합니다")
-        @Schema(example = "1q2w3e4r")
         String password,
 
         @NotNull
         @Min(1) @Max(120)
-        @Schema(example = "90")
         Integer age
     ) {
         public static Member toEntity(SaveMember dto, String password) {

@@ -1,6 +1,4 @@
 spring:
-  cache:
-    type: NONE
   data:
     redis:
       host: localhost
