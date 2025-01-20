@@ -31,7 +31,7 @@ public class AuthedBoardController {
     private final BoardFacade boardFacade;
     private final ImageFacade imageFacade;
 
-    @PostMapping
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "게시글 작성", security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses(
             value = {
@@ -40,9 +40,7 @@ public class AuthedBoardController {
                     @ApiResponse(responseCode = "403", description = "권한 없음"),
             }
     )
-    public ResponseEntity<BoardResponse.FindById> save(
-            @Valid @RequestBody BoardRequest.Save dto
-    ){
+    public ResponseEntity<BoardResponse.FindById> save(@Valid @RequestBody BoardRequest.Save dto){
         Long memberId = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.status(HttpStatus.CREATED).body(boardFacade.save(dto, memberId));
     }

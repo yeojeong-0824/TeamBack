@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,7 +22,7 @@ public class FindBoardController {
 
     private final BoardFacade boardFacade;
 
-    @GetMapping("/{id}")
+    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "게시글 호출")
     @ApiResponses(
             value = {
@@ -33,7 +34,7 @@ public class FindBoardController {
         return ResponseEntity.ok(boardFacade.findById(id));
     }
 
-    @GetMapping("/commentsUpdate/{id}")
+    @GetMapping(value = "/commentsUpdate/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "댓글 업데이트 후 호출")
     @ApiResponses(
             value = {
@@ -45,7 +46,7 @@ public class FindBoardController {
         return ResponseEntity.ok(boardFacade.findByIdForComment(id));
     }
 
-    @GetMapping
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "조건에 따른 게시글 검색, 정렬")
     @ApiResponses(
             value = {
