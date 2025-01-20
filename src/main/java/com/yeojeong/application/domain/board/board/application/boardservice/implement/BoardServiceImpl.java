@@ -40,6 +40,13 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
+    public Board updateForComment(Board entity, int commentCount, int avgScore) {
+        entity.updateAvgScore(avgScore);
+        entity.updateCommentCount(commentCount);
+        return boardRepository.save(entity);
+    }
+
+    @Override
     public void delete(Board entity) {
         boardRepository.delete(entity);
     }
@@ -47,10 +54,18 @@ public class BoardServiceImpl implements BoardService {
     @Override
     @RedisLocker(key = "findById", value = "#id")
 //    @Cacheable(value = "boards", key = "#id", condition="#id != null")
-    public Board findById(Long id) {
+    public Board BoardFindById(Long id) {
         Board entity = boardRepository.findById(id)
                 .orElseThrow(() -> new NotFoundDataException("해당 게시글을 찾을 수 없습니다."));
         entity.addViewCount();
+
+        return boardRepository.save(entity);
+    }
+
+    @Override
+    public Board findById(Long id) {
+        Board entity = boardRepository.findById(id)
+                .orElseThrow(() -> new NotFoundDataException("해당 게시글을 찾을 수 없습니다."));
         return boardRepository.save(entity);
     }
 
@@ -62,28 +77,16 @@ public class BoardServiceImpl implements BoardService {
 
     // 조건에 따른 게시글 검색, 정렬
     @Override
-    public Page<Board> findAll(String searchKeyword, String keyword, SortType sortType, int page) {
-        PageRequest request = createPageRequest(sortType, page);
-        if(request == null) throw new RequestDataException("정렬 값이 잘못되었습니다.");
+    public Page<Board> findAll(String keyword, SortType sortType, int page) {
+        PageRequest request = getSortPage(sortType, page);
+        if(request == null) throw new RequestDataException("정렬 값이 잘못됐습니다.");
 
-        Page<Board> boardList;
-        if (searchKeyword.equals("content")) {
-            boardList = boardRepository.findByTitleOrBodyContaining(keyword, request);
-        } else if (searchKeyword.equals("location")) {
-            boardList = boardRepository.findByFormattedAddressOrLocationNameContaining(keyword, request);
-        } else if (searchKeyword.equals("title")) {
-            List<String> autocompleteTitles = autocompleteService.getAutocomplete(keyword).list().stream()
-                    .map(AutocompleteResponse.Data::value)
-                    .collect(Collectors.toList());
-            boardList = boardRepository.findByTitleIn(autocompleteTitles, request);
-        } else {
-            boardList = boardRepository.findAll(request);
-        }
-
-        return boardList;
+        if(keyword == null)
+            return boardRepository.findAll(request);
+        return boardRepository.findByTitleOrBodyContaining(keyword, request);
     }
 
-    private PageRequest createPageRequest(SortType sortType, int page) {
+    private PageRequest getSortPage(SortType sortType, int page) {
         final int pageSize = 10;
 
         if(sortType == SortType.latest)
@@ -94,6 +97,9 @@ public class BoardServiceImpl implements BoardService {
 
         if(sortType == SortType.comment)
             return PageRequest.of(page - 1, pageSize, Sort.by("commentCount").descending());
+
+        if(sortType == SortType.view)
+            return PageRequest.of(page - 1, pageSize, Sort.by("view").descending());
 
         return null;
     }

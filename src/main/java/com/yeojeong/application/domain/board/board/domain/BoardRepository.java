@@ -13,10 +13,6 @@ import java.util.List;
 public interface BoardRepository extends JpaRepository<Board, Long> {
     @Query("SELECT b FROM Board b WHERE b.title LIKE %:keyword% OR b.body LIKE %:keyword%")
     Page<Board> findByTitleOrBodyContaining(@Param("keyword") String keyword, Pageable pageable);
-    @Query("SELECT b FROM Board b WHERE b.formattedAddress LIKE %:keyword% OR b.locationName LIKE %:keyword%")
-    Page<Board> findByFormattedAddressOrLocationNameContaining(@Param("keyword") String keyword, Pageable pageable);
-    Page<Board> findByTitleIn(List<String> titles, Pageable pageable);
     Page<Board> findAllByMemberId(Long memberId, Pageable pageable);
-
     void deleteByMemberId(Long memberId);
 }

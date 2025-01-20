@@ -1,4 +1,6 @@
 spring:
+  cache:
+    type: NONE
   data:
     redis:
       host: localhost
@@ -53,3 +55,4 @@ logging:
     org:
       springframework:
         r2bc: DEBUG
+

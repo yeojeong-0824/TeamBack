@@ -1,5 +1,6 @@
 package com.yeojeong.application.domain.board.comment.presentation;
 
+import com.yeojeong.application.domain.board.board.application.boardfacade.BoardFacade;
 import com.yeojeong.application.domain.board.board.presentation.dto.BoardResponse;
 import com.yeojeong.application.domain.board.comment.application.commentfacade.CommentFacade;
 import com.yeojeong.application.domain.board.comment.presentation.dto.CommentRequest;
@@ -28,6 +29,7 @@ import org.springframework.web.bind.annotation.*;
 public class AuthedCommentController {
 
     private final CommentFacade commentFacade;
+    private final BoardFacade boardFacade;
 
     @PostMapping("/{boardId}")
     @Operation(summary = "댓글 등록", security = @SecurityRequirement(name = "bearerAuth"))
@@ -39,8 +41,8 @@ public class AuthedCommentController {
             }
     )
     public ResponseEntity<Void> save(@PathVariable("boardId") Long boardId,
-                                                         @Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
-                                                            @Valid @RequestBody CommentRequest.Save dto) {
+                                     @Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
+                                     @Valid @RequestBody CommentRequest.Save dto) {
 
         Long memberId = SecurityUtil.getCurrentMemberId();
         commentFacade.save(dto, boardId, memberId);
@@ -56,8 +58,8 @@ public class AuthedCommentController {
             }
     )
     public ResponseEntity<Void> path(@PathVariable("id") Long id,
-                                                         @Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
-                                                            @Valid @RequestBody CommentRequest.Put dto) {
+                                     @Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
+                                     @Valid @RequestBody CommentRequest.Put dto) {
 
         Long memberId = SecurityUtil.getCurrentMemberId();
         commentFacade.update(id, memberId, dto);
@@ -72,7 +74,7 @@ public class AuthedCommentController {
                     @ApiResponse(responseCode = "403", description = "권한 없음")
             }
     )
-    public ResponseEntity<Void> delete(@PathVariable("id") Long id) {
+    public ResponseEntity<BoardResponse.FindById> delete(@PathVariable("id") Long id) {
 
         Long memberId = SecurityUtil.getCurrentMemberId();
         commentFacade.delete(id, memberId);

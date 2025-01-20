@@ -6,6 +6,7 @@ import com.yeojeong.application.domain.board.board.presentation.dto.BoardRespons
 import com.yeojeong.application.domain.board.board.presentation.dto.BoardRequest;
 import com.yeojeong.application.security.config.SecurityUtil;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -15,6 +16,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -45,7 +47,7 @@ public class AuthedBoardController {
         return ResponseEntity.status(HttpStatus.CREATED).body(boardFacade.save(dto, memberId));
     }
 
-    @PutMapping("/{id}")
+    @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "게시글 수정", security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses(
             value = {
@@ -76,7 +78,7 @@ public class AuthedBoardController {
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping("/images")
+    @PostMapping(value = "/images", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "이미지 저장", security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses(
             value = {
@@ -85,7 +87,7 @@ public class AuthedBoardController {
                     @ApiResponse(responseCode = "403", description = "권한 없음"),
             }
     )
-    public ResponseEntity<String> images(@RequestPart(value = "image", required = false) @NonNull MultipartFile image) {
+    public ResponseEntity<String> images(@Parameter @RequestPart(value = "image", required = false) @NonNull MultipartFile image) {
         return ResponseEntity.status(HttpStatus.CREATED).body(imageFacade.saveImage(image));
     }
 }

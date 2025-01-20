@@ -10,23 +10,23 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public class BoardResponse {
-    public static int getAvgScore(List<Comment> commentList) {
-        int commentCount = commentList.size();
-        if(commentCount == 0) return 0;
-
-        int size = 0;
-        int sum = 0;
-
-        for(Comment comment : commentList) {
-            int score = comment.getScore();
-            if(comment.getScore() == 0) continue;
-
-            size++;
-            sum += score;
-        }
-        if(size == 0) return 0;
-        return (sum * 100) / size;
-    }
+//    public static int getAvgScore(List<Comment> commentList) {
+//        int commentCount = commentList.size();
+//        if(commentCount == 0) return 0;
+//
+//        int size = 0;
+//        int sum = 0;
+//
+//        for(Comment comment : commentList) {
+//            int score = comment.getScore();
+//            if(comment.getScore() == 0) continue;
+//
+//            size++;
+//            sum += score;
+//        }
+//        if(size == 0) return 0;
+//        return (sum * 100) / size;
+//    }
 
     @Builder
     public record BoardInfo(
@@ -58,8 +58,8 @@ public class BoardResponse {
                     .body(board.getBody())
 
                     .view(board.getView())
-                    .avgScore(BoardResponse.getAvgScore(board.getComments()))
-                    .commentCount(board.getComments().size())
+                    .avgScore(board.getAvgScore())
+                    .commentCount(board.getCommentCount())
 
                     .member(MemberResponse.MemberInfo.toDto(board.getMember()))
                     .time(UtilResponse.TimeInfo.toDto(board))
@@ -93,8 +93,8 @@ public class BoardResponse {
                     .title(board.getTitle())
 
                     .view(board.getView())
-                    .avgScore(BoardResponse.getAvgScore(board.getComments()))
-                    .commentCount(board.getComments().size())
+                    .avgScore(board.getAvgScore())
+                    .commentCount(board.getCommentCount())
                     .member(MemberResponse.MemberInfo.toDto(board.getMember()))
                     .time(UtilResponse.TimeInfo.toDto(board))
                     .build();
@@ -132,8 +132,8 @@ public class BoardResponse {
                     .body(board.getBody())
 
                     .view(board.getView())
-                    .avgScore(BoardResponse.getAvgScore(board.getComments()))
-                    .commentCount(board.getComments().size())
+                    .avgScore(board.getAvgScore())
+                    .commentCount(board.getCommentCount())
 
                     .member(MemberResponse.MemberInfo.toDto(board.getMember()))
                     .planner(board.getPlannerId())

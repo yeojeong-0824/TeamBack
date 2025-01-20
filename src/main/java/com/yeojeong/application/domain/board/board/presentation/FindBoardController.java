@@ -33,6 +33,18 @@ public class FindBoardController {
         return ResponseEntity.ok(boardFacade.findById(id));
     }
 
+    @GetMapping("/commentsUpdate/{id}")
+    @Operation(summary = "댓글 업데이트 후 호출")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "게시글 호출 성공"),
+                    @ApiResponse(responseCode = "404", description = "존재하는 게시글 없음")
+            }
+    )
+    public ResponseEntity<BoardResponse.FindById> findByIdForComment(@PathVariable("id") Long id) {
+        return ResponseEntity.ok(boardFacade.findByIdForComment(id));
+    }
+
     @GetMapping
     @Operation(summary = "조건에 따른 게시글 검색, 정렬")
     @ApiResponses(
@@ -42,11 +54,9 @@ public class FindBoardController {
             }
     )
     public ResponseEntity<Page<BoardResponse.FindAll>> findAll(
-            @RequestParam(value = "keyword") String keyword,
-            @RequestParam(value = "searchKeyword") String searchKeyword,
+            @RequestParam(value = "keyword", required = false) String keyword,
             @RequestParam(value = "sortKeyword", defaultValue = "latest") SortType sortType,
             @RequestParam(required = false, defaultValue = "1", value = "page") int page){
-        System.out.println(sortType);
-        return ResponseEntity.ok(boardFacade.findAll(searchKeyword, keyword, sortType, page));
+        return ResponseEntity.ok(boardFacade.findAll(keyword, sortType, page));
     }
 }

@@ -1,5 +1,5 @@
 package com.yeojeong.application.domain.board.board.presentation.dto;
 
 public enum SortType {
-    latest, score, comment
+    latest, score, comment, view
 }

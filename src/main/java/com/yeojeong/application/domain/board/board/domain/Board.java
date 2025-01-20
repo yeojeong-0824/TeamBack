@@ -60,6 +60,12 @@ public class Board extends BaseTime implements Serializable {
     @Builder.Default
     private Long plannerId = 0L;
 
+    @Builder.Default
+    private Integer avgScore = 0;
+
+    @Builder.Default
+    private Integer commentCount = 0;
+
     public void update(Board updateEntity){
         this.locationName = updateEntity.getLocationName();
         this.formattedAddress = updateEntity.getFormattedAddress();
@@ -69,6 +75,12 @@ public class Board extends BaseTime implements Serializable {
         this.body = updateEntity.getBody();
         this.plannerId = updateEntity.getPlannerId();
     }
+
+    public void updateAvgScore(int avgScore) {
+        this.avgScore = avgScore;
+    }
+
+    public void updateCommentCount(int commentCount) { this.commentCount = commentCount; }
 
     public void addViewCount() {
         this.view++;
