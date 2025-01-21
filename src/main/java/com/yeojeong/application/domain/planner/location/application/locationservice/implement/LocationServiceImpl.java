@@ -6,7 +6,6 @@ import com.yeojeong.application.domain.planner.location.domain.Location;
 import com.yeojeong.application.domain.planner.location.domain.LocationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 

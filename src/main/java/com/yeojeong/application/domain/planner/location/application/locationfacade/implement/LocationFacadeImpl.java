@@ -2,7 +2,6 @@ package com.yeojeong.application.domain.planner.location.application.locationfac
 
 import com.yeojeong.application.config.exception.OwnershipException;
 import com.yeojeong.application.config.exception.RequestDataException;
-import com.yeojeong.application.domain.board.board.domain.Board;
 import com.yeojeong.application.domain.member.application.memberservice.MemberService;
 import com.yeojeong.application.domain.member.domain.Member;
 import com.yeojeong.application.domain.planner.location.application.locationfacade.LocationFacade;

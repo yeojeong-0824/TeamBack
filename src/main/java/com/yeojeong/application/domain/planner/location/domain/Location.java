@@ -2,7 +2,6 @@ package com.yeojeong.application.domain.planner.location.domain;
 
 import com.yeojeong.application.config.util.BaseTime;
 import com.yeojeong.application.domain.member.domain.Member;
-import com.yeojeong.application.domain.planner.location.presentation.dto.LocationRequest;
 import com.yeojeong.application.domain.planner.planner.domain.Planner;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -11,8 +10,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
 
 @Entity
 @Builder

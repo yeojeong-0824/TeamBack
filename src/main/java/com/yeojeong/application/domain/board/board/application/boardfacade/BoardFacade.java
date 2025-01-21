@@ -1,6 +1,5 @@
 package com.yeojeong.application.domain.board.board.application.boardfacade;
 
-import com.yeojeong.application.domain.board.board.domain.Board;
 import com.yeojeong.application.domain.board.board.presentation.dto.BoardRequest;
 import com.yeojeong.application.domain.board.board.presentation.dto.BoardResponse;
 import com.yeojeong.application.domain.board.board.presentation.dto.SortType;

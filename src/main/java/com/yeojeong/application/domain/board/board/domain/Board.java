@@ -3,7 +3,6 @@ package com.yeojeong.application.domain.board.board.domain;
 import com.yeojeong.application.domain.board.comment.domain.Comment;
 import com.yeojeong.application.config.util.BaseTime;
 import com.yeojeong.application.domain.member.domain.Member;
-import com.yeojeong.application.domain.planner.planner.domain.Planner;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,7 +10,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 

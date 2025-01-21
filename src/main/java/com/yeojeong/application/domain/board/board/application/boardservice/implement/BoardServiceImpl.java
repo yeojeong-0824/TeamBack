@@ -1,25 +1,18 @@
 package com.yeojeong.application.domain.board.board.application.boardservice.implement;
 
 import com.yeojeong.application.autocomplate.application.AutocompleteService;
-import com.yeojeong.application.autocomplate.presentation.dto.AutocompleteResponse;
 import com.yeojeong.application.config.exception.RequestDataException;
-import com.yeojeong.application.config.util.customannotation.RedisLocker;
 import com.yeojeong.application.domain.board.board.application.boardservice.BoardService;
 import com.yeojeong.application.domain.board.board.domain.Board;
 import com.yeojeong.application.domain.board.board.domain.BoardRepository;
 import com.yeojeong.application.config.exception.NotFoundDataException;
 import com.yeojeong.application.domain.board.board.presentation.dto.SortType;
-import com.yeojeong.application.domain.board.comment.domain.Comment;
-import com.yeojeong.application.domain.planner.planner.domain.Planner;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -52,7 +45,6 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    @RedisLocker(key = "findById", value = "#id")
 //    @Cacheable(value = "boards", key = "#id", condition="#id != null")
     public Board BoardFindById(Long id) {
         Board entity = boardRepository.findById(id)
@@ -75,7 +67,6 @@ public class BoardServiceImpl implements BoardService {
         return boardRepository.findAllByMemberId(memberId, pageRequest);
     }
 
-    // 조건에 따른 게시글 검색, 정렬
     @Override
     public Page<Board> findAll(String keyword, SortType sortType, int page) {
         PageRequest request = getSortPage(sortType, page);

@@ -1,8 +1,6 @@
 package com.yeojeong.application.domain.planner.planner.application.plannerservice.implement;
 
 import com.yeojeong.application.config.exception.NotFoundDataException;
-import com.yeojeong.application.domain.board.board.domain.Board;
-import com.yeojeong.application.domain.planner.location.domain.Location;
 import com.yeojeong.application.domain.planner.planner.application.plannerservice.PlannerService;
 import com.yeojeong.application.domain.planner.planner.domain.Planner;
 import com.yeojeong.application.domain.planner.planner.domain.PlannerRepository;
@@ -11,7 +9,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor

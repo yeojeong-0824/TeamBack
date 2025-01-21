@@ -3,7 +3,6 @@ package com.yeojeong.application.domain.planner.planner.domain;
 import com.yeojeong.application.config.util.BaseTime;
 import com.yeojeong.application.domain.member.domain.Member;
 import com.yeojeong.application.domain.planner.location.domain.Location;
-import com.yeojeong.application.domain.planner.planner.presentation.dto.PlannerRequest;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

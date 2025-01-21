@@ -5,8 +5,6 @@ import com.yeojeong.application.domain.planner.planner.presentation.dto.PlannerR
 import com.yeojeong.application.domain.planner.planner.presentation.dto.PlannerResponse;
 import com.yeojeong.application.security.config.SecurityUtil;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;

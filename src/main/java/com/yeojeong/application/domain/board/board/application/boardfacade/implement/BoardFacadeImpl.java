@@ -1,7 +1,6 @@
 package com.yeojeong.application.domain.board.board.application.boardfacade.implement;
 
 import com.yeojeong.application.config.exception.OwnershipException;
-import com.yeojeong.application.config.util.customannotation.RedisLocker;
 import com.yeojeong.application.domain.board.board.application.boardfacade.BoardFacade;
 import com.yeojeong.application.domain.board.board.application.boardservice.BoardService;
 import com.yeojeong.application.domain.board.board.domain.Board;
@@ -15,7 +14,6 @@ import com.yeojeong.application.domain.member.domain.Member;
 import com.yeojeong.application.domain.planner.planner.application.plannerservice.PlannerService;
 import com.yeojeong.application.domain.planner.planner.domain.Planner;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

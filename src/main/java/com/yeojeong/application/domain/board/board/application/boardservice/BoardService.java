@@ -2,7 +2,6 @@ package com.yeojeong.application.domain.board.board.application.boardservice;
 
 import com.yeojeong.application.domain.board.board.domain.Board;
 import com.yeojeong.application.domain.board.board.presentation.dto.SortType;
-import com.yeojeong.application.domain.board.comment.domain.Comment;
 import org.springframework.data.domain.Page;
 
 public interface BoardService {

@@ -1,6 +1,5 @@
 package com.yeojeong.application.domain.planner.planner.application.plannerservice;
 
-import com.yeojeong.application.domain.board.board.domain.Board;
 import com.yeojeong.application.domain.planner.planner.domain.Planner;
 import org.springframework.data.domain.Page;
 

@@ -1,40 +1,18 @@
 package com.yeojeong.application.domain.board.board.presentation.dto;
 
 import com.yeojeong.application.domain.board.board.domain.Board;
-import com.yeojeong.application.domain.board.comment.domain.Comment;
 import com.yeojeong.application.domain.member.presentation.dto.MemberResponse;
 import com.yeojeong.application.domain.utildto.UtilResponse;
 import lombok.*;
 
-import java.time.LocalDateTime;
-import java.util.List;
-
 public class BoardResponse {
-//    public static int getAvgScore(List<Comment> commentList) {
-//        int commentCount = commentList.size();
-//        if(commentCount == 0) return 0;
-//
-//        int size = 0;
-//        int sum = 0;
-//
-//        for(Comment comment : commentList) {
-//            int score = comment.getScore();
-//            if(comment.getScore() == 0) continue;
-//
-//            size++;
-//            sum += score;
-//        }
-//        if(size == 0) return 0;
-//        return (sum * 100) / size;
-//    }
-
     @Builder
     public record BoardInfo(
             Long id,
             String locationName,
             String formattedAddress,
-            String latitude,  // 위도
-            String longitude,  // 경도
+            String latitude,
+            String longitude,
 
             String title,
             String body,
