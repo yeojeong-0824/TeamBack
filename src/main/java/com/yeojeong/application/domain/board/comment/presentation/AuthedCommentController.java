@@ -1,5 +1,6 @@
 package com.yeojeong.application.domain.board.comment.presentation;
 
+import com.yeojeong.application.config.doc.ResponseDoc;
 import com.yeojeong.application.domain.board.board.application.boardfacade.BoardFacade;
 import com.yeojeong.application.domain.board.board.presentation.dto.BoardResponse;
 import com.yeojeong.application.domain.board.comment.application.commentfacade.CommentFacade;
@@ -33,11 +34,10 @@ public class AuthedCommentController {
 
     @PostMapping(value = "/{boardId}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "댓글 등록", security = @SecurityRequirement(name = "bearerAuth"))
+    @ResponseDoc
     @ApiResponses(
             value = {
-                    @ApiResponse(responseCode = "201", description = "댓글 등록 완료"),
-                    @ApiResponse(responseCode = "400", description = "게시글 수정 실패"),
-                    @ApiResponse(responseCode = "403", description = "권한 없음")
+                    @ApiResponse(responseCode = "201", description = "성공"),
             }
     )
     public ResponseEntity<Void> save(@PathVariable("boardId") Long boardId,
@@ -50,10 +50,10 @@ public class AuthedCommentController {
 
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "댓글 수정", security = @SecurityRequirement(name = "bearerAuth"))
+    @ResponseDoc
     @ApiResponses(
             value = {
-                    @ApiResponse(responseCode = "200", description = "댓글 수정 완료"),
-                    @ApiResponse(responseCode = "403", description = "권한 없음")
+                    @ApiResponse(responseCode = "200", description = "성공"),
             }
     )
     public ResponseEntity<Void> path(@PathVariable("id") Long id,
@@ -64,12 +64,12 @@ public class AuthedCommentController {
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(value = "/{id}")
     @Operation(summary = "댓글 삭제", security = @SecurityRequirement(name = "bearerAuth"))
+    @ResponseDoc
     @ApiResponses(
             value = {
-                    @ApiResponse(responseCode = "200", description = "댓글 삭제 완료"),
-                    @ApiResponse(responseCode = "403", description = "권한 없음")
+                    @ApiResponse(responseCode = "200", description = "성공"),
             }
     )
     public ResponseEntity<Void> delete(@PathVariable("id") Long id) {

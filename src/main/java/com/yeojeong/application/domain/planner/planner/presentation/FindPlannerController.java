@@ -1,5 +1,6 @@
 package com.yeojeong.application.domain.planner.planner.presentation;
 
+import com.yeojeong.application.config.doc.ResponseDoc;
 import com.yeojeong.application.domain.planner.planner.application.plannerfacade.PlannerFacade;
 import com.yeojeong.application.domain.planner.planner.presentation.dto.PlannerResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -24,10 +25,10 @@ public class FindPlannerController {
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "플래너 호출")
+    @ResponseDoc
     @ApiResponses(
             value = {
-                    @ApiResponse(responseCode = "200", description = "플래너 호출 성공"),
-                    @ApiResponse(responseCode = "400", description = "플래너 호출 실패")
+                    @ApiResponse(responseCode = "200", description = "성공"),
             }
     )
     public ResponseEntity<PlannerResponse.FindById> findById(@PathVariable("id") Long id){

@@ -1,5 +1,6 @@
 package com.yeojeong.application.domain.member.presentation;
 
+import com.yeojeong.application.config.doc.ResponseDoc;
 import com.yeojeong.application.domain.member.application.memberfacade.MemberFacade;
 import com.yeojeong.application.domain.member.presentation.dto.MemberResponse;
 import com.yeojeong.application.security.config.SecurityUtil;
@@ -31,11 +32,10 @@ public class AuthedMemberController {
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "회원 정보 확인", security = @SecurityRequirement(name = "bearerAuth"))
+    @ResponseDoc
     @ApiResponses(
             value = {
-                    @ApiResponse(responseCode = "200", description = "조회 완료"),
-                    @ApiResponse(responseCode = "400", description = "유저를 찾지 못함"),
-                    @ApiResponse(responseCode = "403", description = "권한 없음"),
+                    @ApiResponse(responseCode = "200", description = "성공"),
             }
     )
     public ResponseEntity<MemberResponse.FindById> findById() {
@@ -46,11 +46,10 @@ public class AuthedMemberController {
 
     @GetMapping(value = "/boards", produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "해당 회원의 작성 게시글 확인", security = @SecurityRequirement(name = "bearerAuth"))
+    @ResponseDoc
     @ApiResponses(
             value = {
-                    @ApiResponse(responseCode = "200", description = "조회 완료"),
-                    @ApiResponse(responseCode = "400", description = "유저를 찾지 못함"),
-                    @ApiResponse(responseCode = "403", description = "권한 없음"),
+                    @ApiResponse(responseCode = "200", description = "성공"),
             }
     )
     public ResponseEntity<Page<MemberResponse.MemberBoardInfo>> findBoardById(
@@ -63,11 +62,10 @@ public class AuthedMemberController {
 
     @GetMapping(value = "/comments", produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "해당 회원의 작성 댓글 목록 확인", security = @SecurityRequirement(name = "bearerAuth"))
+    @ResponseDoc
     @ApiResponses(
             value = {
-                    @ApiResponse(responseCode = "200", description = "조회 완료"),
-                    @ApiResponse(responseCode = "400", description = "유저를 찾지 못함"),
-                    @ApiResponse(responseCode = "403", description = "권한 없음"),
+                    @ApiResponse(responseCode = "200", description = "성공"),
             }
     )
     public ResponseEntity<Page<MemberResponse.MemberCommentInfo>> findBoardScoreById(

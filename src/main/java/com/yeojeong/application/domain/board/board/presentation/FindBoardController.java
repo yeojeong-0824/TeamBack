@@ -1,5 +1,6 @@
 package com.yeojeong.application.domain.board.board.presentation;
 
+import com.yeojeong.application.config.doc.ResponseDoc;
 import com.yeojeong.application.domain.board.board.application.boardfacade.BoardFacade;
 import com.yeojeong.application.domain.board.board.presentation.dto.BoardResponse;
 import com.yeojeong.application.domain.board.board.presentation.dto.SortType;
@@ -24,10 +25,10 @@ public class FindBoardController {
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "게시글 호출")
+    @ResponseDoc
     @ApiResponses(
             value = {
-                    @ApiResponse(responseCode = "200", description = "게시글 호출 성공"),
-                    @ApiResponse(responseCode = "404", description = "존재하는 게시글 없음")
+                    @ApiResponse(responseCode = "200", description = "성공")
             }
     )
     public ResponseEntity<BoardResponse.FindById> findById(@PathVariable("id") Long id) {
@@ -36,10 +37,10 @@ public class FindBoardController {
 
     @GetMapping(value = "/commentsUpdate/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "댓글 업데이트 후 호출")
+    @ResponseDoc
     @ApiResponses(
             value = {
-                    @ApiResponse(responseCode = "200", description = "게시글 호출 성공"),
-                    @ApiResponse(responseCode = "404", description = "존재하는 게시글 없음")
+                    @ApiResponse(responseCode = "200", description = "성공"),
             }
     )
     public ResponseEntity<BoardResponse.FindById> findByIdForComment(@PathVariable("id") Long id) {
@@ -48,10 +49,10 @@ public class FindBoardController {
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "조건에 따른 게시글 검색, 정렬")
+    @ResponseDoc
     @ApiResponses(
             value = {
-                    @ApiResponse(responseCode = "200", description = "게시글 검색, 정렬 성공"),
-                    @ApiResponse(responseCode = "400", description = "게시글 검색, 정렬 실패")
+                    @ApiResponse(responseCode = "200", description = "성공"),
             }
     )
     public ResponseEntity<Page<BoardResponse.FindAll>> findAll(

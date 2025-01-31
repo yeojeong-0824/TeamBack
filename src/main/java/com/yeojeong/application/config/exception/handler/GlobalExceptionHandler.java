@@ -42,7 +42,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MissingServletRequestParameterException.class)
     public void handlerMissingServletRequestParameterException(MissingServletRequestParameterException ex, HttpServletRequest request, HttpServletResponse response) {
-        int httpStatus = HttpStatus.METHOD_NOT_ALLOWED.value();
+        int httpStatus = HttpStatus.BAD_REQUEST.value();
 
         String parameterName = ex.getParameterName();
         String message = MessageFormat.format("{0}의 값이 누락되었습니다.", parameterName);

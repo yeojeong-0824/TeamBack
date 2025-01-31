@@ -1,5 +1,6 @@
 package com.yeojeong.application.domain.planner.location.presentation;
 
+import com.yeojeong.application.config.doc.ResponseDoc;
 import com.yeojeong.application.domain.planner.location.application.locationfacade.LocationFacade;
 import com.yeojeong.application.domain.planner.location.presentation.dto.LocationRequest;
 import com.yeojeong.application.domain.planner.location.presentation.dto.LocationResponse;
@@ -27,10 +28,10 @@ public class AuthedLocationController {
 
     @PostMapping(value = "/{plannerId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "장소 작성", security = @SecurityRequirement(name = "bearerAuth"))
+    @ResponseDoc
     @ApiResponses(
             value = {
-                    @ApiResponse(responseCode = "201", description = "장소 등록 완료"),
-                    @ApiResponse(responseCode = "403", description = "권한 없음")
+                    @ApiResponse(responseCode = "201", description = "성공"),
             }
     )
     public ResponseEntity<LocationResponse.FindById> save(@PathVariable("plannerId") Long plannerId,
@@ -41,10 +42,10 @@ public class AuthedLocationController {
 
     @PutMapping(value ="/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "장소 수정", security = @SecurityRequirement(name = "bearerAuth"))
+    @ResponseDoc
     @ApiResponses(
             value = {
-                    @ApiResponse(responseCode = "200", description = "장소 수정 완료"),
-                    @ApiResponse(responseCode = "403", description = "권한 없음")
+                    @ApiResponse(responseCode = "200", description = "성공"),
             }
     )
     public ResponseEntity<LocationResponse.FindById> put(@PathVariable("id") Long id,
@@ -55,10 +56,10 @@ public class AuthedLocationController {
 
     @DeleteMapping("/{id}")
     @Operation(summary = "장소를 삭제", security = @SecurityRequirement(name = "bearerAuth"))
+    @ResponseDoc
     @ApiResponses(
             value = {
-                    @ApiResponse(responseCode = "204", description = "장소 삭제 완료"),
-                    @ApiResponse(responseCode = "403", description = "권한 없음")
+                    @ApiResponse(responseCode = "204", description = "성공"),
             }
     )
     public ResponseEntity<Void> delete(@PathVariable("id") Long id) {
