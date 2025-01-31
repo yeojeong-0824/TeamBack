@@ -8,7 +8,6 @@ import lombok.Builder;
 
 public class BoardRequest {
 
-    @Builder
     public record Save(
             @NotBlank// 도
             String title,

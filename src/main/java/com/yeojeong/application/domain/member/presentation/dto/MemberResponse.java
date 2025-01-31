@@ -35,7 +35,6 @@ public class MemberResponse {
     }
 
     @Builder
-    @Schema(name = "유저 정보 호출")
     public record FindById(
         String username,
         String nickname,
@@ -55,7 +54,6 @@ public class MemberResponse {
     }
 
     @Builder
-    @Schema(name = "유저가 작성한 게시글 정보 호출")
     public record MemberBoardInfo(
             Long id,
             String locationName,
@@ -90,7 +88,6 @@ public class MemberResponse {
     }
 
     @Builder
-    @Schema(name = "유저가 작성한 댓글 정보 호출")
     public record MemberCommentInfo(
             BoardResponse.BoardInfo board,
             List<CommentResponse.CommentInfo> commentList

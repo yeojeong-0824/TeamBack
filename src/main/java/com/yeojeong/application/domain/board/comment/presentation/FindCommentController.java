@@ -1,5 +1,6 @@
 package com.yeojeong.application.domain.board.comment.presentation;
 
+import com.yeojeong.application.config.doc.ResponseDoc;
 import com.yeojeong.application.domain.board.comment.application.commentfacade.CommentFacade;
 import com.yeojeong.application.domain.board.comment.presentation.dto.CommentResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -24,9 +25,10 @@ public class FindCommentController {
 
     @GetMapping(value = "/{boardId}", produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "게시글에 작성된 댓글 호출", description = "게시글에 댓글 불러옵니다.")
+    @ResponseDoc
     @ApiResponses(
             value = {
-                    @ApiResponse(responseCode = "200", description = "댓글 등록 완료")
+                    @ApiResponse(responseCode = "200", description = "성공")
             }
     )
     public ResponseEntity<Page<CommentResponse.FindByBoardId>> findByBoardId(@RequestParam(required = false, defaultValue = "1", value = "page") int page,

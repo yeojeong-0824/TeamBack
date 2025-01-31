@@ -1,5 +1,6 @@
 package com.yeojeong.application.domain.board.board.presentation;
 
+import com.yeojeong.application.config.doc.ResponseDoc;
 import com.yeojeong.application.domain.board.board.application.boardfacade.BoardFacade;
 import com.yeojeong.application.domain.board.board.application.imagefacade.ImageFacade;
 import com.yeojeong.application.domain.board.board.presentation.dto.BoardResponse;
@@ -33,11 +34,10 @@ public class AuthedBoardController {
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "게시글 작성", security = @SecurityRequirement(name = "bearerAuth"))
+    @ResponseDoc
     @ApiResponses(
             value = {
-                    @ApiResponse(responseCode = "201", description = "게시글 작성 성공"),
-                    @ApiResponse(responseCode = "400", description = "게시글 작성 실패"),
-                    @ApiResponse(responseCode = "403", description = "권한 없음"),
+                    @ApiResponse(responseCode = "201", description = "성공"),
             }
     )
     public ResponseEntity<BoardResponse.FindById> save(@Valid @RequestBody BoardRequest.Save dto){
@@ -47,11 +47,10 @@ public class AuthedBoardController {
 
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "게시글 수정", security = @SecurityRequirement(name = "bearerAuth"))
+    @ResponseDoc
     @ApiResponses(
             value = {
-                    @ApiResponse(responseCode = "200", description = "게시글 수정 성공"),
-                    @ApiResponse(responseCode = "400", description = "게시글 수정 실패"),
-                    @ApiResponse(responseCode = "403", description = "권한 없음"),
+                    @ApiResponse(responseCode = "200", description = "성공"),
             }
     )
     public ResponseEntity<BoardResponse.FindById> update(
@@ -63,11 +62,10 @@ public class AuthedBoardController {
 
     @DeleteMapping("/{id}")
     @Operation(summary = "게시글 삭제", security = @SecurityRequirement(name = "bearerAuth"))
+    @ResponseDoc
     @ApiResponses(
             value = {
-                    @ApiResponse(responseCode = "204", description = "게시글 삭제 성공"),
-                    @ApiResponse(responseCode = "400", description = "게시글 삭제 실패"),
-                    @ApiResponse(responseCode = "403", description = "권한 없음"),
+                    @ApiResponse(responseCode = "204", description = "성공"),
             }
     )
     public ResponseEntity<Void> delete(@PathVariable("id") Long id){
@@ -78,11 +76,10 @@ public class AuthedBoardController {
 
     @PostMapping(value = "/images", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "이미지 저장", security = @SecurityRequirement(name = "bearerAuth"))
+    @ResponseDoc
     @ApiResponses(
             value = {
-                    @ApiResponse(responseCode = "201", description = "이미지 저장 성공"),
-                    @ApiResponse(responseCode = "400", description = "게시글 저장 실패"),
-                    @ApiResponse(responseCode = "403", description = "권한 없음"),
+                    @ApiResponse(responseCode = "201", description = "성공"),
             }
     )
     public ResponseEntity<String> images(@Parameter @RequestPart(value = "image", required = false) @NonNull MultipartFile image) {

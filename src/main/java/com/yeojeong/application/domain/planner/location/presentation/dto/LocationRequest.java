@@ -10,8 +10,6 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 
 public class LocationRequest {
-    @Builder
-    @Schema(name = "장소 작성")
     public record Save(
             @NotNull
             Long unixTime,
@@ -51,8 +49,6 @@ public class LocationRequest {
         }
     }
 
-    @Builder
-    @Schema(name = "장소 수정")
     public record Put(
             @NotNull
             Long unixTime,

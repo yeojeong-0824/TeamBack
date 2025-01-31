@@ -1,5 +1,6 @@
 package com.yeojeong.application.domain.member.presentation;
 
+import com.yeojeong.application.config.doc.ResponseDoc;
 import com.yeojeong.application.domain.member.application.memberfacade.MemberFacade;
 import com.yeojeong.application.domain.member.presentation.dto.MemberResponse;
 import com.yeojeong.application.security.config.SecurityUtil;
@@ -31,11 +32,10 @@ public class AuthedMemberController {
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "회원 정보 확인", security = @SecurityRequirement(name = "bearerAuth"))
+    @ResponseDoc
     @ApiResponses(
             value = {
-                    @ApiResponse(responseCode = "200", description = "조회 완료"),
-                    @ApiResponse(responseCode = "400", description = "유저를 찾지 못함"),
-                    @ApiResponse(responseCode = "403", description = "권한 없음"),
+                    @ApiResponse(responseCode = "200", description = "성공"),
             }
     )
     public ResponseEntity<MemberResponse.FindById> findById() {
@@ -46,11 +46,10 @@ public class AuthedMemberController {
 
     @GetMapping(value = "/boards", produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "해당 회원의 작성 게시글 확인", security = @SecurityRequirement(name = "bearerAuth"))
+    @ResponseDoc
     @ApiResponses(
             value = {
-                    @ApiResponse(responseCode = "200", description = "조회 완료"),
-                    @ApiResponse(responseCode = "400", description = "유저를 찾지 못함"),
-                    @ApiResponse(responseCode = "403", description = "권한 없음"),
+                    @ApiResponse(responseCode = "200", description = "성공"),
             }
     )
     public ResponseEntity<Page<MemberResponse.MemberBoardInfo>> findBoardById(
@@ -63,11 +62,10 @@ public class AuthedMemberController {
 
     @GetMapping(value = "/comments", produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "해당 회원의 작성 댓글 목록 확인", security = @SecurityRequirement(name = "bearerAuth"))
+    @ResponseDoc
     @ApiResponses(
             value = {
-                    @ApiResponse(responseCode = "200", description = "조회 완료"),
-                    @ApiResponse(responseCode = "400", description = "유저를 찾지 못함"),
-                    @ApiResponse(responseCode = "403", description = "권한 없음"),
+                    @ApiResponse(responseCode = "200", description = "성공"),
             }
     )
     public ResponseEntity<Page<MemberResponse.MemberCommentInfo>> findBoardScoreById(
@@ -80,11 +78,10 @@ public class AuthedMemberController {
 
     @GetMapping(value = "/planners", produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "해당 회원의 플레너 확인", security = @SecurityRequirement(name = "bearerAuth"))
+    @ResponseDoc
     @ApiResponses(
             value = {
-                    @ApiResponse(responseCode = "200", description = "조회 완료"),
-                    @ApiResponse(responseCode = "400", description = "유저를 찾지 못함"),
-                    @ApiResponse(responseCode = "403", description = "권한 없음"),
+                    @ApiResponse(responseCode = "200", description = "성공"),
             }
     )
     public ResponseEntity<Page<MemberResponse.MemberPlannerInfo>> findPlannerById(
@@ -96,10 +93,10 @@ public class AuthedMemberController {
 
     @GetMapping(value = "/locations", produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "날짜 범위에 대한 장소를 조회", security = @SecurityRequirement(name = "bearerAuth"))
+    @ResponseDoc
     @ApiResponses(
             value = {
-                    @ApiResponse(responseCode = "200", description = "날짜 범위에 대한 장소 조회 완료"),
-                    @ApiResponse(responseCode = "403", description = "권한 없음")
+                    @ApiResponse(responseCode = "200", description = "성공"),
             }
     )
     public ResponseEntity<List<MemberResponse.MemberLocationInfo>> findLocationByDate(
@@ -111,11 +108,10 @@ public class AuthedMemberController {
 
     @DeleteMapping
     @Operation(summary = "유저 탈퇴", security = @SecurityRequirement(name = "bearerAuth"))
+    @ResponseDoc
     @ApiResponses(
             value = {
-                    @ApiResponse(responseCode = "204", description = "유저 탈퇴"),
-                    @ApiResponse(responseCode = "400", description = "유저를 찾지 못함"),
-                    @ApiResponse(responseCode = "403", description = "권한 없음"),
+                    @ApiResponse(responseCode = "204", description = "성공"),
             }
     )
     public ResponseEntity<Void> deleteByUserId() {
@@ -128,11 +124,10 @@ public class AuthedMemberController {
 
     @PostMapping(value = "/checkPassword", consumes = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "비밀번호 확인", security = @SecurityRequirement(name = "bearerAuth"))
+    @ResponseDoc
     @ApiResponses(
             value = {
-                    @ApiResponse(responseCode = "204", description = "비밀번호 확인 완료"),
-                    @ApiResponse(responseCode = "400", description = "유저를 찾지 못함"),
-                    @ApiResponse(responseCode = "403", description = "비밀번호가 일치하지 않음"),
+                    @ApiResponse(responseCode = "204", description = "성공"),
             }
     )
     public ResponseEntity<Void> checkPassword(@Valid @RequestBody MemberRequest.CheckPassword dto) {
@@ -144,11 +139,10 @@ public class AuthedMemberController {
 
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "유저 정보 수정", security = @SecurityRequirement(name = "bearerAuth"))
+    @ResponseDoc
     @ApiResponses(
             value = {
-                    @ApiResponse(responseCode = "200", description = "수정 완료"),
-                    @ApiResponse(responseCode = "400", description = "유저를 찾지 못함"),
-                    @ApiResponse(responseCode = "403", description = "권한 없음"),
+                    @ApiResponse(responseCode = "200", description = "성공"),
             }
     )
     public ResponseEntity<Void> update(@Valid @RequestBody MemberRequest.Put dto) {
@@ -160,11 +154,10 @@ public class AuthedMemberController {
 
     @PatchMapping(value = "/password", consumes = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "유저 비밀번호 정보 수정", security = @SecurityRequirement(name = "bearerAuth"))
+    @ResponseDoc
     @ApiResponses(
             value = {
-                    @ApiResponse(responseCode = "200", description = "수정 완료"),
-                    @ApiResponse(responseCode = "400", description = "유저를 찾지 못함"),
-                    @ApiResponse(responseCode = "403", description = "권한 없음"),
+                    @ApiResponse(responseCode = "200", description = "성공"),
             }
     )
     public ResponseEntity<Void> updatePassword(@Valid @RequestBody MemberRequest.PatchPassword dto) {

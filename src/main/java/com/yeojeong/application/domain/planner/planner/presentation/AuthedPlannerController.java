@@ -1,5 +1,6 @@
 package com.yeojeong.application.domain.planner.planner.presentation;
 
+import com.yeojeong.application.config.doc.ResponseDoc;
 import com.yeojeong.application.domain.planner.planner.application.plannerfacade.PlannerFacade;
 import com.yeojeong.application.domain.planner.planner.presentation.dto.PlannerRequest;
 import com.yeojeong.application.domain.planner.planner.presentation.dto.PlannerResponse;
@@ -26,12 +27,10 @@ public class AuthedPlannerController {
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "플래너 작성", security = @SecurityRequirement(name = "bearerAuth"))
+    @ResponseDoc
     @ApiResponses(
             value = {
-                    @ApiResponse(responseCode = "201", description = "성공"),
-                    @ApiResponse(responseCode = "400", description = "잘못된 요청"),
-                    @ApiResponse(responseCode = "403", description = "권한 없음"),
-                    @ApiResponse(responseCode = "500", description = "서버 오류")
+                    @ApiResponse(responseCode = "201", description = "성공")
             }
     )
     public ResponseEntity<PlannerResponse.FindById> save(@Valid @RequestBody PlannerRequest.Save dto){
@@ -41,12 +40,10 @@ public class AuthedPlannerController {
 
     @PutMapping(value ="/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "플래너 수정", security = @SecurityRequirement(name = "bearerAuth"))
+    @ResponseDoc
     @ApiResponses(
             value = {
-                    @ApiResponse(responseCode = "200", description = "플래너 수정 성공"),
-                    @ApiResponse(responseCode = "400", description = "플래너 수정 실패"),
-                    @ApiResponse(responseCode = "403", description = "권한 없음"),
-                    @ApiResponse(responseCode = "403", description = "서버 오류")
+                    @ApiResponse(responseCode = "200", description = "성공"),
             }
     )
     public ResponseEntity<PlannerResponse.FindById> update(@Valid @RequestBody PlannerRequest.Put dto, @PathVariable("id") Long id){
@@ -56,10 +53,10 @@ public class AuthedPlannerController {
 
     @DeleteMapping("/{id}")
     @Operation(summary = "플래너 삭제", security = @SecurityRequirement(name = "bearerAuth"))
+    @ResponseDoc
     @ApiResponses(
             value = {
-                    @ApiResponse(responseCode = "204", description = "플래너 삭제 성공"),
-                    @ApiResponse(responseCode = "400", description = "플래너 삭제 실패")
+                    @ApiResponse(responseCode = "204", description = "성공"),
             }
     )
     public ResponseEntity<Void> delete(@PathVariable("id") Long id){

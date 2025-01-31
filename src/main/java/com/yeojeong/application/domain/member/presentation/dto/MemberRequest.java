@@ -9,7 +9,6 @@ import java.time.LocalDate;
 
 public class MemberRequest {
 
-    @Schema(name = "비밀번호 찾기")
     public record FindPassword(
             @Size(min = 5, max = 30)
             String username,
@@ -18,7 +17,6 @@ public class MemberRequest {
             String email
     ){}
 
-    @Schema(name = "유저 정보 수정")
     public record Put(
             @Size(max = 10)
             @Schema(nullable = true)
@@ -36,7 +34,6 @@ public class MemberRequest {
         }
     }
 
-    @Schema(name = "비밀번호 변경")
     public record PatchPassword(
             @NotBlank @Size(min = 8, max = 30)
             @Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*[0-9])\\S+$", // 비밀번호 정규식
@@ -56,15 +53,12 @@ public class MemberRequest {
             String password
     ) {}
 
-    @Schema(name = "이메일 인증 코드")
     public record EmailAuthedKey (
             @NotBlank
             @Pattern(regexp = "^\\d{4}$", message = "인증 코드는 4자리 숫자입니다.")
             String key
     ){}
 
-    @Builder
-    @Schema(name = "유저 회원가입 정보 입력")
     public record SaveMember(
         @NotBlank @Size(min = 5, max = 30)
         String username,
