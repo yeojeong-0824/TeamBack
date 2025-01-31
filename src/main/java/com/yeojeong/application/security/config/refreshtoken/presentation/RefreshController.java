@@ -1,5 +1,6 @@
 package com.yeojeong.application.security.config.refreshtoken.presentation;
 
+import com.yeojeong.application.config.doc.ResponseDoc;
 import com.yeojeong.application.domain.member.domain.MemberDetails;
 import com.yeojeong.application.security.config.JwtProvider;
 import com.yeojeong.application.security.config.refreshtoken.application.refreshtokenfacade.RefreshTokenFacade;
@@ -26,11 +27,10 @@ public class RefreshController {
 
     @Operation(summary = "리프레시 토큰 삭제")
     @DeleteMapping("/refresh")
+    @ResponseDoc
     @ApiResponses(
             value = {
-                    @ApiResponse(responseCode = "204", description = "refresh token 삭제 성공"),
-                    @ApiResponse(responseCode = "400", description = "refresh token 삭제 실패"),
-                    @ApiResponse(responseCode = "403", description = "권한 없음"),
+                    @ApiResponse(responseCode = "204", description = "성공"),
             }
     )
     public ResponseEntity<Void> refreshDelete(
@@ -48,10 +48,10 @@ public class RefreshController {
 
     @Operation(summary = "액세스 토큰 유효성 검사")
     @GetMapping("/access")
+    @ResponseDoc
     @ApiResponses(
             value = {
-                    @ApiResponse(responseCode = "200", description = "유효한 토큰"),
-                    @ApiResponse(responseCode = "403", description = "유효하지 않은 토큰"),
+                    @ApiResponse(responseCode = "200", description = "성공"),
             }
     )
     public ResponseEntity<Void> access() {

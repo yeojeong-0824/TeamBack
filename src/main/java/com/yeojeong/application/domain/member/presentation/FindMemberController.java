@@ -28,7 +28,7 @@ public class FindMemberController {
     private final MemberFacade memberFacade;
 
     @PatchMapping(value = "/passwords", consumes = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(summary = "새로운 비밀번호 발급", description = "새로운 비밀번호를 발급합니다. 새로운 비밀번호는 해당 아이디의 이메일로 발송됩니다.")
+    @Operation(summary = "새로운 비밀번호 발급")
     @ResponseDoc
     @ApiResponses(
             value = {
@@ -42,7 +42,7 @@ public class FindMemberController {
 
 
     @GetMapping(value = "/usernames/{email}")
-    @Operation(summary = "아이디 찾기", description = "해당 이메일로 회원가입이 된 아이디가 존재한다면, 해당 이메일로 아이디를 발송합니다.")
+    @Operation(summary = "아이디 찾기")
     @ResponseDoc
     @ApiResponses(
             value = {

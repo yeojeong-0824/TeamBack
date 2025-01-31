@@ -11,16 +11,12 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 
 public class CommentRequest {
-    @Builder
-    @Schema(name = "댓글 작성")
     public record Save(
             @NotNull
             @Min(0) @Max(5)
-            @Schema(example = "3", description = "0이면 평점을 넣지 않은 것으로 간주합니다")
             Integer score,
 
             @NotBlank
-            @Schema(example = "여기 맛집임")
             String comment
     ){
         public static Comment toEntity(Save dto, Board board, Member member) {
@@ -33,15 +29,12 @@ public class CommentRequest {
         }
     }
 
-    @Schema(name = "댓글 수정")
     public record Put(
             @NotNull
             @Min(0) @Max(5)
-            @Schema(example = "3", description = "0이면 평점을 넣지 않은 것으로 간주합니다")
             Integer score,
 
             @NotBlank
-            @Schema(example = "여기 맛집임")
             String comment
     ){
         public static Comment toEntity(Put dto) {

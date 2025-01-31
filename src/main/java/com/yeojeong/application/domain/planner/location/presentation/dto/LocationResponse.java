@@ -48,7 +48,6 @@ public class LocationResponse {
     }
 
     @Builder
-    @Schema(name = "장소 조회")
     public record FindById(
             Long id,
             Long unixTime,

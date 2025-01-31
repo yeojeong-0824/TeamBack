@@ -29,7 +29,7 @@ public class JoinMemberController {
     private final MemberFacade memberFacade;
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(summary = "회원가입", description = "회원을 생성합니다.")
+    @Operation(summary = "회원가입")
     @ResponseDoc
     @ApiResponses(
         value = {
@@ -43,7 +43,7 @@ public class JoinMemberController {
 
 
     @GetMapping("/check/username/{username}")
-    @Operation(summary = "아이디 중복 검사", description = "이미 사용되고 있는 아이디인지 확인합니다.")
+    @Operation(summary = "아이디 중복 검사")
     @ResponseDoc
     @ApiResponses(
             value = {
@@ -57,7 +57,7 @@ public class JoinMemberController {
     }
 
     @GetMapping("/check/nickname/{nickname}")
-    @Operation(summary = "닉네임 중복 검사", description = "이미 사용되고 있는 닉네임인지 확인합니다.")
+    @Operation(summary = "닉네임 중복 검사")
     @ResponseDoc
     @ApiResponses(
             value = {
@@ -72,7 +72,7 @@ public class JoinMemberController {
 
 
     @GetMapping("/emailAuthed/{email}")
-    @Operation(summary = "이메일 중복 확인 및 회원가입 인증 이메일 발송", description = "이메일이 중복되었는지 확인 후 중복되지 않았으면 인증 이메일을 발송합니다.")
+    @Operation(summary = "이메일 중복 확인 및 회원가입 인증 이메일 발송")
     @ResponseDoc
     @ApiResponses(
             value = {
@@ -87,7 +87,7 @@ public class JoinMemberController {
 
 
     @PostMapping(value = "/emailAuthed/{email}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(summary = "이메일 인증코드 확인", description = "이메일 인증을 시도합니다. 이메일 인증 이메일이 발송되지 않았으면 이메일 인증 실패를 하게 됩니다.")
+    @Operation(summary = "이메일 인증코드 확인")
     @ResponseDoc
     @ApiResponses(
             value = {

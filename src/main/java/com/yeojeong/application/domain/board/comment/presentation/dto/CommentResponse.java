@@ -29,7 +29,6 @@ public class CommentResponse {
     }
 
     @Builder
-    @Schema(name = "게시글에 작성된 댓글 조회")
     public record FindByBoardId(
             Long id,
             Integer score,

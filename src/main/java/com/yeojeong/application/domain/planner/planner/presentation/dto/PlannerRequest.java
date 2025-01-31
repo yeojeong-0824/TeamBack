@@ -6,7 +6,6 @@ import jakarta.validation.constraints.*;
 import lombok.Builder;
 
 public class PlannerRequest {
-    @Builder
     public record Save(
             @NotNull @Size(min = 1, max = 30)
             String title,
