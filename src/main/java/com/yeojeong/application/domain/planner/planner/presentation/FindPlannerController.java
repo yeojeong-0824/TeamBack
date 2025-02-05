@@ -5,8 +5,6 @@ import com.yeojeong.application.config.doc.StatusOkDoc;
 import com.yeojeong.application.domain.planner.planner.application.plannerfacade.PlannerFacade;
 import com.yeojeong.application.domain.planner.planner.presentation.dto.PlannerResponse;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;

@@ -5,8 +5,6 @@ import com.yeojeong.application.config.doc.StatusOkDoc;
 import com.yeojeong.application.domain.board.comment.application.commentfacade.CommentFacade;
 import com.yeojeong.application.domain.board.comment.presentation.dto.CommentResponse;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
