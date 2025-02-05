@@ -120,4 +120,13 @@ public class BoardResponse {
                     .build();
         }
     }
+
+    @Builder
+    public record ImageUrl(
+            String url
+    ) {
+        public static ImageUrl toDto(String url) {
+            return ImageUrl.builder().url(url).build();
+        }
+    }
 }

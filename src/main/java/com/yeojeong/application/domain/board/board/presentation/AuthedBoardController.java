@@ -82,7 +82,7 @@ public class AuthedBoardController {
                     @ApiResponse(responseCode = "201", description = "성공"),
             }
     )
-    public ResponseEntity<String> images(@Parameter @RequestPart(value = "image", required = false) @NonNull MultipartFile image) {
+    public ResponseEntity<BoardResponse.ImageUrl> images(@Parameter @RequestPart(value = "image", required = false) @NonNull MultipartFile image) {
         return ResponseEntity.status(HttpStatus.CREATED).body(imageFacade.saveImage(image));
     }
 }
