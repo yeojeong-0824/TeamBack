@@ -1,6 +1,8 @@
 package com.yeojeong.application.domain.member.presentation;
 
 import com.yeojeong.application.config.doc.ResponseDoc;
+import com.yeojeong.application.config.doc.StatusCreateDoc;
+import com.yeojeong.application.config.doc.StatusOkDoc;
 import com.yeojeong.application.domain.member.application.memberfacade.MemberFacade;
 import com.yeojeong.application.domain.member.presentation.dto.MemberRequest;
 import io.swagger.v3.oas.annotations.Operation;
@@ -30,12 +32,7 @@ public class JoinMemberController {
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "회원가입")
-    @ResponseDoc
-    @ApiResponses(
-        value = {
-                @ApiResponse(responseCode = "201", description = "성공"),
-        }
-    )
+    @ResponseDoc @StatusCreateDoc
     public ResponseEntity<Void> save(@Valid @RequestBody MemberRequest.SaveMember dto) {
         memberFacade.save(dto);
         return ResponseEntity.status(HttpStatus.CREATED).build();
@@ -44,12 +41,7 @@ public class JoinMemberController {
 
     @GetMapping("/check/username/{username}")
     @Operation(summary = "아이디 중복 검사")
-    @ResponseDoc
-    @ApiResponses(
-            value = {
-                    @ApiResponse(responseCode = "200", description = "성공"),
-            }
-    )
+    @ResponseDoc @StatusOkDoc
     public ResponseEntity<Void> checkDuplicatedByUsername(@Size(min = 5, max = 30) @PathVariable("username") String username) {
 
         memberFacade.checkDuplicatedByUsername(username);
@@ -58,12 +50,7 @@ public class JoinMemberController {
 
     @GetMapping("/check/nickname/{nickname}")
     @Operation(summary = "닉네임 중복 검사")
-    @ResponseDoc
-    @ApiResponses(
-            value = {
-                    @ApiResponse(responseCode = "200", description = "성공"),
-            }
-    )
+    @ResponseDoc @StatusOkDoc
     public ResponseEntity<Void> checkDuplicatedByNickname(@Size(min = 1, max = 10) @PathVariable("nickname") String nickname) {
 
         memberFacade.checkDuplicatedByNickname(nickname);
@@ -73,12 +60,7 @@ public class JoinMemberController {
 
     @GetMapping("/emailAuthed/{email}")
     @Operation(summary = "이메일 중복 확인 및 회원가입 인증 이메일 발송")
-    @ResponseDoc
-    @ApiResponses(
-            value = {
-                    @ApiResponse(responseCode = "200", description = "성공"),
-            }
-    )
+    @ResponseDoc @StatusOkDoc
     public ResponseEntity<Void> authedByEmail(@Size(min = 1, max = 50) @Email @PathVariable("email") String email) {
 
         memberFacade.checkDuplicatedByEmail(email);
@@ -88,12 +70,7 @@ public class JoinMemberController {
 
     @PostMapping(value = "/emailAuthed/{email}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "이메일 인증코드 확인")
-    @ResponseDoc
-    @ApiResponses(
-            value = {
-                    @ApiResponse(responseCode = "200", description = "성공"),
-            }
-    )
+    @ResponseDoc @StatusOkDoc
     public ResponseEntity<Void> authedCheckByEmail(@Size(min = 1, max = 50) @Email @PathVariable("email") String email,
                                                    @RequestBody MemberRequest.EmailAuthedKey dto) {
         memberFacade.checkAuthCheck(email, dto.key());

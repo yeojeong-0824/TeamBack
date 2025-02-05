@@ -1,6 +1,8 @@
 package com.yeojeong.application.domain.member.presentation;
 
 import com.yeojeong.application.config.doc.ResponseDoc;
+import com.yeojeong.application.config.doc.StatusNoContentDoc;
+import com.yeojeong.application.config.doc.StatusOkDoc;
 import com.yeojeong.application.domain.member.application.memberfacade.MemberFacade;
 import com.yeojeong.application.domain.member.presentation.dto.MemberResponse;
 import com.yeojeong.application.security.config.SecurityUtil;
@@ -32,12 +34,7 @@ public class AuthedMemberController {
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "회원 정보 확인", security = @SecurityRequirement(name = "bearerAuth"))
-    @ResponseDoc
-    @ApiResponses(
-            value = {
-                    @ApiResponse(responseCode = "200", description = "성공"),
-            }
-    )
+    @ResponseDoc @StatusOkDoc
     public ResponseEntity<MemberResponse.FindById> findById() {
 
         Long id = SecurityUtil.getCurrentMemberId();
@@ -46,12 +43,7 @@ public class AuthedMemberController {
 
     @GetMapping(value = "/boards", produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "해당 회원의 작성 게시글 확인", security = @SecurityRequirement(name = "bearerAuth"))
-    @ResponseDoc
-    @ApiResponses(
-            value = {
-                    @ApiResponse(responseCode = "200", description = "성공"),
-            }
-    )
+    @ResponseDoc @StatusOkDoc
     public ResponseEntity<Page<MemberResponse.MemberBoardInfo>> findBoardById(
             @RequestParam(required = false, defaultValue = "1", value = "page") int page
     ) {
@@ -62,12 +54,7 @@ public class AuthedMemberController {
 
     @GetMapping(value = "/comments", produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "해당 회원의 작성 댓글 목록 확인", security = @SecurityRequirement(name = "bearerAuth"))
-    @ResponseDoc
-    @ApiResponses(
-            value = {
-                    @ApiResponse(responseCode = "200", description = "성공"),
-            }
-    )
+    @ResponseDoc @StatusOkDoc
     public ResponseEntity<Page<MemberResponse.MemberCommentInfo>> findBoardScoreById(
             @RequestParam(required = false, defaultValue = "1", value = "page") int page
     ) {
@@ -78,12 +65,7 @@ public class AuthedMemberController {
 
     @GetMapping(value = "/planners", produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "해당 회원의 플레너 확인", security = @SecurityRequirement(name = "bearerAuth"))
-    @ResponseDoc
-    @ApiResponses(
-            value = {
-                    @ApiResponse(responseCode = "200", description = "성공"),
-            }
-    )
+    @ResponseDoc @StatusOkDoc
     public ResponseEntity<Page<MemberResponse.MemberPlannerInfo>> findPlannerById(
             @RequestParam(required = false, defaultValue = "1", value = "page") int page
     ) {
@@ -93,12 +75,7 @@ public class AuthedMemberController {
 
     @GetMapping(value = "/locations", produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "날짜 범위에 대한 장소를 조회", security = @SecurityRequirement(name = "bearerAuth"))
-    @ResponseDoc
-    @ApiResponses(
-            value = {
-                    @ApiResponse(responseCode = "200", description = "성공"),
-            }
-    )
+    @ResponseDoc @StatusOkDoc
     public ResponseEntity<List<MemberResponse.MemberLocationInfo>> findLocationByDate(
             @RequestParam("start") Long start, @RequestParam("end"
     ) Long end) {
@@ -108,12 +85,7 @@ public class AuthedMemberController {
 
     @DeleteMapping
     @Operation(summary = "유저 탈퇴", security = @SecurityRequirement(name = "bearerAuth"))
-    @ResponseDoc
-    @ApiResponses(
-            value = {
-                    @ApiResponse(responseCode = "204", description = "성공"),
-            }
-    )
+    @ResponseDoc @StatusNoContentDoc
     public ResponseEntity<Void> deleteByUserId() {
 
         Long id = SecurityUtil.getCurrentMemberId();
@@ -124,12 +96,7 @@ public class AuthedMemberController {
 
     @PostMapping(value = "/checkPassword", consumes = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "비밀번호 확인", security = @SecurityRequirement(name = "bearerAuth"))
-    @ResponseDoc
-    @ApiResponses(
-            value = {
-                    @ApiResponse(responseCode = "204", description = "성공"),
-            }
-    )
+    @ResponseDoc @StatusNoContentDoc
     public ResponseEntity<Void> checkPassword(@Valid @RequestBody MemberRequest.CheckPassword dto) {
 
         Long id = SecurityUtil.getCurrentMemberId();
@@ -139,12 +106,7 @@ public class AuthedMemberController {
 
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "유저 정보 수정", security = @SecurityRequirement(name = "bearerAuth"))
-    @ResponseDoc
-    @ApiResponses(
-            value = {
-                    @ApiResponse(responseCode = "200", description = "성공"),
-            }
-    )
+    @ResponseDoc @StatusOkDoc
     public ResponseEntity<Void> update(@Valid @RequestBody MemberRequest.Put dto) {
 
         Long id = SecurityUtil.getCurrentMemberId();
@@ -154,12 +116,7 @@ public class AuthedMemberController {
 
     @PatchMapping(value = "/password", consumes = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "유저 비밀번호 정보 수정", security = @SecurityRequirement(name = "bearerAuth"))
-    @ResponseDoc
-    @ApiResponses(
-            value = {
-                    @ApiResponse(responseCode = "200", description = "성공"),
-            }
-    )
+    @ResponseDoc @StatusOkDoc
     public ResponseEntity<Void> updatePassword(@Valid @RequestBody MemberRequest.PatchPassword dto) {
 
         Long id = SecurityUtil.getCurrentMemberId();
