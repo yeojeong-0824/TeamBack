@@ -1,6 +1,7 @@
 package com.yeojeong.application.domain.member.presentation;
 
 import com.yeojeong.application.config.doc.ResponseDoc;
+import com.yeojeong.application.config.doc.StatusOkDoc;
 import com.yeojeong.application.domain.member.application.memberfacade.MemberFacade;
 import com.yeojeong.application.domain.member.presentation.dto.MemberRequest;
 import io.swagger.v3.oas.annotations.Operation;
@@ -29,12 +30,7 @@ public class FindMemberController {
 
     @PatchMapping(value = "/passwords", consumes = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "새로운 비밀번호 발급")
-    @ResponseDoc
-    @ApiResponses(
-            value = {
-                    @ApiResponse(responseCode = "200", description = "성공"),
-            }
-    )
+    @ResponseDoc @StatusOkDoc
     public ResponseEntity<Void> findPassword(@Valid @RequestBody MemberRequest.FindPassword dto) {
         memberFacade.findPassword(dto.username(), dto.email());
         return ResponseEntity.ok().build();
@@ -43,12 +39,7 @@ public class FindMemberController {
 
     @GetMapping(value = "/usernames/{email}")
     @Operation(summary = "아이디 찾기")
-    @ResponseDoc
-    @ApiResponses(
-            value = {
-                    @ApiResponse(responseCode = "200", description = "성공"),
-            }
-    )
+    @ResponseDoc @StatusOkDoc
     public ResponseEntity<Void> findUsername(@Size(min = 1, max = 50) @Email @PathVariable("email") String email) {
 
         memberFacade.findUsernameByEmail(email);

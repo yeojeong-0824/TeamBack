@@ -1,6 +1,9 @@
 package com.yeojeong.application.domain.planner.planner.presentation;
 
 import com.yeojeong.application.config.doc.ResponseDoc;
+import com.yeojeong.application.config.doc.StatusCreateDoc;
+import com.yeojeong.application.config.doc.StatusNoContentDoc;
+import com.yeojeong.application.config.doc.StatusOkDoc;
 import com.yeojeong.application.domain.planner.planner.application.plannerfacade.PlannerFacade;
 import com.yeojeong.application.domain.planner.planner.presentation.dto.PlannerRequest;
 import com.yeojeong.application.domain.planner.planner.presentation.dto.PlannerResponse;
@@ -27,12 +30,7 @@ public class AuthedPlannerController {
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "플래너 작성", security = @SecurityRequirement(name = "bearerAuth"))
-    @ResponseDoc
-    @ApiResponses(
-            value = {
-                    @ApiResponse(responseCode = "201", description = "성공")
-            }
-    )
+    @ResponseDoc @StatusCreateDoc
     public ResponseEntity<PlannerResponse.FindById> save(@Valid @RequestBody PlannerRequest.Save dto){
         Long memberId = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.status(HttpStatus.CREATED).body(plannerFacade.save(dto, memberId));
@@ -40,12 +38,7 @@ public class AuthedPlannerController {
 
     @PutMapping(value ="/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "플래너 수정", security = @SecurityRequirement(name = "bearerAuth"))
-    @ResponseDoc
-    @ApiResponses(
-            value = {
-                    @ApiResponse(responseCode = "200", description = "성공"),
-            }
-    )
+    @ResponseDoc @StatusOkDoc
     public ResponseEntity<PlannerResponse.FindById> update(@Valid @RequestBody PlannerRequest.Put dto, @PathVariable("id") Long id){
         Long memberId = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(plannerFacade.update(id, dto, memberId));
@@ -53,12 +46,7 @@ public class AuthedPlannerController {
 
     @DeleteMapping("/{id}")
     @Operation(summary = "플래너 삭제", security = @SecurityRequirement(name = "bearerAuth"))
-    @ResponseDoc
-    @ApiResponses(
-            value = {
-                    @ApiResponse(responseCode = "204", description = "성공"),
-            }
-    )
+    @ResponseDoc @StatusNoContentDoc
     public ResponseEntity<Void> delete(@PathVariable("id") Long id){
         Long memberId = SecurityUtil.getCurrentMemberId();
         plannerFacade.delete(id, memberId);
