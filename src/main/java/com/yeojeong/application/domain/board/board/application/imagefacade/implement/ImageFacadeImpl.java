@@ -2,6 +2,7 @@ package com.yeojeong.application.domain.board.board.application.imagefacade.impl
 
 import com.yeojeong.application.config.exception.RequestDataException;
 import com.yeojeong.application.domain.board.board.application.imagefacade.ImageFacade;
+import com.yeojeong.application.domain.board.board.presentation.dto.BoardResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -19,7 +20,7 @@ public class ImageFacadeImpl implements ImageFacade {
     private String PATH;
 
     @Override
-    public String saveImage(MultipartFile image) {
+    public BoardResponse.ImageUrl saveImage(MultipartFile image) {
         if (!checkExtension(image)) throw new RequestDataException("파일의 형식이 잘못되었습니다.");
 
         String originFileName = StringUtils.getFilename(image.getOriginalFilename());
@@ -33,7 +34,7 @@ public class ImageFacadeImpl implements ImageFacade {
             throw new RuntimeException(e);
         }
 
-        return serverFileName;
+        return BoardResponse.ImageUrl.toDto(serverFileName);
     }
 
     private boolean checkExtension(MultipartFile file) {
