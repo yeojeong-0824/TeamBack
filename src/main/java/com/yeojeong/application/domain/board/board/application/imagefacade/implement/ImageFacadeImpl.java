@@ -24,7 +24,7 @@ public class ImageFacadeImpl implements ImageFacade {
         if (!checkExtension(image)) throw new RequestDataException("파일의 형식이 잘못되었습니다.");
 
         String originFileName = StringUtils.getFilename(image.getOriginalFilename());
-        String serverFileName = UUID.randomUUID() + "_" + originFileName;
+        String serverFileName = UUID.randomUUID() + "_" + originFileName + ".jpg";
 
         String serverSavePath = PATH + serverFileName;
         try {
@@ -40,13 +40,6 @@ public class ImageFacadeImpl implements ImageFacade {
     private boolean checkExtension(MultipartFile file) {
         String filename = file.getOriginalFilename();
         if (filename == null || filename.isEmpty()) return false;
-        String extension = StringUtils.getFilenameExtension(filename);
-
-        for (String checkExtension : checkExtensionArr) {
-            if (extension != null && extension.equalsIgnoreCase(checkExtension)) {
-                return true;
-            }
-        }
-        return false;
+        return true;
     }
 }
