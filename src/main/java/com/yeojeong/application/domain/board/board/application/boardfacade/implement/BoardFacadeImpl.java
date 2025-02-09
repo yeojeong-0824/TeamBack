@@ -31,9 +31,9 @@ public class BoardFacadeImpl implements BoardFacade {
     private final PlannerService plannerService;
 
     @Override
-    public BoardResponse.FindById save(BoardRequest.Save dto, Long memberId) {
+    public BoardResponse.FindById save(BoardRequest.BoardSave dto, Long memberId) {
         Member member = memberService.findById(memberId);
-        Board entity = BoardRequest.Save.toEntity(dto, member);
+        Board entity = BoardRequest.BoardSave.toEntity(dto, member);
 
         if(dto.plannerId() != 0L) {
             Planner planner = plannerService.findById(dto.plannerId());
@@ -45,7 +45,7 @@ public class BoardFacadeImpl implements BoardFacade {
     }
 
     @Override
-    public BoardResponse.FindById update(Long id, Long memberId, BoardRequest.Put dto) {
+    public BoardResponse.FindById update(Long id, Long memberId, BoardRequest.BoardPut dto) {
         Board savedEntity = boardService.findById(id);
         checkMember(savedEntity, memberId);
 
@@ -54,7 +54,7 @@ public class BoardFacadeImpl implements BoardFacade {
             checkMemberPlanner(planner, memberId);
         }
 
-        Board updateEntity = BoardRequest.Put.toEntity(dto);
+        Board updateEntity = BoardRequest.BoardPut.toEntity(dto);
         Board rtnEntity = boardService.update(savedEntity, updateEntity);
 
         return BoardResponse.FindById.toDto(rtnEntity);

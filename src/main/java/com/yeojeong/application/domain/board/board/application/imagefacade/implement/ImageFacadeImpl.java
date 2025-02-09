@@ -14,16 +14,17 @@ import java.util.UUID;
 
 @Service
 public class ImageFacadeImpl implements ImageFacade {
+    private final String[] checkExtensionArr = {"jpg", "png"};
 
     @Value("${filePath}")
     private String PATH;
 
     @Override
     public BoardResponse.ImageUrl saveImage(MultipartFile image) {
-        if (!checkExtension(image)) throw new RequestDataException("파일의 형식이 잘못되었습니다.");
+        if (!checkExtension(image)) throw new RequestDataException("파일의 확장자가 잘못되었습니다.");
 
         String originFileName = StringUtils.getFilename(image.getOriginalFilename());
-        String serverFileName = UUID.randomUUID() + "_" + originFileName + ".jpg";
+        String serverFileName = UUID.randomUUID() + "_" + originFileName;
 
         String serverSavePath = PATH + serverFileName;
         try {
@@ -39,6 +40,13 @@ public class ImageFacadeImpl implements ImageFacade {
     private boolean checkExtension(MultipartFile file) {
         String filename = file.getOriginalFilename();
         if (filename == null || filename.isEmpty()) return false;
-        return true;
+        String extension = StringUtils.getFilenameExtension(filename);
+
+        for (String checkExtension : checkExtensionArr) {
+            if (extension != null && extension.equalsIgnoreCase(checkExtension)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

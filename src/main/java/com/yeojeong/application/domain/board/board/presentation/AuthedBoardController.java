@@ -10,7 +10,6 @@ import com.yeojeong.application.domain.board.board.presentation.dto.BoardRespons
 import com.yeojeong.application.domain.board.board.presentation.dto.BoardRequest;
 import com.yeojeong.application.security.config.SecurityUtil;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -36,7 +35,7 @@ public class AuthedBoardController {
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "게시글 작성", security = @SecurityRequirement(name = "bearerAuth"))
     @ResponseDoc @StatusCreateDoc
-    public ResponseEntity<BoardResponse.FindById> save(@Valid @RequestBody BoardRequest.Save dto){
+    public ResponseEntity<BoardResponse.FindById> save(@Valid @RequestBody BoardRequest.BoardSave dto){
         Long memberId = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.status(HttpStatus.CREATED).body(boardFacade.save(dto, memberId));
     }
@@ -44,7 +43,7 @@ public class AuthedBoardController {
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "게시글 수정", security = @SecurityRequirement(name = "bearerAuth"))
     @ResponseDoc @StatusOkDoc
-    public ResponseEntity<BoardResponse.FindById> update(@Valid @RequestBody BoardRequest.Put dto, @PathVariable("id") Long id){
+    public ResponseEntity<BoardResponse.FindById> update(@Valid @RequestBody BoardRequest.BoardPut dto, @PathVariable("id") Long id){
         Long memberId = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(boardFacade.update(id, memberId, dto));
     }
