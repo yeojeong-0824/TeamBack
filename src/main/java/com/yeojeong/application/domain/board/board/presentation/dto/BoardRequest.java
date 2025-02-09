@@ -4,11 +4,12 @@ import com.yeojeong.application.domain.board.board.domain.Board;
 import com.yeojeong.application.domain.member.domain.Member;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.Builder;
+
+import java.util.List;
 
 public class BoardRequest {
 
-    public record Save(
+    public record BoardSave(
             @NotBlank// 도
             String title,
 
@@ -28,9 +29,11 @@ public class BoardRequest {
             String longitude,
 
             @NotNull
-            Long plannerId
+            Long plannerId,
+
+            List<String> images
     ) {
-        public static Board toEntity(Save dto, Member member) {
+        public static Board toEntity(BoardSave dto, Member member) {
             return Board.builder()
                     .locationName(dto.locationName())
                     .formattedAddress(dto.formattedAddress())
@@ -38,13 +41,14 @@ public class BoardRequest {
                     .longitude(dto.longitude())
                     .title(dto.title())
                     .body(dto.body())
+                    .images(dto.images())
 
                     .member(member)
                     .build();
         }
     }
 
-    public record Put(
+    public record BoardPut(
             @NotBlank
             String title,
 
@@ -64,9 +68,11 @@ public class BoardRequest {
             String longitude,
 
             @NotNull
-            Long plannerId
+            Long plannerId,
+
+            List<String> images
     ) {
-        public static Board toEntity(Put dto) {
+        public static Board toEntity(BoardPut dto) {
             return Board.builder()
                     .locationName(dto.locationName())
                     .formattedAddress(dto.formattedAddress())
@@ -75,6 +81,7 @@ public class BoardRequest {
                     .title(dto.title())
                     .body(dto.body())
                     .plannerId(dto.plannerId())
+                    .images(dto.images())
                     .build();
         }
     }

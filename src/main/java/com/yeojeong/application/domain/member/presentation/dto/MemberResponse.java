@@ -67,9 +67,14 @@ public class MemberResponse {
             Integer commentCount,
 
             MemberResponse.MemberInfo member,
-            UtilResponse.TimeInfo time
+            UtilResponse.TimeInfo time,
+            String image
     ){
         public static MemberBoardInfo toDto(Board board) {
+            String image = null;
+            if(!board.getImages().isEmpty()) {
+                image = board.getImages().get(0);
+            }
             return MemberBoardInfo.builder()
                     .id(board.getId())
                     .locationName(board.getLocationName())
@@ -81,8 +86,9 @@ public class MemberResponse {
                     .view(board.getView())
                     .avgScore(board.getAvgScore())
                     .commentCount(board.getCommentCount())
-                    .member(MemberResponse.MemberInfo.toDto(board.getMember()))
+                    .member(MemberInfo.toDto(board.getMember()))
                     .time(UtilResponse.TimeInfo.toDto(board))
+                    .image(image)
                     .build();
         }
     }

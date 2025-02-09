@@ -5,6 +5,8 @@ import com.yeojeong.application.domain.member.presentation.dto.MemberResponse;
 import com.yeojeong.application.domain.utildto.UtilResponse;
 import lombok.*;
 
+import java.util.List;
+
 public class BoardResponse {
     @Builder
     public record BoardInfo(
@@ -22,9 +24,14 @@ public class BoardResponse {
             Integer commentCount,
 
             MemberResponse.MemberInfo member,
-            UtilResponse.TimeInfo time
+            UtilResponse.TimeInfo time,
+            String image
     ) {
         public static BoardInfo toDto(Board board) {
+            String image = null;
+            if(!board.getImages().isEmpty()) {
+                image = board.getImages().get(0);
+            }
             return BoardInfo.builder()
                     .id(board.getId())
                     .locationName(board.getLocationName())
@@ -41,6 +48,7 @@ public class BoardResponse {
 
                     .member(MemberResponse.MemberInfo.toDto(board.getMember()))
                     .time(UtilResponse.TimeInfo.toDto(board))
+                    .image(image)
                     .build();
         }
     }
@@ -59,9 +67,15 @@ public class BoardResponse {
             Integer commentCount,
 
             MemberResponse.MemberInfo member,
-            UtilResponse.TimeInfo time
+            UtilResponse.TimeInfo time,
+
+            String image
     ) {
         public static FindAll toDto(Board board) {
+            String image = null;
+            if(!board.getImages().isEmpty()) {
+                image = board.getImages().get(0);
+            }
             return FindAll.builder()
                     .id(board.getId())
                     .locationName(board.getLocationName())
@@ -75,6 +89,8 @@ public class BoardResponse {
                     .commentCount(board.getCommentCount())
                     .member(MemberResponse.MemberInfo.toDto(board.getMember()))
                     .time(UtilResponse.TimeInfo.toDto(board))
+
+                    .image(image)
                     .build();
         }
     }
@@ -96,7 +112,9 @@ public class BoardResponse {
 
             MemberResponse.MemberInfo member,
             Long planner,
-            UtilResponse.TimeInfo time
+            UtilResponse.TimeInfo time,
+
+            List<String> images
     ) {
         public static FindById toDto(Board board) {
             return FindById.builder()
@@ -117,6 +135,7 @@ public class BoardResponse {
                     .planner(board.getPlannerId())
 
                     .time(UtilResponse.TimeInfo.toDto(board))
+                    .images(board.getImages())
                     .build();
         }
     }
