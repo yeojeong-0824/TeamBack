@@ -14,7 +14,6 @@ import java.util.UUID;
 
 @Service
 public class ImageFacadeImpl implements ImageFacade {
-    private final String[] checkExtensionArr = {"jpg"};
 
     @Value("${filePath}")
     private String PATH;
