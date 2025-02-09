@@ -61,7 +61,7 @@ public class AuthedBoardController {
     @PostMapping(value = "/images", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "이미지 저장", security = @SecurityRequirement(name = "bearerAuth"))
     @ResponseDoc @StatusCreateDoc
-    public ResponseEntity<BoardResponse.ImageUrl> images(@Parameter @RequestPart(value = "image", required = false) @NonNull MultipartFile image) {
+    public ResponseEntity<BoardResponse.ImageUrl> images(@RequestPart(value = "image", required = false) @NonNull MultipartFile image) {
         return ResponseEntity.status(HttpStatus.CREATED).body(imageFacade.saveImage(image));
     }
 }
