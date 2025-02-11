@@ -26,7 +26,7 @@ public class LocationService {
 
     public Location findByIdAuth(Long id, Long memberId) {
         Location entity = findById(id);
-        if(entity.getMember().getId().equals(memberId)) throw new OwnershipException("location을 작성한 사용자가 아닙니다.");
+        if(!entity.getMember().getId().equals(memberId)) throw new OwnershipException("location을 작성한 사용자가 아닙니다.");
         return entity;
     }
 

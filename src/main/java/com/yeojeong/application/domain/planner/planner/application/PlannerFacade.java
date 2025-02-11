@@ -1,17 +1,13 @@
 package com.yeojeong.application.domain.planner.planner.application;
 
-import com.yeojeong.application.config.exception.OwnershipException;
 import com.yeojeong.application.domain.member.application.MemberService;
 import com.yeojeong.application.domain.member.domain.Member;
-import com.yeojeong.application.domain.planner.location.application.LocationService;
 import com.yeojeong.application.domain.planner.planner.domain.Planner;
 import com.yeojeong.application.domain.planner.planner.presentation.dto.PlannerRequest;
 import com.yeojeong.application.domain.planner.planner.presentation.dto.PlannerResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
