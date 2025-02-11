@@ -34,6 +34,7 @@ public class BoardFacade {
         return BoardResponse.FindById.toDto(savedEntity);
     }
 
+    @Transactional
     public BoardResponse.FindById update(Long id, Long memberId, BoardRequest.BoardPut dto) {
         Board savedEntity = boardService.findByIdAuth(id, memberId);
         if(dto.plannerId() != 0L) plannerService.findByIdAuth(dto.plannerId(), memberId);
