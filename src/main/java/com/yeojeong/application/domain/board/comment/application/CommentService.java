@@ -24,18 +24,18 @@ public class CommentService {
                 .orElseThrow(() -> new NotFoundDataException("해당 댓글을 찾을 수 없습니다."));
     }
 
-    public Comment findByIdAuth(Long id) {
+    public Comment findByIdAuth(Long id, Long memberId) {
         Comment comment = findById(id);
-        if(comment.getMember().getId().equals(id)) throw new OwnershipException("댓글을 작성한 회원이 아닙니다.");
+        if(!comment.getMember().getId().equals(memberId)) throw new OwnershipException("댓글을 작성한 회원이 아닙니다.");
         return comment;
-    }
-
-    public void save(Comment entity) {
-        commentRepository.save(entity);
     }
 
     public void delete(Comment entity) {
         commentRepository.delete(entity);
+    }
+
+    public void save(Comment entity) {
+        commentRepository.save(entity);
     }
 
     public Page<Comment> findByBoardId(Long boardId, int page) {

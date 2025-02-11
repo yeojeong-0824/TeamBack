@@ -31,7 +31,7 @@ public class CommentFacade {
 
     @Transactional
     public void delete(Long id, Long memberId) {
-        Comment savedEntity = commentService.findByIdAuth(id);
+        Comment savedEntity = commentService.findByIdAuth(id, memberId);
         commentService.delete(savedEntity);
     }
 
@@ -42,7 +42,7 @@ public class CommentFacade {
 
     @Transactional
     public void update(Long id, Long memberId, CommentRequest.Put dto) {
-        Comment savedEntity = commentService.findByIdAuth(id);
+        Comment savedEntity = commentService.findByIdAuth(id, memberId);
         Comment updateEntity = CommentRequest.Put.toEntity(dto);
         commentService.update(savedEntity, updateEntity);
     }

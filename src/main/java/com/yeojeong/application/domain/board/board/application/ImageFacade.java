@@ -9,6 +9,7 @@ import com.yeojeong.application.domain.member.domain.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -26,7 +27,8 @@ public class ImageFacade {
 
     @Value("${filePath}")
     private String PATH;
-    
+
+    @Transactional
     public void delete(String id, Long memberId) {
         imageService.delete(id, memberId);
         String serverSavePath = PATH + id;
