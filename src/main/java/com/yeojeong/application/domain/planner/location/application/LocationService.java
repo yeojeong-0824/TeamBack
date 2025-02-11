@@ -1,6 +1,7 @@
 package com.yeojeong.application.domain.planner.location.application;
 
 import com.yeojeong.application.config.exception.NotFoundDataException;
+import com.yeojeong.application.config.exception.OwnershipException;
 import com.yeojeong.application.domain.planner.location.domain.Location;
 import com.yeojeong.application.domain.planner.location.domain.LocationRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,12 @@ public class LocationService {
                 .orElseThrow(() ->  new NotFoundDataException("해당 location 을 찾을 수 없습니다."));
     }
 
+    public Location findByIdAuth(Long id, Long memberId) {
+        Location entity = findById(id);
+        if(entity.getMember().getId().equals(memberId)) throw new OwnershipException("location을 작성한 사용자가 아닙니다.");
+        return entity;
+    }
+
     public Location update(Location entity, Location updateEntity) {
         entity.update(updateEntity);
         return locationRepository.save(entity);
@@ -34,17 +41,5 @@ public class LocationService {
 
     public List<Location> findByMemberAndDate(Long memberId, Long start, Long end) {
         return locationRepository.findByMemberAndDate(memberId, start, end);
-    }
-
-    public List<Location> findByPlannerId(Long plannerId) {
-        return locationRepository.findByPlannerId(plannerId);
-    }
-
-    public void deleteByMemberId(Long memberId) {
-        locationRepository.deleteByMemberId(memberId);
-    }
-
-    public void deleteByPlannerId(Long plannerId) {
-        locationRepository.deleteByPlannerId(plannerId);
     }
 }

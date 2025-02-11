@@ -31,9 +31,7 @@ public class CommentFacade {
 
     @Transactional
     public void delete(Long id, Long memberId) {
-        Comment savedEntity = commentService.findById(id);
-        checkMember(savedEntity, memberId);
-
+        Comment savedEntity = commentService.findByIdAuth(id);
         commentService.delete(savedEntity);
     }
 
@@ -44,14 +42,8 @@ public class CommentFacade {
 
     @Transactional
     public void update(Long id, Long memberId, CommentRequest.Put dto) {
-        Comment savedEntity = commentService.findById(id);
-        checkMember(savedEntity, memberId);
-
+        Comment savedEntity = commentService.findByIdAuth(id);
         Comment updateEntity = CommentRequest.Put.toEntity(dto);
         commentService.update(savedEntity, updateEntity);
-    }
-
-    private void checkMember(Comment comment, Long memberId) {
-        if(!memberId.equals(comment.getMember().getId())) throw new OwnershipException("댓글을 작성한 회원이 아닙니다.");
     }
 }

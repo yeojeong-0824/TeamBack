@@ -1,16 +1,13 @@
 package com.yeojeong.application.domain.board.board.application;
 
-import com.yeojeong.application.config.exception.OwnershipException;
 import com.yeojeong.application.domain.board.board.domain.Board;
 import com.yeojeong.application.domain.board.board.presentation.dto.BoardRequest;
 import com.yeojeong.application.domain.board.board.presentation.dto.BoardResponse;
 import com.yeojeong.application.domain.board.board.presentation.dto.SortType;
-import com.yeojeong.application.domain.board.comment.application.CommentService;
 import com.yeojeong.application.domain.board.comment.domain.Comment;
 import com.yeojeong.application.domain.member.application.MemberService;
 import com.yeojeong.application.domain.member.domain.Member;
 import com.yeojeong.application.domain.planner.planner.application.PlannerService;
-import com.yeojeong.application.domain.planner.planner.domain.Planner;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
@@ -23,32 +20,23 @@ import java.util.List;
 public class BoardFacade {
 
     private final BoardService boardService;
-    private final CommentService commentService;
 
     private final MemberService memberService;
     private final PlannerService plannerService;
 
+    @Transactional
     public BoardResponse.FindById save(BoardRequest.BoardSave dto, Long memberId) {
         Member member = memberService.findById(memberId);
         Board entity = BoardRequest.BoardSave.toEntity(dto, member);
-
-        if(dto.plannerId() != 0L) {
-            Planner planner = plannerService.findById(dto.plannerId());
-            checkMemberPlanner(planner, memberId);
-        }
+        if(dto.plannerId() != 0L) plannerService.findByIdAuth(dto.plannerId(), memberId);
 
         Board savedEntity = boardService.save(entity);
         return BoardResponse.FindById.toDto(savedEntity);
     }
 
     public BoardResponse.FindById update(Long id, Long memberId, BoardRequest.BoardPut dto) {
-        Board savedEntity = boardService.findById(id);
-        checkMember(savedEntity, memberId);
-
-        if(dto.plannerId() != 0L) {
-            Planner planner = plannerService.findById(dto.plannerId());
-            checkMemberPlanner(planner, memberId);
-        }
+        Board savedEntity = boardService.findByIdAuth(id, memberId);
+        if(dto.plannerId() != 0L) plannerService.findByIdAuth(dto.plannerId(), memberId);
 
         Board updateEntity = BoardRequest.BoardPut.toEntity(dto);
         Board rtnEntity = boardService.update(savedEntity, updateEntity);
@@ -78,8 +66,7 @@ public class BoardFacade {
 
     @Transactional
     public void delete(Long id, Long memberId) {
-        Board savedEntity = boardService.findById(id);
-        checkMember(savedEntity, memberId);
+        Board savedEntity = boardService.findByIdAuth(id, memberId);
         boardService.delete(savedEntity);
     }
 
@@ -92,15 +79,5 @@ public class BoardFacade {
     public Page<BoardResponse.FindAll> findAll(String keyword, SortType sortType, int page) {
         Page<Board> savedEntityPage = boardService.findAll(keyword, sortType, page);
         return savedEntityPage.map(BoardResponse.FindAll::toDto);
-    }
-
-    private void checkMember(Board board, Long memberId) {
-        if (!memberId.equals(board.getMember().getId()))
-            throw new OwnershipException("게시글을 작성한 사용자가 아닙니다.");
-    }
-
-    private void checkMemberPlanner(Planner planner, Long memberId) {
-        if (!memberId.equals(planner.getMember().getId()))
-            throw new OwnershipException("플레너를 작성한 사용자가 아닙니다.");
     }
 }

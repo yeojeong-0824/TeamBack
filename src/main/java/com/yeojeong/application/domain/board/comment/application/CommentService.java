@@ -1,5 +1,6 @@
 package com.yeojeong.application.domain.board.comment.application;
 
+import com.yeojeong.application.config.exception.OwnershipException;
 import com.yeojeong.application.domain.board.comment.domain.Comment;
 import com.yeojeong.application.domain.board.comment.domain.CommentRepository;
 import com.yeojeong.application.config.exception.NotFoundDataException;
@@ -21,6 +22,12 @@ public class CommentService {
     public Comment findById(Long id) {
         return commentRepository.findById(id)
                 .orElseThrow(() -> new NotFoundDataException("해당 댓글을 찾을 수 없습니다."));
+    }
+
+    public Comment findByIdAuth(Long id) {
+        Comment comment = findById(id);
+        if(comment.getMember().getId().equals(id)) throw new OwnershipException("댓글을 작성한 회원이 아닙니다.");
+        return comment;
     }
 
     public void save(Comment entity) {

@@ -1,6 +1,7 @@
 package com.yeojeong.application.domain.board.board.application;
 
 import com.yeojeong.application.autocomplate.application.AutocompleteService;
+import com.yeojeong.application.config.exception.OwnershipException;
 import com.yeojeong.application.config.exception.RequestDataException;
 import com.yeojeong.application.domain.board.board.domain.Board;
 import com.yeojeong.application.domain.board.board.domain.BoardRepository;
@@ -41,17 +42,21 @@ public class BoardService {
 
 //    @Cacheable(value = "boards", key = "#id", condition="#id != null")
     public Board BoardFindById(Long id) {
-        Board entity = boardRepository.findById(id)
-                .orElseThrow(() -> new NotFoundDataException("해당 게시글을 찾을 수 없습니다."));
+        Board entity = findById(id);
         entity.addViewCount();
 
         return boardRepository.save(entity);
     }
 
+    public Board findByIdAuth(Long id, Long memberId) {
+        Board entity = findById(id);
+        if(!entity.getMember().getId().equals(memberId)) throw new OwnershipException("게시글을 작성한 사용자가 아닙니다.");
+        return entity;
+    }
+
     public Board findById(Long id) {
-        Board entity = boardRepository.findById(id)
+        return boardRepository.findById(id)
                 .orElseThrow(() -> new NotFoundDataException("해당 게시글을 찾을 수 없습니다."));
-        return boardRepository.save(entity);
     }
 
     public Page<Board> findByMember(Long memberId, int page) {
