@@ -34,7 +34,7 @@ public class Planner extends BaseTime implements Serializable {
     @Builder.Default
     private int locationCount = 0;
 
-    @OneToMany(mappedBy = "planner", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "planner", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Location> locations;
 
     @ManyToOne(fetch = FetchType.EAGER)

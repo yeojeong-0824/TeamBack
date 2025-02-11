@@ -48,7 +48,7 @@ public class Board extends BaseTime implements Serializable {
     @JoinColumn(name = "member_id", nullable = false, foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private Member member;
 
-    @OneToMany(mappedBy = "board", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "board", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private List<Comment> comments = new ArrayList<>();
 
@@ -64,9 +64,6 @@ public class Board extends BaseTime implements Serializable {
     @Builder.Default
     private Integer commentCount = 0;
 
-    @ElementCollection(fetch = FetchType.LAZY)
-    private List<String> images;
-
     public void update(Board updateEntity){
         this.locationName = updateEntity.getLocationName();
         this.formattedAddress = updateEntity.getFormattedAddress();
@@ -75,7 +72,6 @@ public class Board extends BaseTime implements Serializable {
         this.title = updateEntity.getTitle();
         this.body = updateEntity.getBody();
         this.plannerId = updateEntity.getPlannerId();
-        this.images = updateEntity.getImages();
     }
 
     public void updateAvgScore(int avgScore) {

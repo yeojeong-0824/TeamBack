@@ -2,7 +2,7 @@ package com.yeojeong.application.domain.board.board.presentation;
 
 import com.yeojeong.application.config.doc.ResponseDoc;
 import com.yeojeong.application.config.doc.StatusOkDoc;
-import com.yeojeong.application.domain.board.board.application.boardfacade.BoardFacade;
+import com.yeojeong.application.domain.board.board.application.BoardFacade;
 import com.yeojeong.application.domain.board.board.presentation.dto.BoardResponse;
 import com.yeojeong.application.domain.board.board.presentation.dto.SortType;
 import io.swagger.v3.oas.annotations.Operation;

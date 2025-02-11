@@ -4,8 +4,8 @@ import com.yeojeong.application.config.doc.ResponseDoc;
 import com.yeojeong.application.config.doc.StatusCreateDoc;
 import com.yeojeong.application.config.doc.StatusNoContentDoc;
 import com.yeojeong.application.config.doc.StatusOkDoc;
-import com.yeojeong.application.domain.board.board.application.boardfacade.BoardFacade;
-import com.yeojeong.application.domain.board.board.application.imagefacade.ImageFacade;
+import com.yeojeong.application.domain.board.board.application.BoardFacade;
+import com.yeojeong.application.domain.board.board.application.ImageFacade;
 import com.yeojeong.application.domain.board.board.presentation.dto.BoardResponse;
 import com.yeojeong.application.domain.board.board.presentation.dto.BoardRequest;
 import com.yeojeong.application.security.config.SecurityUtil;
@@ -61,6 +61,16 @@ public class AuthedBoardController {
     @Operation(summary = "이미지 저장", security = @SecurityRequirement(name = "bearerAuth"))
     @ResponseDoc @StatusCreateDoc
     public ResponseEntity<BoardResponse.ImageUrl> images(@RequestPart(value = "image", required = false) @NonNull MultipartFile image) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(imageFacade.saveImage(image));
+        Long memberId = SecurityUtil.getCurrentMemberId();
+        return ResponseEntity.status(HttpStatus.CREATED).body(imageFacade.save(image, memberId));
+    }
+
+    @DeleteMapping(value = "/images/{id}")
+    @Operation(summary = "이미지 삭제", security = @SecurityRequirement(name = "bearerAuth"))
+    @ResponseDoc @StatusCreateDoc
+    public ResponseEntity<Void> imagesDel(@PathVariable("id") String id) {
+        Long memberId = SecurityUtil.getCurrentMemberId();
+        imageFacade.delete(id, memberId);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }
