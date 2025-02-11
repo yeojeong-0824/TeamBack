@@ -147,7 +147,8 @@ public class MemberFacadeImpl implements MemberFacade {
     public Page<MemberResponse.MemberCommentInfo> findCommentById(Long id, int page) {
         final int pageSize = 10;
 
-        List<Comment> savedCommentList = commentService.findByMemberId(id);
+        Member entity = memberService.findById(id);
+        List<Comment> savedCommentList = entity.getComments();
         if(savedCommentList.isEmpty()) return new PageImpl<>(new ArrayList<>());
 
         Map<Long, MemberResponse.MemberCommentInfo> duplicatedBoardEntries = new HashMap<>();
