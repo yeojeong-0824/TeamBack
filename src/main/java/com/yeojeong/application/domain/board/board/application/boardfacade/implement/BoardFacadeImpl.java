@@ -86,8 +86,6 @@ public class BoardFacadeImpl implements BoardFacade {
     public void delete(Long id, Long memberId) {
         Board savedEntity = boardService.findById(id);
         checkMember(savedEntity, memberId);
-
-        commentService.deleteByBoardId(id);
         boardService.delete(savedEntity);
     }
 

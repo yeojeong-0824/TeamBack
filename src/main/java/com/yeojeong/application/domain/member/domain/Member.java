@@ -1,6 +1,10 @@
 package com.yeojeong.application.domain.member.domain;
 
 import com.yeojeong.application.config.util.BaseTime;
+import com.yeojeong.application.domain.board.board.domain.Board;
+import com.yeojeong.application.domain.board.comment.domain.Comment;
+import com.yeojeong.application.domain.planner.location.domain.Location;
+import com.yeojeong.application.domain.planner.planner.domain.Planner;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,6 +13,8 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Entity @Getter
@@ -38,6 +44,22 @@ public class Member extends BaseTime implements Serializable {
 
     @Column(nullable = false)
     private LocalDate lastLoginDate;
+
+    @OneToMany(mappedBy = "member", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private List<Board> boards = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private List<Comment> comments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private List<Planner> planners = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private List<Location> locations = new ArrayList<>();
 
     public void updatePassword(String password) {
         this.password = password;

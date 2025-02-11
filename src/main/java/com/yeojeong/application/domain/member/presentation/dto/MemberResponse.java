@@ -67,14 +67,9 @@ public class MemberResponse {
             Integer commentCount,
 
             MemberResponse.MemberInfo member,
-            UtilResponse.TimeInfo time,
-            String image
+            UtilResponse.TimeInfo time
     ){
         public static MemberBoardInfo toDto(Board board) {
-            String image = null;
-            if(!board.getImages().isEmpty()) {
-                image = board.getImages().get(0);
-            }
             return MemberBoardInfo.builder()
                     .id(board.getId())
                     .locationName(board.getLocationName())
@@ -88,7 +83,6 @@ public class MemberResponse {
                     .commentCount(board.getCommentCount())
                     .member(MemberInfo.toDto(board.getMember()))
                     .time(UtilResponse.TimeInfo.toDto(board))
-                    .image(image)
                     .build();
         }
     }

@@ -49,8 +49,6 @@ public class PlannerFacadeImpl implements PlannerFacade {
     public void delete(Long id, Long memberId) {
         Planner savedEntity = plannerService.findById(id);
         checkMember(savedEntity, memberId);
-
-        locationService.deleteByPlannerId(id);
         plannerService.delete(savedEntity);
     }
 
