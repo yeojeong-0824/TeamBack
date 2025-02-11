@@ -25,8 +25,12 @@ public class ImageFacade {
 
     @Value("${filePath}")
     private String PATH;
+    
+    public void delete(String id, Long memberId) {
+        imageService.delete(id, memberId);
+    }
 
-    public BoardResponse.ImageUrl saveImage(MultipartFile image, Long id) {
+    public BoardResponse.ImageUrl save(MultipartFile image, Long id) {
         if (!checkExtension(image)) throw new RequestDataException("파일의 확장자가 잘못되었습니다.");
 
         String originFileName = StringUtils.getFilename(image.getOriginalFilename());
@@ -42,7 +46,7 @@ public class ImageFacade {
 
         Member member = memberService.findById(id);
         Image entity = Image.builder()
-                .url(serverSavePath)
+                .url(serverFileName)
                 .member(member)
                 .build();
         imageService.save(entity);

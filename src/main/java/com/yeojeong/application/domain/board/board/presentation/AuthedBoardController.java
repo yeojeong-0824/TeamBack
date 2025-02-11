@@ -62,6 +62,15 @@ public class AuthedBoardController {
     @ResponseDoc @StatusCreateDoc
     public ResponseEntity<BoardResponse.ImageUrl> images(@RequestPart(value = "image", required = false) @NonNull MultipartFile image) {
         Long memberId = SecurityUtil.getCurrentMemberId();
-        return ResponseEntity.status(HttpStatus.CREATED).body(imageFacade.saveImage(image, memberId));
+        return ResponseEntity.status(HttpStatus.CREATED).body(imageFacade.save(image, memberId));
+    }
+
+    @DeleteMapping(value = "/images/{id}")
+    @Operation(summary = "이미지 삭제", security = @SecurityRequirement(name = "bearerAuth"))
+    @ResponseDoc @StatusCreateDoc
+    public ResponseEntity<Void> imagesDel(@PathVariable("id") String id) {
+        Long memberId = SecurityUtil.getCurrentMemberId();
+        imageFacade.delete(id, memberId);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

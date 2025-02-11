@@ -21,7 +21,7 @@ public class LocationService {
 
     public Location findById(Long id) {
         return locationRepository.findById(id)
-                .orElseThrow(() ->  new NotFoundDataException("해당 location 을 찾을 수 없습니다."));
+                .orElseThrow(() ->  new NotFoundDataException("해당 location을 찾을 수 없습니다."));
     }
 
     public Location findByIdAuth(Long id, Long memberId) {
