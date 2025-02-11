@@ -1,5 +1,6 @@
 package com.yeojeong.application.domain.board.board.application;
 
+import com.yeojeong.application.config.exception.NotFoundDataException;
 import com.yeojeong.application.config.exception.RequestDataException;
 import com.yeojeong.application.domain.board.board.domain.Image;
 import com.yeojeong.application.domain.board.board.presentation.dto.BoardResponse;
@@ -28,6 +29,18 @@ public class ImageFacade {
     
     public void delete(String id, Long memberId) {
         imageService.delete(id, memberId);
+        String serverSavePath = PATH + id;
+        File dest = new File(serverSavePath);
+
+        if (dest.exists()) {
+            boolean isDeleted = dest.delete();
+            if (!isDeleted) {
+                throw new RuntimeException("파일 삭제에 실패했습니다: " + serverSavePath);
+            }
+        } else {
+            throw new NotFoundDataException("삭제할 파일이 존재하지 않습니다: " + serverSavePath);
+        }
+
     }
 
     public BoardResponse.ImageUrl save(MultipartFile image, Long id) {
