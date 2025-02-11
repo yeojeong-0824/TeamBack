@@ -2,7 +2,7 @@ package com.yeojeong.application.domain.planner.planner.presentation;
 
 import com.yeojeong.application.config.doc.ResponseDoc;
 import com.yeojeong.application.config.doc.StatusOkDoc;
-import com.yeojeong.application.domain.planner.planner.application.plannerfacade.PlannerFacade;
+import com.yeojeong.application.domain.planner.planner.application.PlannerFacade;
 import com.yeojeong.application.domain.planner.planner.presentation.dto.PlannerResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

@@ -45,6 +45,7 @@ public class Member extends BaseTime implements Serializable {
     @Column(nullable = false)
     private LocalDate lastLoginDate;
 
+
     @OneToMany(mappedBy = "member", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private List<Board> boards = new ArrayList<>();
@@ -60,6 +61,7 @@ public class Member extends BaseTime implements Serializable {
     @OneToMany(mappedBy = "member", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private List<Location> locations = new ArrayList<>();
+
 
     public void updatePassword(String password) {
         this.password = password;

@@ -4,7 +4,7 @@ import com.yeojeong.application.config.doc.ResponseDoc;
 import com.yeojeong.application.config.doc.StatusCreateDoc;
 import com.yeojeong.application.config.doc.StatusNoContentDoc;
 import com.yeojeong.application.config.doc.StatusOkDoc;
-import com.yeojeong.application.domain.planner.planner.application.plannerfacade.PlannerFacade;
+import com.yeojeong.application.domain.planner.planner.application.PlannerFacade;
 import com.yeojeong.application.domain.planner.planner.presentation.dto.PlannerRequest;
 import com.yeojeong.application.domain.planner.planner.presentation.dto.PlannerResponse;
 import com.yeojeong.application.security.config.SecurityUtil;

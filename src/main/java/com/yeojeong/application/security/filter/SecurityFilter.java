@@ -1,10 +1,8 @@
 package com.yeojeong.application.security.filter;
 
-import com.yeojeong.application.domain.member.application.membernotification.MemberChangeService;
+import com.yeojeong.application.domain.member.application.MemberChangeService;
 import com.yeojeong.application.security.config.JwtProvider;
 import com.yeojeong.application.security.config.refreshtoken.application.refreshtokenfacade.RefreshTokenFacade;
-import com.yeojeong.application.security.config.refreshtoken.application.refreshtokenservice.RefreshTokenService;
-import com.yeojeong.application.security.config.refreshtoken.domain.RefreshTokenRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

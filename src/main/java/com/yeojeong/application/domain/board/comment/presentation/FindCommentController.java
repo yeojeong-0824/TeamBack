@@ -2,7 +2,7 @@ package com.yeojeong.application.domain.board.comment.presentation;
 
 import com.yeojeong.application.config.doc.ResponseDoc;
 import com.yeojeong.application.config.doc.StatusOkDoc;
-import com.yeojeong.application.domain.board.comment.application.commentfacade.CommentFacade;
+import com.yeojeong.application.domain.board.comment.application.CommentFacade;
 import com.yeojeong.application.domain.board.comment.presentation.dto.CommentResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

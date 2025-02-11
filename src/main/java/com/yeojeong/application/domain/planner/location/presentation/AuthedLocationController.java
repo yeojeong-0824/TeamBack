@@ -4,7 +4,7 @@ import com.yeojeong.application.config.doc.ResponseDoc;
 import com.yeojeong.application.config.doc.StatusCreateDoc;
 import com.yeojeong.application.config.doc.StatusNoContentDoc;
 import com.yeojeong.application.config.doc.StatusOkDoc;
-import com.yeojeong.application.domain.planner.location.application.locationfacade.LocationFacade;
+import com.yeojeong.application.domain.planner.location.application.LocationFacade;
 import com.yeojeong.application.domain.planner.location.presentation.dto.LocationRequest;
 import com.yeojeong.application.domain.planner.location.presentation.dto.LocationResponse;
 import com.yeojeong.application.security.config.SecurityUtil;

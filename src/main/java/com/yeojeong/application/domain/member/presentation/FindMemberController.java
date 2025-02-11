@@ -2,11 +2,9 @@ package com.yeojeong.application.domain.member.presentation;
 
 import com.yeojeong.application.config.doc.ResponseDoc;
 import com.yeojeong.application.config.doc.StatusOkDoc;
-import com.yeojeong.application.domain.member.application.memberfacade.MemberFacade;
+import com.yeojeong.application.domain.member.application.MemberFacade;
 import com.yeojeong.application.domain.member.presentation.dto.MemberRequest;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
