@@ -43,6 +43,7 @@ public class BoardRequest {
                     .body(dto.body())
 
                     .member(member)
+                    .images(dto.images)
                     .build();
         }
     }
@@ -80,6 +81,7 @@ public class BoardRequest {
                     .title(dto.title())
                     .body(dto.body())
                     .plannerId(dto.plannerId())
+                    .images(dto.images)
                     .build();
         }
     }
