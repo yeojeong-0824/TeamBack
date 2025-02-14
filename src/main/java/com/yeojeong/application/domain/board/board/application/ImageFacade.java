@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Service
@@ -47,9 +48,7 @@ public class ImageFacade {
 
     public BoardResponse.ImageUrl save(MultipartFile image, Long id) {
         if (!checkExtension(image)) throw new RequestDataException("파일의 확장자가 잘못되었습니다.");
-
-        String originFileName = StringUtils.getFilename(image.getOriginalFilename());
-        String serverFileName = UUID.randomUUID() + "_" + originFileName;
+        String serverFileName = UUID.randomUUID() + "_" + LocalDateTime.now();
 
         String serverSavePath = PATH + serverFileName;
         try {
