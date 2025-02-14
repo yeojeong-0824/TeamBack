@@ -1,5 +1,6 @@
 package com.yeojeong.application.domain.planner.planner.presentation.dto;
 
+import com.yeojeong.application.domain.planner.location.domain.Location;
 import com.yeojeong.application.domain.planner.location.presentation.dto.LocationResponse;
 import com.yeojeong.application.domain.planner.planner.domain.Planner;
 import com.yeojeong.application.domain.utildto.UtilResponse;
@@ -21,21 +22,24 @@ public class PlannerResponse {
             UtilResponse.TimeInfo time
     ) {
         public static PlannerInfo toDto(Planner planner) {
+            int locationCount = planner.getLocations().size();
+            List<Location> locations = planner.getLocations();
+            List<LocationResponse.LocationInfo> locationInfos = locations.stream().map(LocationResponse.LocationInfo::toDto).toList();
             return PlannerInfo.builder()
                     .id(planner.getId())
                     .title(planner.getTitle())
                     .personnel(planner.getPersonnel())
                     .subTitle(planner.getSubTitle())
 
-                    .locationCount(planner.getLocationCount())
-                    .location(planner.getLocations() == null ? null : planner.getLocations().stream().map(LocationResponse.LocationInfo::toDto).toList())
+                    .locationCount(locationCount)
+                    .location(locationInfos)
                     .time(UtilResponse.TimeInfo.toDto(planner))
                     .build();
         }
     }
 
     @Builder
-    public record FindById(
+    public record PlannerFindById(
             Long id,
             String title,
             int personnel,
@@ -45,15 +49,18 @@ public class PlannerResponse {
             List<LocationResponse.LocationInfo> location,
             UtilResponse.TimeInfo time
     ) {
-        public static FindById toDto(Planner planner) {
-            return FindById.builder()
+        public static PlannerFindById toDto(Planner planner) {
+            int locationCount = planner.getLocations().size();
+            List<Location> locations = planner.getLocations();
+            List<LocationResponse.LocationInfo> locationInfos = locations.stream().map(LocationResponse.LocationInfo::toDto).toList();
+            return PlannerFindById.builder()
                     .id(planner.getId())
                     .title(planner.getTitle())
                     .personnel(planner.getPersonnel())
                     .subTitle(planner.getSubTitle())
 
-                    .locationCount(planner.getLocationCount())
-                    .location(planner.getLocations() == null ? null : planner.getLocations().stream().map(LocationResponse.LocationInfo::toDto).toList())
+                    .locationCount(locationCount)
+                    .location(locationInfos)
                     .time(UtilResponse.TimeInfo.toDto(planner))
                     .build();
         }

@@ -105,7 +105,7 @@ public class AuthedMemberController {
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "유저 정보 수정", security = @SecurityRequirement(name = "bearerAuth"))
     @ResponseDoc @StatusOkDoc
-    public ResponseEntity<Void> update(@Valid @RequestBody MemberRequest.Put dto) {
+    public ResponseEntity<Void> update(@Valid @RequestBody MemberRequest.MemberPut dto) {
 
         Long id = SecurityUtil.getCurrentMemberId();
         memberFacade.update(id, dto);

@@ -3,10 +3,9 @@ package com.yeojeong.application.domain.planner.planner.presentation.dto;
 import com.yeojeong.application.domain.member.domain.Member;
 import com.yeojeong.application.domain.planner.planner.domain.Planner;
 import jakarta.validation.constraints.*;
-import lombok.Builder;
 
 public class PlannerRequest {
-    public record Save(
+    public record PlannerSave(
             @NotNull @Size(min = 1, max = 30)
             String title,
             @NotNull
@@ -15,7 +14,7 @@ public class PlannerRequest {
             String subTitle
 
     ) {
-        public static Planner toEntity(PlannerRequest.Save dto, Member member) {
+        public static Planner toEntity(PlannerSave dto, Member member) {
             return Planner.builder()
                     .title(dto.title())
                     .personnel(dto.personnel())
@@ -25,7 +24,7 @@ public class PlannerRequest {
         }
     }
 
-    public record Put(
+    public record PlannerPut(
             @NotNull @Size(min = 1, max = 30)
             String title,
             @NotNull
@@ -33,7 +32,7 @@ public class PlannerRequest {
             @Size(max = 30)
             String subTitle
     ) {
-        public static Planner toEntity(PlannerRequest.Put dto) {
+        public static Planner toEntity(PlannerPut dto) {
             return Planner.builder()
                     .title(dto.title())
                     .personnel(dto.personnel())

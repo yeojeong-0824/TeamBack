@@ -3,14 +3,12 @@ package com.yeojeong.application.domain.planner.location.presentation.dto;
 import com.yeojeong.application.domain.member.domain.Member;
 import com.yeojeong.application.domain.planner.location.domain.Location;
 import com.yeojeong.application.domain.planner.planner.domain.Planner;
-import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.Builder;
 
 public class LocationRequest {
-    public record Save(
+    public record LocationSave(
             @NotNull
             Long unixTime,
 
@@ -30,7 +28,7 @@ public class LocationRequest {
 
             String memo
     ){
-        public static Location toEntity (Save dto, Planner planner, Member member) {
+        public static Location toEntity (LocationSave dto, Planner planner, Member member) {
             return Location.builder()
                     .unixTime(dto.unixTime())
                     .travelTime(dto.travelTime())
@@ -49,7 +47,7 @@ public class LocationRequest {
         }
     }
 
-    public record Put(
+    public record LocationPut(
             @NotNull
             Long unixTime,
 
@@ -68,7 +66,7 @@ public class LocationRequest {
 
             String memo
     ){
-        public static Location toEntity (Put dto) {
+        public static Location toEntity (LocationPut dto) {
             return Location.builder()
                     .unixTime(dto.unixTime())
                     .travelTime(dto.travelTime())

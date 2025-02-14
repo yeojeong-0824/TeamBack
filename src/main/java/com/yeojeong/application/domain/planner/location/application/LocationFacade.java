@@ -21,16 +21,15 @@ public class LocationFacade {
     private final LocationService locationService;
 
     @Transactional
-    public LocationResponse.FindById save(LocationRequest.Save dto, Long plannerId, Long memberId) {
+    public LocationResponse.FindById save(LocationRequest.LocationSave dto, Long plannerId, Long memberId) {
         Member member = memberService.findById(memberId);
         Planner planner = plannerService.findById(plannerId);
 
-        if (planner.getLocationCount() >= 15)
+        if (planner.getLocations().size() >= 15)
             throw new RequestDataException("Location 은 15개까지 생성 가능합니다.");
 
-        Location entity = LocationRequest.Save.toEntity(dto, planner, member);
+        Location entity = LocationRequest.LocationSave.toEntity(dto, planner, member);
         Location savedEntity = locationService.save(entity);
-        plannerService.updateLocation(planner);
 
         return LocationResponse.FindById.toDto(savedEntity);
     }
@@ -38,17 +37,14 @@ public class LocationFacade {
     @Transactional
     public void delete(Long id, Long memberId) {
         Location savedEntity = locationService.findByIdAuth(id, memberId);
-
-        Planner planner = plannerService.findById(savedEntity.getPlanner().getId());
         locationService.delete(savedEntity);
-        plannerService.updateLocation(planner);
     }
 
     @Transactional
-    public LocationResponse.FindById update(LocationRequest.Put dto, Long id, Long memberId) {
+    public LocationResponse.FindById update(LocationRequest.LocationPut dto, Long id, Long memberId) {
         Location savedEntity = locationService.findByIdAuth(id, memberId);
 
-        Location updateEntity = LocationRequest.Put.toEntity(dto);
+        Location updateEntity = LocationRequest.LocationPut.toEntity(dto);
         Location rtnEntity = locationService.update(savedEntity, updateEntity);
 
         return LocationResponse.FindById.toDto(rtnEntity);

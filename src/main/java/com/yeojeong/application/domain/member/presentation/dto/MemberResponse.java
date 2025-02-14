@@ -121,7 +121,7 @@ public class MemberResponse {
                     .title(planner.getTitle())
                     .subTitle(planner.getSubTitle())
                     .personnel(planner.getPersonnel())
-                    .locationCount(planner.getLocationCount())
+                    .locationCount(planner.getLocations().size())
                     .build();
         }
     }

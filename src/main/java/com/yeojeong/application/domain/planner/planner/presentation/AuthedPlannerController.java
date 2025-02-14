@@ -29,7 +29,7 @@ public class AuthedPlannerController {
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "플래너 작성", security = @SecurityRequirement(name = "bearerAuth"))
     @ResponseDoc @StatusCreateDoc
-    public ResponseEntity<PlannerResponse.FindById> save(@Valid @RequestBody PlannerRequest.Save dto){
+    public ResponseEntity<PlannerResponse.PlannerFindById> save(@Valid @RequestBody PlannerRequest.PlannerSave dto){
         Long memberId = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.status(HttpStatus.CREATED).body(plannerFacade.save(dto, memberId));
     }
@@ -37,7 +37,7 @@ public class AuthedPlannerController {
     @PutMapping(value ="/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "플래너 수정", security = @SecurityRequirement(name = "bearerAuth"))
     @ResponseDoc @StatusOkDoc
-    public ResponseEntity<PlannerResponse.FindById> update(@Valid @RequestBody PlannerRequest.Put dto, @PathVariable("id") Long id){
+    public ResponseEntity<PlannerResponse.PlannerFindById> update(@Valid @RequestBody PlannerRequest.PlannerPut dto, @PathVariable("id") Long id){
         Long memberId = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(plannerFacade.update(id, dto, memberId));
     }

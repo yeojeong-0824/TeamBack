@@ -16,22 +16,22 @@ public class PlannerFacade {
     private final PlannerService plannerService;
 
     @Transactional
-    public PlannerResponse.FindById save(PlannerRequest.Save dto, Long memberId) {
+    public PlannerResponse.PlannerFindById save(PlannerRequest.PlannerSave dto, Long memberId) {
         Member member = memberService.findById(memberId);
-        Planner entity = PlannerRequest.Save.toEntity(dto, member);
+        Planner entity = PlannerRequest.PlannerSave.toEntity(dto, member);
         Planner savedEntity = plannerService.save(entity);
 
-        return PlannerResponse.FindById.toDto(savedEntity);
+        return PlannerResponse.PlannerFindById.toDto(savedEntity);
     }
 
     @Transactional
-    public PlannerResponse.FindById update(Long id, PlannerRequest.Put dto, Long memberId) {
+    public PlannerResponse.PlannerFindById update(Long id, PlannerRequest.PlannerPut dto, Long memberId) {
         Planner savedEntity = plannerService.findByIdAuth(id, memberId);
 
-        Planner updateEntity = PlannerRequest.Put.toEntity(dto);
+        Planner updateEntity = PlannerRequest.PlannerPut.toEntity(dto);
         Planner rtnEntity = plannerService.update(savedEntity, updateEntity);
 
-        return PlannerResponse.FindById.toDto(rtnEntity);
+        return PlannerResponse.PlannerFindById.toDto(rtnEntity);
     }
 
     @Transactional
@@ -40,8 +40,8 @@ public class PlannerFacade {
         plannerService.delete(savedEntity);
     }
 
-    public PlannerResponse.FindById findById(Long id) {
+    public PlannerResponse.PlannerFindById findById(Long id) {
         Planner savedEntity = plannerService.findById(id);
-        return PlannerResponse.FindById.toDto(savedEntity);
+        return PlannerResponse.PlannerFindById.toDto(savedEntity);
     }
 }

@@ -31,7 +31,7 @@ public class AuthedLocationController {
     @Operation(summary = "장소 작성", security = @SecurityRequirement(name = "bearerAuth"))
     @ResponseDoc @StatusCreateDoc
     public ResponseEntity<LocationResponse.FindById> save(@PathVariable("plannerId") Long plannerId,
-                                                          @Valid @RequestBody LocationRequest.Save dto) {
+                                                          @Valid @RequestBody LocationRequest.LocationSave dto) {
         Long memberId = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.status(HttpStatus.CREATED).body(locationFacade.save(dto, plannerId, memberId));
     }
@@ -40,7 +40,7 @@ public class AuthedLocationController {
     @Operation(summary = "장소 수정", security = @SecurityRequirement(name = "bearerAuth"))
     @ResponseDoc @StatusOkDoc
     public ResponseEntity<LocationResponse.FindById> put(@PathVariable("id") Long id,
-                                                         @Valid @RequestBody LocationRequest.Put dto) {
+                                                         @Valid @RequestBody LocationRequest.LocationPut dto) {
         Long memberId = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.status(HttpStatus.OK).body(locationFacade.update(dto, id, memberId));
     }

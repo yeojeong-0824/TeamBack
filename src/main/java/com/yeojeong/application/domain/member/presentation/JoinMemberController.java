@@ -31,7 +31,7 @@ public class JoinMemberController {
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "회원가입")
     @ResponseDoc @StatusCreateDoc
-    public ResponseEntity<Void> save(@Valid @RequestBody MemberRequest.SaveMember dto) {
+    public ResponseEntity<Void> save(@Valid @RequestBody MemberRequest.MemberSave dto) {
         memberFacade.save(dto);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }

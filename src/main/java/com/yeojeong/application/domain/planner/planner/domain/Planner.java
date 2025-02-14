@@ -10,6 +10,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -32,10 +33,8 @@ public class Planner extends BaseTime implements Serializable {
     private String subTitle;
 
     @Builder.Default
-    private int locationCount = 0;
-
     @OneToMany(mappedBy = "planner", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Location> locations;
+    private List<Location> locations = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", nullable = false, foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
@@ -45,9 +44,5 @@ public class Planner extends BaseTime implements Serializable {
         title = updateEntity.getTitle();
         personnel = updateEntity.getPersonnel();
         subTitle = updateEntity.getSubTitle();
-    }
-
-    public void updateLocation(){
-        locationCount = this.getLocations().size();
     }
 }

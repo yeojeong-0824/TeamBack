@@ -58,10 +58,6 @@ public class Member extends BaseTime implements Serializable {
     @Builder.Default
     private List<Planner> planners = new ArrayList<>();
 
-    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @Builder.Default
-    private List<Location> locations = new ArrayList<>();
-
 
     public void updatePassword(String password) {
         this.password = password;

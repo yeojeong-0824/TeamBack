@@ -41,11 +41,6 @@ public class PlannerService {
         return plannerRepository.findAllByMemberId(memberId, pageRequest);
     }
 
-    public void updateLocation(Planner entity) {
-        entity.updateLocation();
-        plannerRepository.save(entity);
-    }
-
     public void delete(Planner entity) {
         plannerRepository.delete(entity);
     }
