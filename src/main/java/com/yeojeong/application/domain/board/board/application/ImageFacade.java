@@ -49,7 +49,6 @@ public class ImageFacade {
     public BoardResponse.ImageUrl save(MultipartFile image, Long id) {
         if (!checkExtension(image)) throw new RequestDataException("파일의 확장자가 잘못되었습니다.");
         String serverFileName = UUID.randomUUID() + "_" + LocalDateTime.now();
-
         String serverSavePath = PATH + serverFileName;
         try {
             File dest = new File(serverSavePath);

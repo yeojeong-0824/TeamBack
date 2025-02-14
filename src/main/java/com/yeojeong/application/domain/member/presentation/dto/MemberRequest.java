@@ -3,7 +3,6 @@ package com.yeojeong.application.domain.member.presentation.dto;
 import com.yeojeong.application.domain.member.domain.Member;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
-import lombok.Builder;
 
 import java.time.LocalDate;
 
@@ -17,7 +16,7 @@ public class MemberRequest {
             String email
     ){}
 
-    public record Put(
+    public record MemberPut(
             @Size(max = 10)
             @Schema(nullable = true)
             String nickname,
@@ -26,7 +25,7 @@ public class MemberRequest {
             @Schema(nullable = true)
             Integer age
     ) {
-        public static Member toEntity(Put dto) {
+        public static Member toEntity(MemberPut dto) {
             return Member.builder()
                     .nickname(dto.nickname)
                     .age(dto.age)
@@ -59,7 +58,7 @@ public class MemberRequest {
             String key
     ){}
 
-    public record SaveMember(
+    public record MemberSave(
         @NotBlank @Size(min = 5, max = 30)
         String username,
 
@@ -79,7 +78,7 @@ public class MemberRequest {
         @Min(1) @Max(120)
         Integer age
     ) {
-        public static Member toEntity(SaveMember dto, String password) {
+        public static Member toEntity(MemberSave dto, String password) {
             if(dto.password.equals(password)) return null;
             return Member.builder()
                     .username(dto.username())

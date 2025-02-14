@@ -25,7 +25,7 @@ public class FindPlannerController {
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "플래너 호출")
     @ResponseDoc @StatusOkDoc
-    public ResponseEntity<PlannerResponse.FindById> findById(@PathVariable("id") Long id){
+    public ResponseEntity<PlannerResponse.PlannerFindById> findById(@PathVariable("id") Long id){
         return ResponseEntity.ok(plannerFacade.findById(id));
     }
 }

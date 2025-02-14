@@ -48,12 +48,12 @@ public class MemberFacade {
     }
 
     @Transactional
-    public void save(MemberRequest.SaveMember dto) {
+    public void save(MemberRequest.MemberSave dto) {
         if(!redisAuthedService.checkKey(dto.email(), AUTH_CHECK_KEY)) throw new AuthedException("인증이 되지 않은 사용자 입니다.");
         redisAuthedService.delete(dto.email());
 
         String encodingPassword = passwordEncoder.encode(dto.password());
-        Member entity = MemberRequest.SaveMember.toEntity(dto, encodingPassword);
+        Member entity = MemberRequest.MemberSave.toEntity(dto, encodingPassword);
         memberService.save(entity);
     }
 
@@ -67,14 +67,14 @@ public class MemberFacade {
     }
 
     @Transactional
-    public void update(Long id, MemberRequest.Put dto) {
+    public void update(Long id, MemberRequest.MemberPut dto) {
         Member savedEntity = memberService.findById(id);
         if(!redisAuthedService.checkKey(savedEntity.getUsername(), AUTH_CHECK_KEY)) throw new AuthedException("사전 인증이 되지 않은 사용자 입니다.");
 
         if(!savedEntity.getNickname().equals(dto.nickname()))
             memberService.checkDuplicatedByNickname(dto.nickname());
 
-        Member updateEntity = MemberRequest.Put.toEntity(dto);
+        Member updateEntity = MemberRequest.MemberPut.toEntity(dto);
         memberService.update(savedEntity, updateEntity);
         redisAuthedService.delete(savedEntity.getUsername());
     }
