@@ -8,6 +8,7 @@ import lombok.*;
 import java.util.List;
 
 public class BoardResponse {
+
     @Builder
     public record BoardInfo(
             Long id,
